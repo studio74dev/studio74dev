@@ -4,107 +4,186 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Studio 74 — Software a medida, sistemas de gestión y webs | Pinamar y la costa</title>
   <meta name="description"
-    content="Estudio de desarrollo web en Argentina. Landing pages, sitios institucionales y sistemas de gestión a medida. Cuatro desarrolladores, sin intermediarios." />
-  <meta name="robots" content="index, follow" />
+    content="Studio 74 es un estudio de desarrollo de software. Hacemos sistemas de gestión, turnos y reservas online y webs para negocios de Pinamar, Villa Gesell, Madariaga y toda la Argentina." />
+  <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://studio74dev.github.io/" />
   <meta property="og:site_name" content="Studio 74" />
-  <meta property="og:title" content="Studio 74 — Desarrollo web a medida" />
+  <meta property="og:title" content="Studio 74 — Software a medida para tu negocio" />
   <meta property="og:description"
-    content="Landing pages, sitios institucionales y sistemas de gestión. Cuatro desarrolladores, sin intermediarios." />
+    content="Sistemas de gestión, turnos y reservas online y webs. Lo diseñamos, lo programamos y lo dejamos funcionando." />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_AR" />
   <meta property="og:url" content="https://studio74dev.github.io/" />
-  <meta name="theme-color" content="#0B0B0C" />
-  <meta property="og:image" content="https://studio74dev.github.io/assets/og.png" />
+  <meta property="og:image" content="https://studio74dev.github.io/assets/og.png?v=2" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:alt" content="Studio 74 — Desarrollo web a medida" />
+  <meta property="og:image:alt" content="Studio 74 — Software a medida para tu negocio" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Studio 74 — Desarrollo web a medida" />
+  <meta name="twitter:title" content="Studio 74 — Software a medida para tu negocio" />
   <meta name="twitter:description"
-    content="Landing pages, sitios institucionales y sistemas de gestión. Cuatro desarrolladores, sin intermediarios." />
-  <meta name="twitter:image" content="https://studio74dev.github.io/assets/og.png" />
-  <title>Studio 74 — Desarrollo web a medida</title>
+    content="Sistemas de gestión, turnos y reservas online y webs. Lo diseñamos, lo programamos y lo dejamos funcionando." />
+  <meta name="twitter:image" content="https://studio74dev.github.io/assets/og.png?v=2" />
+  <meta name="theme-color" content="#0A0A0B" />
 
-  <!-- Datos estructurados: le dicen a los buscadores qué es Studio 74 -->
+  <!-- Datos estructurados: qué es el estudio y sus preguntas frecuentes (Google puede mostrarlas) -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": ["Organization", "ProfessionalService"],
-      "@id": "https://studio74dev.github.io/#estudio",
-      "name": "Studio 74",
-      "description": "Estudio de desarrollo web en Argentina. Landing pages, sitios institucionales y sistemas de gestión a medida. Cuatro desarrolladores, sin intermediarios.",
-      "url": "https://studio74dev.github.io/",
-      "email": "studio74dev@gmail.com",
-      "logo": "https://studio74dev.github.io/assets/firma/studio74-logo-firma.png",
-      "image": "https://studio74dev.github.io/assets/og.png",
-      "areaServed": { "@type": "Country", "name": "Argentina" },
-      "knowsLanguage": "es-AR",
-      "sameAs": ["https://www.instagram.com/studio74dev/"],
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Servicios",
-        "itemListElement": [
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Landing pages" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sitios institucionales" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sistemas de gestión a medida" } },
-          { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Aplicaciones web" } }
-        ]
-      }
+      "@graph": [
+        {
+          "@type": ["Organization", "ProfessionalService"],
+          "@id": "https://studio74dev.github.io/#estudio",
+          "name": "Studio 74",
+          "description": "Estudio de desarrollo de software a medida: sistemas de gestión, turnos y reservas online y webs.",
+          "url": "https://studio74dev.github.io/",
+          "email": "studio74dev@gmail.com",
+          "logo": "https://studio74dev.github.io/assets/firma/studio74-logo-firma.png",
+          "image": "https://studio74dev.github.io/assets/og.png?v=2",
+          "areaServed": [
+            { "@type": "City", "name": "Pinamar" },
+            { "@type": "City", "name": "Villa Gesell" },
+            { "@type": "City", "name": "General Juan Madariaga" },
+            { "@type": "Country", "name": "Argentina" }
+          ],
+          "knowsLanguage": "es-AR",
+          "sameAs": ["https://www.instagram.com/studio74dev/", "https://github.com/studio74dev"],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Servicios",
+            "itemListElement": [
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sistemas de gestión a medida" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Turnos online" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reservas online con seña" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Webs y landings" } }
+            ]
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            { "@type": "Question", "name": "¿Qué tipo de sistemas hacen?", "acceptedAnswer": { "@type": "Answer", "text": "Desde una web con turnos hasta un sistema de gestión con usuarios, permisos, cobros y reportes." } },
+            { "@type": "Question", "name": "¿Cuánto cuesta?", "acceptedAnswer": { "@type": "Answer", "text": "Depende de lo que necesites. Pasamos un presupuesto por escrito, sin compromiso, con todo lo que incluye." } },
+            { "@type": "Question", "name": "¿Cuánto tarda?", "acceptedAnswer": { "@type": "Answer", "text": "Una web simple, alrededor de una semana desde que llegan los textos y las fotos. Turnos, reservas y sistemas dependen de cada caso y el plazo va en el presupuesto." } },
+            { "@type": "Question", "name": "¿Y si después no quiero seguir?", "acceptedAnswer": { "@type": "Answer", "text": "El dominio está a tu nombre. Te avisamos con tiempo y te pasamos la web a una cuenta tuya." } }
+          ]
+        }
+      ]
     }
   </script>
 
-
-  <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="assets/favicon-180.png" />
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
-    rel="stylesheet" />
+  <!-- Las fuentes no bloquean el primer pintado: la intro se ve al instante -->
+  <link rel="preload" as="style"
+    href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&family=Michroma&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
+    rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
+      rel="stylesheet" />
+  </noscript>
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="css/styles.css?v=2" />
+  <link rel="stylesheet" href="css/styles.css?v=11" />
+  <!-- Con JS, lo animado arranca oculto; sin JS se ve siempre.
+       La intro se muestra una vez por sesión (o siempre con ?intro), nunca con reduced-motion. -->
+  <script>
+    (function () {
+      var d = document.documentElement;
+      d.classList.add('js');
+      try {
+        // Tema elegido con el botón de la barra; si no hay, manda el dispositivo
+        var tema = localStorage.getItem('s74-tema');
+        if (tema === 'light' || tema === 'dark') d.setAttribute('data-theme', tema);
+      } catch (e) { }
+      try {
+        var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var forzar = /[?&]intro\b/.test(location.search);
+        if (!quieto && (forzar || !sessionStorage.getItem('s74-intro'))) d.classList.add('con-intro');
+      } catch (e) { }
+    })();
+  </script>
 </head>
 
 <body>
 
-  <!-- ════════════════════════════════════════════════
-       NAVIGATION
-  ════════════════════════════════════════════════ -->
+  <!-- Intro: pantalla de carga con líneas, el 74 y la marca. Termina con "Entrar". -->
+  <div class="intro" id="intro">
+    <div class="intro__mitad intro__mitad--arriba" aria-hidden="true"></div>
+    <div class="intro__mitad intro__mitad--abajo" aria-hidden="true"></div>
+    <svg class="intro__lineas" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d="M980 0V760a40 40 0 0 0 40 40H1600" pathLength="1" />
+      <path d="M1180 0V600" pathLength="1" />
+      <path d="M760 900A420 420 0 0 1 1180 480" pathLength="1" />
+      <path d="M1180 600L1480 300" pathLength="1" />
+      <path d="M0 700H520a40 40 0 0 1 40 40V900" pathLength="1" />
+    </svg>
+    <p class="intro__esquina intro__esquina--arriba" aria-hidden="true">©2026<br />Studio 74</p>
+    <p class="intro__esquina intro__esquina--abajo" aria-hidden="true">Estudio de desarrollo<br />studio74dev@gmail.com</p>
+    <p class="intro__carga" aria-hidden="true"><span id="introPct">00</span></p>
+
+    <div class="intro__centro">
+      <div class="intro__marca" id="introMarca" aria-hidden="true">
+        <svg class="intro__logo" viewBox="0 0 100 100" focusable="false">
+          <g class="intro__trazos" fill="none">
+            <path d="M7.7 10.9H64L13 88" stroke-width="6.2" pathLength="1" />
+            <path d="M7.7 90.4H18" stroke-width="6.4" pathLength="1" />
+            <path d="M90 7.7V78" stroke-width="5.5" pathLength="1" />
+            <path d="M90 19L52 59.5M50 60.5H90" stroke-width="4.2" pathLength="1" />
+          </g>
+          <rect class="intro__punto" x="85" y="86" width="8" height="8" />
+        </svg>
+      </div>
+      <p class="intro__palabra" aria-hidden="true">
+        <span>S</span><span>T</span><span>U</span><span>D</span><span>I</span><span>O</span><span class="hueco"></span><span>7</span><span>4</span>
+      </p>
+      <button type="button" class="intro__entrar" id="introEntrar">Entrar</button>
+    </div>
+  </div>
+
   <header class="header">
-    <nav class="nav" id="nav" role="navigation" aria-label="Navegación principal">
-      <a href="#hero" class="nav__logo" aria-label="Studio 74 — inicio">
-        <svg class="nav__logo-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img"
-          aria-label="Isotipo Studio 74" focusable="false">
-          <rect width="100" height="100" fill="#0B0B0C" />
-          <g fill="none" stroke="#D2FF3A">
+    <nav class="nav" id="nav" aria-label="Navegación principal">
+      <a href="#inicio" class="nav__logo" aria-label="Studio 74, inicio">
+        <svg class="nav__logo-icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+          <g fill="none" stroke="currentColor">
             <path d="M7.7 10.9H64L13 88" stroke-width="6.2" />
             <path d="M7.7 90.4H18" stroke-width="6.4" />
             <path d="M90 7.7V78" stroke-width="5.5" />
             <path d="M90 19L52 59.5M50 60.5H90" stroke-width="4.2" />
           </g>
-          <rect x="85" y="86" width="8" height="8" fill="#D2FF3A" />
+          <rect x="85" y="86" width="8" height="8" fill="currentColor" />
         </svg>
-        <span class="nav__logo-text">Studio <strong>74</strong></span>
+        <span class="nav__logo-text">STUDIO 74</span>
       </a>
 
-      <ul class="nav__links" id="navLinks" role="menu">
-        <li role="none"><a href="#about" class="nav__link" role="menuitem">Nosotros</a></li>
-        <li role="none"><a href="#projects" class="nav__link" role="menuitem">Proyectos</a></li>
-        <li role="none"><a href="#stack" class="nav__link" role="menuitem">Stack</a></li>
-        <li role="none"><a href="#contact" class="nav__link nav__link--cta" role="menuitem">Contacto</a></li>
+      <ul class="nav__links" id="navLinks">
+        <li><a href="#sistemas" class="nav__link">Sistemas</a></li>
+        <li><a href="#servicios" class="nav__link">Servicios</a></li>
+        <li><a href="#estudio" class="nav__link">El estudio</a></li>
+        <li><a href="#contacto" class="nav__link nav__link--cta">Pedí tu presupuesto
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M7 17L17 7M8 7h9v9" />
+            </svg></a></li>
       </ul>
 
-      <button class="nav__hamburger" id="hamburger" type="button" aria-label="Abrir menú de navegación"
-        aria-expanded="false" aria-controls="navLinks">
-        <span class="hamburger__bar"></span>
+      <button class="tema" id="tema" type="button" aria-label="Cambiar a modo claro">
+        <svg class="tema__sol" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="4.5" />
+          <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
+        </svg>
+        <svg class="tema__luna" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+        </svg>
+      </button>
+
+      <button class="nav__hamburger" id="hamburger" type="button" aria-label="Abrir menú" aria-expanded="false"
+        aria-controls="navLinks">
         <span class="hamburger__bar"></span>
         <span class="hamburger__bar"></span>
       </button>
@@ -114,589 +193,378 @@
 
   <main>
 
-    <!-- ════════════════════════════════════════════════
-         HERO
-    ════════════════════════════════════════════════ -->
-    <section id="hero" class="hero" aria-label="Presentación de Studio 74">
-      <div class="hero__bg" aria-hidden="true">
-        <div class="hero__grid"></div>
-        <div class="hero__glow hero__glow--primary"></div>
-        <div class="hero__glow hero__glow--secondary"></div>
-      </div>
-
-      <div class="container">
-        <div class="hero__inner">
-          <div class="hero__content" data-reveal>
-            <div class="hero__eyebrow">
-              <span class="label">Estudio de desarrollo · Argentina</span>
-            </div>
-
-            <h1 class="hero__title">
-              Desarrollo web
-              <br />
-              a medida,
-              <br />
-              <span class="text-gradient">de punta a punta.</span>
-            </h1>
-
-            <p class="hero__desc lead">
-              Landing pages, sitios institucionales y sistemas de gestión. Somos cuatro desarrolladores: lo
-              diseñamos, lo programamos y lo dejamos funcionando.
-            </p>
-
-            <div class="hero__actions">
-              <a href="#projects" class="btn btn--primary">
-                Ver proyectos
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                  <path d="M7 17L17 7M7 7h10v10" />
-                </svg>
-              </a>
-              <a href="#contact" class="btn btn--ghost">Hablemos sobre tu idea</a>
+    <!-- 1. Portada: un editor. La barra de propiedades cambia el título de verdad. -->
+    <section id="inicio" class="hero" aria-labelledby="hero-title">
+      <div class="editor">
+        <div class="editor__barra" role="toolbar" aria-label="Probá cambiar el título">
+          <div class="editor__grupo">
+            <span class="editor__rotulo" id="rotPeso">Peso</span>
+            <div class="editor__opciones" role="group" aria-labelledby="rotPeso">
+              <button type="button" class="opcion" data-prop="peso" data-valor="400" aria-pressed="false">400</button>
+              <button type="button" class="opcion is-on" data-prop="peso" data-valor="600" aria-pressed="true">600</button>
+              <button type="button" class="opcion" data-prop="peso" data-valor="800" aria-pressed="false">800</button>
             </div>
           </div>
-
-          <div class="hero__visual" aria-hidden="true" data-reveal="fade-right">
-            <div class="hero__mark-wrap">
-              <svg class="hero__mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img"
-                aria-label="Marca Studio 74" focusable="false">
-                <rect width="100" height="100" fill="#D2FF3A" />
-                <g fill="none" stroke="#0B0B0C">
-                  <path d="M7.7 10.9H64L13 88" stroke-width="6.2" />
-                  <path d="M7.7 90.4H18" stroke-width="6.4" />
-                  <path d="M90 7.7V78" stroke-width="5.5" />
-                  <path d="M90 19L52 59.5M50 60.5H90" stroke-width="4.2" />
-                </g>
-                <rect x="85" y="86" width="8" height="8" fill="#0B0B0C" />
-              </svg>
-              <div class="hero__mark-orbit"></div>
+          <div class="editor__grupo">
+            <span class="editor__rotulo" id="rotColor">Color</span>
+            <div class="editor__opciones" role="group" aria-labelledby="rotColor">
+              <button type="button" class="opcion opcion--color is-on" data-prop="color" data-valor="var(--texto)"
+                aria-pressed="true" aria-label="Base"><i style="background:var(--texto)"></i></button>
+              <button type="button" class="opcion opcion--color" data-prop="color" data-valor="var(--titulo-2)"
+                aria-pressed="false" aria-label="Acento"><i style="background:var(--titulo-2)"></i></button>
+              <button type="button" class="opcion opcion--color" data-prop="color" data-valor="var(--titulo-3)"
+                aria-pressed="false" aria-label="Agua"><i style="background:var(--titulo-3)"></i></button>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div class="hero__scroll" aria-hidden="true">
-        <span>Scroll</span>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-          focusable="false">
-          <path d="M12 5v14M5 12l7 7 7-7" />
-        </svg>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════
-         STATS
-    ════════════════════════════════════════════════ -->
-    <section class="stats" aria-label="Estadísticas del estudio">
-      <div class="container">
-        <div class="stats__grid" data-reveal-stagger>
-          <article class="stat-card" data-reveal>
-            <span class="stat-card__num" data-counter="3">0</span>
-            <span class="stat-card__label">Proyectos en marcha</span>
-          </article>
-          <article class="stat-card" data-reveal>
-            <span class="stat-card__num" data-counter="4">0</span>
-            <span class="stat-card__label">Desarrolladores en el equipo</span>
-          </article>
-          <article class="stat-card" data-reveal>
-            <span class="stat-card__num"><span data-counter="24">0</span> h</span>
-            <span class="stat-card__label">Respuesta a tu consulta</span>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- ════════════════════════════════════════════════
-         ABOUT
-    ════════════════════════════════════════════════ -->
-    <section id="about" class="section about" aria-labelledby="about-heading">
-      <div class="container">
-        <div class="section__header" data-reveal>
-          <span class="label">Sobre nosotros</span>
-          <h2 id="about-heading">
-            Un equipo chico,
-            <br />
-            cero intermediarios.
-          </h2>
-        </div>
-
-        <div class="about__grid">
-          <div class="about__content" data-reveal>
-            <p class="lead">
-              Studio 74 es un estudio de cuatro personas. Hacemos desarrollo web a medida: desde una landing para
-              lanzar un producto hasta el sistema que ordena la operación diaria de un negocio.
-            </p>
-            <div class="about__text">
-              <p>Trabajamos en desarrollo web full-stack: desde sitios institucionales hasta sistemas internos con
-                usuarios, permisos, cobros y reportes.</p>
-              <p>Contanos qué necesitás: una web nueva, una landing para una campaña o un sistema a medida. Te
-                decimos con honestidad qué te conviene — incluso si es más simple de lo que pensabas.</p>
-            </div>
-
-            <div class="team">
-              <span class="team__label">El equipo</span>
-              <ul class="team__list">
-                <li class="team__member">
-                  <span class="team__info">
-                    <span class="team__name">Mariano</span>
-                    <span class="team__role">Desarrollo full-stack</span>
-                  </span>
-                </li>
-                <li class="team__member">
-                  <span class="team__info">
-                    <span class="team__name">Ramiro</span>
-                    <span class="team__role">Backend &amp; arquitectura</span>
-                  </span>
-                </li>
-                <li class="team__member">
-                  <span class="team__info">
-                    <span class="team__name">Gerónimo</span>
-                    <span class="team__role">Frontend &amp; UI</span>
-                  </span>
-                </li>
-                <li class="team__member">
-                  <span class="team__info">
-                    <span class="team__name">Valentín</span>
-                    <span class="team__role">Producto &amp; UX</span>
-                  </span>
-                </li>
-              </ul>
+          <div class="editor__grupo">
+            <span class="editor__rotulo" id="rotAlinear">Alinear</span>
+            <div class="editor__opciones" role="group" aria-labelledby="rotAlinear">
+              <button type="button" class="opcion" data-prop="alinear" data-valor="left" aria-pressed="false"
+                aria-label="A la izquierda">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M4 12h10M4 18h13" /></svg>
+              </button>
+              <button type="button" class="opcion is-on" data-prop="alinear" data-valor="center" aria-pressed="true"
+                aria-label="Centrado">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 6h16M7 12h10M5 18h14" /></svg>
+              </button>
             </div>
           </div>
+          <div class="editor__grupo editor__grupo--fuente">
+            <span class="editor__rotulo">Fuente</span>
+            <span class="editor__valor">Geist</span>
+          </div>
+        </div>
 
-          <div class="values" data-reveal>
-            <article class="value-card" data-spotlight>
-              <div class="value-card__icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.6-4.8a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8z" />
-                </svg>
-              </div>
-              <h3>Te hablamos claro</h3>
-              <p>Sin jerga innecesaria: te explicamos cada decisión en palabras simples, para que entiendas siempre qué
-                se está haciendo y por qué.</p>
-            </article>
-            <article class="value-card" data-spotlight>
-              <div class="value-card__icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path
-                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                  <line x1="12" y1="22.08" x2="12" y2="12" />
-                </svg>
-              </div>
-              <h3>Entregas por etapas</h3>
-              <p>Vas viendo el avance durante el desarrollo, no al final. Si algo no cierra, se ajusta sobre la marcha.
-              </p>
-            </article>
-            <article class="value-card" data-spotlight>
-              <div class="value-card__icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                  <polyline points="22 4 12 14.01 9 11.01" />
-                </svg>
-              </div>
-              <h3>Foco en lo que vas a usar</h3>
-              <p>Preferimos un sistema simple que tu equipo use todos los días antes que una lista de funciones que
-                nadie toca.</p>
-            </article>
-            <article class="value-card" data-spotlight>
-              <div class="value-card__icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-              </div>
-              <h3>Acompañamiento después</h3>
-              <p>Cuando el sistema sale a producción seguimos disponibles para ajustes, mejoras y nuevas etapas.</p>
-            </article>
+        <div class="editor__cuerpo">
+          <ul class="editor__herramientas" aria-hidden="true">
+            <li><svg viewBox="0 0 24 24"><path d="M6 2v20M18 2v20M2 6h20M2 18h20" /></svg></li>
+            <li><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" /></svg></li>
+            <li><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg></li>
+            <li><svg viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16" /></svg></li>
+            <li><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3" /><path d="M20 12c0 1.7-3.6 3-8 3s-8-1.3-8-3M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5" /></svg></li>
+          </ul>
+
+          <div class="lienzo">
+            <div class="lienzo__luz" aria-hidden="true"></div>
+            <p class="chip"><span class="chip__punto"></span>Respondemos en menos de 24 horas</p>
+            <div class="seleccion" id="seleccion">
+              <span class="seleccion__tag" aria-hidden="true">&lt;h1&gt;</span>
+              <span class="seleccion__manija seleccion__manija--1" aria-hidden="true"></span>
+              <span class="seleccion__manija seleccion__manija--2" aria-hidden="true"></span>
+              <span class="seleccion__manija seleccion__manija--3" aria-hidden="true"></span>
+              <span class="seleccion__manija seleccion__manija--4" aria-hidden="true"></span>
+              <h1 id="hero-title" class="hero__title">Software a medida para tu negocio.</h1>
+            </div>
+            <p class="hero__lead">Sistemas de gestión, turnos y reservas online, y webs. <b>Lo diseñamos, lo programamos y
+                lo dejamos funcionando.</b></p>
+            <div class="hero__acciones">
+              <a href="#contacto" class="btn btn--blanco">Pedí tu presupuesto
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a>
+              <a href="#sistemas" class="btn btn--vidrio">Ver un sistema real</a>
+            </div>
+            <p class="lienzo__pista" aria-hidden="true">Probá la barra de arriba: este título es editable.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════
-         PROJECTS
-    ════════════════════════════════════════════════ -->
-    <section id="projects" class="section projects" aria-labelledby="projects-heading">
-      <div class="container">
-        <div class="projects__header" data-reveal>
-          <div class="projects__header-text">
-            <span class="label">Proyectos</span>
-            <h2 id="projects-heading">
-              Lo que
-              construimos.
-            </h2>
-            <p class="lead">
-              Un club de playa ya en producción, un gimnasio y una barbería en desarrollo.
-            </p>
-          </div>
-        </div>
-
-        <!-- Featured -->
-        <article class="project-featured" data-reveal>
-          <div class="project-featured__media">
-            <div class="carousel" role="region" aria-label="Capturas de Club El Progreso">
-              <div class="carousel__track">
-                <div class="carousel__slides">
-                  <div class="carousel__slide">
-                    <img src="assets/img/progreso-dashboard.webp" width="1024" height="470"
-                      alt="Panel principal de Club El Progreso con métricas y resumen de ocupación" loading="eager"
-                      decoding="async" />
-                  </div>
-                  <div class="carousel__slide">
-                    <img src="assets/img/progreso-mapa.webp" width="1024" height="470"
-                      alt="Mapa interactivo de sombrillas y pileta del club" loading="lazy" decoding="async" />
-                  </div>
-                  <div class="carousel__slide">
-                    <img src="assets/img/progreso-recaudacion.webp" width="1024" height="471"
-                      alt="Módulo de recaudación y estado de cobranzas" loading="lazy" decoding="async" />
-                  </div>
-                </div>
-              </div>
-              <div class="carousel__dots" role="tablist" aria-label="Seleccionar vista">
-                <button class="carousel__dot is-active" role="tab" aria-selected="true" aria-label="Vista 1"></button>
-                <button class="carousel__dot" role="tab" aria-selected="false" aria-label="Vista 2"></button>
-                <button class="carousel__dot" role="tab" aria-selected="false" aria-label="Vista 3"></button>
-              </div>
-            </div>
-          </div>
-
-          <div class="project-featured__content">
-            <header class="project-featured__header">
-              <span class="project-featured__kicker">Proyecto destacado · 01</span>
-              <h3 class="project-featured__title">Club El Progreso</h3>
-              <p class="project-featured__desc">
-                Sistema de gestión integral para club de playa. Digitalizamos la administración de socios, asignación
-                de sombrillas, tarifas y recaudación para optimizar tiempos y reducir errores.
-              </p>
-            </header>
-
-            <ul class="feature-list">
-              <li class="feature-list__item">
-                <span class="feature-list__dot"></span>
-                <span>Mapa interactivo con estados en tiempo real y filtros por sector.</span>
-              </li>
-              <li class="feature-list__item">
-                <span class="feature-list__dot"></span>
-                <span>Gestión de socios, grupos familiares, historial y autorizaciones.</span>
-              </li>
-              <li class="feature-list__item">
-                <span class="feature-list__dot"></span>
-                <span>Módulo de cobranzas con planes diferenciados y reporte de mora.</span>
-              </li>
-              <li class="feature-list__item">
-                <span class="feature-list__dot"></span>
-                <span>Roles y permisos configurables para el equipo administrativo.</span>
-              </li>
-            </ul>
-
-            <div class="tags">
-              <span class="tag">Web App</span>
-              <span class="tag">Full Stack</span>
-              <span class="tag">React</span>
-              <span class="tag">Node.js</span>
-              <span class="tag">PostgreSQL</span>
-            </div>
-
-            <footer class="project-featured__footer">
-              <span class="project-featured__meta">En producción · Sistema de uso interno</span>
-              <a href="#contact" class="btn btn--primary">
-                ¿Te gustaría algo similar?
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                  <path d="M7 17L17 7M7 7h10v10" />
-                </svg>
-              </a>
-            </footer>
-          </div>
-        </article>
-
-        <div class="projects-grid" data-reveal-stagger>
-          <article class="project-card" data-reveal data-spotlight>
-            <span class="project-card__kicker">02 · Sistema de gestión</span>
-            <h3 class="project-card__title">Socios y cobros para gimnasio</h3>
-            <p class="project-card__desc">
-              Administración de socios y pagos: altas, estado de cada cuenta y seguimiento de cuotas desde un solo
-              panel para la administración del gimnasio.
-            </p>
-            <span class="project-card__status">
-              <span class="project-card__dot"></span>
-              En desarrollo
-            </span>
-            <span class="project-card__bg" aria-hidden="true">02</span>
-          </article>
-
-          <article class="project-card" data-reveal data-spotlight>
-            <span class="project-card__kicker">03 · Sistema de gestión</span>
-            <h3 class="project-card__title">Turnos para barbería</h3>
-            <p class="project-card__desc">
-              Gestión de turnos y agenda: disponibilidad, reservas y organización diaria del local, sin cuadernos
-              ni mensajes sueltos.
-            </p>
-            <span class="project-card__status">
-              <span class="project-card__dot"></span>
-              En desarrollo
-            </span>
-            <span class="project-card__bg" aria-hidden="true">03</span>
-          </article>
-        </div>
-      </div>
+    <!-- 2. Quiénes somos, en dos tonos -->
+    <section id="estudio" class="bloque-texto" aria-labelledby="estudio-title">
+      <span class="regla" aria-hidden="true"></span>
+      <h2 id="estudio-title" class="dos-tonos" data-reveal><span>Software a medida.</span> Hecho en la costa.</h2>
+      <p class="bloque-texto__p" data-reveal>Somos <b>Studio 74</b>, un estudio de cuatro desarrolladores: Mariano,
+        Ramiro, Gerónimo y Valentín. Hacemos los sistemas que ordenan un negocio, las agendas que reemplazan al
+        WhatsApp y las webs que te hacen aparecer en Google. En octubre de 2026 revisamos <b>355 negocios</b> de
+        Pinamar, Villa Gesell y Madariaga: <b>275 no tienen web propia</b>. Empezamos por ahí.</p>
     </section>
 
-    <!-- ════════════════════════════════════════════════
-         STACK
-    ════════════════════════════════════════════════ -->
-    <section id="stack" class="section stack" aria-labelledby="stack-heading">
-      <div class="container">
-        <div class="stack__header" data-reveal>
-          <div class="stack__intro">
-            <span class="label">Stack tecnológico</span>
-            <h2 id="stack-heading">
-              Con qué
-              <br />
-              trabajamos.
-            </h2>
+    <!-- 3. El sistema real, dentro de la ventana del editor -->
+    <section id="sistemas" class="sistemas" aria-labelledby="sistemas-title">
+      <div class="ventana" data-reveal="pantalla">
+        <div class="ventana__barra">
+          <span class="ventana__archivo">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6" /></svg>
+            CLUB EL PROGRESO
+          </span>
+          <div class="app__tabs" role="tablist" aria-label="Pantallas del sistema">
+            <button type="button" role="tab" class="app__tab is-on" aria-selected="true" aria-controls="appVista"
+              data-img="assets/img/progreso-dashboard.webp"
+              data-alt="Panel principal del club con métricas y resumen de ocupación">Panel</button>
+            <button type="button" role="tab" class="app__tab" aria-selected="false" aria-controls="appVista"
+              data-img="assets/img/progreso-mapa.webp"
+              data-alt="Mapa de sombrillas y pileta del club, con el estado de cada lugar">Mapa de sombrillas</button>
+            <button type="button" role="tab" class="app__tab" aria-selected="false" aria-controls="appVista"
+              data-img="assets/img/progreso-recaudacion.webp"
+              data-alt="Módulo de recaudación y estado de cobranzas">Recaudación</button>
           </div>
-          <p class="stack__lead lead">
-            Herramientas conocidas y con ecosistema grande: el sistema tiene que poder mantenerse y crecer. Estas
-            cuatro áreas son las que están detrás de Club El Progreso, nuestro sistema en producción.
+          <span class="ventana__estado"><span class="chip__punto"></span>En producción</span>
+        </div>
+        <div class="app__vista" id="appVista" role="tabpanel">
+          <img src="assets/img/progreso-dashboard.webp" width="1024" height="470"
+            alt="Panel principal del club con métricas y resumen de ocupación" loading="lazy" decoding="async" />
+        </div>
+      </div>
+
+      <div class="sistemas__texto">
+        <h2 id="sistemas-title" class="dos-tonos dos-tonos--centro" data-reveal><span>Conocé</span> Club El Progreso</h2>
+        <p class="sistemas__p" data-reveal>El sistema de gestión que usa todos los días la administración de un club de
+          playa: socios y grupos familiares, mapa de sombrillas, tarifas y cobranzas, con permisos por persona.</p>
+      </div>
+
+      <!-- Barra de pedido: escribís y te lleva al formulario con el texto cargado -->
+      <form class="pedido" id="pedido" data-reveal>
+        <span class="pedido__orbe" aria-hidden="true"></span>
+        <label for="pedidoTexto" class="visually-hidden">Contanos qué necesitás</label>
+        <input type="text" id="pedidoTexto" class="pedido__input" autocomplete="off"
+          placeholder="Quiero que mis clientes reserven turnos online" />
+        <button type="submit" class="pedido__enviar" aria-label="Seguir al formulario">
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </button>
+      </form>
+      <p class="pedido__pista" data-reveal><span class="chip__punto"></span>Escribí qué necesitás y seguimos en el
+        formulario.</p>
+    </section>
+
+    <!-- 4. Servicios: preguntas reales de un cliente y lo que respondemos -->
+    <section id="servicios" class="servicios" aria-labelledby="servicios-title">
+      <h2 id="servicios-title" class="visually-hidden">Qué hacemos</h2>
+
+      <article class="servicio">
+        <div class="servicio__texto" data-reveal>
+          <p class="kicker">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h2M7 8v8M11 5v14M15 9v6M19 11v2" /></svg>
+            Sistemas de gestión
           </p>
+          <h3 class="servicio__pregunta">¿Quién me debe la cuota de este mes?</h3>
+          <p class="respuesta"><span class="respuesta__orbe" aria-hidden="true"></span>Listo: 12 socios con la cuota
+            vencida, ordenados por fecha.</p>
+        </div>
+        <div class="servicio__tarjetas" data-reveal-stagger>
+          <div class="tarjeta" data-reveal>
+            <span class="tarjeta__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg></span>
+            <h4>Socios, cobros y stock</h4>
+            <p>Todo lo que hoy anotás en un cuaderno o en varias planillas, en un solo lugar y con permisos por persona.</p>
+          </div>
+          <div class="tarjeta" data-reveal>
+            <span class="tarjeta__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6" /></svg></span>
+            <h4>Reportes que se leen</h4>
+            <p>Cuánto entró, quién debe y qué se vende más, sin armar cuentas a mano a fin de mes.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="servicio servicio--invertido">
+        <div class="servicio__texto" data-reveal>
+          <p class="kicker">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
+            Turnos y reservas
+          </p>
+          <h3 class="servicio__pregunta">¿Me guardás el jueves a las 11?</h3>
+          <p class="respuesta"><span class="respuesta__orbe" aria-hidden="true"></span>Tus clientes reservan solos, y
+            vos dejás de contestar mensajes.</p>
+        </div>
+        <!-- Demo usable con un negocio ficticio -->
+        <div class="agenda" id="agenda" data-reveal>
+          <div class="agenda__cabeza">
+            <p class="agenda__titulo">Peluquería Los Médanos</p>
+            <p class="agenda__sub">Corte, 45 minutos. Negocio de ejemplo.</p>
+          </div>
+          <div class="agenda__dias" role="group" aria-label="Día">
+            <button type="button" class="dia is-on" aria-pressed="true">Hoy</button>
+            <button type="button" class="dia" aria-pressed="false">Mañana</button>
+            <button type="button" class="dia" aria-pressed="false">Jueves</button>
+          </div>
+          <div class="agenda__horas" role="group" aria-label="Horario disponible">
+            <button type="button" class="hora">10:00</button>
+            <button type="button" class="hora">10:45</button>
+            <button type="button" class="hora">11:00</button>
+            <button type="button" class="hora">12:15</button>
+            <button type="button" class="hora">15:00</button>
+            <button type="button" class="hora">15:45</button>
+            <button type="button" class="hora">16:30</button>
+            <button type="button" class="hora">17:15</button>
+          </div>
+          <p class="agenda__estado" id="agendaEstado" role="status" aria-live="polite">Probalo: elegí un horario.</p>
+        </div>
+      </article>
+
+      <article class="servicio">
+        <div class="servicio__texto" data-reveal>
+          <p class="kicker">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
+            Webs y arreglos
+          </p>
+          <h3 class="servicio__pregunta">¿Por qué no aparezco en Google?</h3>
+          <p class="respuesta"><span class="respuesta__orbe" aria-hidden="true"></span>Tu web, conectada a tu ficha de
+            Google, con tus precios y un botón para escribirte.</p>
+        </div>
+        <div class="servicio__tarjetas" data-reveal-stagger>
+          <div class="tarjeta" data-reveal>
+            <span class="tarjeta__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" /></svg></span>
+            <h4>Una web para tu negocio</h4>
+            <p>Lo que hacés, tus precios, horarios y cómo llegar. Rápida, y pensada para el celular.</p>
+          </div>
+          <div class="tarjeta" data-reveal>
+            <span class="tarjeta__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></svg></span>
+            <h4>Arreglos</h4>
+            <p>Enlaces que llevan a una página que no existe, webs caídas, certificados vencidos.</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- 5. Lo que nos piden: carrusel horizontal -->
+    <section class="pedidos" aria-labelledby="pedidos-title">
+      <span class="regla" aria-hidden="true"></span>
+      <div class="pedidos__cabeza">
+        <h2 id="pedidos-title" class="pedidos__titulo" data-reveal>Cosas que resolvemos, <b>contadas como nos las
+            piden.</b></h2>
+        <div class="pedidos__flechas">
+          <button type="button" class="flecha" id="pedidosAnt" aria-label="Anterior">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6" /></svg>
+          </button>
+          <button type="button" class="flecha" id="pedidosSig" aria-label="Siguiente">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6" /></svg>
+          </button>
+        </div>
+      </div>
+      <ul class="pedidos__pista" id="pedidosPista">
+        <li class="pedido-tarjeta"><p class="pedido-tarjeta__tipo">Turnos</p><p class="pedido-tarjeta__texto">Quiero que me reserven sin escribirme por WhatsApp.</p></li>
+        <li class="pedido-tarjeta"><p class="pedido-tarjeta__tipo">Gestión</p><p class="pedido-tarjeta__texto">Necesito saber quién me debe sin revisar el cuaderno.</p></li>
+        <li class="pedido-tarjeta"><p class="pedido-tarjeta__tipo">Reservas</p><p class="pedido-tarjeta__texto">Que vean qué cabaña está libre y dejen la seña.</p></li>
+        <li class="pedido-tarjeta"><p class="pedido-tarjeta__tipo">Webs</p><p class="pedido-tarjeta__texto">Mi web dejó de andar y no sé por qué.</p></li>
+        <li class="pedido-tarjeta"><p class="pedido-tarjeta__tipo">Google</p><p class="pedido-tarjeta__texto">Me buscan en Google y no aparezco.</p></li>
+      </ul>
+    </section>
+
+    <!-- 6. Panel de vidrio: proceso, garantías y preguntas -->
+    <section class="cristal" aria-labelledby="cristal-title">
+      <div class="cristal__fondo" aria-hidden="true">
+        <span class="cristal__letras">74</span>
+      </div>
+      <h2 id="cristal-title" class="visually-hidden">Cómo trabajamos, qué garantizamos y preguntas frecuentes</h2>
+      <div class="panel-vidrio" data-reveal>
+        <div class="segmentos" role="tablist" aria-label="Información del estudio">
+          <button type="button" role="tab" class="segmento is-on" id="tabProceso" aria-selected="true"
+            aria-controls="vistaProceso">Proceso</button>
+          <button type="button" role="tab" class="segmento" id="tabGarantias" aria-selected="false"
+            aria-controls="vistaGarantias" tabindex="-1">Garantías</button>
+          <button type="button" role="tab" class="segmento" id="tabPreguntas" aria-selected="false"
+            aria-controls="vistaPreguntas" tabindex="-1">Preguntas</button>
         </div>
 
-        <div class="stack__grid" data-reveal-stagger>
-          <article class="stack-card" data-reveal data-spotlight>
-            <header class="stack-card__header">
-              <div class="stack-card__icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <polyline points="16 18 22 12 16 6" />
-                  <polyline points="8 6 2 12 8 18" />
-                </svg>
-              </div>
-              <span class="stack-card__title">Frontend</span>
-            </header>
-            <ul class="stack-list">
-              <li class="stack-list__item">React · Next.js</li>
-              <li class="stack-list__item">TypeScript</li>
-              <li class="stack-list__item">Tailwind CSS</li>
-              <li class="stack-list__item">HTML · CSS · JavaScript</li>
-            </ul>
-          </article>
+        <div class="vista" id="vistaProceso" role="tabpanel" aria-labelledby="tabProceso">
+          <ol class="filas">
+            <li class="fila"><span class="fila__n">1</span><div><b>Nos contás qué necesitás</b><p>Por mensaje, por mail o en persona en la costa.</p></div></li>
+            <li class="fila"><span class="fila__n">2</span><div><b>Presupuesto por escrito</b><p>Qué incluye, qué no, cuánto tarda y cuánto sale.</p></div></li>
+            <li class="fila"><span class="fila__n">3</span><div><b>Desarrollo con avances</b><p>Lo ves crecer y lo probamos con vos antes de entregarlo.</p></div></li>
+            <li class="fila"><span class="fila__n">4</span><div><b>Te acompañamos después</b><p>Hosting, mantenimiento y cambios chicos con una cuota mensual.</p></div></li>
+          </ol>
+        </div>
 
-          <article class="stack-card" data-reveal data-spotlight>
-            <header class="stack-card__header">
-              <div class="stack-card__icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <rect x="2" y="3" width="20" height="14" rx="2" />
-                  <line x1="8" y1="21" x2="16" y2="21" />
-                  <line x1="12" y1="17" x2="12" y2="21" />
-                </svg>
-              </div>
-              <span class="stack-card__title">Backend</span>
-            </header>
-            <ul class="stack-list">
-              <li class="stack-list__item">Node.js</li>
-              <li class="stack-list__item">Express · Fastify</li>
-              <li class="stack-list__item">REST APIs</li>
-              <li class="stack-list__item">Python</li>
-            </ul>
-          </article>
+        <div class="vista" id="vistaGarantias" role="tabpanel" aria-labelledby="tabGarantias" hidden>
+          <ul class="filas">
+            <li class="fila"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg><div><b>El dominio es tuyo</b><p>Se registra a tu nombre, no al nuestro.</p></div></li>
+            <li class="fila"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg><div><b>Si te vas, te la llevás</b><p>Te pasamos la web a una cuenta tuya.</p></div></li>
+            <li class="fila"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg><div><b>Respuesta en 24 horas</b><p>Escribís y en menos de un día tenés respuesta.</p></div></li>
+            <li class="fila"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg><div><b>En persona en la costa</b><p>En Pinamar, Gesell o Madariaga lo charlamos cara a cara.</p></div></li>
+          </ul>
+        </div>
 
-          <article class="stack-card" data-reveal data-spotlight>
-            <header class="stack-card__header">
-              <div class="stack-card__icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <ellipse cx="12" cy="5" rx="9" ry="3" />
-                  <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3" />
-                  <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5" />
-                </svg>
-              </div>
-              <span class="stack-card__title">Base de datos</span>
-            </header>
-            <ul class="stack-list">
-              <li class="stack-list__item">PostgreSQL</li>
-              <li class="stack-list__item">Supabase</li>
-              <li class="stack-list__item">MongoDB</li>
-              <li class="stack-list__item">Firebase</li>
-            </ul>
-          </article>
-
-          <article class="stack-card" data-reveal data-spotlight>
-            <header class="stack-card__header">
-              <div class="stack-card__icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <path
-                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-                  <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
-                  <line x1="12" y1="22.08" x2="12" y2="12" />
-                </svg>
-              </div>
-              <span class="stack-card__title">DevOps · Deploy</span>
-            </header>
-            <ul class="stack-list">
-              <li class="stack-list__item">Git · GitHub</li>
-              <li class="stack-list__item">Vercel · Netlify</li>
-              <li class="stack-list__item">Docker</li>
-              <li class="stack-list__item">AWS · GCP</li>
-            </ul>
-          </article>
+        <div class="vista" id="vistaPreguntas" role="tabpanel" aria-labelledby="tabPreguntas" hidden>
+          <details class="pregunta">
+            <summary>¿Qué tipo de sistemas hacen?</summary>
+            <p>Desde una web con turnos hasta un sistema de gestión con usuarios, permisos, cobros y reportes.</p>
+          </details>
+          <details class="pregunta">
+            <summary>¿Con qué tecnologías trabajan?</summary>
+            <p>Herramientas conocidas y con mucho soporte: React y Next.js, Node.js, PostgreSQL y Supabase, entre otras.</p>
+          </details>
+          <details class="pregunta">
+            <summary>¿Cuánto cuesta?</summary>
+            <p>Depende de lo que necesites. Te pasamos un presupuesto por escrito, sin compromiso.</p>
+          </details>
+          <details class="pregunta">
+            <summary>¿Cuánto tarda?</summary>
+            <p>Una web simple, alrededor de una semana desde que nos pasás los textos y las fotos. Lo demás, según el caso.</p>
+          </details>
+          <details class="pregunta">
+            <summary>¿Y si después no quiero seguir?</summary>
+            <p>El dominio ya está a tu nombre. Te avisamos con tiempo y te pasamos la web a una cuenta tuya.</p>
+          </details>
         </div>
       </div>
     </section>
 
-    <!-- ════════════════════════════════════════════════
-         CONTACT
-    ════════════════════════════════════════════════ -->
-    <section id="contact" class="section contact" aria-labelledby="contact-heading">
-      <div class="container">
-        <div class="contact__grid">
-          <div class="contact__info" data-reveal>
-            <span class="label">Contacto</span>
-            <h2 id="contact-heading">
-              Hablemos de tu
-              próximo proyecto.
-            </h2>
-            <p class="contact__text lead">
-              ¿Tenés una idea en mente, necesitás renovar tu web o querés digitalizar un proceso? Contanos qué
-              buscás y te respondemos en menos de 24 horas, sin compromiso.
-            </p>
+    <!-- 7. Cierre: contacto -->
+    <section id="contacto" class="cierre" aria-labelledby="contacto-title">
+      <div class="cierre__luz" aria-hidden="true"></div>
+      <p class="chip" data-reveal><span class="chip__punto"></span>Respondemos en menos de 24 horas</p>
+      <h2 id="contacto-title" class="cierre__titulo" data-reveal>
+        <span class="cierre__trazo" aria-hidden="true"></span>Hablemos
+      </h2>
+      <p class="cierre__bajada" data-reveal>Contanos qué necesitás. <b>Sin compromiso.</b></p>
 
-            <div class="contact-list">
-              <div class="contact-item">
-                <div class="contact-item__icon">
-                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                    <polyline points="22,6 12,13 2,6" />
-                  </svg>
-                </div>
-                <a class="contact-item__text" href="mailto:studio74dev@gmail.com">studio74dev@gmail.com</a>
-              </div>
-              <div class="contact-item">
-                <div class="contact-item__icon">
-                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
-                  </svg>
-                </div>
-                <a class="contact-item__text" href="https://www.instagram.com/studio74dev/" target="_blank"
-                  rel="noopener noreferrer">@studio74dev</a>
-              </div>
-              <div class="contact-item">
-                <div class="contact-item__icon">
-                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                </div>
-                <span class="contact-item__text">Argentina</span>
-              </div>
-            </div>
-          </div>
+      <form class="form" id="contactForm" action="contact.php" method="post" novalidate data-reveal>
+        <fieldset class="form__servicios">
+          <legend class="visually-hidden">Qué te interesa</legend>
+          <label class="servicio-chip"><input type="radio" name="service" value="Un sistema de gestión" required /><span>Sistema de gestión</span></label>
+          <label class="servicio-chip"><input type="radio" name="service" value="Turnos online" /><span>Turnos</span></label>
+          <label class="servicio-chip"><input type="radio" name="service" value="Reservas con seña" /><span>Reservas</span></label>
+          <label class="servicio-chip"><input type="radio" name="service" value="Una web para mi negocio" /><span>Web</span></label>
+          <label class="servicio-chip"><input type="radio" name="service" value="Otra cosa" /><span>Otra cosa</span></label>
+        </fieldset>
 
-          <div class="contact__form-wrap" data-reveal>
-            <form class="form" id="contactForm" action="contact.php" method="post" novalidate>
-              <div class="form__row">
-                <div class="form__field">
-                  <label for="name" class="form__label">Nombre</label>
-                  <input type="text" id="name" name="name" class="form__input" placeholder="Tu nombre"
-                    autocomplete="given-name" required />
-                </div>
-                <div class="form__field">
-                  <label for="email" class="form__label">Email</label>
-                  <input type="email" id="email" name="email" class="form__input" placeholder="tu@email.com"
-                    autocomplete="email" required />
-                </div>
-              </div>
+        <label for="message" class="visually-hidden">Tu negocio y qué querés resolver</label>
+        <textarea id="message" name="message" class="form__mensaje" rows="3"
+          placeholder="Tu negocio y qué querés resolver. Por ejemplo: tengo un gimnasio y anoto las cuotas en un cuaderno."
+          required></textarea>
 
-              <div class="form__field">
-                <label for="service" class="form__label">Tipo de proyecto</label>
-                <select id="service" name="service" class="form__select" required>
-                  <option value="" disabled selected>Seleccioná una opción</option>
-                  <option>Landing page</option>
-                  <option>Sitio web institucional</option>
-                  <option>Aplicación web a medida</option>
-                  <option>Sistema de gestión / Dashboard</option>
-                  <option>Diseño UI/UX</option>
-                  <option>Consultoría técnica</option>
-                  <option>Otro</option>
-                </select>
-              </div>
-
-              <div class="form__field">
-                <label for="message" class="form__label">Mensaje</label>
-                <textarea id="message" name="message" class="form__textarea"
-                  placeholder="Contanos qué necesitás resolver, para cuándo y si tenés un presupuesto estimado."
-                  required></textarea>
-              </div>
-
-              <!-- Anti-spam: honeypot invisible (los bots suelen completarlo) -->
-              <div class="form__hp" aria-hidden="true">
-                <label for="company">Empresa (no completar)</label>
-                <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
-              </div>
-              <!-- Trampa de tiempo: la completa el JS al cargar la página -->
-              <input type="hidden" name="started" id="formStarted" value="" />
-
-              <div class="form__footer">
-                <span class="form__note">Respondemos en menos de 24 hs · Sin compromiso</span>
-                <button type="submit" class="btn btn--primary">
-                  Enviar mensaje
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                    <line x1="22" y1="2" x2="11" y2="13" />
-                    <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                  </svg>
-                </button>
-              </div>
-
-              <p class="form__privacy">
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                  <rect x="3" y="11" width="18" height="11" rx="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-                <span>Usamos tus datos solo para responderte.</span>
-              </p>
-            </form>
-          </div>
+        <div class="form__fila">
+          <span class="pedido__orbe" aria-hidden="true"></span>
+          <label for="name" class="visually-hidden">Tu nombre</label>
+          <input type="text" id="name" name="name" class="form__input" placeholder="Tu nombre" autocomplete="given-name"
+            required />
+          <label for="email" class="visually-hidden">Tu mail</label>
+          <input type="email" id="email" name="email" class="form__input" placeholder="Tu mail" autocomplete="email"
+            required />
+          <button type="submit" class="btn btn--blanco btn--primary">Enviar</button>
         </div>
-      </div>
+
+        <!-- Anti-spam: honeypot invisible (los bots suelen completarlo) -->
+        <div class="form__hp" aria-hidden="true">
+          <label for="company">Empresa (no completar)</label>
+          <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+        </div>
+        <!-- Trampa de tiempo: la completa el JS al cargar la página -->
+        <input type="hidden" name="started" id="formStarted" value="" />
+
+        <p class="form__note">Usamos tus datos solo para responderte. También: <a
+            href="mailto:studio74dev@gmail.com">studio74dev@gmail.com</a></p>
+      </form>
     </section>
 
   </main>
 
-  <!-- ════════════════════════════════════════════════
-       FOOTER
-  ════════════════════════════════════════════════ -->
   <footer class="footer">
-    <div class="container">
-      <div class="footer__inner">
-        <div class="footer__brand">
-          <svg class="footer__brand-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img"
-            aria-label="Studio 74" focusable="false">
-            <rect width="100" height="100" fill="#0B0B0C" />
-            <g fill="none" stroke="#D2FF3A">
-              <path d="M7.7 10.9H64L13 88" stroke-width="6.2" />
-              <path d="M7.7 90.4H18" stroke-width="6.4" />
-              <path d="M90 7.7V78" stroke-width="5.5" />
-              <path d="M90 19L52 59.5M50 60.5H90" stroke-width="4.2" />
-            </g>
-            <rect x="85" y="86" width="8" height="8" fill="#D2FF3A" />
-          </svg>
-          <span class="footer__brand-text">Studio <strong>74</strong></span>
-        </div>
-
-        <span class="footer__copy">© <span id="year"></span> Studio 74. Todos los derechos reservados.</span>
-
-        <nav class="footer__links" aria-label="Navegación secundaria">
-          <a href="#about" class="footer__link">Nosotros</a>
-          <a href="#projects" class="footer__link">Proyectos</a>
-          <a href="#stack" class="footer__link">Stack</a>
-          <a href="#contact" class="footer__link">Contacto</a>
-        </nav>
-      </div>
+    <span class="regla regla--ancha" aria-hidden="true"></span>
+    <div class="footer__inner">
+      <!-- Redes: las que todavía no existen van atenuadas y sin enlace.
+           Para activar una: cambiar el <span> por un <a href="..."> con la misma clase, sin "red--pendiente". -->
+      <ul class="redes" aria-label="Redes y canales de Studio 74">
+        <li><a class="red" href="mailto:studio74dev@gmail.com" aria-label="Mail"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg></a></li>
+        <li><a class="red" href="https://www.instagram.com/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="2" width="20" height="20" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg></a></li>
+        <li><a class="red" href="https://github.com/studio74dev" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg></a></li>
+        <li><span class="red red--pendiente" role="img" aria-label="WhatsApp, próximamente" title="WhatsApp: próximamente"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.3A8.5 8.5 0 1 1 21 11.5z" /><path d="M9 8.6c.2 2.9 2.5 5.2 5.4 5.5l1-1.3-1.8-1-.8.8a4 4 0 0 1-1.9-1.9l.8-.8-1-1.8z" /></svg></span></li>
+        <li><span class="red red--pendiente" role="img" aria-label="Facebook, próximamente" title="Facebook: próximamente"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg></span></li>
+        <li><span class="red red--pendiente" role="img" aria-label="LinkedIn, próximamente" title="LinkedIn: próximamente"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></svg></span></li>
+      </ul>
+      <p class="footer__zona">Pinamar, Villa Gesell, General Madariaga y alrededores</p>
+      <p class="footer__copy">©<span id="year"></span> Studio 74</p>
     </div>
   </footer>
 
-  <script src="js/main.js?v=2" defer></script>
+  <script src="js/main.js?v=11" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
