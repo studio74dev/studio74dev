@@ -26,18 +26,18 @@ En el orden de `index.html`. Todo el texto va en registro formal (usted o neutro
 Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` o `senal`).
 
 1. **Intro de carga** (`#intro`): líneas que se dibujan, el 74 trazándose, "STUDIO 74" letra por letra y un contador que sigue la carga real. Al llegar a 100 aparece **Entrar**; si nadie lo toca, entra sola. La pantalla se abre en dos y el logo vuela a la barra.
-2. **Barra**: fina, esmerilada y siempre visible. Logo, las secciones (en pantallas anchas, marcando la que se está leyendo), el botón de **tema claro/oscuro**, "Hablemos" e **Índice**, que abre la navegación a pantalla completa. Toma el color del capítulo que tiene debajo. A la derecha, el **riel** de progreso: el trazo del 4 con el punto de la marca.
+2. **Barra**: fina, esmerilada y siempre visible. El isotipo (sin "STUDIO 74" al lado, para no repetir el 74), las secciones (en pantallas anchas, marcando la que se está leyendo), el botón de **tema claro/oscuro**, "Hablemos" (también en el celular) e **Índice**, que abre la navegación a pantalla completa. Toma el color del capítulo que tiene debajo. A la derecha, el **riel** de progreso: el trazo del 4 con el punto de la marca.
 3. **Portada** (`#inicio`, base): frase de valor centrada, con el 74 detrás, y las dos acciones. Al bajar, el texto se va, el 74 se enciende, los trazos del 7 y el 4 se separan y **el punto crece hasta cubrir la pantalla**: así se entra al capítulo siguiente.
-4. **Visión** (`#vision`, señal): el manifiesto se enciende palabra por palabra con el scroll.
+4. **Visión** (`#vision`, señal, azul): el manifiesto se enciende palabra por palabra con el scroll.
 5. **El problema** (`#problema`, base): los cinco problemas se deslizan en horizontal mientras se baja.
 6. **Bandas cruzadas**: dos cintas en diagonal, como los trazos del 7 y el 4, que corren con el scroll.
 7. **Qué hacemos** (`#servicios`, alt): un teléfono ilustrativo se arma a medida que se leen los tres pasos del paquete de entrada (página, Google Maps, WhatsApp). Debajo, el trabajo a medida en un mosaico de tarjetas. Los enlaces con `data-servicio` dejan marcado ese tipo en el formulario.
 8. **Caso real** (`#caso`, base): la ventana de Club El Progreso se apoya y se endereza; sus pestañas funcionan.
 9. **Sin letra chica** (`#diferencia`, base): los compromisos concretos en un mosaico, con un trazo que se completa.
 10. **Proceso** (`#proceso`, alt): la línea se dibuja con el scroll y enciende cada paso.
-11. **El estudio** (`#estudio`, base): los cuatro integrantes. Los cargos que faltan se ven con borde punteado (`.pendiente`) a propósito.
+11. **El estudio** (`#estudio`, base): los cuatro desarrolladores full stack con su formación (Licenciatura en Sistemas y Técnico en Software) y el enlace al GitHub de la organización.
 12. **Preguntas frecuentes** (`#preguntas`, alt).
-13. **Contacto** (`#contacto`, base): el formulario se completa como una frase ("Hola, mi nombre es…") y al lado van los canales directos.
+13. **Contacto** (`#contacto`, base): formulario simple con etiquetas visibles (nombre, correo, tipo de consulta y mensaje) y, al lado, los canales directos.
 14. **Pie** con redes y la marca a todo el ancho.
 
 ## Cosas a saber antes de tocar
@@ -51,10 +51,11 @@ Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` 
 
 ### Paleta, temas y capítulos
 
-- Solo los tres colores del logo: **tinta** `#0B0B0C`, **papel** `#F4F3EF` y **señal** `#D2FF3A` (más blanco y dos grises oscuros para las tarjetas).
+- El logo en blanco y negro con un solo color de acento: **tinta** `#0B0B0C`, **papel** `#F4F3EF` y **señal**, un azul costa `#2F5BEA` (más blanco y dos grises oscuros para las tarjetas). Sobre fondos oscuros, el texto de acento usa su versión clara `#8EA8FF`.
+- El acento vive en una sola variable (`--senal` en `styles.css`), con `--senal-claro` y `--sobre-senal` (texto encima). Para probar otro tono se cambian esas tres y se revisa el contraste.
 - **Tema claro y oscuro**: `html[data-theme="claro|oscuro"]`. Lo pone el script del `<head>` antes del primer pintado: el que eligió el visitante con el botón de la barra (guardado en `localStorage` como `s74-tema`) o, si nunca lo tocó, el del sistema.
 - Cada capítulo declara `data-tema="base|alt|senal"` y eso redefine `--fondo`, `--texto`, `--suave`, `--superficie`, `--boton-fondo`… según el tema. `base` y `alt` cambian con el tema; `senal` es verde en los dos. Para un capítulo nuevo alcanza con ponerle `class="capitulo"` y su `data-tema`.
-- La señal nunca va como texto sobre papel (no tiene contraste): en el tema claro el acento y los botones principales son de tinta (con texto en señal).
+- Contrastes: blanco sobre el azul 5,5:1, azul sobre papel 5:1, azul claro sobre tinta 8,6:1. Con `prefers-contrast: more` el texto secundario pasa a color pleno.
 
 ### Tipografía
 
@@ -152,7 +153,6 @@ Dos cosas a tener en cuenta:
 ## Pendientes anotados
 
 - Número de WhatsApp del estudio (constante `CANALES` en `js/main.js`).
-- Cargo o área de Ramiro, Gerónimo y Valentín en `#estudio` (marcados `TODO`). El de Mariano sale de la firma de mail.
 - Medios de pago aceptados, en la pregunta frecuente y en el JSON-LD (hoy dice que se detallan en el presupuesto).
 - Dominio propio `studio74dev.com` (hoy `studio74dev.github.io` es provisional). Cuando
   esté, hay que actualizar `canonical`, `og:url`, `og:image`, las URLs de `sitemap.xml`,
