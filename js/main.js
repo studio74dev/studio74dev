@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   STUDIO 74 — MAIN SCRIPT V6
+   STUDIO 74 — MAIN SCRIPT V7
 ═══════════════════════════════════════════════════════ */
 
 (function () {
@@ -145,47 +145,6 @@
   );
   document.querySelectorAll('section[id]').forEach((s) => sectionObserver.observe(s));
 
-  /* ── Demo de agenda (negocio ficticio) ───────────── */
-  const agenda = document.getElementById('agenda');
-  if (agenda) {
-    const estado = document.getElementById('agendaEstado');
-    const dias = agenda.querySelectorAll('.dia');
-    const horas = agenda.querySelectorAll('.hora');
-    // Horarios ocupados por día, para que cambiar de día cambie la grilla
-    const ocupados = [[0, 3, 6], [1, 4], [0, 4, 7]];
-    let dia = 0;
-
-    const pintar = () => {
-      horas.forEach((h, i) => {
-        h.disabled = ocupados[dia].includes(i);
-        h.classList.remove('is-on');
-        h.setAttribute('aria-pressed', 'false');
-      });
-      estado.textContent = 'Probalo: elegí un horario.';
-      estado.classList.remove('is-ok');
-    };
-
-    dias.forEach((d, i) => d.addEventListener('click', () => {
-      dia = i;
-      dias.forEach((x, j) => {
-        x.classList.toggle('is-on', j === i);
-        x.setAttribute('aria-pressed', String(j === i));
-      });
-      pintar();
-    }));
-
-    horas.forEach((h) => h.addEventListener('click', () => {
-      horas.forEach((x) => {
-        x.classList.toggle('is-on', x === h);
-        x.setAttribute('aria-pressed', String(x === h));
-      });
-      estado.textContent = `Turno reservado: ${dias[dia].textContent.toLowerCase()} a las ${h.textContent}. Te llega el recordatorio por WhatsApp.`;
-      estado.classList.add('is-ok');
-    }));
-
-    pintar();
-  }
-
   /* ── Pestañas del sistema real ───────────────────── */
   const tabs = document.querySelectorAll('.app__tab');
   const vista = document.querySelector('#appVista img');
@@ -205,91 +164,12 @@
     setTimeout(cambiar, 220);
   }));
 
-  /* ── Barra de pedido → formulario ────────────────── */
-  /* Lo que se escribe pasa al mensaje del formulario y se baja hasta ahí. */
-  const pedido = document.getElementById('pedido');
-  if (pedido) {
-    const entrada = document.getElementById('pedidoTexto');
-    const ejemplos = [
-      'Quiero que mis clientes reserven turnos online',
-      'Necesito saber quién me debe la cuota',
-      'Quiero que vean qué cabaña está libre',
-      'Mi web dejó de andar',
-    ];
-    let k = 0;
-    if (!reduceMotion) {
-      setInterval(() => {
-        if (document.activeElement === entrada || entrada.value) return;
-        k = (k + 1) % ejemplos.length;
-        entrada.placeholder = ejemplos[k];
-      }, 3200);
-    }
-    pedido.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const texto = entrada.value.trim() || entrada.placeholder;
-      const mensaje = document.getElementById('message');
-      mensaje.value = texto;
-      document.getElementById('contacto').scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
-      setTimeout(() => document.getElementById('name').focus({ preventScroll: true }), reduceMotion ? 0 : 700);
-    });
-  }
-
-  /* ── Carrusel de pedidos ─────────────────────────── */
-  const pista = document.getElementById('pedidosPista');
-  if (pista) {
-    const mover = (dir) => {
-      const tarjeta = pista.querySelector('.pedido-tarjeta');
-      const paso = tarjeta ? tarjeta.getBoundingClientRect().width + 20 : 300;
-      pista.scrollBy({ left: dir * paso, behavior: reduceMotion ? 'auto' : 'smooth' });
-    };
-    document.getElementById('pedidosAnt').addEventListener('click', () => mover(-1));
-    document.getElementById('pedidosSig').addEventListener('click', () => mover(1));
-  }
-
-  /* ── Panel de vidrio: pestañas con teclado ───────── */
-  const segmentos = Array.from(document.querySelectorAll('.segmento'));
-  const elegir = (seg, enfocar) => {
-    segmentos.forEach((s) => {
-      const on = s === seg;
-      s.classList.toggle('is-on', on);
-      s.setAttribute('aria-selected', String(on));
-      s.tabIndex = on ? 0 : -1;
-      document.getElementById(s.getAttribute('aria-controls')).hidden = !on;
-    });
-    if (enfocar) seg.focus();
-  };
-  segmentos.forEach((s, i) => {
-    s.addEventListener('click', () => elegir(s, false));
-    s.addEventListener('keydown', (e) => {
-      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
-      e.preventDefault();
-      const j = (i + (e.key === 'ArrowRight' ? 1 : segmentos.length - 1)) % segmentos.length;
-      elegir(segmentos[j], true);
-    });
-  });
-
-  /* ── Contadores ──────────────────────────────────── */
-  /* El número final ya está en el HTML (sin JS se lee bien). */
-  const contar = (el) => {
-    if (reduceMotion) return;
-    const target = parseInt(el.dataset.counter || '0', 10);
-    const start = performance.now();
-    const tick = (t) => {
-      const p = Math.min((t - start) / 1400, 1);
-      el.textContent = Math.round((1 - Math.pow(1 - p, 4)) * target).toLocaleString('es-AR');
-      if (p < 1) requestAnimationFrame(tick);
-    };
-    el.textContent = '0';
-    requestAnimationFrame(tick);
-  };
-
   /* ── Reveal on scroll ───────────────────────────── */
   const revealObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
         entry.target.classList.add('is-visible');
-        entry.target.querySelectorAll('[data-counter]').forEach(contar);
         revealObserver.unobserve(entry.target);
       });
     },
@@ -302,7 +182,14 @@
     });
   });
 
-  document.querySelectorAll('[data-reveal], .dos-tonos').forEach((el) => revealObserver.observe(el));
+  document.querySelectorAll('[data-reveal]').forEach((el) => revealObserver.observe(el));
+
+  /* ── Enlaces que preeligen el tipo de consulta ─────── */
+  /* "Solicitar presupuesto" desde un servicio deja marcado ese servicio en el formulario. */
+  document.querySelectorAll('[data-servicio]').forEach((a) => a.addEventListener('click', () => {
+    const radio = document.querySelector(`#contactForm input[name="service"][value="${a.dataset.servicio}"]`);
+    if (radio) radio.checked = true;
+  }));
 
   /* ── Contact form ───────────────────────────────── */
   /* Tres modos, en este orden:
@@ -399,7 +286,7 @@
           const info = await res.json().catch(() => null);
           return {
             state: 'limit',
-            message: (info && info.message) || 'Demasiados envíos, probá de nuevo en unos minutos',
+            message: (info && info.message) || 'Demasiados envíos seguidos. Intente nuevamente en unos minutos.',
           };
         }
 
@@ -455,14 +342,14 @@
       // Honeypot lleno → bot: éxito falso, sin abrir nada.
       const hp = form.querySelector('[name="company"]');
       if (hp && hp.value.trim() !== '') {
-        setState('is-sent', { btn: `${CHECK_SVG} ¡Mensaje enviado!`, reset: true });
+        setState('is-sent', { btn: `${CHECK_SVG} Consulta enviada`, reset: true });
         return;
       }
 
       const data = new FormData(form);
       setState('is-loading', { btn: 'Enviando…' });
 
-      const sent = () => setState('is-sent', { btn: `${CHECK_SVG} ¡Mensaje enviado!`, reset: true });
+      const sent = () => setState('is-sent', { btn: `${CHECK_SVG} Consulta enviada`, reset: true });
 
       // 1) Hosting con PHP (Hostinger): envío propio, sin terceros.
       const php = await sendViaPhp(data);
@@ -482,8 +369,8 @@
       // 3) Último recurso: abrimos el correo del visitante.
       openMailto(data);
       setState('is-sent', {
-        btn: 'Se abrió tu correo',
-        note: 'El mensaje está listo en tu app de correo: solo tenés que darle a enviar.',
+        btn: 'Se abrió su correo',
+        note: 'El mensaje quedó listo en su aplicación de correo: solo resta enviarlo.',
         ms: 6000,
       });
     });

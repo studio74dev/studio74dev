@@ -90,7 +90,7 @@
       rel="stylesheet" />
   </noscript>
 
-  <link rel="stylesheet" href="css/styles.css?v=11" />
+  <link rel="stylesheet" href="css/styles.css?v=12" />
   <!-- Con JS, lo animado arranca oculto; sin JS se ve siempre.
        La intro se muestra una vez por sesión (o siempre con ?intro), nunca con reduced-motion. -->
   <script>
@@ -112,6 +112,8 @@
 </head>
 
 <body>
+
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
 
   <!-- Intro: pantalla de carga con líneas, el 74 y la marca. Termina con "Entrar". -->
   <div class="intro" id="intro">
@@ -163,13 +165,12 @@
       </a>
 
       <ul class="nav__links" id="navLinks">
-        <li><a href="#sistemas" class="nav__link">Sistemas</a></li>
         <li><a href="#servicios" class="nav__link">Servicios</a></li>
+        <li><a href="#caso" class="nav__link">Caso real</a></li>
+        <li><a href="#proceso" class="nav__link">Proceso</a></li>
         <li><a href="#estudio" class="nav__link">El estudio</a></li>
-        <li><a href="#contacto" class="nav__link nav__link--cta">Pedí tu presupuesto
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-              <path d="M7 17L17 7M8 7h9v9" />
-            </svg></a></li>
+        <li><a href="#preguntas" class="nav__link">Preguntas</a></li>
+        <li><a href="#contacto" class="nav__link nav__link--cta">Solicitar presupuesto</a></li>
       </ul>
 
       <button class="tema" id="tema" type="button" aria-label="Cambiar a modo claro">
@@ -191,54 +192,159 @@
     <div class="nav__backdrop" id="navBackdrop" aria-hidden="true"></div>
   </header>
 
-  <main>
+  <main id="contenido">
 
-    <!-- 1. Portada: un editor. La barra de propiedades cambia el título de verdad. -->
+    <!-- 1. Portada: propuesta de valor y las dos acciones -->
     <section id="inicio" class="hero" aria-labelledby="hero-title">
-      <div class="editor">
-        <div class="editor__cuerpo">
-          <ul class="editor__herramientas" aria-hidden="true">
-            <li><svg viewBox="0 0 24 24"><path d="M6 2v20M18 2v20M2 6h20M2 18h20" /></svg></li>
-            <li><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" /></svg></li>
-            <li><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg></li>
-            <li><svg viewBox="0 0 24 24"><path d="M4 7V4h16v3M9 20h6M12 4v16" /></svg></li>
-            <li><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="8" ry="3" /><path d="M20 12c0 1.7-3.6 3-8 3s-8-1.3-8-3M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5" /></svg></li>
-          </ul>
-
-          <div class="lienzo">
-            <div class="lienzo__luz" aria-hidden="true"></div>
-            <p class="chip"><span class="chip__punto"></span>Respondemos en menos de 24 horas</p>
-            <div class="seleccion" id="seleccion">
-              <span class="seleccion__tag" aria-hidden="true">&lt;h1&gt;</span>
-              <span class="seleccion__manija seleccion__manija--1" aria-hidden="true"></span>
-              <span class="seleccion__manija seleccion__manija--2" aria-hidden="true"></span>
-              <span class="seleccion__manija seleccion__manija--3" aria-hidden="true"></span>
-              <span class="seleccion__manija seleccion__manija--4" aria-hidden="true"></span>
-              <h1 id="hero-title" class="hero__title">Software a medida para tu negocio.</h1>
-            </div>
-            <p class="hero__lead">Sistemas de gestión, turnos y reservas online, y webs. <b>Lo diseñamos, lo programamos y
-                lo dejamos funcionando.</b></p>
-            <div class="hero__acciones">
-              <a href="#contacto" class="btn btn--blanco">Pedí tu presupuesto
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a>
-              <a href="#sistemas" class="btn btn--vidrio">Ver un sistema real</a>
-            </div>
+      <div class="hero__contenido">
+        <div class="hero__texto">
+          <p class="eyebrow">Estudio de desarrollo · Pinamar, Villa Gesell y General Madariaga</p>
+          <h1 id="hero-title" class="hero__title">Software y presencia digital para comercios de la costa.</h1>
+          <p class="hero__lead">Diseñamos, desarrollamos y mantenemos el canal digital de su negocio: desde una página
+            propia con ubicación en Google Maps y contacto por WhatsApp hasta sistemas de gestión a medida.</p>
+          <div class="hero__acciones">
+            <a href="#contacto" class="btn btn--principal">Solicitar presupuesto
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
+            <a href="#caso" class="btn btn--secundario">Ver un caso real</a>
           </div>
+          <ul class="hero__garantias">
+            <li>Respuesta en menos de 24 horas</li>
+            <li>Presupuesto por escrito y sin cargo</li>
+            <li>El dominio queda a nombre del cliente</li>
+          </ul>
         </div>
+
+        <aside class="ficha" aria-labelledby="ficha-title">
+          <p class="ficha__rotulo">Para empezar</p>
+          <h2 id="ficha-title" class="ficha__titulo">Paquete de entrada</h2>
+          <ul class="ficha__lista">
+            <li>Página propia del negocio, pensada para el celular</li>
+            <li>Ubicación y ficha en Google Maps</li>
+            <li>Contacto directo por WhatsApp</li>
+            <li>Dominio registrado a nombre del cliente</li>
+          </ul>
+          <a href="#servicios" class="ficha__enlace">Ver qué incluye
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
+        </aside>
       </div>
     </section>
 
-    <!-- 2. Quiénes somos, en dos tonos -->
-    <section id="estudio" class="bloque-texto" aria-labelledby="estudio-title">
-      <span class="regla" aria-hidden="true"></span>
-      <h2 id="estudio-title" class="dos-tonos" data-reveal><span>Software a medida.</span> Hecho en la costa.</h2>
-      <p class="bloque-texto__p" data-reveal>Somos <b>Studio 74</b>, un estudio de cuatro desarrolladores: Mariano,
-        Ramiro, Gerónimo y Valentín. Hacemos los sistemas que ordenan un negocio, las agendas que reemplazan al
-        WhatsApp y las webs que te hacen aparecer en Google.</p>
+    <!-- 2. El problema y los casos típicos, en tercera persona -->
+    <section id="problema" class="seccion" aria-labelledby="problema-title">
+      <div class="seccion__cabeza" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__n">01</span>El problema</p>
+        <h2 id="problema-title" class="seccion__titulo">Buena reputación, sin un canal digital propio.</h2>
+        <p class="seccion__bajada">Muchos comercios de la costa son conocidos en su ciudad y tienen clientes fieles,
+          pero dependen de terceros para que los encuentren: un perfil en redes sociales, el boca a boca o una ficha de
+          Google incompleta. Quien los busca no encuentra horarios, precios ni una forma directa de contactarlos.</p>
+      </div>
+
+      <h3 class="subtitulo" data-reveal>Problemas que resolvemos</h3>
+      <ul class="problemas" data-reveal-stagger>
+        <li class="problema" data-reveal>
+          <p class="problema__tipo">Presencia en Google</p>
+          <p class="problema__texto">El negocio no aparece cuando se lo busca, o aparece con datos desactualizados.</p>
+        </li>
+        <li class="problema" data-reveal>
+          <p class="problema__tipo">Turnos</p>
+          <p class="problema__texto">Los turnos se piden por mensaje y se anotan a mano, con superposiciones y
+            ausencias sin aviso.</p>
+        </li>
+        <li class="problema" data-reveal>
+          <p class="problema__tipo">Reservas</p>
+          <p class="problema__texto">Los huéspedes no pueden consultar la disponibilidad ni dejar una seña sin
+            intercambiar varios mensajes.</p>
+        </li>
+        <li class="problema" data-reveal>
+          <p class="problema__tipo">Gestión</p>
+          <p class="problema__texto">Las cuotas y los saldos se llevan en cuadernos o planillas sueltas, y saber quién
+            adeuda lleva horas.</p>
+        </li>
+        <li class="problema" data-reveal>
+          <p class="problema__tipo">Sitio web</p>
+          <p class="problema__texto">El sitio existente dejó de funcionar o muestra información vieja, y nadie sabe
+            cómo recuperarlo.</p>
+        </li>
+      </ul>
     </section>
 
-    <!-- 3. El sistema real, dentro de la ventana del editor -->
-    <section id="sistemas" class="sistemas" aria-labelledby="sistemas-title">
+    <!-- 3. Qué hacemos: el paquete de entrada y, aparte, el trabajo a medida -->
+    <section id="servicios" class="seccion" aria-labelledby="servicios-title">
+      <div class="seccion__cabeza" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__n">02</span>Qué hacemos</p>
+        <h2 id="servicios-title" class="seccion__titulo">Un punto de partida claro y, cuando hace falta, software a
+          medida.</h2>
+      </div>
+
+      <article class="paquete" aria-labelledby="paquete-title" data-reveal>
+        <div class="paquete__intro">
+          <p class="paquete__rotulo">Paquete de entrada</p>
+          <h3 id="paquete-title" class="paquete__titulo">Presencia digital completa para empezar.</h3>
+          <p class="paquete__p">Todo lo necesario para que un cliente encuentre el negocio, sepa qué ofrece y se
+            comunique en un solo paso.</p>
+          <a href="#contacto" class="btn btn--principal" data-servicio="Paquete de entrada">Solicitar presupuesto
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
+        </div>
+        <ol class="paquete__items">
+          <li class="item">
+            <span class="item__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" /></svg></span>
+            <div>
+              <h4>Página propia</h4>
+              <p>Qué ofrece el negocio, precios, horarios y cómo llegar. Rápida y pensada para el celular.</p>
+            </div>
+          </li>
+          <li class="item">
+            <span class="item__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg></span>
+            <div>
+              <h4>Google Maps</h4>
+              <p>La ficha del negocio configurada y vinculada a la página, para aparecer en búsquedas y mapas.</p>
+            </div>
+          </li>
+          <li class="item">
+            <span class="item__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.3A8.5 8.5 0 1 1 21 11.5z" /></svg></span>
+            <div>
+              <h4>Contacto por WhatsApp</h4>
+              <p>Un botón que abre la conversación con el negocio, sin formularios ni pasos intermedios.</p>
+            </div>
+          </li>
+        </ol>
+      </article>
+
+      <h3 class="subtitulo" data-reveal>Además, trabajo a medida</h3>
+      <ul class="servicios" data-reveal-stagger>
+        <li class="servicio" data-reveal>
+          <span class="item__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6" /></svg></span>
+          <h4>Sistemas a medida</h4>
+          <p>Socios, cobros, stock y reportes en un solo lugar, con permisos por usuario.</p>
+          <a href="#contacto" class="servicio__enlace" data-servicio="Sistema a medida">Consultar<span class="visually-hidden"> sobre sistemas a medida</span></a>
+        </li>
+        <li class="servicio" data-reveal>
+          <span class="item__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg></span>
+          <h4>Turnos y reservas</h4>
+          <p>Agenda online para que los clientes reserven solos, con señas y recordatorios.</p>
+          <a href="#contacto" class="servicio__enlace" data-servicio="Turnos y reservas">Consultar<span class="visually-hidden"> sobre turnos y reservas</span></a>
+        </li>
+        <li class="servicio" data-reveal>
+          <span class="item__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-3-6.7L21 8" /><path d="M21 3v5h-5" /></svg></span>
+          <h4>Automatización</h4>
+          <p>Tareas repetitivas que hoy se hacen a mano: avisos a clientes, reportes periódicos e integración entre
+            sistemas.</p>
+          <a href="#contacto" class="servicio__enlace" data-servicio="Automatización">Consultar<span class="visually-hidden"> sobre automatización</span></a>
+        </li>
+      </ul>
+      <p class="nota" data-reveal>También resolvemos arreglos de sitios existentes: páginas caídas, certificados
+        vencidos y enlaces rotos.</p>
+    </section>
+
+    <!-- 4. Caso real: Club El Progreso, dentro de una ventana con pestañas -->
+    <section id="caso" class="seccion" aria-labelledby="caso-title">
+      <div class="seccion__cabeza" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__n">03</span>Caso real</p>
+        <h2 id="caso-title" class="seccion__titulo">Club El Progreso</h2>
+        <p class="seccion__bajada">Sistema de gestión que utiliza a diario la administración de un club de playa:
+          socios y grupos familiares, mapa de sombrillas, tarifas y cobranzas, con permisos por usuario.</p>
+      </div>
+
       <div class="ventana" data-reveal="pantalla">
         <div class="ventana__barra">
           <span class="ventana__archivo">
@@ -256,7 +362,7 @@
               data-img="assets/img/progreso-recaudacion.webp"
               data-alt="Módulo de recaudación y estado de cobranzas">Recaudación</button>
           </div>
-          <span class="ventana__estado"><span class="chip__punto"></span>En producción</span>
+          <span class="ventana__estado"><span class="punto" aria-hidden="true"></span>En producción</span>
         </div>
         <div class="app__vista" id="appVista" role="tabpanel">
           <img src="assets/img/progreso-dashboard.webp" width="1024" height="470"
@@ -264,230 +370,159 @@
         </div>
       </div>
 
-      <div class="sistemas__texto">
-        <h2 id="sistemas-title" class="dos-tonos dos-tonos--centro" data-reveal><span>Conocé</span> Club El Progreso</h2>
-        <p class="sistemas__p" data-reveal>El sistema de gestión que usa todos los días la administración de un club de
-          playa: socios y grupos familiares, mapa de sombrillas, tarifas y cobranzas, con permisos por persona.</p>
-      </div>
-
-      <!-- Barra de pedido: escribís y te lleva al formulario con el texto cargado -->
-      <form class="pedido" id="pedido" data-reveal>
-        <span class="pedido__orbe" aria-hidden="true"></span>
-        <label for="pedidoTexto" class="visually-hidden">Contanos qué necesitás</label>
-        <input type="text" id="pedidoTexto" class="pedido__input" autocomplete="off"
-          placeholder="Quiero que mis clientes reserven turnos online" />
-        <button type="submit" class="pedido__enviar" aria-label="Seguir al formulario">
-          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-        </button>
-      </form>
-      <p class="pedido__pista" data-reveal><span class="chip__punto"></span>Escribí qué necesitás y seguimos en el
-        formulario.</p>
+      <dl class="datos" data-reveal-stagger>
+        <div class="dato" data-reveal><dt>Tipo</dt><dd>Sistema de gestión a medida</dd></div>
+        <div class="dato" data-reveal><dt>Módulos</dt><dd>Socios, mapa de sombrillas, tarifas y cobranzas</dd></div>
+        <div class="dato" data-reveal><dt>Estado</dt><dd>En producción, de uso diario</dd></div>
+      </dl>
     </section>
 
-    <!-- 4. Servicios: preguntas reales de un cliente y lo que respondemos -->
-    <section id="servicios" class="servicios" aria-labelledby="servicios-title">
-      <h2 id="servicios-title" class="visually-hidden">Qué hacemos</h2>
-
-      <article class="servicio">
-        <div class="servicio__texto" data-reveal>
-          <p class="kicker">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 12h2M7 8v8M11 5v14M15 9v6M19 11v2" /></svg>
-            Sistemas de gestión
-          </p>
-          <h3 class="servicio__pregunta">¿Quién me debe la cuota de este mes?</h3>
-          <p class="respuesta"><span class="respuesta__orbe" aria-hidden="true"></span>Listo: 12 socios con la cuota
-            vencida, ordenados por fecha.</p>
-        </div>
-        <div class="servicio__tarjetas" data-reveal-stagger>
-          <div class="tarjeta" data-reveal>
-            <span class="tarjeta__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg></span>
-            <h4>Socios, cobros y stock</h4>
-            <p>Todo lo que hoy anotás en un cuaderno o en varias planillas, en un solo lugar y con permisos por persona.</p>
-          </div>
-          <div class="tarjeta" data-reveal>
-            <span class="tarjeta__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6" /></svg></span>
-            <h4>Reportes que se leen</h4>
-            <p>Cuánto entró, quién debe y qué se vende más, sin armar cuentas a mano a fin de mes.</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="servicio servicio--invertido">
-        <div class="servicio__texto" data-reveal>
-          <p class="kicker">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="18" rx="2" /><path d="M16 2v4M8 2v4M3 10h18" /></svg>
-            Turnos y reservas
-          </p>
-          <h3 class="servicio__pregunta">¿Me guardás el jueves a las 11?</h3>
-          <p class="respuesta"><span class="respuesta__orbe" aria-hidden="true"></span>Tus clientes reservan solos, y
-            vos dejás de contestar mensajes.</p>
-        </div>
-        <!-- Demo usable con un negocio ficticio -->
-        <div class="agenda" id="agenda" data-reveal>
-          <div class="agenda__cabeza">
-            <p class="agenda__titulo">Peluquería Los Médanos</p>
-            <p class="agenda__sub">Corte, 45 minutos. Negocio de ejemplo.</p>
-          </div>
-          <div class="agenda__dias" role="group" aria-label="Día">
-            <button type="button" class="dia is-on" aria-pressed="true">Hoy</button>
-            <button type="button" class="dia" aria-pressed="false">Mañana</button>
-            <button type="button" class="dia" aria-pressed="false">Jueves</button>
-          </div>
-          <div class="agenda__horas" role="group" aria-label="Horario disponible">
-            <button type="button" class="hora">10:00</button>
-            <button type="button" class="hora">10:45</button>
-            <button type="button" class="hora">11:00</button>
-            <button type="button" class="hora">12:15</button>
-            <button type="button" class="hora">15:00</button>
-            <button type="button" class="hora">15:45</button>
-            <button type="button" class="hora">16:30</button>
-            <button type="button" class="hora">17:15</button>
-          </div>
-          <p class="agenda__estado" id="agendaEstado" role="status" aria-live="polite">Probalo: elegí un horario.</p>
-        </div>
-      </article>
-
-      <article class="servicio">
-        <div class="servicio__texto" data-reveal>
-          <p class="kicker">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
-            Webs y arreglos
-          </p>
-          <h3 class="servicio__pregunta">¿Por qué no aparezco en Google?</h3>
-          <p class="respuesta"><span class="respuesta__orbe" aria-hidden="true"></span>Tu web, conectada a tu ficha de
-            Google, con tus precios y un botón para escribirte.</p>
-        </div>
-        <div class="servicio__tarjetas" data-reveal-stagger>
-          <div class="tarjeta" data-reveal>
-            <span class="tarjeta__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8M12 17v4" /></svg></span>
-            <h4>Una web para tu negocio</h4>
-            <p>Lo que hacés, tus precios, horarios y cómo llegar. Rápida, y pensada para el celular.</p>
-          </div>
-          <div class="tarjeta" data-reveal>
-            <span class="tarjeta__icono" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" /></svg></span>
-            <h4>Arreglos</h4>
-            <p>Enlaces que llevan a una página que no existe, webs caídas, certificados vencidos.</p>
-          </div>
-        </div>
-      </article>
+    <!-- 5. Cómo trabajamos: cuatro pasos -->
+    <section id="proceso" class="seccion" aria-labelledby="proceso-title">
+      <div class="seccion__cabeza" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__n">04</span>Cómo trabajamos</p>
+        <h2 id="proceso-title" class="seccion__titulo">Cuatro pasos, sin sorpresas.</h2>
+      </div>
+      <ol class="pasos" data-reveal-stagger>
+        <li class="paso" data-reveal>
+          <span class="paso__n" aria-hidden="true">01</span>
+          <h3>Relevamiento</h3>
+          <p>Una conversación por mensaje, por correo o en persona en la costa, para entender el negocio y lo que
+            necesita.</p>
+        </li>
+        <li class="paso" data-reveal>
+          <span class="paso__n" aria-hidden="true">02</span>
+          <h3>Presupuesto por escrito</h3>
+          <p>Detalla qué incluye, qué no, el plazo y el costo. Sin cargo y sin compromiso.</p>
+        </li>
+        <li class="paso" data-reveal>
+          <span class="paso__n" aria-hidden="true">03</span>
+          <h3>Desarrollo con avances</h3>
+          <p>El cliente ve el trabajo a medida que avanza y lo prueba antes de la entrega.</p>
+        </li>
+        <li class="paso" data-reveal>
+          <span class="paso__n" aria-hidden="true">04</span>
+          <h3>Acompañamiento</h3>
+          <p>Hosting, mantenimiento y cambios menores con una cuota mensual.</p>
+        </li>
+      </ol>
     </section>
 
-    <!-- 5. Lo que nos piden: carrusel horizontal -->
-    <section class="pedidos" aria-labelledby="pedidos-title">
-      <span class="regla" aria-hidden="true"></span>
-      <div class="pedidos__cabeza">
-        <h2 id="pedidos-title" class="pedidos__titulo" data-reveal>Cosas que resolvemos, <b>contadas como nos las
-            piden.</b></h2>
-        <div class="pedidos__flechas">
-          <button type="button" class="flecha" id="pedidosAnt" aria-label="Anterior">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 18l-6-6 6-6" /></svg>
-          </button>
-          <button type="button" class="flecha" id="pedidosSig" aria-label="Siguiente">
-            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18l6-6-6-6" /></svg>
-          </button>
-        </div>
+    <!-- 6. El estudio: el equipo.
+         TODO: completar cargo o área de cada integrante (y, si se quiere, apellido y foto). -->
+    <section id="estudio" class="seccion" aria-labelledby="estudio-title">
+      <div class="seccion__cabeza" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__n">05</span>El estudio</p>
+        <h2 id="estudio-title" class="seccion__titulo">Un equipo de cuatro desarrolladores, con base en la costa.</h2>
+        <p class="seccion__bajada"><b>Studio 74</b> es un estudio de desarrollo de software. Atendemos comercios de
+          Pinamar, Villa Gesell, General Madariaga y alrededores, con reuniones presenciales en la zona.</p>
       </div>
-      <ul class="pedidos__pista" id="pedidosPista">
-        <li class="pedido-tarjeta"><p class="pedido-tarjeta__tipo">Turnos</p><p class="pedido-tarjeta__texto">Quiero que me reserven sin escribirme por WhatsApp.</p></li>
-        <li class="pedido-tarjeta"><p class="pedido-tarjeta__tipo">Gestión</p><p class="pedido-tarjeta__texto">Necesito saber quién me debe sin revisar el cuaderno.</p></li>
-        <li class="pedido-tarjeta"><p class="pedido-tarjeta__tipo">Reservas</p><p class="pedido-tarjeta__texto">Que vean qué cabaña está libre y dejen la seña.</p></li>
-        <li class="pedido-tarjeta"><p class="pedido-tarjeta__tipo">Webs</p><p class="pedido-tarjeta__texto">Mi web dejó de andar y no sé por qué.</p></li>
-        <li class="pedido-tarjeta"><p class="pedido-tarjeta__tipo">Google</p><p class="pedido-tarjeta__texto">Me buscan en Google y no aparezco.</p></li>
+      <ul class="equipo" data-reveal-stagger>
+        <li class="persona" data-reveal>
+          <span class="persona__inicial" aria-hidden="true">M</span>
+          <p class="persona__nombre">Mariano</p>
+          <p class="persona__cargo pendiente">TODO: cargo o área</p>
+        </li>
+        <li class="persona" data-reveal>
+          <span class="persona__inicial" aria-hidden="true">R</span>
+          <p class="persona__nombre">Ramiro</p>
+          <p class="persona__cargo pendiente">TODO: cargo o área</p>
+        </li>
+        <li class="persona" data-reveal>
+          <span class="persona__inicial" aria-hidden="true">G</span>
+          <p class="persona__nombre">Gerónimo</p>
+          <p class="persona__cargo pendiente">TODO: cargo o área</p>
+        </li>
+        <li class="persona" data-reveal>
+          <span class="persona__inicial" aria-hidden="true">V</span>
+          <p class="persona__nombre">Valentín</p>
+          <p class="persona__cargo pendiente">TODO: cargo o área</p>
+        </li>
       </ul>
     </section>
 
-    <!-- 6. Panel de vidrio: proceso, garantías y preguntas -->
-    <section class="cristal" aria-labelledby="cristal-title">
-      <div class="cristal__fondo" aria-hidden="true">
-        <span class="cristal__letras">74</span>
+    <!-- 7. Preguntas frecuentes. Si cambian, actualizar también el FAQPage del JSON-LD. -->
+    <section id="preguntas" class="seccion" aria-labelledby="preguntas-title">
+      <div class="seccion__cabeza" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__n">06</span>Preguntas frecuentes</p>
+        <h2 id="preguntas-title" class="seccion__titulo">Lo que conviene saber antes de empezar.</h2>
       </div>
-      <h2 id="cristal-title" class="visually-hidden">Cómo trabajamos, qué garantizamos y preguntas frecuentes</h2>
-      <div class="panel-vidrio" data-reveal>
-        <div class="segmentos" role="tablist" aria-label="Información del estudio">
-          <button type="button" role="tab" class="segmento is-on" id="tabProceso" aria-selected="true"
-            aria-controls="vistaProceso">Proceso</button>
-          <button type="button" role="tab" class="segmento" id="tabGarantias" aria-selected="false"
-            aria-controls="vistaGarantias" tabindex="-1">Garantías</button>
-          <button type="button" role="tab" class="segmento" id="tabPreguntas" aria-selected="false"
-            aria-controls="vistaPreguntas" tabindex="-1">Preguntas</button>
-        </div>
-
-        <div class="vista" id="vistaProceso" role="tabpanel" aria-labelledby="tabProceso">
-          <ol class="filas">
-            <li class="fila"><span class="fila__n">1</span><div><b>Nos contás qué necesitás</b><p>Por mensaje, por mail o en persona en la costa.</p></div></li>
-            <li class="fila"><span class="fila__n">2</span><div><b>Presupuesto por escrito</b><p>Qué incluye, qué no, cuánto tarda y cuánto sale.</p></div></li>
-            <li class="fila"><span class="fila__n">3</span><div><b>Desarrollo con avances</b><p>Lo ves crecer y lo probamos con vos antes de entregarlo.</p></div></li>
-            <li class="fila"><span class="fila__n">4</span><div><b>Te acompañamos después</b><p>Hosting, mantenimiento y cambios chicos con una cuota mensual.</p></div></li>
-          </ol>
-        </div>
-
-        <div class="vista" id="vistaGarantias" role="tabpanel" aria-labelledby="tabGarantias" hidden>
-          <ul class="filas">
-            <li class="fila"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg><div><b>El dominio es tuyo</b><p>Se registra a tu nombre, no al nuestro.</p></div></li>
-            <li class="fila"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" /></svg><div><b>Si te vas, te la llevás</b><p>Te pasamos la web a una cuenta tuya.</p></div></li>
-            <li class="fila"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg><div><b>Respuesta en 24 horas</b><p>Escribís y en menos de un día tenés respuesta.</p></div></li>
-            <li class="fila"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg><div><b>En persona en la costa</b><p>En Pinamar, Gesell o Madariaga lo charlamos cara a cara.</p></div></li>
-          </ul>
-        </div>
-
-        <div class="vista" id="vistaPreguntas" role="tabpanel" aria-labelledby="tabPreguntas" hidden>
-          <details class="pregunta">
-            <summary>¿Qué tipo de sistemas hacen?</summary>
-            <p>Desde una web con turnos hasta un sistema de gestión con usuarios, permisos, cobros y reportes.</p>
-          </details>
-          <details class="pregunta">
-            <summary>¿Con qué tecnologías trabajan?</summary>
-            <p>Herramientas conocidas y con mucho soporte: React y Next.js, Node.js, PostgreSQL y Supabase, entre otras.</p>
-          </details>
-          <details class="pregunta">
-            <summary>¿Cuánto cuesta?</summary>
-            <p>Depende de lo que necesites. Te pasamos un presupuesto por escrito, sin compromiso.</p>
-          </details>
-          <details class="pregunta">
-            <summary>¿Cuánto tarda?</summary>
-            <p>Una web simple, alrededor de una semana desde que nos pasás los textos y las fotos. Lo demás, según el caso.</p>
-          </details>
-          <details class="pregunta">
-            <summary>¿Y si después no quiero seguir?</summary>
-            <p>El dominio ya está a tu nombre. Te avisamos con tiempo y te pasamos la web a una cuenta tuya.</p>
-          </details>
-        </div>
+      <div class="preguntas" data-reveal>
+        <details class="pregunta">
+          <summary>¿Cuánto tiempo lleva el desarrollo?</summary>
+          <p>Una página simple lleva alrededor de una semana desde que se reciben los textos y las fotos. Los
+            sistemas, turnos y reservas dependen del alcance; el plazo se indica en el presupuesto.</p>
+        </details>
+        <details class="pregunta">
+          <summary>¿Cuánto cuesta?</summary>
+          <p>Depende del alcance. Antes de empezar enviamos un presupuesto por escrito, sin cargo, que detalla qué
+            incluye y qué no.</p>
+        </details>
+        <details class="pregunta">
+          <summary>¿Quién es dueño de la web?</summary>
+          <p>El cliente. El dominio se registra a su nombre y, si decide no continuar con nosotros, le transferimos el
+            sitio a una cuenta propia.</p>
+        </details>
+        <details class="pregunta">
+          <summary>¿Incluye mantenimiento?</summary>
+          <p>Ofrecemos un servicio mensual que cubre hosting, mantenimiento y cambios menores. Se informa por separado
+            en el presupuesto.</p>
+        </details>
+        <details class="pregunta">
+          <!-- TODO: confirmar los medios de pago aceptados y detallarlos acá y en el JSON-LD. -->
+          <summary>¿Qué medios de pago aceptan?</summary>
+          <p>Las condiciones y los medios de pago se detallan en cada presupuesto.</p>
+        </details>
+        <details class="pregunta">
+          <summary>¿Qué pasa después de la entrega?</summary>
+          <p>El proyecto queda publicado y en funcionamiento. A partir de ahí, el cliente puede contratar el servicio
+            mensual de hosting y mantenimiento, o pedir que lo transfiramos a una cuenta propia.</p>
+        </details>
       </div>
     </section>
 
-    <!-- 7. Cierre: contacto -->
-    <section id="contacto" class="cierre" aria-labelledby="contacto-title">
-      <div class="cierre__luz" aria-hidden="true"></div>
-      <p class="chip" data-reveal><span class="chip__punto"></span>Respondemos en menos de 24 horas</p>
-      <h2 id="contacto-title" class="cierre__titulo" data-reveal>
-        <span class="cierre__trazo" aria-hidden="true"></span>Hablemos
-      </h2>
-      <p class="cierre__bajada" data-reveal>Contanos qué necesitás. <b>Sin compromiso.</b></p>
+    <!-- 8. Contacto: canales y formulario -->
+    <section id="contacto" class="seccion contacto" aria-labelledby="contacto-title">
+      <div class="contacto__texto" data-reveal>
+        <p class="eyebrow"><span class="eyebrow__n">07</span>Contacto</p>
+        <h2 id="contacto-title" class="seccion__titulo">Solicite su presupuesto.</h2>
+        <p class="seccion__bajada">Cuéntenos sobre su negocio y lo que necesita resolver. Respondemos en menos de 24
+          horas, sin compromiso.</p>
+        <ul class="canales" aria-label="Otros canales de contacto">
+          <li><a class="canal" href="mailto:studio74dev@gmail.com">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>
+              <span><span class="canal__rotulo">Correo</span>studio74dev@gmail.com</span></a></li>
+          <li><a class="canal" href="https://www.instagram.com/studio74dev/" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="2" width="20" height="20" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg>
+              <span><span class="canal__rotulo">Instagram</span>@studio74dev</span></a></li>
+        </ul>
+      </div>
 
       <form class="form" id="contactForm" action="contact.php" method="post" novalidate data-reveal>
         <fieldset class="form__servicios">
-          <legend class="visually-hidden">Qué te interesa</legend>
-          <label class="servicio-chip"><input type="radio" name="service" value="Un sistema de gestión" required /><span>Sistema de gestión</span></label>
-          <label class="servicio-chip"><input type="radio" name="service" value="Turnos online" /><span>Turnos</span></label>
-          <label class="servicio-chip"><input type="radio" name="service" value="Reservas con seña" /><span>Reservas</span></label>
-          <label class="servicio-chip"><input type="radio" name="service" value="Una web para mi negocio" /><span>Web</span></label>
-          <label class="servicio-chip"><input type="radio" name="service" value="Otra cosa" /><span>Otra cosa</span></label>
+          <legend class="form__label">Tipo de consulta</legend>
+          <label class="servicio-chip"><input type="radio" name="service" value="Paquete de entrada" required /><span>Paquete de entrada</span></label>
+          <label class="servicio-chip"><input type="radio" name="service" value="Sistema a medida" /><span>Sistema a medida</span></label>
+          <label class="servicio-chip"><input type="radio" name="service" value="Turnos y reservas" /><span>Turnos y reservas</span></label>
+          <label class="servicio-chip"><input type="radio" name="service" value="Automatización" /><span>Automatización</span></label>
+          <label class="servicio-chip"><input type="radio" name="service" value="Otra consulta" /><span>Otra consulta</span></label>
         </fieldset>
 
-        <label for="message" class="visually-hidden">Tu negocio y qué querés resolver</label>
-        <textarea id="message" name="message" class="form__mensaje" rows="3"
-          placeholder="Tu negocio y qué querés resolver. Por ejemplo: tengo un gimnasio y anoto las cuotas en un cuaderno."
-          required></textarea>
+        <div class="form__campo">
+          <label for="message" class="form__label">Su negocio y lo que necesita</label>
+          <textarea id="message" name="message" class="form__control form__mensaje" rows="4"
+            placeholder="Por ejemplo: un gimnasio que registra las cuotas en un cuaderno." required></textarea>
+        </div>
 
         <div class="form__fila">
-          <span class="pedido__orbe" aria-hidden="true"></span>
-          <label for="name" class="visually-hidden">Tu nombre</label>
-          <input type="text" id="name" name="name" class="form__input" placeholder="Tu nombre" autocomplete="given-name"
-            required />
-          <label for="email" class="visually-hidden">Tu mail</label>
-          <input type="email" id="email" name="email" class="form__input" placeholder="Tu mail" autocomplete="email"
-            required />
-          <button type="submit" class="btn btn--blanco btn--primary">Enviar</button>
+          <div class="form__campo">
+            <label for="name" class="form__label">Nombre</label>
+            <input type="text" id="name" name="name" class="form__control" autocomplete="name" required />
+          </div>
+          <div class="form__campo">
+            <label for="email" class="form__label">Correo electrónico</label>
+            <input type="email" id="email" name="email" class="form__control" autocomplete="email" required />
+          </div>
         </div>
 
         <!-- Anti-spam: honeypot invisible (los bots suelen completarlo) -->
@@ -498,32 +533,33 @@
         <!-- Trampa de tiempo: la completa el JS al cargar la página -->
         <input type="hidden" name="started" id="formStarted" value="" />
 
-        <p class="form__note">Usamos tus datos solo para responderte. También: <a
-            href="mailto:studio74dev@gmail.com">studio74dev@gmail.com</a></p>
+        <div class="form__pie">
+          <button type="submit" class="btn btn--principal btn--primary">Enviar consulta</button>
+          <p class="form__note" role="status" aria-live="polite">Sus datos se usan únicamente para responder la
+            consulta.</p>
+        </div>
       </form>
     </section>
 
   </main>
 
   <footer class="footer">
-    <span class="regla regla--ancha" aria-hidden="true"></span>
     <div class="footer__inner">
-      <!-- Redes: las que todavía no existen van atenuadas y sin enlace.
-           Para activar una: cambiar el <span> por un <a href="..."> con la misma clase, sin "red--pendiente". -->
+      <div class="footer__marca">
+        <p class="footer__nombre">STUDIO 74</p>
+        <p class="footer__zona">Software y presencia digital para comercios de Pinamar, Villa Gesell, General Madariaga
+          y alrededores.</p>
+      </div>
       <ul class="redes" aria-label="Redes y canales de Studio 74">
-        <li><a class="red" href="mailto:studio74dev@gmail.com" aria-label="Mail"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg></a></li>
-        <li><a class="red" href="https://www.instagram.com/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="2" y="2" width="20" height="20" rx="5" /><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" /><line x1="17.5" y1="6.5" x2="17.51" y2="6.5" /></svg></a></li>
-        <li><a class="red" href="https://github.com/studio74dev" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" /></svg></a></li>
-        <li><span class="red red--pendiente" role="img" aria-label="WhatsApp, próximamente" title="WhatsApp: próximamente"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.3A8.5 8.5 0 1 1 21 11.5z" /><path d="M9 8.6c.2 2.9 2.5 5.2 5.4 5.5l1-1.3-1.8-1-.8.8a4 4 0 0 1-1.9-1.9l.8-.8-1-1.8z" /></svg></span></li>
-        <li><span class="red red--pendiente" role="img" aria-label="Facebook, próximamente" title="Facebook: próximamente"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" /></svg></span></li>
-        <li><span class="red red--pendiente" role="img" aria-label="LinkedIn, próximamente" title="LinkedIn: próximamente"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" /><rect x="2" y="9" width="4" height="12" /><circle cx="4" cy="4" r="2" /></svg></span></li>
+        <li><a class="red" href="https://www.instagram.com/studio74dev/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+        <li><a class="red" href="mailto:studio74dev@gmail.com">studio74dev@gmail.com</a></li>
+        <li><a class="red red--secundaria" href="https://github.com/studio74dev" target="_blank" rel="noopener noreferrer">GitHub</a></li>
       </ul>
-      <p class="footer__zona">Pinamar, Villa Gesell, General Madariaga y alrededores</p>
-      <p class="footer__copy">©<span id="year"></span> Studio 74</p>
     </div>
+    <p class="footer__copy">©<span id="year">2026</span> Studio 74</p>
   </footer>
 
-  <script src="js/main.js?v=11" defer></script>
+  <script src="js/main.js?v=12" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

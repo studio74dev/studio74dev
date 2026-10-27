@@ -78,7 +78,7 @@ $age       = time() - $started;
 
 if ($wantsJson && ($started <= 0 || $age < 3 || $age > 604800)) {
     // Sin timestamp válido o recién abierto: no es una interacción humana.
-    respond(false, 400, 'Sesión inválida, recargá la página');
+    respond(false, 400, 'La sesión expiró. Recargue la página.');
 }
 
 // ── Limpieza (sin CR/LF: protege contra header injection) ───────────────────
@@ -93,16 +93,16 @@ $message = $clean($_POST['message'] ?? '');
 
 // ── Validación ──────────────────────────────────────────────────────────────
 if ($name === '' || ulen($name) > LIMITS['name']) {
-    respond(false, 400, 'Revisá el campo nombre');
+    respond(false, 400, 'Revise el campo nombre.');
 }
 if (!filter_var($email, FILTER_VALIDATE_EMAIL) || ulen($email) > LIMITS['email']) {
-    respond(false, 400, 'Revisá el campo email');
+    respond(false, 400, 'Revise el campo correo electrónico.');
 }
 if ($service === '' || ulen($service) > LIMITS['service']) {
-    respond(false, 400, 'Elegí un tipo de proyecto');
+    respond(false, 400, 'Seleccione un tipo de consulta.');
 }
 if ($message === '' || ulen($message) > LIMITS['message']) {
-    respond(false, 400, 'Contanos un poco más de tu proyecto');
+    respond(false, 400, 'Cuéntenos un poco más sobre su proyecto.');
 }
 
 // ── Rate limit por IP: MAX_PER_HOUR envíos por hora (archivo en tmp) ────────
@@ -127,7 +127,7 @@ if ($fh !== false && flock($fh, LOCK_EX)) {
     if (count($mine) >= MAX_PER_HOUR) {
         flock($fh, LOCK_UN);
         fclose($fh);
-        respond(false, 429, 'Demasiados envíos seguidos, probá de nuevo en unos minutos');
+        respond(false, 429, 'Demasiados envíos seguidos. Intente nuevamente en unos minutos.');
     }
 
     $mine[]     = $now;
@@ -180,7 +180,7 @@ $sent = @mail(TO_EMAIL, $subjectEnc, $body, $headers, '-f' . FROM_EMAIL);
 
 if (!$sent) {
     // El front ofrece el fallback mailto: al recibir este error.
-    respond(false, 500, 'No se pudo enviar el mensaje');
+    respond(false, 500, 'No se pudo enviar el mensaje.');
 }
 
 respond(true, 200);
