@@ -974,7 +974,8 @@ b {
   flex-direction: column;
   align-items: center;
   padding: 1rem 0;
-  background: linear-gradient(var(--fondo) 90%, transparent);
+  background: var(--fondo);
+  box-shadow: 0 12px 16px -4px var(--fondo);
 }
 
 .relato__nota {
@@ -1075,8 +1076,8 @@ b {
 }
 
 .tel-web__hero b {
-  font-size: 1.8em;
-  font-stretch: 125%;
+  font-size: 1.5em;
+  font-stretch: 110%;
   font-weight: 900;
   text-transform: uppercase;
   line-height: 1;
