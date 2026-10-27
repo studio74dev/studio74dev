@@ -1028,6 +1028,32 @@ b {
   gap: 0.5rem;
 }
 
+/* Bloque de WhatsApp (oculto hasta que se cargue el número en main.js) */
+.whatsapp {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem 1.5rem;
+  margin-top: 2rem;
+  padding: 1.25rem 1.5rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  box-shadow: inset 0 0 0 1px var(--linea-fuerte);
+}
+
+.whatsapp[hidden],
+[data-canal][hidden] {
+  display: none;
+}
+
+.whatsapp__texto {
+  font-weight: 600;
+}
+
+.whatsapp .btn svg {
+  color: var(--acento-texto);
+}
+
 .canal {
   display: flex;
   align-items: center;
