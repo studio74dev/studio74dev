@@ -9,8 +9,8 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 | Archivo | Qué es |
 |---|---|
 | `index.html` | La landing completa (ver secciones abajo). Incluye los datos estructurados JSON-LD. |
-| `css/styles.css` | Todos los estilos. Los colores salen de las variables de `:root`; el modo claro las redefine (ver "Modo claro y oscuro"). |
-| `js/main.js` | Canales pendientes (WhatsApp y LinkedIn), intro de carga, tema, menú, pestañas del caso real, animaciones de scroll y envío del formulario. |
+| `css/styles.css` | Todos los estilos. Paleta del logo y tokens por capítulo (ver "Paleta y capítulos"). |
+| `js/main.js` | Canales (WhatsApp y LinkedIn), intro de carga, índice, motor de scroll, teléfono de "Qué hacemos", botones magnéticos, pestañas del caso real y envío del formulario. |
 | `contact.php` | Relay del formulario para el hosting con PHP (Hostinger). |
 | `404.html` | Página de error propia. Lleva los estilos en línea, así que no depende del CSS. |
 | `assets/og.png` | Imagen que se ve al compartir el link (1200×630). |
@@ -23,18 +23,22 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 ## Secciones de la landing
 
 En el orden de `index.html`. Todo el texto va en registro formal (usted o neutro, sin voseo).
+Cada capítulo lleva su número (`01`…`09`) y un color de la marca.
 
 1. **Intro de carga** (`#intro`): líneas que se dibujan, el 74 trazándose, "STUDIO 74" letra por letra y un contador que sigue la carga real. Al llegar a 100 aparece **Entrar**; si nadie lo toca, entra sola. La pantalla se abre en dos y el logo vuela a la barra.
-2. **Barra de navegación**, con el botón sol/luna del tema y "Solicitar presupuesto".
-3. **Portada** (`#inicio`): frase de valor, "Solicitar presupuesto", "Ver un caso real" y la ficha del paquete de entrada.
-4. **El problema** (`#problema`): comercios con buena reputación y sin canal digital propio, y los "Problemas que resolvemos" en tercera persona.
-5. **Qué hacemos** (`#servicios`): el paquete de entrada (landing + Google Maps + WhatsApp) y, aparte, sistemas a medida, turnos y reservas y automatización. Los enlaces con `data-servicio` dejan marcado ese tipo en el formulario.
-6. **Caso real** (`#caso`): Club El Progreso en una ventana con pestañas.
-7. **Cómo trabajamos** (`#proceso`): los cuatro pasos.
-8. **El estudio** (`#estudio`): los cuatro integrantes. El cargo de cada uno está marcado como pendiente (`.pendiente`, se ve con borde punteado a propósito).
-9. **Preguntas frecuentes** (`#preguntas`).
-10. **Contacto** (`#contacto`): canales y formulario.
-11. **Pie** con redes.
+2. **Barra**: logo, "Hablemos" e **Índice**, que abre la navegación a pantalla completa. Toma el color del capítulo que tiene debajo, se esconde al bajar y vuelve al subir. A la derecha, el **riel** de progreso: el trazo del 4 con el punto de la marca.
+3. **Portada** (`#inicio`, tinta): frase de valor y las dos acciones. Al bajar, los trazos del 7 y el 4 se separan y **el punto crece hasta cubrir la pantalla**: así se entra al capítulo siguiente.
+4. **Visión** (`#vision`, señal): el manifiesto se enciende palabra por palabra con el scroll.
+5. **El problema** (`#problema`, tinta): los cinco problemas se deslizan en horizontal mientras se baja.
+6. **Bandas cruzadas**: dos cintas en diagonal, como los trazos del 7 y el 4, que corren con el scroll.
+7. **Qué hacemos** (`#servicios`, papel): un teléfono ilustrativo se arma a medida que se leen los tres pasos del paquete de entrada (página, Google Maps, WhatsApp). Debajo, el trabajo a medida en filas grandes. Los enlaces con `data-servicio` dejan marcado ese tipo en el formulario.
+8. **Caso real** (`#caso`, tinta): la ventana de Club El Progreso se apoya y se endereza; sus pestañas funcionan.
+9. **Sin letra chica** (`#diferencia`, tinta): los compromisos concretos, con un trazo que se completa.
+10. **Proceso** (`#proceso`, tinta): la línea se dibuja con el scroll y enciende cada paso.
+11. **El estudio** (`#estudio`, papel): los cuatro integrantes. Los cargos que faltan se ven con borde punteado (`.pendiente`) a propósito.
+12. **Preguntas frecuentes** (`#preguntas`, papel).
+13. **Contacto** (`#contacto`, tinta): el formulario se completa como una frase ("Hola, mi nombre es…") y al lado van los canales directos.
+14. **Pie** con redes y la marca a todo el ancho.
 
 ## Cosas a saber antes de tocar
 
@@ -45,18 +49,27 @@ En el orden de `index.html`. Todo el texto va en registro formal (usted o neutro
 - La activa el script del `<head>` poniendo la clase `con-intro` en `<html>`. **No uses `intro` como nombre de clase en `<html>`**: choca con el componente `.intro` (que arranca con `display: none`) y esconde toda la página.
 - Si algo falla, se cierra sola a los 8 segundos.
 
-### Modo claro y oscuro
+### Paleta y capítulos
 
-- Oscuro por defecto. Si el dispositivo está en claro, se ve claro.
-- El botón sol/luna fija el tema con `data-theme` en `<html>` y lo guarda en `localStorage` (`s74-tema`).
-- Los colores que cambian con el tema son variables (`--fondo`, `--capa`, `--sobre-texto`, `--acento-texto`, `--luz-1`...). Para un color nuevo, agregá la variable en `:root` y en los dos bloques de "Modo claro" de `styles.css`.
-- La intro es siempre oscura.
+- Solo los tres colores del logo: **tinta** `#0B0B0C`, **papel** `#F4F3EF` y **señal** `#D2FF3A`.
+- Cada capítulo declara `data-tema="tinta|papel|senal"` y eso redefine `--fondo`, `--texto`, `--suave`, `--linea`… Para un capítulo nuevo alcanza con ponerle `class="capitulo"` y su `data-tema`.
+- La señal nunca va como texto sobre papel (no tiene contraste): sobre papel y señal, el acento es la tinta.
+- No hay modo claro: la alternancia de capítulos ya cumple ese papel.
+
+### Animaciones de scroll
+
+- `js/main.js` le da a cada `[data-escena]` una variable `--p` de 0 a 1, y el CSS la usa con `calc()`:
+  - `pin`: capítulos altos con una escena fija (`sticky`), como la portada, la visión, el problema y el caso.
+  - `entrada`: el elemento entra en pantalla. `paso`: lo atraviesa. `recorrido`: la línea del proceso.
+- Todo lo animado vive bajo `html.mov`, que pone el `<head>` solo si hay JavaScript y el dispositivo no pide movimiento reducido. **Sin `mov`, la página se ve completa y quieta**: es la versión accesible, no hay que mantener otra.
+- Para cambiar cuánto dura una escena fija, se cambia su `--alto` en `styles.css`. La del problema la calcula el JS según el ancho de las tarjetas.
+- Se anima solo `transform`, `opacity` y `clip-path`, para que vaya fluido en celulares.
 
 ### Redes y canales
 
-Correo, Instagram y GitHub (secundario, solo en el pie) están activos.
+Correo, Instagram, LinkedIn y GitHub (secundario, solo en el pie) están activos.
 
-**WhatsApp y LinkedIn** están en el HTML pero ocultos. Para activarlos no se toca el HTML:
+**WhatsApp** está en el HTML pero oculto. Para activarlo no se toca el HTML:
 se completa la constante `CANALES` al principio de `js/main.js`:
 
 ```js
@@ -66,9 +79,9 @@ const CANALES = {
 };
 ```
 
-Cada bloque con `data-canal="whatsapp"` o `data-canal="linkedin"` se muestra solo con su enlace.
-El de WhatsApp abre la conversación con el mensaje de `MENSAJE_WHATSAPP`. Al activar LinkedIn,
-sumá también su URL a `sameAs` en el JSON-LD.
+Cada bloque con `data-canal="whatsapp"` se muestra solo con su enlace, que abre la conversación
+con el mensaje de `MENSAJE_WHATSAPP`. LinkedIn ya está escrito en el HTML y en `sameAs` del JSON-LD;
+si cambia la URL, hay que cambiarla en los tres lugares (índice, contacto y pie) y en el JSON-LD.
 
 ### Animaciones
 
@@ -132,8 +145,8 @@ Dos cosas a tener en cuenta:
 
 ## Pendientes anotados
 
-- Número de WhatsApp del estudio y URL de LinkedIn (constante `CANALES` en `js/main.js`).
-- Cargo o área de cada integrante en `#estudio` (marcados `TODO`); apellidos y fotos si se quieren sumar.
+- Número de WhatsApp del estudio (constante `CANALES` en `js/main.js`).
+- Cargo o área de Ramiro, Gerónimo y Valentín en `#estudio` (marcados `TODO`). El de Mariano sale de la firma de mail.
 - Medios de pago aceptados, en la pregunta frecuente y en el JSON-LD (hoy dice que se detallan en el presupuesto).
 - Dominio propio `studio74dev.com` (hoy `studio74dev.github.io` es provisional). Cuando
   esté, hay que actualizar `canonical`, `og:url`, `og:image`, las URLs de `sitemap.xml`,
