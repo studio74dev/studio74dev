@@ -198,7 +198,7 @@
     if (heroPunto && mov) {
       const hero = heroPunto.closest('[data-escena]');
       const p = parseFloat(hero.style.getPropertyValue('--p')) || 0;
-      const t = clamp((p - 0.35) / 0.6);
+      const t = clamp((p - 0.4) / 0.6);
       const cubrir = parseFloat(heroPunto.dataset.cubrir) || 60;
       heroPunto.style.setProperty('--punto', (1 + (cubrir - 1) * t * t * t).toFixed(3));
     }
@@ -209,9 +209,10 @@
       const r = c.getBoundingClientRect();
       return r.top <= bajoBarra && r.bottom > bajoBarra;
     });
-    let tema = actual ? actual.dataset.tema : 'tinta';
     // Mientras el punto de la portada cubre la pantalla, ya es señal
-    if (actual && actual.id === 'inicio' && heroPunto && parseFloat(heroPunto.style.getPropertyValue('--punto')) > 20) tema = 'senal';
+    const cubierto = heroPunto && parseFloat(heroPunto.style.getPropertyValue('--punto')) > 20;
+    const temaDe = (c) => (!c ? 'tinta' : c.id === 'inicio' && cubierto ? 'senal' : c.dataset.tema);
+    const tema = temaDe(actual);
     if (menuBoton.getAttribute('aria-expanded') !== 'true') header.dataset.tema = tema;
     header.classList.toggle('con-fondo', y > 40 && tema !== 'senal');
 
@@ -220,7 +221,7 @@
       return r.top <= vh / 2 && r.bottom > vh / 2;
     });
     if (riel) {
-      riel.dataset.tema = rielEn ? rielEn.dataset.tema : 'tinta';
+      riel.dataset.tema = temaDe(rielEn);
       riel.style.setProperty('--progreso', clamp(y / (document.documentElement.scrollHeight - vh)).toFixed(4));
     }
 
