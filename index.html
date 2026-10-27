@@ -4,70 +4,216 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Studio 74 — Software a medida, sistemas de gestión y webs | Pinamar y la costa</title>
+  <title>Studio 74 — Software y presencia digital para comercios de la costa</title>
   <meta name="description"
-    content="Studio 74 es un estudio de desarrollo de software. Hacemos sistemas de gestión, turnos y reservas online y webs para negocios de Pinamar, Villa Gesell, Madariaga y toda la Argentina." />
+    content="Estudio de desarrollo para comercios de Pinamar, Villa Gesell y General Madariaga: página propia con Google Maps y WhatsApp, sistemas a medida, turnos y reservas." />
   <meta name="robots" content="index, follow, max-image-preview:large" />
   <link rel="canonical" href="https://studio74dev.github.io/" />
   <meta property="og:site_name" content="Studio 74" />
-  <meta property="og:title" content="Studio 74 — Software a medida para tu negocio" />
+  <meta property="og:title" content="Studio 74 — Software y presencia digital para comercios de la costa" />
   <meta property="og:description"
-    content="Sistemas de gestión, turnos y reservas online y webs. Lo diseñamos, lo programamos y lo dejamos funcionando." />
+    content="Página propia con Google Maps y contacto por WhatsApp, sistemas a medida, turnos, reservas y automatización. Presupuesto por escrito y sin cargo." />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_AR" />
   <meta property="og:url" content="https://studio74dev.github.io/" />
-  <meta property="og:image" content="https://studio74dev.github.io/assets/og.png?v=2" />
+  <meta property="og:image" content="https://studio74dev.github.io/assets/og.png?v=3" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:type" content="image/png" />
-  <meta property="og:image:alt" content="Studio 74 — Software a medida para tu negocio" />
+  <meta property="og:image:alt" content="Studio 74: software y presencia digital para comercios de la costa" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Studio 74 — Software a medida para tu negocio" />
+  <meta name="twitter:title" content="Studio 74 — Software y presencia digital para comercios de la costa" />
   <meta name="twitter:description"
-    content="Sistemas de gestión, turnos y reservas online y webs. Lo diseñamos, lo programamos y lo dejamos funcionando." />
-  <meta name="twitter:image" content="https://studio74dev.github.io/assets/og.png?v=2" />
+    content="Página propia con Google Maps y contacto por WhatsApp, sistemas a medida, turnos, reservas y automatización. Presupuesto por escrito y sin cargo." />
+  <meta name="twitter:image" content="https://studio74dev.github.io/assets/og.png?v=3" />
   <meta name="theme-color" content="#0A0A0B" />
 
-  <!-- Datos estructurados: qué es el estudio y sus preguntas frecuentes (Google puede mostrarlas) -->
+  <!-- Datos estructurados: organización, zona de servicio y preguntas frecuentes.
+       Si cambian las preguntas de la sección #preguntas, actualizar también el FAQPage.
+       TODO: sumar la URL de LinkedIn a "sameAs" cuando exista. -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
         {
-          "@type": ["Organization", "ProfessionalService"],
+          "@type": [
+            "Organization",
+            "ProfessionalService"
+          ],
           "@id": "https://studio74dev.github.io/#estudio",
           "name": "Studio 74",
-          "description": "Estudio de desarrollo de software a medida: sistemas de gestión, turnos y reservas online y webs.",
+          "description": "Estudio de desarrollo de software y presencia digital para comercios de la costa atlántica bonaerense.",
           "url": "https://studio74dev.github.io/",
           "email": "studio74dev@gmail.com",
           "logo": "https://studio74dev.github.io/assets/firma/studio74-logo-firma.png",
-          "image": "https://studio74dev.github.io/assets/og.png?v=2",
+          "image": "https://studio74dev.github.io/assets/og.png?v=3",
+          "address": {
+            "@type": "PostalAddress",
+            "addressRegion": "Buenos Aires",
+            "addressCountry": "AR"
+          },
           "areaServed": [
-            { "@type": "City", "name": "Pinamar" },
-            { "@type": "City", "name": "Villa Gesell" },
-            { "@type": "City", "name": "General Juan Madariaga" },
-            { "@type": "Country", "name": "Argentina" }
+            {
+              "@type": "City",
+              "name": "Pinamar",
+              "sameAs": "https://es.wikipedia.org/wiki/Pinamar",
+              "containedInPlace": {
+                "@type": "State",
+                "name": "Provincia de Buenos Aires"
+              }
+            },
+            {
+              "@type": "City",
+              "name": "Villa Gesell",
+              "sameAs": "https://es.wikipedia.org/wiki/Villa_Gesell",
+              "containedInPlace": {
+                "@type": "State",
+                "name": "Provincia de Buenos Aires"
+              }
+            },
+            {
+              "@type": "City",
+              "name": "General Juan Madariaga",
+              "sameAs": "https://es.wikipedia.org/wiki/General_Juan_Madariaga",
+              "containedInPlace": {
+                "@type": "State",
+                "name": "Provincia de Buenos Aires"
+              }
+            }
           ],
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "email": "studio74dev@gmail.com",
+            "availableLanguage": "es",
+            "areaServed": "AR"
+          },
           "knowsLanguage": "es-AR",
-          "sameAs": ["https://www.instagram.com/studio74dev/", "https://github.com/studio74dev"],
+          "sameAs": [
+            "https://www.instagram.com/studio74dev/",
+            "https://github.com/studio74dev"
+          ],
           "hasOfferCatalog": {
             "@type": "OfferCatalog",
             "name": "Servicios",
             "itemListElement": [
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Sistemas de gestión a medida" } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Turnos online" } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Reservas online con seña" } },
-              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Webs y landings" } }
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Paquete de entrada",
+                  "description": "Página propia del negocio, ficha en Google Maps y contacto directo por WhatsApp.",
+                  "areaServed": {
+                    "@id": "https://studio74dev.github.io/#zona"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Sistemas a medida",
+                  "description": "Gestión de socios, cobros, stock y reportes con permisos por usuario.",
+                  "areaServed": {
+                    "@id": "https://studio74dev.github.io/#zona"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Turnos y reservas",
+                  "description": "Agenda online con señas y recordatorios.",
+                  "areaServed": {
+                    "@id": "https://studio74dev.github.io/#zona"
+                  }
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Automatización",
+                  "description": "Avisos a clientes, reportes periódicos e integración entre sistemas.",
+                  "areaServed": {
+                    "@id": "https://studio74dev.github.io/#zona"
+                  }
+                }
+              }
             ]
+          }
+        },
+        {
+          "@type": "Place",
+          "@id": "https://studio74dev.github.io/#zona",
+          "name": "Pinamar, Villa Gesell, General Madariaga y alrededores",
+          "containedInPlace": {
+            "@type": "State",
+            "name": "Provincia de Buenos Aires"
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://studio74dev.github.io/#sitio",
+          "url": "https://studio74dev.github.io/",
+          "name": "Studio 74",
+          "inLanguage": "es-AR",
+          "publisher": {
+            "@id": "https://studio74dev.github.io/#estudio"
           }
         },
         {
           "@type": "FAQPage",
           "mainEntity": [
-            { "@type": "Question", "name": "¿Qué tipo de sistemas hacen?", "acceptedAnswer": { "@type": "Answer", "text": "Desde una web con turnos hasta un sistema de gestión con usuarios, permisos, cobros y reportes." } },
-            { "@type": "Question", "name": "¿Cuánto cuesta?", "acceptedAnswer": { "@type": "Answer", "text": "Depende de lo que necesites. Pasamos un presupuesto por escrito, sin compromiso, con todo lo que incluye." } },
-            { "@type": "Question", "name": "¿Cuánto tarda?", "acceptedAnswer": { "@type": "Answer", "text": "Una web simple, alrededor de una semana desde que llegan los textos y las fotos. Turnos, reservas y sistemas dependen de cada caso y el plazo va en el presupuesto." } },
-            { "@type": "Question", "name": "¿Y si después no quiero seguir?", "acceptedAnswer": { "@type": "Answer", "text": "El dominio está a tu nombre. Te avisamos con tiempo y te pasamos la web a una cuenta tuya." } }
+            {
+              "@type": "Question",
+              "name": "¿Cuánto tiempo lleva el desarrollo?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Una página simple lleva alrededor de una semana desde que se reciben los textos y las fotos. Los sistemas, turnos y reservas dependen del alcance; el plazo se indica en el presupuesto."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cuánto cuesta?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Depende del alcance. Antes de empezar enviamos un presupuesto por escrito, sin cargo, que detalla qué incluye y qué no."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Quién es dueño de la web?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "El cliente. El dominio se registra a su nombre y, si decide no continuar con nosotros, le transferimos el sitio a una cuenta propia."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Incluye mantenimiento?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Ofrecemos un servicio mensual que cubre hosting, mantenimiento y cambios menores. Se informa por separado en el presupuesto."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué medios de pago aceptan?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Las condiciones y los medios de pago se detallan en cada presupuesto."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Qué pasa después de la entrega?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "El proyecto queda publicado y en funcionamiento. A partir de ahí, el cliente puede contratar el servicio mensual de hosting y mantenimiento, o pedir que lo transfiramos a una cuenta propia."
+              }
+            }
           ]
         }
       ]
