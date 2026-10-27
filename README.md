@@ -59,7 +59,7 @@ Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` 
 
 ### Tipografía
 
-- Las fuentes se sirven desde `assets/fonts/` (solo el juego latino, en woff2; se declaran al principio de `styles.css`). La de los títulos se precarga en el `<head>`. No se usa Google Fonts: un dominio menos y sin bloquear el primer pintado.
+- Las fuentes se sirven desde `assets/fonts/` (solo el juego latino, en woff2; se declaran al principio de `styles.css`). La de los títulos se precarga en el `<head>` y usa `font-display: optional`: si no llegó para el primer pintado, esa visita sigue con la del sistema en lugar de mover la portada. No se usa Google Fonts: un dominio menos y sin bloquear el primer pintado.
 - **Archivo** (variable con ejes de ancho y peso). Los títulos grandes usan `font-stretch: 125%`, peso 900 y mayúsculas: una grotesca extendida y negra. El texto corrido va en Archivo normal.
 - **Geist Mono** para rótulos chicos y **Michroma** solo para la marca ("STUDIO 74").
 - Las palabras muy largas en los títulos llevan guiones suaves (`&shy;`) para cortar bien en el celular.
