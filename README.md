@@ -32,7 +32,7 @@ Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` 
 5. **El problema** (`#problema`, base): los cinco problemas se deslizan en horizontal mientras se baja.
 6. **Bandas cruzadas**: dos cintas en diagonal, como los trazos del 7 y el 4, que corren con el scroll.
 7. **Qué hacemos** (`#servicios`, alt): un teléfono ilustrativo se arma a medida que se leen los tres pasos del paquete de entrada (página, Google Maps, WhatsApp). Debajo, el trabajo a medida en un mosaico de tarjetas. Los enlaces con `data-servicio` dejan marcado ese tipo en el formulario.
-8. **Caso real** (`#caso`, base): la ventana de Club El Progreso se apoya y se endereza; sus pestañas funcionan.
+8. **Caso real** (`#caso`, base): en pantallas anchas la ventana de Club El Progreso se apoya y se endereza; en el celular va suelta y la imagen se recorre con el dedo. Sus pestañas funcionan y **Ampliar** (o tocar la imagen) la abre a tamaño real en un visor (`<dialog>`).
 9. **Sin letra chica** (`#diferencia`, base): los compromisos concretos en un mosaico, con un trazo que se completa.
 10. **Proceso** (`#proceso`, alt): la línea se dibuja con el scroll y enciende cada paso.
 11. **El estudio** (`#estudio`, base): los cuatro desarrolladores full stack con su formación (Licenciatura en Sistemas y Técnico en Software) y el enlace al GitHub de la organización.
@@ -44,7 +44,7 @@ Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` 
 
 ### Intro de carga
 
-- Se muestra **una vez por sesión** (guarda `s74-intro` en `sessionStorage`). Para verla de nuevo: `?intro` en la URL.
+- Se muestra **una vez por sesión** (guarda `s74-intro` en `sessionStorage`) y **solo en pantallas de 760 px o más**: en el celular se entra directo a la portada. Para verla de nuevo (también en el celular): `?intro` en la URL.
 - No aparece si el visitante tiene las animaciones reducidas en su dispositivo.
 - La activa el script del `<head>` poniendo la clase `con-intro` en `<html>`. **No uses `intro` como nombre de clase en `<html>`**: choca con el componente `.intro` (que arranca con `display: none`) y esconde toda la página.
 - Si algo falla, se cierra sola a los 8 segundos.
@@ -59,7 +59,8 @@ Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` 
 
 ### Tipografía
 
-- **Archivo** (Google Fonts, variable con eje de ancho). Los títulos grandes usan `font-stretch: 125%`, peso 900 y mayúsculas: una grotesca extendida y negra. El texto corrido va en Archivo normal.
+- Las fuentes se sirven desde `assets/fonts/` (solo el juego latino, en woff2; se declaran al principio de `styles.css`). La de los títulos se precarga en el `<head>`. No se usa Google Fonts: un dominio menos y sin bloquear el primer pintado.
+- **Archivo** (variable con ejes de ancho y peso). Los títulos grandes usan `font-stretch: 125%`, peso 900 y mayúsculas: una grotesca extendida y negra. El texto corrido va en Archivo normal.
 - **Geist Mono** para rótulos chicos y **Michroma** solo para la marca ("STUDIO 74").
 - Las palabras muy largas en los títulos llevan guiones suaves (`&shy;`) para cortar bien en el celular.
 
@@ -67,10 +68,12 @@ Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` 
 
 - `js/main.js` le da a cada `[data-escena]` una variable `--p` de 0 a 1, y el CSS la usa con `calc()`:
   - `pin`: capítulos altos con una escena fija (`sticky`), como la portada, la visión, el problema y el caso.
-  - `entrada`: el elemento entra en pantalla. `paso`: lo atraviesa. `recorrido`: la línea del proceso.
+  - `paso`: el elemento atraviesa la pantalla (las bandas). `recorrido`: la línea del proceso.
+- `entrada` no usa `--p`: un `IntersectionObserver` le pone la clase `.visto` **una sola vez** cuando aparece y el CSS hace la transición. Así las tarjetas entran fluidas aunque el dedo vaya rápido o lento.
+- El motor lee todas las posiciones primero y escribe después (sin forzar el diseño varias veces por cuadro), y solo toca el estilo de lo que cambió.
 - Todo lo animado vive bajo `html.mov`, que pone el `<head>` solo si hay JavaScript y el dispositivo no pide movimiento reducido. **Sin `mov`, la página se ve completa y quieta**: es la versión accesible, no hay que mantener otra.
 - Para cambiar cuánto dura una escena fija, se cambia su `--alto` en `styles.css`. La del problema la calcula el JS según el ancho de las tarjetas.
-- Se anima solo `transform`, `opacity` y `clip-path`, para que vaya fluido en celulares.
+- Se anima solo `transform`, `opacity` y `clip-path`, para que vaya fluido en celulares. En el celular la barra va sin desenfoque (`backdrop-filter` se recalcula en cada cuadro).
 
 ### Redes y canales
 

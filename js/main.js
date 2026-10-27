@@ -174,7 +174,8 @@
   /* Cada [data-escena] recibe --p entre 0 y 1 según el tipo:
      - pin: el capítulo es más alto que la pantalla; 0 cuando su borde de
        arriba toca el de la pantalla, 1 cuando su borde de abajo toca el de abajo.
-     - entrada: 0 cuando asoma por abajo, 1 cuando llegó al 70 % de la pantalla.
+     - entrada: no sigue al scroll; recibe la clase .visto una sola vez al aparecer
+       y el CSS hace la transición (fluida aunque el dedo vaya rápido o lento).
      - paso: 0 cuando asoma por abajo, 1 cuando se fue por arriba.
      - recorrido: la línea del proceso, que avanza con el centro de la pantalla.
      También pinta el riel, el punto de la portada, el color de la barra y
@@ -187,8 +188,28 @@
   const pista = document.getElementById('problemaPista');
   const linksBarra = Array.from(document.querySelectorAll('.nav__links a'));
   const clamp = (v) => Math.min(1, Math.max(0, v));
+  const continuas = escenas.filter((el) => el.dataset.escena !== 'entrada');
+  let entradas = escenas.filter((el) => el.dataset.escena === 'entrada');
+  const indiceHero = continuas.findIndex((el) => el.contains(heroPunto));
+  let altoBarra = header.offsetHeight;
+
+  const mostrar = (el) => el.classList.add('visto');
+  if ('IntersectionObserver' in window) {
+    const revelar = new IntersectionObserver((lista) => {
+      lista.forEach((e) => {
+        if (!e.isIntersecting) return;
+        mostrar(e.target);
+        revelar.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px' });
+    entradas.forEach((el) => revelar.observe(el));
+  } else {
+    entradas.forEach(mostrar);
+    entradas = [];
+  }
 
   const medir = () => {
+    altoBarra = header.offsetHeight;
     // Pista horizontal: lo que sobra a la derecha es lo que hay que recorrer
     if (problema && pista) {
       const sobra = Math.max(0, pista.scrollWidth - window.innerWidth);
@@ -198,12 +219,15 @@
     // Punto de la portada: escala necesaria para cubrir toda la pantalla
     if (heroPunto) {
       heroPunto.style.removeProperty('--escala');
+      ultimos.delete(heroPunto);
       const lado = heroPunto.getBoundingClientRect().width || 1;
       heroPunto.dataset.cubrir = String((Math.hypot(window.innerWidth, window.innerHeight) * 2.2) / lado);
     }
   };
 
   let pendiente = false;
+  // Último valor escrito por elemento, para no tocar el estilo si no cambió
+  const ultimos = new WeakMap();
 
   const pintar = () => {
     pendiente = false;
@@ -211,45 +235,63 @@
     const y = window.scrollY;
     const alFinal = y + vh >= document.documentElement.scrollHeight - 2;
 
-    escenas.forEach((el) => {
-      const r = el.getBoundingClientRect();
+    // Primero se lee todo y después se escribe: mezclar lecturas y escrituras
+    // obliga al navegador a recalcular el diseño varias veces por cuadro.
+    const rects = continuas.map((el) => el.getBoundingClientRect());
+    const rectsCap = capitulos.map((c) => c.getBoundingClientRect());
+    const total = document.documentElement.scrollHeight;
+
+    const valores = rects.map((r, i) => {
       let p;
-      switch (el.dataset.escena) {
+      switch (continuas[i].dataset.escena) {
         case 'pin': p = -r.top / Math.max(1, r.height - vh); break;
         case 'paso': p = (vh - r.top) / (vh + r.height); break;
-        case 'recorrido': p = (vh * 0.6 - r.top) / Math.max(1, r.height); break;
-        default: p = alFinal ? 1 : (vh - r.top) / (vh * 0.3);
+        default: p = (vh * 0.6 - r.top) / Math.max(1, r.height);
       }
-      el.style.setProperty('--p', clamp(p).toFixed(4));
+      return clamp(p);
     });
 
+    // Solo se escribe lo que cambió (las escenas lejos de la pantalla quedan quietas)
+    continuas.forEach((el, i) => {
+      const v = valores[i].toFixed(4);
+      if (ultimos.get(el) === v) return;
+      ultimos.set(el, v);
+      el.style.setProperty('--p', v);
+    });
+
+    // Al llegar al final, lo que quede por revelar se muestra
+    if (alFinal && entradas.length) {
+      entradas.forEach(mostrar);
+      entradas = [];
+    }
+
     // Portada: el punto crece en la segunda mitad del recorrido
-    if (heroPunto && mov) {
-      const hero = heroPunto.closest('[data-escena]');
-      const p = parseFloat(hero.style.getPropertyValue('--p')) || 0;
-      const t = clamp((p - 0.4) / 0.6);
+    let escala = 1;
+    if (heroPunto && mov && indiceHero >= 0) {
+      const t = clamp((valores[indiceHero] - 0.4) / 0.6);
       const cubrir = parseFloat(heroPunto.dataset.cubrir) || 60;
-      heroPunto.style.setProperty('--escala', (1 + (cubrir - 1) * t * t * t).toFixed(3));
+      escala = 1 + (cubrir - 1) * t * t * t;
+      const e = escala.toFixed(3);
+      if (ultimos.get(heroPunto) !== e) {
+        ultimos.set(heroPunto, e);
+        heroPunto.style.setProperty('--escala', e);
+      }
     }
 
     // Barra y riel: toman el color del capítulo que tienen debajo
-    const bajoBarra = header.offsetHeight / 2;
-    const actual = capitulos.find((c) => {
-      const r = c.getBoundingClientRect();
-      return r.top <= bajoBarra && r.bottom > bajoBarra;
-    });
+    const bajoBarra = altoBarra / 2;
+    const actual = capitulos.find((c, i) => rectsCap[i].top <= bajoBarra && rectsCap[i].bottom > bajoBarra);
     // Mientras el punto de la portada cubre la pantalla, ya es señal
-    const cubierto = heroPunto && parseFloat(heroPunto.style.getPropertyValue('--escala')) > 20;
+    const cubierto = escala > 20;
     const temaDe = (c) => (!c ? 'base' : c.id === 'inicio' && cubierto ? 'senal' : c.dataset.tema);
-    if (menuBoton.getAttribute('aria-expanded') !== 'true') header.dataset.tema = temaDe(actual);
+    const temaBarra = temaDe(actual);
+    if (menuBoton.getAttribute('aria-expanded') !== 'true' && header.dataset.tema !== temaBarra) header.dataset.tema = temaBarra;
 
-    const rielEn = capitulos.find((c) => {
-      const r = c.getBoundingClientRect();
-      return r.top <= vh / 2 && r.bottom > vh / 2;
-    });
+    const rielEn = capitulos.find((c, i) => rectsCap[i].top <= vh / 2 && rectsCap[i].bottom > vh / 2);
     if (riel) {
-      riel.dataset.tema = temaDe(rielEn);
-      riel.style.setProperty('--progreso', clamp(y / (document.documentElement.scrollHeight - vh)).toFixed(4));
+      const temaRiel = temaDe(rielEn);
+      if (riel.dataset.tema !== temaRiel) riel.dataset.tema = temaRiel;
+      riel.style.setProperty('--progreso', clamp(y / Math.max(1, total - vh)).toFixed(4));
     }
 
     // Sección actual en la barra (el capítulo que cruza el centro de la pantalla)
@@ -308,6 +350,7 @@
   /* ── Pestañas del sistema real ───────────────────── */
   const tabs = document.querySelectorAll('.app__tab');
   const vista = document.querySelector('#appVista img');
+  const tabActual = () => document.querySelector('.app__tab.is-on');
   tabs.forEach((tab) => tab.addEventListener('click', () => {
     if (tab.classList.contains('is-on')) return;
     tabs.forEach((t) => {
@@ -323,6 +366,28 @@
     vista.classList.add('is-cambiando');
     setTimeout(cambiar, 220);
   }));
+
+  /* ── Visor: la pantalla del sistema a tamaño real ── */
+  const visor = document.getElementById('visor');
+  const ampliar = document.getElementById('appAmpliar');
+  if (visor && vista && typeof visor.showModal === 'function') {
+    const visorImagen = document.getElementById('visorImagen');
+    const abrirVisor = () => {
+      visorImagen.src = vista.src;
+      visorImagen.alt = vista.alt;
+      document.getElementById('visorTitulo').textContent = tabActual() ? tabActual().textContent : '';
+      visor.showModal();
+      const lienzo = visor.querySelector('.visor__lienzo');
+      lienzo.scrollLeft = 0;
+      lienzo.scrollTop = 0;
+    };
+    ampliar.addEventListener('click', abrirVisor);
+    vista.addEventListener('click', abrirVisor);
+    // Tocar fuera de la imagen también cierra
+    visor.addEventListener('click', (e) => { if (e.target === visor) visor.close(); });
+  } else if (ampliar) {
+    ampliar.hidden = true;
+  }
 
   /* ── Mensaje: crece con el texto ─────────────────── */
   /* Donde el navegador no tiene field-sizing, se ajusta a mano. */

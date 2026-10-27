@@ -24,6 +24,35 @@
      Sin esa clase la página se ve completa, quieta y en orden.
 ═══════════════════════════════════════════════════════ */
 
+/* Fuentes propias: juego latino (español completo). Archivo es variable en ancho y peso. */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400 900;
+  font-stretch: 100% 125%;
+  font-display: swap;
+  src: url('../assets/fonts/archivo-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url('../assets/fonts/geist-mono-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Michroma';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/michroma-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 :root {
   --tinta: #0B0B0C;
   --papel: #F4F3EF;
@@ -1415,12 +1444,114 @@ b {
 }
 
 .app__vista {
+  position: relative;
   background: #fff;
 }
 
 .app__vista img {
   width: 100%;
+  cursor: zoom-in;
   transition: opacity 0.25s var(--ease);
+}
+
+.app__ampliar {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 40px;
+  padding: 0.4rem 0.9rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(11, 11, 12, 0.82);
+  color: #fff;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.app__ampliar svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Visor a pantalla completa */
+.visor {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #0B0B0C;
+  color: #fff;
+}
+
+.visor::backdrop {
+  background: rgba(0, 0, 0, 0.85);
+}
+
+.visor[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.visor__barra {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: max(0.5rem, env(safe-area-inset-top)) 1rem 0.5rem;
+}
+
+.visor__titulo {
+  flex: 1;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.visor__cerrar {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  cursor: pointer;
+}
+
+.visor__cerrar svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* La imagen va a su tamaño real: se recorre con el dedo y se puede pellizcar */
+.visor__lienzo {
+  flex: 1;
+  display: grid;
+  place-items: center;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: #fff;
+}
+
+.visor__lienzo img {
+  width: 1024px;
+  max-width: none;
+  height: auto;
+}
+
+@media (min-width: 1100px) {
+  .visor__lienzo img {
+    width: min(1024px * 1.4, 96vw);
+  }
 }
 
 .app__vista img.is-cambiando {
@@ -1562,7 +1693,6 @@ b {
   z-index: 1;
   background: var(--senal);
   box-shadow: 0 0 0 1.5px var(--tinta);
-  opacity: clamp(0, calc((var(--p) - 0.6) * 6), 1);
 }
 
 .paso__n {
@@ -2175,23 +2305,58 @@ b {
   transform: translateX(calc(-30% + var(--p) * 30%));
 }
 
-/* Entradas genéricas */
+/* Entradas: se revelan una sola vez al aparecer, con una transición propia.
+   No siguen al scroll, así se ven fluidas aunque el dedo vaya rápido o lento. */
 .mov .cabeza[data-escena='entrada'],
 .mov .subtitulo,
 .mov .medida li,
-.mov .persona,
 .mov .preguntas,
 .mov .form,
 .mov .canales {
-  opacity: clamp(0, calc(var(--p) * 1.6 - 0.1), 1);
-  transform: translateY(calc((1 - var(--p)) * 56px));
+  opacity: 0;
+  transform: translate3d(0, 32px, 0);
+  transition: opacity 0.7s var(--ease), transform 0.8s var(--ease);
+}
+
+/* La persona conserva el cambio de color al pasar el mouse */
+.mov .persona {
+  opacity: 0;
+  transform: translate3d(0, 32px, 0);
+  transition: opacity 0.7s var(--ease), transform 0.8s var(--ease), background-color 0.4s var(--ease), color 0.4s var(--ease);
 }
 
 /* Tarjetas: además crecen un poco al entrar, como en una vitrina */
 .mov .compromiso {
-  opacity: clamp(0, calc(var(--p) * 1.6 - 0.1), 1);
-  transform: translateY(calc((1 - var(--p)) * 40px)) scale(calc(0.94 + var(--p) * 0.06));
+  opacity: 0;
+  transform: translate3d(0, 28px, 0) scale(0.96);
+  transition: opacity 0.7s var(--ease), transform 0.8s var(--ease);
 }
+
+/* Proceso: cada paso entra desde la línea */
+.mov .paso {
+  opacity: 0;
+  transform: translate3d(24px, 0, 0);
+  transition: opacity 0.7s var(--ease), transform 0.8s var(--ease);
+}
+
+.mov [data-escena='entrada'].visto {
+  opacity: 1;
+  transform: none;
+}
+
+/* En los mosaicos, cada tarjeta llega un poco después que la anterior */
+.mov .medida li:nth-child(2),
+.mov .persona:nth-child(2),
+.mov .compromiso:nth-child(2) { transition-delay: 0.08s; }
+.mov .medida li:nth-child(3),
+.mov .persona:nth-child(3),
+.mov .compromiso:nth-child(3) { transition-delay: 0.16s; }
+.mov .medida li:nth-child(4),
+.mov .persona:nth-child(4),
+.mov .compromiso:nth-child(4) { transition-delay: 0.24s; }
+
+/* Pasado el hover, sin demora */
+.mov .persona.visto:hover { transition-delay: 0s; }
 
 .mov .relato__paso {
   opacity: 0.4;
@@ -2217,26 +2382,49 @@ b {
 
 /* Sin letra chica: el trazo se completa y la frase se descubre */
 .mov .compromiso::before {
-  transform: scaleX(max(0.06, var(--p)));
+  transition: transform 1s var(--ease-io) 0.2s;
+}
+
+.mov .compromiso.visto::before {
+  transform: none;
 }
 
 .mov .compromiso__frase span {
-  clip-path: inset(-0.1em calc((1 - var(--p)) * 100%) -0.15em 0);
+  clip-path: inset(-0.1em 100% -0.15em 0);
+  transition: clip-path 0.9s var(--ease-io) 0.15s;
+}
+
+.mov .compromiso.visto .compromiso__frase span {
+  clip-path: inset(-0.1em 0 -0.15em 0);
 }
 
 .mov .compromiso__detalle {
-  opacity: clamp(0, calc((var(--p) - 0.5) * 3), 1);
+  opacity: 0;
+  transition: opacity 0.6s var(--ease) 0.5s;
 }
 
-/* Proceso: cada paso entra desde la línea */
-.mov .paso {
-  opacity: clamp(0.2, calc(var(--p) * 1.5), 1);
-  transform: translateX(calc((1 - var(--p)) * 32px));
+.mov .compromiso.visto .compromiso__detalle {
+  opacity: 1;
+}
+
+/* Proceso: el nodo se enciende cuando llega el paso */
+.mov .paso::after {
+  opacity: 0;
+  transition: opacity 0.4s var(--ease) 0.35s;
+}
+
+.mov .paso.visto::after {
+  opacity: 1;
 }
 
 /* Pie: la marca sube desde abajo */
 .mov .footer__marca span {
-  transform: translateY(calc((1 - var(--p)) * 100%));
+  transform: translate3d(0, 100%, 0);
+  transition: transform 1.1s var(--ease);
+}
+
+.mov .footer__marca.visto span {
+  transform: none;
 }
 
 
@@ -2710,6 +2898,109 @@ html.con-intro .hero * {
 
   .contacto__grilla {
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  }
+}
+
+/* ── Solo celular ────────────────────────────────── */
+@media (max-width: 759px) {
+  /* El desenfoque de la barra se recalcula en cada cuadro: en el celular va sólida */
+  .header {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background: color-mix(in srgb, var(--fondo) 96%, transparent);
+  }
+
+  /* Portada: la entrada es más corta */
+  .mov .linea > span {
+    animation-duration: 0.7s;
+  }
+
+  .mov .hero .rotulo,
+  .mov .hero__lead,
+  .mov .hero__acciones,
+  .mov .hero__coordenadas,
+  .mov .hero__bajar {
+    animation-duration: 0.6s;
+    animation-delay: 0.2s;
+  }
+
+  /* El problema: la cabeza más compacta y tarjetas a la medida de su texto,
+     para que todo (tarjetas y barra) entre en la pantalla fija */
+  .problema__escena {
+    gap: 1.5rem;
+    padding: calc(var(--header-height) + 1.25rem) 0 1.5rem;
+  }
+
+  .problema__cabeza .titulo {
+    font-size: clamp(1.6rem, 7.4vw, 2.2rem);
+  }
+
+  .problema__cabeza .bajada {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .problema__pista {
+    padding-bottom: 1rem;
+  }
+
+  .sintoma {
+    min-height: 0;
+    padding: 1.5rem;
+  }
+
+  .sintoma__n {
+    font-size: 2.25rem;
+  }
+
+  .sintoma__tipo {
+    padding-top: 1.25rem;
+  }
+
+  .sintoma__texto {
+    font-size: 1.1rem;
+  }
+
+  /* Caso real: sin escena fija ni giro 3D; la pantalla se recorre con el dedo */
+  .mov .caso {
+    height: auto;
+  }
+
+  .mov .caso__escena {
+    position: static;
+    height: auto;
+    min-height: 0;
+  }
+
+  .caso__escena {
+    padding-block: clamp(4rem, 14vw, 6rem);
+  }
+
+  .mov .ventana {
+    transform: none;
+    opacity: 1;
+  }
+
+  .mov .datos {
+    opacity: 1;
+  }
+
+  .app__marco {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+
+  .app__marco img {
+    width: 720px;
+    max-width: none;
+  }
+}
+
+/* Pantallas muy bajas: la bajada del problema se resigna para que entren las tarjetas */
+@media (max-width: 759px) and (max-height: 600px) {
+  .problema__cabeza .bajada {
+    display: none;
   }
 }
 

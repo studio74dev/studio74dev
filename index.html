@@ -225,23 +225,16 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico" />
   <link rel="apple-touch-icon" href="assets/favicon-180.png" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Las fuentes no bloquean el primer pintado: la intro se ve al instante -->
-  <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap" />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
-    rel="stylesheet" media="print" onload="this.media='all'" />
-  <noscript>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
-      rel="stylesheet" />
-  </noscript>
+  <!-- Fuentes propias (solo el juego latino), sin pasar por otro dominio.
+       La de los títulos se pide primero porque es la que se ve al cargar. -->
+  <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="css/styles.css?v=15" />
+  <link rel="stylesheet" href="css/styles.css?v=16" />
   <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
        (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
-       La intro se muestra una vez por sesión (o siempre con ?intro). -->
+       La intro se muestra una vez por sesión en pantallas anchas (o siempre con ?intro).
+       En el celular se entra directo a la portada. -->
   <script>
     (function () {
       var d = document.documentElement;
@@ -257,7 +250,8 @@
         var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!quieto) d.classList.add('mov');
         var forzar = /[?&]intro\b/.test(location.search);
-        if (!quieto && (forzar || !sessionStorage.getItem('s74-intro'))) d.classList.add('con-intro');
+        var chico = window.matchMedia('(max-width: 759px)').matches;
+        if (!quieto && (forzar || (!chico && !sessionStorage.getItem('s74-intro')))) d.classList.add('con-intro');
       } catch (e) { }
     })();
   </script>
@@ -591,8 +585,13 @@
             <span class="ventana__estado"><span class="punto" aria-hidden="true"></span>En producción</span>
           </div>
           <div class="app__vista" id="appVista" role="tabpanel">
-            <img src="assets/img/progreso-dashboard.webp" width="1024" height="470"
-              alt="Panel principal del club con métricas y resumen de ocupación" loading="lazy" decoding="async" />
+            <div class="app__marco">
+              <img src="assets/img/progreso-dashboard.webp" width="1024" height="470"
+                alt="Panel principal del club con métricas y resumen de ocupación" loading="lazy" decoding="async" />
+            </div>
+            <button type="button" class="app__ampliar" id="appAmpliar" aria-haspopup="dialog">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7" /></svg>
+              Ampliar</button>
           </div>
         </div>
 
@@ -853,7 +852,19 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=15" defer></script>
+  <!-- Visor de la pantalla del sistema: se puede desplazar y hacer zoom -->
+  <dialog class="visor" id="visor" aria-label="Pantalla del sistema ampliada">
+    <form method="dialog" class="visor__barra">
+      <span class="visor__titulo" id="visorTitulo"></span>
+      <button type="submit" class="visor__cerrar" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
+    </form>
+    <div class="visor__lienzo">
+      <img id="visorImagen" src="data:," width="1024" height="470" alt="" />
+    </div>
+  </dialog>
+
+  <script src="js/main.js?v=16" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
