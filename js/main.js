@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   STUDIO 74 — MAIN SCRIPT V8
+   STUDIO 74 — MAIN SCRIPT V9
 ═══════════════════════════════════════════════════════ */
 
 (function () {
@@ -97,11 +97,39 @@
     setTimeout(abrir, 8000);
   }
 
+  /* ── Tema claro / oscuro ─────────────────────────── */
+  /* El <head> ya puso html[data-theme] (lo guardado o el del sistema).
+     El botón lo alterna y lo recuerda; si nunca se tocó, sigue al sistema. */
+  const temaBoton = document.getElementById('temaBoton');
+  const metaColor = document.querySelector('meta[name="theme-color"]');
+  const pintarTema = () => {
+    const claro = root.dataset.theme === 'claro';
+    if (temaBoton) temaBoton.setAttribute('aria-label', claro ? 'Cambiar a tema oscuro' : 'Cambiar a tema claro');
+    if (metaColor) metaColor.content = claro ? '#F4F3EF' : '#0B0B0C';
+  };
+  pintarTema();
+  if (temaBoton) {
+    temaBoton.addEventListener('click', () => {
+      root.dataset.theme = root.dataset.theme === 'claro' ? 'oscuro' : 'claro';
+      try {
+        localStorage.setItem('s74-tema', root.dataset.theme);
+      } catch (_) { /* sin storage: vale para esta visita */ }
+      pintarTema();
+    });
+  }
+  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
+    let elegido = null;
+    try { elegido = localStorage.getItem('s74-tema'); } catch (_) { /* sin storage */ }
+    if (elegido) return;
+    root.dataset.theme = e.matches ? 'claro' : 'oscuro';
+    pintarTema();
+  });
+
   /* ── Índice a pantalla completa ──────────────────── */
   const header = document.getElementById('header');
   const menuBoton = document.getElementById('menuBoton');
   const indice = document.getElementById('indice');
-  let temaAntes = 'tinta';
+  let temaAntes = 'base';
 
   const cerrarIndice = (volverAlBoton) => {
     if (menuBoton.getAttribute('aria-expanded') !== 'true') return;
@@ -116,8 +144,7 @@
   const abrirIndice = () => {
     indice.hidden = false;
     temaAntes = header.dataset.tema;
-    header.dataset.tema = 'tinta';
-    header.classList.remove('oculto');
+    header.dataset.tema = 'base';
     menuBoton.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
     requestAnimationFrame(() => requestAnimationFrame(() => indice.classList.add('abierto')));
@@ -149,13 +176,15 @@
      - entrada: 0 cuando asoma por abajo, 1 cuando llegó al 70 % de la pantalla.
      - paso: 0 cuando asoma por abajo, 1 cuando se fue por arriba.
      - recorrido: la línea del proceso, que avanza con el centro de la pantalla.
-     También pinta el riel, el punto de la portada y el color de la barra. */
+     También pinta el riel, el punto de la portada, el color de la barra y
+     marca en la barra la sección que se está leyendo. */
   const escenas = Array.from(document.querySelectorAll('[data-escena]'));
   const capitulos = Array.from(document.querySelectorAll('.capitulo[data-tema]'));
   const riel = document.querySelector('.riel');
   const heroPunto = document.getElementById('heroPunto');
   const problema = document.querySelector('.problema');
   const pista = document.getElementById('problemaPista');
+  const linksBarra = Array.from(document.querySelectorAll('.nav__links a'));
   const clamp = (v) => Math.min(1, Math.max(0, v));
 
   const medir = () => {
@@ -173,7 +202,6 @@
     }
   };
 
-  let ultimoY = window.scrollY;
   let pendiente = false;
 
   const pintar = () => {
@@ -211,10 +239,8 @@
     });
     // Mientras el punto de la portada cubre la pantalla, ya es señal
     const cubierto = heroPunto && parseFloat(heroPunto.style.getPropertyValue('--punto')) > 20;
-    const temaDe = (c) => (!c ? 'tinta' : c.id === 'inicio' && cubierto ? 'senal' : c.dataset.tema);
-    const tema = temaDe(actual);
-    if (menuBoton.getAttribute('aria-expanded') !== 'true') header.dataset.tema = tema;
-    header.classList.toggle('con-fondo', y > 40 && tema !== 'senal');
+    const temaDe = (c) => (!c ? 'base' : c.id === 'inicio' && cubierto ? 'senal' : c.dataset.tema);
+    if (menuBoton.getAttribute('aria-expanded') !== 'true') header.dataset.tema = temaDe(actual);
 
     const rielEn = capitulos.find((c) => {
       const r = c.getBoundingClientRect();
@@ -225,11 +251,14 @@
       riel.style.setProperty('--progreso', clamp(y / (document.documentElement.scrollHeight - vh)).toFixed(4));
     }
 
-    // La barra se esconde al bajar y vuelve al subir
-    if (Math.abs(y - ultimoY) > 6) {
-      header.classList.toggle('oculto', y > ultimoY && y > vh * 0.6 && menuBoton.getAttribute('aria-expanded') !== 'true');
-      ultimoY = y;
-    }
+    // Sección actual en la barra (el capítulo que cruza el centro de la pantalla)
+    const id = rielEn ? `#${rielEn.id}` : '';
+    linksBarra.forEach((a) => {
+      const es = a.getAttribute('href') === id;
+      a.classList.toggle('is-actual', es);
+      if (es) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    });
   };
 
   const pedir = () => {

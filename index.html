@@ -228,22 +228,30 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- Las fuentes no bloquean el primer pintado: la intro se ve al instante -->
   <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&family=Michroma&display=swap" />
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
     rel="stylesheet" media="print" onload="this.media='all'" />
   <noscript>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..800&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
       rel="stylesheet" />
   </noscript>
 
-  <link rel="stylesheet" href="css/styles.css?v=13" />
-  <!-- "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
+  <link rel="stylesheet" href="css/styles.css?v=14" />
+  <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
+       "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
        (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
        La intro se muestra una vez por sesión (o siempre con ?intro). -->
   <script>
     (function () {
       var d = document.documentElement;
       d.classList.add('js');
+      // Tema: el elegido con el botón de la barra o, si no hay, el del sistema
+      var tema = null;
+      try { tema = localStorage.getItem('s74-tema'); } catch (e) { }
+      if (tema !== 'claro' && tema !== 'oscuro') {
+        tema = window.matchMedia('(prefers-color-scheme: light)').matches ? 'claro' : 'oscuro';
+      }
+      d.dataset.theme = tema;
       try {
         var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!quieto) d.classList.add('mov');
@@ -292,9 +300,9 @@
     </div>
   </div>
 
-  <!-- Barra: logo, "Hablemos" y el índice a pantalla completa.
-       data-tema cambia según el capítulo que tiene debajo (tinta, papel o señal). -->
-  <header class="header" id="header" data-tema="tinta">
+  <!-- Barra: logo, secciones, tema, "Hablemos" y el índice a pantalla completa.
+       data-tema cambia según el capítulo que tiene debajo (base, alt o señal). -->
+  <header class="header" id="header" data-tema="base">
     <nav class="nav" aria-label="Navegación principal">
       <a href="#inicio" class="nav__logo" aria-label="Studio 74, inicio">
         <svg class="nav__logo-icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
@@ -309,6 +317,20 @@
         <span class="nav__logo-text">STUDIO 74</span>
       </a>
 
+      <ul class="nav__links">
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#caso">Caso real</a></li>
+        <li><a href="#proceso">Proceso</a></li>
+        <li><a href="#estudio">Estudio</a></li>
+        <li><a href="#preguntas">Preguntas</a></li>
+      </ul>
+
+      <button class="nav__tema" id="temaBoton" type="button" aria-label="Cambiar a tema claro">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="8" />
+          <path d="M12 4a8 8 0 0 1 0 16z" />
+        </svg>
+      </button>
       <a href="#contacto" class="nav__cta magnetico">Hablemos</a>
       <button class="nav__menu" id="menuBoton" type="button" aria-expanded="false" aria-controls="indice">
         <span class="nav__menu-texto">Índice</span>
@@ -318,7 +340,7 @@
   </header>
 
   <!-- Índice a pantalla completa -->
-  <div class="indice" id="indice" hidden>
+  <div class="indice" id="indice" data-tema="base" hidden>
     <ol class="indice__lista">
       <li><a href="#vision"><span>01</span>Visión</a></li>
       <li><a href="#problema"><span>02</span>El problema</a></li>
@@ -347,7 +369,7 @@
 
     <!-- 00. Portada. Al bajar, los trazos del 74 se separan y el punto crece
          hasta cubrir la pantalla: así se entra al capítulo de visión. -->
-    <section id="inicio" class="hero capitulo" data-tema="tinta" data-escena="pin" aria-labelledby="hero-title">
+    <section id="inicio" class="hero capitulo" data-tema="base" data-escena="pin" aria-labelledby="hero-title">
       <div class="hero__escena">
         <div class="hero__marca" aria-hidden="true">
           <svg viewBox="0 0 100 100" focusable="false">
@@ -368,8 +390,8 @@
           <h1 id="hero-title" class="hero__title">
             <span class="linea"><span>Software y</span></span>
             <span class="linea"><span>presencia digital</span></span>
-            <span class="linea"><span>para comercios</span></span>
-            <span class="linea"><span>de la costa<i class="hero__fin" aria-hidden="true"></i></span></span>
+            <span class="linea linea--suave"><span>para comercios</span></span>
+            <span class="linea linea--suave"><span>de la costa<i class="hero__fin" aria-hidden="true"></i></span></span>
           </h1>
           <p class="hero__lead">Diseñamos, desarrollamos y mantenemos el canal digital de su negocio, con atención en
             persona y presupuesto por escrito.</p>
@@ -398,9 +420,9 @@
     </section>
 
     <!-- 02. El problema: las tarjetas se deslizan en horizontal mientras se baja -->
-    <section id="problema" class="problema capitulo" data-tema="tinta" data-escena="pin" aria-labelledby="problema-title">
+    <section id="problema" class="problema capitulo" data-tema="base" data-escena="pin" aria-labelledby="problema-title">
       <div class="problema__escena">
-        <div class="problema__cabeza">
+        <div class="cabeza problema__cabeza">
           <p class="rotulo"><span class="rotulo__n">02</span>El problema</p>
           <h2 id="problema-title" class="titulo">Buena reputación.<br /><em>Sin un canal digital propio.</em></h2>
           <p class="bajada">Muchos comercios de la costa son conocidos en su ciudad, pero dependen de terceros para que
@@ -450,7 +472,7 @@
     </div>
 
     <!-- 03. Qué hacemos: el teléfono se arma a medida que se leen los pasos -->
-    <section id="servicios" class="servicios capitulo" data-tema="papel" aria-labelledby="servicios-title">
+    <section id="servicios" class="servicios capitulo" data-tema="alt" aria-labelledby="servicios-title">
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">03</span>Qué hacemos</p>
@@ -542,9 +564,9 @@
     </section>
 
     <!-- 04. Caso real: la ventana se apoya sobre la mesa mientras se baja -->
-    <section id="caso" class="caso capitulo" data-tema="tinta" data-escena="pin" aria-labelledby="caso-title">
+    <section id="caso" class="caso capitulo" data-tema="base" data-escena="pin" aria-labelledby="caso-title">
       <div class="caso__escena">
-        <div class="caso__cabeza">
+        <div class="cabeza caso__cabeza">
           <p class="rotulo"><span class="rotulo__n">04</span>Caso real</p>
           <h2 id="caso-title" class="titulo">Club El Progreso</h2>
           <p class="bajada">Sistema de gestión que utiliza a diario la administración de un club de playa: socios y
@@ -582,7 +604,7 @@
     </section>
 
     <!-- 05. En qué nos diferenciamos: compromisos concretos, sin promesas infladas -->
-    <section id="diferencia" class="diferencia capitulo" data-tema="tinta" aria-labelledby="diferencia-title">
+    <section id="diferencia" class="diferencia capitulo" data-tema="base" aria-labelledby="diferencia-title">
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">05</span>En qué nos diferenciamos</p>
@@ -614,7 +636,7 @@
     </section>
 
     <!-- 06. Proceso: la línea se dibuja con el scroll y enciende cada paso -->
-    <section id="proceso" class="proceso capitulo" data-tema="tinta" aria-labelledby="proceso-title">
+    <section id="proceso" class="proceso capitulo" data-tema="alt" aria-labelledby="proceso-title">
       <div class="contenedor proceso__grilla">
         <div class="cabeza proceso__cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">06</span>Proceso</p>
@@ -647,11 +669,11 @@
 
     <!-- 07. El estudio.
          TODO: cargo o área de Ramiro, Gerónimo y Valentín (el de Mariano sale de la firma de mail). -->
-    <section id="estudio" class="estudio capitulo" data-tema="papel" aria-labelledby="estudio-title">
+    <section id="estudio" class="estudio capitulo" data-tema="base" aria-labelledby="estudio-title">
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">07</span>El estudio</p>
-          <h2 id="estudio-title" class="titulo">Cuatro desarrolladores.<br /><em>Con base en la costa.</em></h2>
+          <h2 id="estudio-title" class="titulo">Cuatro desa&shy;rro&shy;lla&shy;dores.<br /><em>Con base en la costa.</em></h2>
           <p class="bajada"><b>Studio 74</b> es un estudio de desarrollo de software. Atendemos comercios de Pinamar,
             Villa Gesell, General Madariaga y alrededores, con reuniones presenciales en la zona.</p>
         </div>
@@ -681,7 +703,7 @@
     </section>
 
     <!-- 08. Preguntas frecuentes. Si cambian, actualizar también el FAQPage del JSON-LD. -->
-    <section id="preguntas" class="preguntas-sec capitulo" data-tema="papel" aria-labelledby="preguntas-title">
+    <section id="preguntas" class="preguntas-sec capitulo" data-tema="alt" aria-labelledby="preguntas-title">
       <div class="contenedor preguntas-sec__grilla">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">08</span>Preguntas frecuentes</p>
@@ -723,7 +745,7 @@
     </section>
 
     <!-- 09. Contacto: el formulario se completa como una frase -->
-    <section id="contacto" class="contacto capitulo" data-tema="tinta" aria-labelledby="contacto-title">
+    <section id="contacto" class="contacto capitulo" data-tema="base" aria-labelledby="contacto-title">
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">09</span>Contacto</p>
@@ -797,7 +819,7 @@
 
   </main>
 
-  <footer class="footer capitulo" data-tema="tinta">
+  <footer class="footer capitulo" data-tema="base">
     <div class="contenedor">
       <div class="footer__fila">
         <p class="footer__zona">Software y presencia digital para comercios de Pinamar, Villa Gesell, General
@@ -815,7 +837,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=13" defer></script>
+  <script src="js/main.js?v=14" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
