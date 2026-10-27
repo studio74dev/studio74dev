@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   STUDIO 74 — MAIN SCRIPT V9
+   STUDIO 74 — MAIN SCRIPT V10
 ═══════════════════════════════════════════════════════ */
 
 (function () {
@@ -65,7 +65,7 @@
       setTimeout(terminar, 1000);
     };
 
-    // Carga real: espera al load y a las fuentes, con 1,6 s mínimos de animación
+    // Carga real: espera al load y a las fuentes, con 1,2 s mínimos de animación
     const cargado = Promise.all([
       new Promise((r) => (document.readyState === 'complete' ? r() : window.addEventListener('load', r, { once: true }))),
       document.fonts ? document.fonts.ready.catch(() => { }) : Promise.resolve(),
@@ -75,14 +75,14 @@
     const t0 = performance.now();
     const contar = (t) => {
       if (estado !== 'cargando') return;
-      const minimo = Math.min((t - t0) / 1600, 1);
+      const minimo = Math.min((t - t0) / 1200, 1);
       const valor = Math.floor((listo ? minimo : Math.min(minimo, 0.9)) * 100);
       pct.textContent = String(valor).padStart(2, '0');
       if (valor >= 100) {
         estado = 'lista';
         intro.classList.add('is-lista');
         entrar.focus({ preventScroll: true });
-        setTimeout(abrir, 2600);
+        setTimeout(abrir, 800);
         return;
       }
       requestAnimationFrame(contar);
@@ -164,8 +164,9 @@
      enciende cuando el avance del capítulo llega a ella. */
   document.querySelectorAll('[data-palabras]').forEach((p) => {
     const palabras = p.textContent.trim().split(/\s+/);
-    p.setAttribute('aria-label', palabras.join(' '));
-    p.innerHTML = palabras.map((w, i) => `<span class="w" style="--i:${i}" aria-hidden="true">${w}</span>`).join(' ');
+    // El texto completo queda para lectores de pantalla; las palabras sueltas solo se ven
+    p.innerHTML = `<span class="visually-hidden">${palabras.join(' ')}</span>` +
+      palabras.map((w, i) => `<span class="w" style="--i:${i}" aria-hidden="true">${w}</span>`).join(' ');
     p.style.setProperty('--n', palabras.length);
   });
 
@@ -196,7 +197,7 @@
     }
     // Punto de la portada: escala necesaria para cubrir toda la pantalla
     if (heroPunto) {
-      heroPunto.style.removeProperty('--punto');
+      heroPunto.style.removeProperty('--escala');
       const lado = heroPunto.getBoundingClientRect().width || 1;
       heroPunto.dataset.cubrir = String((Math.hypot(window.innerWidth, window.innerHeight) * 2.2) / lado);
     }
@@ -228,7 +229,7 @@
       const p = parseFloat(hero.style.getPropertyValue('--p')) || 0;
       const t = clamp((p - 0.4) / 0.6);
       const cubrir = parseFloat(heroPunto.dataset.cubrir) || 60;
-      heroPunto.style.setProperty('--punto', (1 + (cubrir - 1) * t * t * t).toFixed(3));
+      heroPunto.style.setProperty('--escala', (1 + (cubrir - 1) * t * t * t).toFixed(3));
     }
 
     // Barra y riel: toman el color del capítulo que tienen debajo
@@ -238,7 +239,7 @@
       return r.top <= bajoBarra && r.bottom > bajoBarra;
     });
     // Mientras el punto de la portada cubre la pantalla, ya es señal
-    const cubierto = heroPunto && parseFloat(heroPunto.style.getPropertyValue('--punto')) > 20;
+    const cubierto = heroPunto && parseFloat(heroPunto.style.getPropertyValue('--escala')) > 20;
     const temaDe = (c) => (!c ? 'base' : c.id === 'inicio' && cubierto ? 'senal' : c.dataset.tema);
     if (menuBoton.getAttribute('aria-expanded') !== 'true') header.dataset.tema = temaDe(actual);
 

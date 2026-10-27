@@ -1,7 +1,9 @@
 /* ═══════════════════════════════════════════════════════
-   STUDIO 74 — STYLESHEET V9
-   Paleta del logo, y nada más:
-     Tinta #0B0B0C · Papel #F4F3EF · Señal #D2FF3A
+   STUDIO 74 — STYLESHEET V10
+   Paleta: el logo en blanco y negro, con el punto en azul costa.
+     Tinta #0B0B0C · Papel #F4F3EF · Señal (azul costa) #2F5BEA
+   El azul cumple AA con texto blanco encima (5,5:1) y sobre papel (5:1).
+   Sobre fondos oscuros, el acento de texto es su versión clara #8EA8FF (8,6:1).
    Archivo (títulos en ancho 125 % y peso 900, y texto), Geist Mono
    (rótulos), Michroma (marca).
 
@@ -25,7 +27,9 @@
 :root {
   --tinta: #0B0B0C;
   --papel: #F4F3EF;
-  --senal: #D2FF3A;
+  --senal: #2F5BEA;
+  --senal-claro: #8EA8FF;
+  --sobre-senal: #FFFFFF;
 
   --font: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -53,7 +57,8 @@
   color-scheme: light;
 }
 
-/* Tokens por tema y capítulo. Texto secundario: 7:1 o más en todos. */
+/* Tokens por tema y capítulo. Texto secundario: 7:1 o más sobre tinta y papel,
+   4,5:1 o más sobre el azul. */
 :root,
 [data-tema='base'] {
   --fondo: var(--tinta);
@@ -61,12 +66,13 @@
   --suave: rgba(244, 243, 239, 0.68);
   --linea: rgba(244, 243, 239, 0.12);
   --linea-fuerte: rgba(244, 243, 239, 0.24);
-  --acento: var(--senal);
-  --foco: var(--senal);
+  --acento: var(--senal-claro);
+  --foco: var(--senal-claro);
   --superficie: #18181B;
   --boton-fondo: var(--senal);
-  --boton-texto: var(--tinta);
-  --trazo: var(--senal);
+  --boton-texto: var(--sobre-senal);
+  --trazo: var(--papel);
+  --punto: var(--senal);
 }
 
 [data-tema='alt'] {
@@ -75,12 +81,13 @@
   --suave: rgba(244, 243, 239, 0.7);
   --linea: rgba(244, 243, 239, 0.12);
   --linea-fuerte: rgba(244, 243, 239, 0.24);
-  --acento: var(--senal);
-  --foco: var(--senal);
+  --acento: var(--senal-claro);
+  --foco: var(--senal-claro);
   --superficie: #202024;
   --boton-fondo: var(--senal);
-  --boton-texto: var(--tinta);
-  --trazo: var(--senal);
+  --boton-texto: var(--sobre-senal);
+  --trazo: var(--papel);
+  --punto: var(--senal);
 }
 
 [data-theme='claro'],
@@ -90,12 +97,13 @@
   --suave: rgba(11, 11, 12, 0.7);
   --linea: rgba(11, 11, 12, 0.1);
   --linea-fuerte: rgba(11, 11, 12, 0.24);
-  --acento: var(--tinta);
-  --foco: var(--tinta);
+  --acento: var(--senal);
+  --foco: var(--senal);
   --superficie: #FFFFFF;
-  --boton-fondo: var(--tinta);
-  --boton-texto: var(--senal);
+  --boton-fondo: var(--senal);
+  --boton-texto: var(--sobre-senal);
   --trazo: var(--tinta);
+  --punto: var(--senal);
 }
 
 [data-theme='claro'] [data-tema='alt'] {
@@ -104,27 +112,29 @@
   --suave: rgba(11, 11, 12, 0.7);
   --linea: rgba(11, 11, 12, 0.1);
   --linea-fuerte: rgba(11, 11, 12, 0.24);
-  --acento: var(--tinta);
-  --foco: var(--tinta);
+  --acento: var(--senal);
+  --foco: var(--senal);
   --superficie: var(--papel);
-  --boton-fondo: var(--tinta);
-  --boton-texto: var(--senal);
+  --boton-fondo: var(--senal);
+  --boton-texto: var(--sobre-senal);
   --trazo: var(--tinta);
+  --punto: var(--senal);
 }
 
 [data-tema='senal'],
 [data-theme='claro'] [data-tema='senal'] {
   --fondo: var(--senal);
-  --texto: var(--tinta);
-  --suave: rgba(11, 11, 12, 0.72);
-  --linea: rgba(11, 11, 12, 0.16);
-  --linea-fuerte: rgba(11, 11, 12, 0.32);
-  --acento: var(--tinta);
-  --foco: var(--tinta);
-  --superficie: rgba(11, 11, 12, 0.06);
-  --boton-fondo: var(--tinta);
+  --texto: var(--sobre-senal);
+  --suave: rgba(255, 255, 255, 0.9);
+  --linea: rgba(255, 255, 255, 0.2);
+  --linea-fuerte: rgba(255, 255, 255, 0.4);
+  --acento: var(--sobre-senal);
+  --foco: var(--sobre-senal);
+  --superficie: rgba(255, 255, 255, 0.08);
+  --boton-fondo: var(--sobre-senal);
   --boton-texto: var(--senal);
-  --trazo: var(--tinta);
+  --trazo: var(--sobre-senal);
+  --punto: var(--sobre-senal);
 }
 
 *,
@@ -137,6 +147,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Los enlaces internos no quedan debajo de la barra fija */
+  scroll-padding-top: var(--header-height);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -185,7 +197,7 @@ svg {
 
 ::selection {
   background: var(--senal);
-  color: var(--tinta);
+  color: var(--sobre-senal);
 }
 
 .visually-hidden {
@@ -232,6 +244,7 @@ b {
 .btn svg,
 .medida__fila svg,
 .canal svg,
+.estudio__github svg,
 .nav__tema svg {
   fill: none;
   stroke: currentColor;
@@ -248,7 +261,7 @@ b {
   padding: 0.6rem 1rem;
   border-radius: 999px;
   background: var(--senal);
-  color: var(--tinta);
+  color: var(--sobre-senal);
   font-weight: 600;
   text-decoration: none;
   transform: translateY(-200%);
@@ -286,7 +299,7 @@ b {
   justify-content: center;
   gap: 0.6rem;
   font-family: var(--mono);
-  font-size: 0.75rem;
+  font-size: 0.78rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--suave);
@@ -432,16 +445,15 @@ b {
   text-decoration: none;
 }
 
+/* El isotipo solo (sin "STUDIO 74" al lado): trazos del color del texto y el punto en azul */
 .nav__logo-icon {
-  width: 24px;
-  height: 24px;
-  color: var(--acento);
+  width: 28px;
+  height: 28px;
+  color: var(--texto);
 }
 
-.nav__logo-text {
-  font-family: var(--marca);
-  font-size: 0.72rem;
-  letter-spacing: 0.28em;
+.nav__logo-punto {
+  fill: var(--punto);
 }
 
 .nav__links {
@@ -495,7 +507,7 @@ b {
 }
 
 .nav__cta {
-  display: none;
+  display: inline-flex;
   align-items: center;
   min-height: 32px;
   padding: 0 1rem;
@@ -513,7 +525,7 @@ b {
   align-items: center;
   gap: 0.6rem;
   min-height: 40px;
-  padding: 0 0.4rem 0 0.75rem;
+  padding: 0;
   border: 0;
   border-radius: 999px;
   background: transparent;
@@ -522,6 +534,11 @@ b {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   cursor: pointer;
+}
+
+/* En el celular el índice queda como ícono, para que entre "Hablemos" */
+.nav__menu-texto {
+  display: none;
 }
 
 .nav__menu-icono {
@@ -655,7 +672,7 @@ b {
 
 .hero__siete,
 .hero__cuatro {
-  opacity: 0.13;
+  opacity: 0.1;
 }
 
 .hero__punto {
@@ -666,7 +683,7 @@ b {
   height: 8%;
   z-index: 1;
   background: var(--senal);
-  transform: scale(var(--punto, 1));
+  transform: scale(var(--escala, 1));
   will-change: transform;
 }
 
@@ -762,7 +779,7 @@ b {
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--trazo);
+  background: var(--acento);
   transform: translateY(-100%);
 }
 
@@ -914,7 +931,7 @@ b {
 .banda--senal {
   z-index: 2;
   background: var(--senal);
-  color: var(--tinta);
+  color: var(--sobre-senal);
   transform: translateY(-50%) rotate(-6deg);
 }
 
@@ -1005,7 +1022,7 @@ b {
 
 /* Teléfono ilustrativo */
 .telefono {
-  width: min(200px, 48vw);
+  width: min(176px, 44vw);
   aspect-ratio: 9 / 18.5;
   padding: 9px;
   border-radius: 38px;
@@ -1066,7 +1083,7 @@ b {
 }
 
 .tel-web__hero span {
-  color: var(--senal);
+  color: var(--senal-claro);
   font-family: var(--mono);
   font-size: 0.85em;
 }
@@ -1201,9 +1218,9 @@ b {
   padding: 9px;
   border-radius: 999px;
   background: var(--senal);
+  color: var(--sobre-senal);
   font-weight: 600;
   text-align: center;
-  box-shadow: inset 0 0 0 1px var(--tinta);
 }
 
 /* Lo que se suma en cada paso */
@@ -1252,7 +1269,7 @@ b {
 .medida__fila:focus-visible {
   transform: scale(1.015);
   background: var(--senal);
-  color: var(--tinta);
+  color: var(--sobre-senal);
 }
 
 .medida__n {
@@ -1266,7 +1283,7 @@ b {
 
 .medida__fila:hover .medida__n,
 .medida__fila:focus-visible .medida__n {
-  color: var(--tinta);
+  color: var(--sobre-senal);
 }
 
 .medida__nombre {
@@ -1288,7 +1305,7 @@ b {
 
 .medida__fila:hover .medida__desc,
 .medida__fila:focus-visible .medida__desc {
-  color: rgba(11, 11, 12, 0.75);
+  color: rgba(255, 255, 255, 0.86);
 }
 
 .medida__fila svg {
@@ -1518,7 +1535,7 @@ b {
 }
 
 .pasos::after {
-  background: var(--trazo);
+  background: var(--acento);
   transform: scaleY(var(--p));
   transform-origin: top;
 }
@@ -1590,8 +1607,8 @@ b {
 
 .persona:hover {
   background: var(--senal);
-  color: var(--tinta);
-  --suave: rgba(11, 11, 12, 0.72);
+  color: var(--sobre-senal);
+  --suave: rgba(255, 255, 255, 0.86);
 }
 
 .persona__inicial {
@@ -1610,19 +1627,35 @@ b {
 }
 
 .persona__cargo {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.persona__formacion {
+  margin-top: 0.35rem;
   font-size: 0.92rem;
+  line-height: 1.4;
   color: var(--suave);
 }
 
-/* Dato pendiente: se ve a propósito para no publicarlo así */
-.pendiente {
-  align-self: flex-start;
-  margin-top: 0.25rem;
-  padding: 0 0.4rem;
-  border: 1px dashed currentColor;
-  border-radius: 6px;
-  font-family: var(--mono);
-  font-size: 0.72rem;
+.estudio__github {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.estudio__github a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  font-weight: 600;
+  color: var(--acento);
+  text-underline-offset: 0.25em;
+}
+
+.estudio__github svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* ── 08. Preguntas ───────────────────────────────── */
@@ -1721,69 +1754,68 @@ b {
 
 .form {
   display: grid;
-  gap: 1.25rem;
-  padding: clamp(1.5rem, 4vw, 3rem);
+  gap: 1.5rem;
+  padding: clamp(1.5rem, 4vw, 2.75rem);
   border-radius: var(--radio);
   background: var(--superficie);
 }
 
-.frase {
-  font-size: clamp(1.25rem, 2.4vw, 1.9rem);
-  font-weight: 500;
-  line-height: 1.7;
-  letter-spacing: -0.02em;
+.form__fila {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.grupo {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+  border: 0;
+}
+
+.grupo__etiqueta {
+  padding: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.grupo__ayuda {
+  font-size: 0.88rem;
   color: var(--suave);
 }
 
-.frase label {
-  color: inherit;
-}
-
 .campo {
-  min-height: 44px;
-  padding: 0 0.15em;
-  border: 0;
-  border-bottom: 2px solid var(--linea-fuerte);
-  border-radius: 0;
-  background: transparent;
+  width: 100%;
+  min-height: 52px;
+  padding: 0.8rem 1rem;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: 12px;
+  background: var(--fondo);
   color: var(--texto);
-  font-weight: 650;
-  transition: border-color 0.25s var(--ease);
+  font-size: 1rem;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 
-.campo::placeholder {
-  color: color-mix(in srgb, var(--texto) 55%, transparent);
-  font-weight: 500;
+.campo:hover {
+  border-color: color-mix(in srgb, var(--texto) 45%, transparent);
 }
 
 .campo:focus {
   outline: none;
-  border-bottom-color: var(--acento);
-}
-
-.campo--corto {
-  width: min(11ch, 100%);
-}
-
-.campo--medio {
-  width: min(16ch, 100%);
+  border-color: var(--acento);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--acento) 30%, transparent);
 }
 
 .campo--largo {
-  width: 100%;
-  min-height: 3.2em;
-  padding-block: 0.4em;
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  min-height: 8.5rem;
   line-height: 1.5;
-  resize: none;
+  resize: vertical;
   field-sizing: content;
 }
 
-.form__servicios {
+.opciones {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  border: 0;
 }
 
 .opcion {
@@ -1799,19 +1831,20 @@ b {
 }
 
 .opcion span {
-  display: inline-block;
-  padding: 0.55em 1.1em;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 1rem;
   border-radius: 999px;
-  box-shadow: inset 0 0 0 1.5px var(--linea-fuerte);
-  font-size: clamp(0.98rem, 1.5vw, 1.12rem);
-  font-weight: 500;
+  box-shadow: inset 0 0 0 1px var(--linea-fuerte);
+  font-size: 0.95rem;
   color: var(--suave);
-  transition: background-color 0.25s var(--ease), color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
 
 .opcion:hover span {
   color: var(--texto);
-  box-shadow: inset 0 0 0 1.5px var(--texto);
+  box-shadow: inset 0 0 0 1px var(--texto);
 }
 
 .opcion input:checked + span {
@@ -1834,7 +1867,7 @@ b {
 }
 
 .form__pie {
-  margin-top: 1rem;
+  margin-top: 0.25rem;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1843,8 +1876,6 @@ b {
 
 .form__pie .btn {
   flex: 1 1 100%;
-  min-height: 60px;
-  font-size: 1.05rem;
 }
 
 .form__note {
@@ -2032,15 +2063,15 @@ b {
 }
 
 .mov .hero {
-  --alto: 200svh;
+  --alto: 180svh;
 }
 
 .mov .vision {
-  --alto: 320svh;
+  --alto: 240svh;
 }
 
 .mov .caso {
-  --alto: 230svh;
+  --alto: 180svh;
 }
 
 .mov .hero__escena,
@@ -2093,7 +2124,7 @@ b {
 
 .mov .hero__siete,
 .mov .hero__cuatro {
-  opacity: calc(0.13 + var(--a) * 0.87);
+  opacity: calc(0.1 + var(--a) * 0.9);
 }
 
 .mov .hero__siete {
@@ -2116,7 +2147,7 @@ b {
 
 /* Visión: cada palabra se enciende a su turno */
 .mov .vision__texto .w {
-  opacity: clamp(0.14, calc(var(--p) * var(--n) * 1.25 - var(--i)), 1);
+  opacity: clamp(0.22, calc(var(--p) * var(--n) * 1.25 - var(--i)), 1);
 }
 
 .mov .vision__firma {
@@ -2131,7 +2162,7 @@ b {
 }
 
 .mov .problema__barra {
-  background: linear-gradient(var(--trazo), var(--trazo)) 0 0 / calc(var(--p) * 100%) 100% no-repeat, var(--linea);
+  background: linear-gradient(var(--acento), var(--acento)) 0 0 / calc(var(--p) * 100%) 100% no-repeat, var(--linea);
 }
 
 /* Bandas: cada una corre hacia un lado */
@@ -2162,7 +2193,7 @@ b {
 }
 
 .mov .relato__paso {
-  opacity: 0.25;
+  opacity: 0.4;
 }
 
 .mov .relato__paso.is-activo {
@@ -2207,10 +2238,6 @@ b {
   transform: translateY(calc((1 - var(--p)) * 100%));
 }
 
-/* Botones magnéticos (los mueve main.js) */
-.magnetico {
-  will-change: transform;
-}
 
 /* ── Intro ───────────────────────────────────────── */
 /* Solo existe con html.con-intro (JS + sin reduced-motion + primera vez en la sesión). */
@@ -2276,9 +2303,9 @@ html.con-intro .intro {
   animation: intro-trazo 1.6s var(--ease-io) forwards;
 }
 
-.intro__lineas path:nth-child(2) { animation-delay: 0.15s; stroke: rgba(210, 255, 58, 0.6); }
+.intro__lineas path:nth-child(2) { animation-delay: 0.15s; stroke: rgba(142, 168, 255, 0.7); }
 .intro__lineas path:nth-child(3) { animation-delay: 0.3s; }
-.intro__lineas path:nth-child(4) { animation-delay: 0.45s; stroke: rgba(210, 255, 58, 0.6); }
+.intro__lineas path:nth-child(4) { animation-delay: 0.45s; stroke: rgba(142, 168, 255, 0.7); }
 .intro__lineas path:nth-child(5) { animation-delay: 0.2s; }
 
 .intro__esquina,
@@ -2287,7 +2314,7 @@ html.con-intro .intro {
   font-family: var(--mono);
   font-size: 0.75rem;
   line-height: 1.4;
-  color: var(--senal);
+  color: var(--senal-claro);
   opacity: 0;
   animation: intro-aparece 0.6s var(--ease) 0.3s forwards;
   transition: opacity 0.3s var(--ease);
@@ -2338,7 +2365,7 @@ html.con-intro .intro {
 }
 
 .intro__trazos path {
-  stroke: var(--senal);
+  stroke: var(--papel);
   stroke-dasharray: 1;
   stroke-dashoffset: 1;
   animation: intro-trazo 0.6s cubic-bezier(0.6, 0, 0.3, 1) 0.2s forwards;
@@ -2380,8 +2407,8 @@ html.con-intro .intro {
 .intro__palabra span:nth-child(4) { animation-delay: 0.85s; }
 .intro__palabra span:nth-child(5) { animation-delay: 0.9s; }
 .intro__palabra span:nth-child(6) { animation-delay: 0.95s; }
-.intro__palabra span:nth-child(8) { animation-delay: 1.05s; color: var(--senal); }
-.intro__palabra span:nth-child(9) { animation-delay: 1.1s; color: var(--senal); }
+.intro__palabra span:nth-child(8) { animation-delay: 1.05s; color: var(--senal-claro); }
+.intro__palabra span:nth-child(9) { animation-delay: 1.1s; color: var(--senal-claro); }
 
 .intro__entrar {
   min-width: 150px;
@@ -2409,7 +2436,7 @@ html.con-intro .intro {
 .intro__entrar:hover,
 .intro__entrar:focus-visible {
   background: var(--senal);
-  color: var(--tinta);
+  color: var(--sobre-senal);
 }
 
 /* Al abrir: se va todo menos el logo, que vuela a la barra */
@@ -2427,7 +2454,6 @@ html.intro-volando .nav__logo-icon {
   opacity: 0;
 }
 
-html.con-intro .nav__logo-text,
 html.con-intro .nav__links,
 html.con-intro .nav__tema,
 html.con-intro .nav__cta,
@@ -2437,7 +2463,6 @@ html.con-intro .hero__escena {
   transform: translateY(24px);
 }
 
-.nav__logo-text,
 .nav__links,
 .nav__tema,
 .nav__cta,
@@ -2489,10 +2514,6 @@ html.con-intro .hero * {
 ═══════════════════════════════════════════════════════ */
 
 @media (min-width: 560px) {
-  .nav__cta {
-    display: inline-flex;
-  }
-
   .hero__acciones .btn {
     flex: 0 0 auto;
   }
@@ -2507,6 +2528,10 @@ html.con-intro .hero * {
 
   .form__note {
     flex: 1 1 16rem;
+  }
+
+  .form__fila {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .footer__fila {
@@ -2615,15 +2640,6 @@ html.con-intro .hero * {
     margin-right: 1rem;
   }
 
-  /* En pantallas anchas el índice queda como ícono: las secciones ya están a la vista */
-  .nav__menu-texto {
-    display: none;
-  }
-
-  .nav__menu {
-    padding: 0;
-  }
-
   .hero__title {
     font-size: clamp(2rem, min(6.6vw, 9.6svh), 6.4rem);
   }
@@ -2692,7 +2708,22 @@ html.con-intro .hero * {
   }
 
   .contacto__grilla {
-    grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.9fr);
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  }
+}
+
+/* Más contraste si el sistema lo pide: texto secundario pleno y líneas marcadas */
+@media (prefers-contrast: more) {
+  :root,
+  [data-tema] {
+    --suave: var(--texto);
+    --linea: color-mix(in srgb, var(--texto) 40%, transparent);
+    --linea-fuerte: var(--texto);
+  }
+
+  .linea--suave,
+  .titulo em {
+    color: var(--texto);
   }
 }
 

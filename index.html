@@ -16,7 +16,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="es_AR" />
   <meta property="og:url" content="https://studio74dev.github.io/" />
-  <meta property="og:image" content="https://studio74dev.github.io/assets/og.png?v=3" />
+  <meta property="og:image" content="https://studio74dev.github.io/assets/og.png?v=4" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:type" content="image/png" />
@@ -25,8 +25,9 @@
   <meta name="twitter:title" content="Studio 74 — Software y presencia digital para comercios de la costa" />
   <meta name="twitter:description"
     content="Página propia con Google Maps y contacto por WhatsApp, sistemas a medida, turnos, reservas y automatización. Presupuesto por escrito y sin cargo." />
-  <meta name="twitter:image" content="https://studio74dev.github.io/assets/og.png?v=3" />
+  <meta name="twitter:image" content="https://studio74dev.github.io/assets/og.png?v=4" />
   <meta name="theme-color" content="#0B0B0C" />
+  <meta name="author" content="Studio 74" />
 
   <!-- Datos estructurados: organización, zona de servicio y preguntas frecuentes.
        Si cambian las preguntas de la sección #preguntas, actualizar también el FAQPage. -->
@@ -45,7 +46,7 @@
           "url": "https://studio74dev.github.io/",
           "email": "studio74dev@gmail.com",
           "logo": "https://studio74dev.github.io/assets/firma/studio74-logo-firma.png",
-          "image": "https://studio74dev.github.io/assets/og.png?v=3",
+          "image": "https://studio74dev.github.io/assets/og.png?v=4",
           "address": {
             "@type": "PostalAddress",
             "addressRegion": "Buenos Aires",
@@ -228,15 +229,15 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <!-- Las fuentes no bloquean el primer pintado: la intro se ve al instante -->
   <link rel="preload" as="style"
-    href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap" />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
     rel="stylesheet" media="print" onload="this.media='all'" />
   <noscript>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=Geist+Mono:wght@400;500&family=Michroma&display=swap"
       rel="stylesheet" />
   </noscript>
 
-  <link rel="stylesheet" href="css/styles.css?v=14" />
+  <link rel="stylesheet" href="css/styles.css?v=15" />
   <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
        (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
@@ -312,9 +313,8 @@
             <path d="M90 7.7V78" stroke-width="5.5" />
             <path d="M90 19L52 59.5M50 60.5H90" stroke-width="4.2" />
           </g>
-          <rect x="85" y="86" width="8" height="8" fill="currentColor" />
+          <rect class="nav__logo-punto" x="85" y="86" width="8" height="8" />
         </svg>
-        <span class="nav__logo-text">STUDIO 74</span>
       </a>
 
       <ul class="nav__links">
@@ -332,7 +332,7 @@
         </svg>
       </button>
       <a href="#contacto" class="nav__cta magnetico">Hablemos</a>
-      <button class="nav__menu" id="menuBoton" type="button" aria-expanded="false" aria-controls="indice">
+      <button class="nav__menu" id="menuBoton" type="button" aria-expanded="false" aria-controls="indice" aria-label="Índice de secciones">
         <span class="nav__menu-texto">Índice</span>
         <span class="nav__menu-icono" aria-hidden="true"><i></i><i></i></span>
       </button>
@@ -356,6 +356,7 @@
       <a href="mailto:studio74dev@gmail.com">studio74dev@gmail.com</a>
       <a href="https://www.instagram.com/studio74dev/" target="_blank" rel="noopener noreferrer">Instagram</a>
       <a href="https://www.linkedin.com/in/studio-dev-368410447/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://github.com/studio74dev" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
   </div>
 
@@ -667,38 +668,47 @@
       </div>
     </section>
 
-    <!-- 07. El estudio.
-         TODO: cargo o área de Ramiro, Gerónimo y Valentín (el de Mariano sale de la firma de mail). -->
+    <!-- 07. El estudio: quiénes somos y qué formación tenemos -->
     <section id="estudio" class="estudio capitulo" data-tema="base" aria-labelledby="estudio-title">
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">07</span>El estudio</p>
-          <h2 id="estudio-title" class="titulo">Cuatro desa&shy;rro&shy;lla&shy;dores.<br /><em>Con base en la costa.</em></h2>
-          <p class="bajada"><b>Studio 74</b> es un estudio de desarrollo de software. Atendemos comercios de Pinamar,
-            Villa Gesell, General Madariaga y alrededores, con reuniones presenciales en la zona.</p>
+          <h2 id="estudio-title" class="titulo">Formados en sistemas.<br /><em>Con base en la costa.</em></h2>
+          <p class="bajada"><b>Studio 74</b> somos cuatro desarrolladores full stack: dos estudiantes de la
+            Licenciatura en Sistemas y dos técnicos en software. El mismo equipo diseña, programa y mantiene cada
+            proyecto, con reuniones presenciales en Pinamar, Villa Gesell y General Madariaga.</p>
         </div>
         <ul class="equipo">
           <li class="persona" data-escena="entrada">
             <span class="persona__inicial" aria-hidden="true">M</span>
             <p class="persona__nombre">Mariano</p>
-            <p class="persona__cargo">Desarrollo full-stack</p>
+            <p class="persona__cargo">Desarrollador full stack</p>
+            <p class="persona__formacion">Estudiante de la Licenciatura en Sistemas</p>
           </li>
           <li class="persona" data-escena="entrada">
             <span class="persona__inicial" aria-hidden="true">R</span>
             <p class="persona__nombre">Ramiro</p>
-            <p class="persona__cargo pendiente">TODO: cargo o área</p>
-          </li>
-          <li class="persona" data-escena="entrada">
-            <span class="persona__inicial" aria-hidden="true">G</span>
-            <p class="persona__nombre">Gerónimo</p>
-            <p class="persona__cargo pendiente">TODO: cargo o área</p>
+            <p class="persona__cargo">Desarrollador full stack</p>
+            <p class="persona__formacion">Estudiante de la Licenciatura en Sistemas</p>
           </li>
           <li class="persona" data-escena="entrada">
             <span class="persona__inicial" aria-hidden="true">V</span>
             <p class="persona__nombre">Valentín</p>
-            <p class="persona__cargo pendiente">TODO: cargo o área</p>
+            <p class="persona__cargo">Desarrollador full stack</p>
+            <p class="persona__formacion">Técnico en Software</p>
+          </li>
+          <li class="persona" data-escena="entrada">
+            <span class="persona__inicial" aria-hidden="true">G</span>
+            <p class="persona__nombre">Gerónimo</p>
+            <p class="persona__cargo">Desarrollador full stack</p>
+            <p class="persona__formacion">Próximo a recibirse de Técnico en Software</p>
           </li>
         </ul>
+        <p class="estudio__github" data-escena="entrada">
+          <a href="https://github.com/studio74dev" target="_blank" rel="noopener noreferrer">Nuestro código en
+            GitHub<span class="visually-hidden"> (se abre en una pestaña nueva)</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a>
+        </p>
       </div>
     </section>
 
@@ -749,37 +759,40 @@
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">09</span>Contacto</p>
-          <h2 id="contacto-title" class="contacto__titulo">Hablemos de<br />su negocio<i class="hero__fin" aria-hidden="true"></i></h2>
+          <h2 id="contacto-title" class="contacto__titulo">Hablemos<br />de su negocio<i class="hero__fin" aria-hidden="true"></i></h2>
         </div>
 
         <div class="contacto__grilla">
           <form class="form" id="contactForm" action="contact.php" method="post" novalidate data-escena="entrada">
-            <p class="frase">
-              Hola, mi nombre es
-              <label for="name" class="visually-hidden">Nombre</label>
-              <input type="text" id="name" name="name" class="campo campo--corto" autocomplete="name"
-                placeholder="su nombre" required />
-              y quisiera consultar por
-            </p>
-            <fieldset class="form__servicios">
-              <legend class="visually-hidden">Tipo de consulta</legend>
-              <label class="opcion"><input type="radio" name="service" value="Paquete de entrada" required /><span>el paquete de entrada</span></label>
-              <label class="opcion"><input type="radio" name="service" value="Sistema a medida" /><span>un sistema a medida</span></label>
-              <label class="opcion"><input type="radio" name="service" value="Turnos y reservas" /><span>turnos y reservas</span></label>
-              <label class="opcion"><input type="radio" name="service" value="Automatización" /><span>automatización</span></label>
-              <label class="opcion"><input type="radio" name="service" value="Otra consulta" /><span>otra cosa</span></label>
+            <div class="form__fila">
+              <div class="grupo">
+                <label class="grupo__etiqueta" for="name">Nombre</label>
+                <input type="text" id="name" name="name" class="campo" autocomplete="name" required />
+              </div>
+              <div class="grupo">
+                <label class="grupo__etiqueta" for="email">Correo electrónico</label>
+                <input type="email" id="email" name="email" class="campo" autocomplete="email" required />
+              </div>
+            </div>
+
+            <fieldset class="grupo form__servicios">
+              <legend class="grupo__etiqueta">Tipo de consulta</legend>
+              <div class="opciones">
+                <label class="opcion"><input type="radio" name="service" value="Paquete de entrada" required /><span>Paquete de entrada</span></label>
+                <label class="opcion"><input type="radio" name="service" value="Sistema a medida" /><span>Sistema a medida</span></label>
+                <label class="opcion"><input type="radio" name="service" value="Turnos y reservas" /><span>Turnos y reservas</span></label>
+                <label class="opcion"><input type="radio" name="service" value="Automatización" /><span>Automatización</span></label>
+                <label class="opcion"><input type="radio" name="service" value="Otra consulta" /><span>Otra consulta</span></label>
+              </div>
             </fieldset>
-            <p class="frase">
-              <label for="message">Les cuento sobre mi negocio:</label>
-            </p>
-            <textarea id="message" name="message" class="campo campo--largo" rows="2"
-              placeholder="Por ejemplo: tengo un gimnasio y registro las cuotas en un cuaderno." required></textarea>
-            <p class="frase">
-              Pueden responderme a
-              <label for="email" class="visually-hidden">Correo electrónico</label>
-              <input type="email" id="email" name="email" class="campo campo--medio" autocomplete="email"
-                placeholder="su correo" required />
-            </p>
+
+            <div class="grupo">
+              <label class="grupo__etiqueta" for="message">Mensaje</label>
+              <textarea id="message" name="message" class="campo campo--largo" rows="4" aria-describedby="messageAyuda"
+                required></textarea>
+              <p class="grupo__ayuda" id="messageAyuda">Cuéntenos sobre su negocio y qué necesita. Por ejemplo: «Tengo
+                un gimnasio y registro las cuotas en un cuaderno».</p>
+            </div>
 
             <!-- Anti-spam: honeypot invisible (los bots suelen completarlo) -->
             <div class="form__hp" aria-hidden="true">
@@ -812,6 +825,9 @@
             <a class="canal" href="https://www.linkedin.com/in/studio-dev-368410447/" target="_blank" rel="noopener noreferrer">
               <span class="canal__rotulo">LinkedIn</span><span class="canal__valor">Studio 74</span>
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a>
+            <a class="canal" href="https://github.com/studio74dev" target="_blank" rel="noopener noreferrer">
+              <span class="canal__rotulo">GitHub</span><span class="canal__valor">studio74dev</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a>
           </div>
         </div>
       </div>
@@ -837,7 +853,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=14" defer></script>
+  <script src="js/main.js?v=15" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
