@@ -878,7 +878,7 @@ b {
   top: -1px;
   left: 0;
   width: 48px;
-  height: 1px;
+  height: 2px;
   background: var(--acento);
   transition: width 0.5s var(--ease);
 }
