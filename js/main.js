@@ -5,6 +5,26 @@
 (function () {
   'use strict';
 
+  /* ── Canales pendientes ──────────────────────────── */
+  /* Único lugar donde se cargan. Mientras estén vacíos, los bloques con
+     data-canal quedan ocultos; al completarlos se muestran con su enlace. */
+  const CANALES = {
+    whatsapp: '', // TODO: número con código de país, sin "+" ni espacios. Ej.: '5492254123456'
+    linkedin: '', // TODO: URL de la página del estudio. Ej.: 'https://www.linkedin.com/company/studio74dev/'
+  };
+  const MENSAJE_WHATSAPP = 'Hola, quisiera solicitar un presupuesto.';
+
+  const enlaces = {
+    whatsapp: CANALES.whatsapp && `https://wa.me/${CANALES.whatsapp}?text=${encodeURIComponent(MENSAJE_WHATSAPP)}`,
+    linkedin: CANALES.linkedin,
+  };
+  document.querySelectorAll('[data-canal]').forEach((bloque) => {
+    const href = enlaces[bloque.dataset.canal];
+    if (!href) return;
+    bloque.querySelectorAll('a').forEach((a) => { a.href = href; });
+    bloque.hidden = false;
+  });
+
   const nav = document.getElementById('nav');
   const hamburger = document.getElementById('hamburger');
   const navLinks = document.getElementById('navLinks');
