@@ -23,21 +23,21 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 ## Secciones de la landing
 
 En el orden de `index.html`. Todo el texto va en registro formal (usted o neutro, sin voseo).
-Cada capítulo lleva su número (`01`…`09`) y un color de la marca.
+Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` o `senal`).
 
 1. **Intro de carga** (`#intro`): líneas que se dibujan, el 74 trazándose, "STUDIO 74" letra por letra y un contador que sigue la carga real. Al llegar a 100 aparece **Entrar**; si nadie lo toca, entra sola. La pantalla se abre en dos y el logo vuela a la barra.
-2. **Barra**: logo, "Hablemos" e **Índice**, que abre la navegación a pantalla completa. Toma el color del capítulo que tiene debajo, se esconde al bajar y vuelve al subir. A la derecha, el **riel** de progreso: el trazo del 4 con el punto de la marca.
-3. **Portada** (`#inicio`, tinta): frase de valor y las dos acciones. Al bajar, los trazos del 7 y el 4 se separan y **el punto crece hasta cubrir la pantalla**: así se entra al capítulo siguiente.
+2. **Barra**: fina, esmerilada y siempre visible. Logo, las secciones (en pantallas anchas, marcando la que se está leyendo), el botón de **tema claro/oscuro**, "Hablemos" e **Índice**, que abre la navegación a pantalla completa. Toma el color del capítulo que tiene debajo. A la derecha, el **riel** de progreso: el trazo del 4 con el punto de la marca.
+3. **Portada** (`#inicio`, base): frase de valor centrada, con el 74 detrás, y las dos acciones. Al bajar, el texto se va, el 74 se enciende, los trazos del 7 y el 4 se separan y **el punto crece hasta cubrir la pantalla**: así se entra al capítulo siguiente.
 4. **Visión** (`#vision`, señal): el manifiesto se enciende palabra por palabra con el scroll.
-5. **El problema** (`#problema`, tinta): los cinco problemas se deslizan en horizontal mientras se baja.
+5. **El problema** (`#problema`, base): los cinco problemas se deslizan en horizontal mientras se baja.
 6. **Bandas cruzadas**: dos cintas en diagonal, como los trazos del 7 y el 4, que corren con el scroll.
-7. **Qué hacemos** (`#servicios`, papel): un teléfono ilustrativo se arma a medida que se leen los tres pasos del paquete de entrada (página, Google Maps, WhatsApp). Debajo, el trabajo a medida en filas grandes. Los enlaces con `data-servicio` dejan marcado ese tipo en el formulario.
-8. **Caso real** (`#caso`, tinta): la ventana de Club El Progreso se apoya y se endereza; sus pestañas funcionan.
-9. **Sin letra chica** (`#diferencia`, tinta): los compromisos concretos, con un trazo que se completa.
-10. **Proceso** (`#proceso`, tinta): la línea se dibuja con el scroll y enciende cada paso.
-11. **El estudio** (`#estudio`, papel): los cuatro integrantes. Los cargos que faltan se ven con borde punteado (`.pendiente`) a propósito.
-12. **Preguntas frecuentes** (`#preguntas`, papel).
-13. **Contacto** (`#contacto`, tinta): el formulario se completa como una frase ("Hola, mi nombre es…") y al lado van los canales directos.
+7. **Qué hacemos** (`#servicios`, alt): un teléfono ilustrativo se arma a medida que se leen los tres pasos del paquete de entrada (página, Google Maps, WhatsApp). Debajo, el trabajo a medida en un mosaico de tarjetas. Los enlaces con `data-servicio` dejan marcado ese tipo en el formulario.
+8. **Caso real** (`#caso`, base): la ventana de Club El Progreso se apoya y se endereza; sus pestañas funcionan.
+9. **Sin letra chica** (`#diferencia`, base): los compromisos concretos en un mosaico, con un trazo que se completa.
+10. **Proceso** (`#proceso`, alt): la línea se dibuja con el scroll y enciende cada paso.
+11. **El estudio** (`#estudio`, base): los cuatro integrantes. Los cargos que faltan se ven con borde punteado (`.pendiente`) a propósito.
+12. **Preguntas frecuentes** (`#preguntas`, alt).
+13. **Contacto** (`#contacto`, base): el formulario se completa como una frase ("Hola, mi nombre es…") y al lado van los canales directos.
 14. **Pie** con redes y la marca a todo el ancho.
 
 ## Cosas a saber antes de tocar
@@ -49,12 +49,18 @@ Cada capítulo lleva su número (`01`…`09`) y un color de la marca.
 - La activa el script del `<head>` poniendo la clase `con-intro` en `<html>`. **No uses `intro` como nombre de clase en `<html>`**: choca con el componente `.intro` (que arranca con `display: none`) y esconde toda la página.
 - Si algo falla, se cierra sola a los 8 segundos.
 
-### Paleta y capítulos
+### Paleta, temas y capítulos
 
-- Solo los tres colores del logo: **tinta** `#0B0B0C`, **papel** `#F4F3EF` y **señal** `#D2FF3A`.
-- Cada capítulo declara `data-tema="tinta|papel|senal"` y eso redefine `--fondo`, `--texto`, `--suave`, `--linea`… Para un capítulo nuevo alcanza con ponerle `class="capitulo"` y su `data-tema`.
-- La señal nunca va como texto sobre papel (no tiene contraste): sobre papel y señal, el acento es la tinta.
-- No hay modo claro: la alternancia de capítulos ya cumple ese papel.
+- Solo los tres colores del logo: **tinta** `#0B0B0C`, **papel** `#F4F3EF` y **señal** `#D2FF3A` (más blanco y dos grises oscuros para las tarjetas).
+- **Tema claro y oscuro**: `html[data-theme="claro|oscuro"]`. Lo pone el script del `<head>` antes del primer pintado: el que eligió el visitante con el botón de la barra (guardado en `localStorage` como `s74-tema`) o, si nunca lo tocó, el del sistema.
+- Cada capítulo declara `data-tema="base|alt|senal"` y eso redefine `--fondo`, `--texto`, `--suave`, `--superficie`, `--boton-fondo`… según el tema. `base` y `alt` cambian con el tema; `senal` es verde en los dos. Para un capítulo nuevo alcanza con ponerle `class="capitulo"` y su `data-tema`.
+- La señal nunca va como texto sobre papel (no tiene contraste): en el tema claro el acento y los botones principales son de tinta (con texto en señal).
+
+### Tipografía
+
+- **Archivo** (Google Fonts, variable con eje de ancho). Los títulos grandes usan `font-stretch: 125%`, peso 900 y mayúsculas: una grotesca extendida y negra. El texto corrido va en Archivo normal.
+- **Geist Mono** para rótulos chicos y **Michroma** solo para la marca ("STUDIO 74").
+- Las palabras muy largas en los títulos llevan guiones suaves (`&shy;`) para cortar bien en el celular.
 
 ### Animaciones de scroll
 
@@ -92,7 +98,7 @@ si cambia la URL, hay que cambiarla en los tres lugares (índice, contacto y pie
 
 - Un solo `h1` (el de la portada).
 - JSON-LD con `Organization`/`ProfessionalService` (zona de servicio y catálogo), `Place`, `WebSite` y `FAQPage`. Si cambian las preguntas de `#preguntas`, actualizá también las del JSON-LD.
-- Las fuentes (Geist, Geist Mono y Michroma) cargan sin bloquear el primer pintado.
+- Las fuentes (Archivo, Geist Mono y Michroma) cargan sin bloquear el primer pintado.
 
 ## Probarlo en local
 
