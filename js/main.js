@@ -80,18 +80,6 @@
     setTimeout(abrir, 8000);
   }
 
-  /* ── Editor de la portada ────────────────────────── */
-  /* La barra cambia el título de verdad: peso, color y alineación. */
-  const titulo = document.getElementById('hero-title');
-  document.querySelectorAll('.opcion').forEach((op) => op.addEventListener('click', () => {
-    const prop = op.dataset.prop;
-    document.querySelectorAll(`.opcion[data-prop="${prop}"]`).forEach((o) => {
-      o.classList.toggle('is-on', o === op);
-      o.setAttribute('aria-pressed', String(o === op));
-    });
-    titulo.style.setProperty(`--${prop}`, op.dataset.valor);
-  }));
-
   /* ── Tema claro / oscuro ─────────────────────────── */
   /* Arranca con el del dispositivo; el botón lo fija y se recuerda. */
   const botonTema = document.getElementById('tema');
