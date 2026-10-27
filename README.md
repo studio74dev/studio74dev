@@ -10,7 +10,7 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 |---|---|
 | `index.html` | La landing completa (ver secciones abajo). Incluye los datos estructurados JSON-LD. |
 | `css/styles.css` | Todos los estilos. Los colores salen de las variables de `:root`; el modo claro las redefine (ver "Modo claro y oscuro"). |
-| `js/main.js` | Intro de carga, tema, editor de la portada, demos, carrusel, pestañas, animaciones de scroll y envío del formulario. |
+| `js/main.js` | Canales pendientes (WhatsApp y LinkedIn), intro de carga, tema, menú, pestañas del caso real, animaciones de scroll y envío del formulario. |
 | `contact.php` | Relay del formulario para el hosting con PHP (Hostinger). |
 | `404.html` | Página de error propia. Lleva los estilos en línea, así que no depende del CSS. |
 | `assets/og.png` | Imagen que se ve al compartir el link (1200×630). |
@@ -22,18 +22,19 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 
 ## Secciones de la landing
 
-En el orden de `index.html`:
+En el orden de `index.html`. Todo el texto va en registro formal (usted o neutro, sin voseo).
 
 1. **Intro de carga** (`#intro`): líneas que se dibujan, el 74 trazándose, "STUDIO 74" letra por letra y un contador que sigue la carga real. Al llegar a 100 aparece **Entrar**; si nadie lo toca, entra sola. La pantalla se abre en dos y el logo vuela a la barra.
-2. **Barra de navegación**, con el botón sol/luna del tema.
-3. **Portada como editor** (`#inicio`): el `h1` está "seleccionado" y la barra de propiedades lo cambia de verdad (peso, color, alineación).
-4. **El estudio** (`#estudio`): titular en dos tonos, el equipo y el dato del relevamiento.
-5. **Sistema real** (`#sistemas`): Club El Progreso en una ventana con pestañas. Debajo, la **barra de pedido**: lo que se escribe pasa al mensaje del formulario.
-6. **Servicios** (`#servicios`): cada uno como pregunta del cliente y respuesta. El de turnos tiene una agenda de prueba que funciona, con un negocio **ficticio**.
-7. **Carrusel** de pedidos típicos.
-8. **Panel de vidrio**: pestañas Proceso, Garantías y Preguntas.
-9. **Cierre** (`#contacto`): "Hablemos" y el formulario.
-10. **Pie** con redes.
+2. **Barra de navegación**, con el botón sol/luna del tema y "Solicitar presupuesto".
+3. **Portada** (`#inicio`): frase de valor, "Solicitar presupuesto", "Ver un caso real" y la ficha del paquete de entrada.
+4. **El problema** (`#problema`): comercios con buena reputación y sin canal digital propio, y los "Problemas que resolvemos" en tercera persona.
+5. **Qué hacemos** (`#servicios`): el paquete de entrada (landing + Google Maps + WhatsApp) y, aparte, sistemas a medida, turnos y reservas y automatización. Los enlaces con `data-servicio` dejan marcado ese tipo en el formulario.
+6. **Caso real** (`#caso`): Club El Progreso en una ventana con pestañas.
+7. **Cómo trabajamos** (`#proceso`): los cuatro pasos.
+8. **El estudio** (`#estudio`): los cuatro integrantes. El cargo de cada uno está marcado como pendiente (`.pendiente`, se ve con borde punteado a propósito).
+9. **Preguntas frecuentes** (`#preguntas`).
+10. **Contacto** (`#contacto`): canales y formulario.
+11. **Pie** con redes.
 
 ## Cosas a saber antes de tocar
 
@@ -51,9 +52,23 @@ En el orden de `index.html`:
 - Los colores que cambian con el tema son variables (`--fondo`, `--capa`, `--sobre-texto`, `--acento-texto`, `--luz-1`...). Para un color nuevo, agregá la variable en `:root` y en los dos bloques de "Modo claro" de `styles.css`.
 - La intro es siempre oscura.
 
-### Redes
+### Redes y canales
 
-Mail, Instagram y GitHub están activos. WhatsApp, Facebook y LinkedIn aparecen atenuados como "próximamente", **sin enlace**. Para activar una, en el pie de `index.html` cambiá su `<span class="red red--pendiente">` por `<a class="red" href="...">`.
+Correo, Instagram y GitHub (secundario, solo en el pie) están activos.
+
+**WhatsApp y LinkedIn** están en el HTML pero ocultos. Para activarlos no se toca el HTML:
+se completa la constante `CANALES` al principio de `js/main.js`:
+
+```js
+const CANALES = {
+  whatsapp: '5492254123456', // con código de país, sin "+" ni espacios
+  linkedin: 'https://www.linkedin.com/company/...',
+};
+```
+
+Cada bloque con `data-canal="whatsapp"` o `data-canal="linkedin"` se muestra solo con su enlace.
+El de WhatsApp abre la conversación con el mensaje de `MENSAJE_WHATSAPP`. Al activar LinkedIn,
+sumá también su URL a `sameAs` en el JSON-LD.
 
 ### Animaciones
 
@@ -63,7 +78,7 @@ Mail, Instagram y GitHub están activos. WhatsApp, Facebook y LinkedIn aparecen 
 ### SEO
 
 - Un solo `h1` (el de la portada).
-- JSON-LD con `Organization` y `FAQPage`. Si cambian las preguntas del panel, actualizá también las del JSON-LD.
+- JSON-LD con `Organization`/`ProfessionalService` (zona de servicio y catálogo), `Place`, `WebSite` y `FAQPage`. Si cambian las preguntas de `#preguntas`, actualizá también las del JSON-LD.
 - Las fuentes (Geist, Geist Mono y Michroma) cargan sin bloquear el primer pintado.
 
 ## Probarlo en local
@@ -117,8 +132,10 @@ Dos cosas a tener en cuenta:
 
 ## Pendientes anotados
 
-- Número de WhatsApp del estudio para activar ese ícono.
+- Número de WhatsApp del estudio y URL de LinkedIn (constante `CANALES` en `js/main.js`).
+- Cargo o área de cada integrante en `#estudio` (marcados `TODO`); apellidos y fotos si se quieren sumar.
+- Medios de pago aceptados, en la pregunta frecuente y en el JSON-LD (hoy dice que se detallan en el presupuesto).
 - Dominio propio `studio74dev.com` (hoy `studio74dev.github.io` es provisional). Cuando
   esté, hay que actualizar `canonical`, `og:url`, `og:image`, las URLs de `sitemap.xml`,
   `robots.txt`, el JSON-LD de `index.html`, el pie de `docs/og-imagen.html` y el mail de la firma.
-- Testimonio real de un cliente y capturas de los proyectos en desarrollo.
+- Testimonio real de un cliente (con autorización) y capturas de los proyectos en desarrollo.
