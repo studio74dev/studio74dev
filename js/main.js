@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   STUDIO 74 — MAIN SCRIPT V7
+   STUDIO 74 — MAIN SCRIPT V8
 ═══════════════════════════════════════════════════════ */
 
 (function () {
@@ -10,7 +10,7 @@
      data-canal quedan ocultos; al completarlos se muestran con su enlace. */
   const CANALES = {
     whatsapp: '', // TODO: número con código de país, sin "+" ni espacios. Ej.: '5492254123456'
-    linkedin: '', // TODO: URL de la página del estudio. Ej.: 'https://www.linkedin.com/company/studio74dev/'
+    linkedin: 'https://www.linkedin.com/in/studio-dev-368410447/',
   };
   const MENSAJE_WHATSAPP = 'Hola, quisiera solicitar un presupuesto.';
 
@@ -25,12 +25,9 @@
     bloque.hidden = false;
   });
 
-  const nav = document.getElementById('nav');
-  const hamburger = document.getElementById('hamburger');
-  const navLinks = document.getElementById('navLinks');
-  const navBackdrop = document.getElementById('navBackdrop');
-  const navAnchors = document.querySelectorAll('.nav__link');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Animaciones de scroll: solo si el <head> puso html.mov
+  const mov = document.documentElement.classList.contains('mov');
 
   /* ── Intro: carga, "Entrar" y apertura ───────────── */
   /* El contador sigue la carga real (página y fuentes), con un mínimo para
@@ -100,70 +97,182 @@
     setTimeout(abrir, 8000);
   }
 
-  /* ── Tema claro / oscuro ─────────────────────────── */
-  /* Arranca con el del dispositivo; el botón lo fija y se recuerda. */
-  const botonTema = document.getElementById('tema');
-  const metaColor = document.querySelector('meta[name="theme-color"]');
-  const temaActual = () => root.getAttribute('data-theme')
-    || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
-  const pintarTema = () => {
-    const claro = temaActual() === 'light';
-    botonTema.setAttribute('aria-label', claro ? 'Cambiar a modo oscuro' : 'Cambiar a modo claro');
-    metaColor.setAttribute('content', claro ? '#F6F8F4' : '#0A0A0B');
-  };
-  botonTema.addEventListener('click', () => {
-    const nuevo = temaActual() === 'light' ? 'dark' : 'light';
-    root.setAttribute('data-theme', nuevo);
-    try {
-      localStorage.setItem('s74-tema', nuevo);
-    } catch (_) { /* sin storage: vale solo para esta visita */ }
-    pintarTema();
-  });
-  pintarTema();
+  /* ── Índice a pantalla completa ──────────────────── */
+  const header = document.getElementById('header');
+  const menuBoton = document.getElementById('menuBoton');
+  const indice = document.getElementById('indice');
+  let temaAntes = 'tinta';
 
-  /* ── Barra al hacer scroll ───────────────────────── */
-  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
-
-  /* ── Mobile menu ─────────────────────────────────── */
-  const closeMenu = () => {
-    navLinks.classList.remove('is-open');
-    hamburger.classList.remove('is-active');
-    navBackdrop.classList.remove('is-visible');
-    hamburger.setAttribute('aria-expanded', 'false');
+  const cerrarIndice = (volverAlBoton) => {
+    if (menuBoton.getAttribute('aria-expanded') !== 'true') return;
+    menuBoton.setAttribute('aria-expanded', 'false');
+    indice.classList.remove('abierto');
+    header.dataset.tema = temaAntes;
     document.body.style.overflow = '';
+    setTimeout(() => { indice.hidden = true; }, mov ? 600 : 0);
+    if (volverAlBoton) menuBoton.focus();
   };
 
-  const openMenu = () => {
-    navLinks.classList.add('is-open');
-    hamburger.classList.add('is-active');
-    navBackdrop.classList.add('is-visible');
-    hamburger.setAttribute('aria-expanded', 'true');
+  const abrirIndice = () => {
+    indice.hidden = false;
+    temaAntes = header.dataset.tema;
+    header.dataset.tema = 'tinta';
+    header.classList.remove('oculto');
+    menuBoton.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => requestAnimationFrame(() => indice.classList.add('abierto')));
+    indice.querySelector('a').focus({ preventScroll: true });
   };
 
-  hamburger.addEventListener('click', () => {
-    navLinks.classList.contains('is-open') ? closeMenu() : openMenu();
+  menuBoton.addEventListener('click', () => {
+    menuBoton.getAttribute('aria-expanded') === 'true' ? cerrarIndice(false) : abrirIndice();
   });
-  navBackdrop.addEventListener('click', closeMenu);
+  indice.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => cerrarIndice(false)));
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeMenu();
+    if (e.key === 'Escape') cerrarIndice(true);
   });
-  navAnchors.forEach((a) => a.addEventListener('click', closeMenu));
 
-  /* ── Active nav link on scroll ──────────────────── */
-  const sectionObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const id = entry.target.getAttribute('id');
-        navAnchors.forEach((link) => link.classList.toggle('is-active', link.getAttribute('href') === `#${id}`));
+  /* ── Visión: el manifiesto, palabra por palabra ──── */
+  /* Cada palabra queda en un <span class="w"> con su índice; el CSS la
+     enciende cuando el avance del capítulo llega a ella. */
+  document.querySelectorAll('[data-palabras]').forEach((p) => {
+    const palabras = p.textContent.trim().split(/\s+/);
+    p.setAttribute('aria-label', palabras.join(' '));
+    p.innerHTML = palabras.map((w, i) => `<span class="w" style="--i:${i}" aria-hidden="true">${w}</span>`).join(' ');
+    p.style.setProperty('--n', palabras.length);
+  });
+
+  /* ── Motor de scroll ─────────────────────────────── */
+  /* Cada [data-escena] recibe --p entre 0 y 1 según el tipo:
+     - pin: el capítulo es más alto que la pantalla; 0 cuando su borde de
+       arriba toca el de la pantalla, 1 cuando su borde de abajo toca el de abajo.
+     - entrada: 0 cuando asoma por abajo, 1 cuando llegó al 70 % de la pantalla.
+     - paso: 0 cuando asoma por abajo, 1 cuando se fue por arriba.
+     - recorrido: la línea del proceso, que avanza con el centro de la pantalla.
+     También pinta el riel, el punto de la portada y el color de la barra. */
+  const escenas = Array.from(document.querySelectorAll('[data-escena]'));
+  const capitulos = Array.from(document.querySelectorAll('.capitulo[data-tema]'));
+  const riel = document.querySelector('.riel');
+  const heroPunto = document.getElementById('heroPunto');
+  const problema = document.querySelector('.problema');
+  const pista = document.getElementById('problemaPista');
+  const clamp = (v) => Math.min(1, Math.max(0, v));
+
+  const medir = () => {
+    // Pista horizontal: lo que sobra a la derecha es lo que hay que recorrer
+    if (problema && pista) {
+      const sobra = Math.max(0, pista.scrollWidth - window.innerWidth);
+      problema.style.setProperty('--distancia', `${sobra}px`);
+      problema.style.setProperty('--alto', `calc(100svh + ${sobra}px)`);
+    }
+    // Punto de la portada: escala necesaria para cubrir toda la pantalla
+    if (heroPunto) {
+      heroPunto.style.removeProperty('--punto');
+      const lado = heroPunto.getBoundingClientRect().width || 1;
+      heroPunto.dataset.cubrir = String((Math.hypot(window.innerWidth, window.innerHeight) * 2.2) / lado);
+    }
+  };
+
+  let ultimoY = window.scrollY;
+  let pendiente = false;
+
+  const pintar = () => {
+    pendiente = false;
+    const vh = window.innerHeight;
+    const y = window.scrollY;
+    const alFinal = y + vh >= document.documentElement.scrollHeight - 2;
+
+    escenas.forEach((el) => {
+      const r = el.getBoundingClientRect();
+      let p;
+      switch (el.dataset.escena) {
+        case 'pin': p = -r.top / Math.max(1, r.height - vh); break;
+        case 'paso': p = (vh - r.top) / (vh + r.height); break;
+        case 'recorrido': p = (vh * 0.6 - r.top) / Math.max(1, r.height); break;
+        default: p = alFinal ? 1 : (vh - r.top) / (vh * 0.3);
+      }
+      el.style.setProperty('--p', clamp(p).toFixed(4));
+    });
+
+    // Portada: el punto crece en la segunda mitad del recorrido
+    if (heroPunto && mov) {
+      const hero = heroPunto.closest('[data-escena]');
+      const p = parseFloat(hero.style.getPropertyValue('--p')) || 0;
+      const t = clamp((p - 0.35) / 0.6);
+      const cubrir = parseFloat(heroPunto.dataset.cubrir) || 60;
+      heroPunto.style.setProperty('--punto', (1 + (cubrir - 1) * t * t * t).toFixed(3));
+    }
+
+    // Barra y riel: toman el color del capítulo que tienen debajo
+    const bajoBarra = header.offsetHeight / 2;
+    const actual = capitulos.find((c) => {
+      const r = c.getBoundingClientRect();
+      return r.top <= bajoBarra && r.bottom > bajoBarra;
+    });
+    let tema = actual ? actual.dataset.tema : 'tinta';
+    // Mientras el punto de la portada cubre la pantalla, ya es señal
+    if (actual && actual.id === 'inicio' && heroPunto && parseFloat(heroPunto.style.getPropertyValue('--punto')) > 20) tema = 'senal';
+    if (menuBoton.getAttribute('aria-expanded') !== 'true') header.dataset.tema = tema;
+    header.classList.toggle('con-fondo', y > 40 && tema !== 'senal');
+
+    const rielEn = capitulos.find((c) => {
+      const r = c.getBoundingClientRect();
+      return r.top <= vh / 2 && r.bottom > vh / 2;
+    });
+    if (riel) {
+      riel.dataset.tema = rielEn ? rielEn.dataset.tema : 'tinta';
+      riel.style.setProperty('--progreso', clamp(y / (document.documentElement.scrollHeight - vh)).toFixed(4));
+    }
+
+    // La barra se esconde al bajar y vuelve al subir
+    if (Math.abs(y - ultimoY) > 6) {
+      header.classList.toggle('oculto', y > ultimoY && y > vh * 0.6 && menuBoton.getAttribute('aria-expanded') !== 'true');
+      ultimoY = y;
+    }
+  };
+
+  const pedir = () => {
+    if (!pendiente) {
+      pendiente = true;
+      requestAnimationFrame(pintar);
+    }
+  };
+
+  medir();
+  pintar();
+  window.addEventListener('scroll', pedir, { passive: true });
+  window.addEventListener('resize', () => { medir(); pedir(); });
+  window.addEventListener('load', () => { medir(); pedir(); });
+  if (document.fonts) document.fonts.ready.then(() => { medir(); pedir(); });
+
+  /* ── Qué hacemos: el teléfono sigue al paso que se lee ── */
+  const telefono = document.getElementById('telefono');
+  const pasosRelato = document.querySelectorAll('.relato__paso');
+  if (telefono && pasosRelato.length) {
+    const activar = (paso) => {
+      pasosRelato.forEach((p) => p.classList.toggle('is-activo', p === paso));
+      telefono.dataset.paso = paso.dataset.paso;
+    };
+    activar(pasosRelato[0]);
+    const observador = new IntersectionObserver((entradas) => {
+      entradas.forEach((e) => { if (e.isIntersecting) activar(e.target); });
+    }, { rootMargin: '-45% 0px -45% 0px' });
+    pasosRelato.forEach((p) => observador.observe(p));
+  }
+
+  /* ── Botones magnéticos ──────────────────────────── */
+  /* Siguen un poco al puntero; solo con mouse y con movimiento permitido. */
+  if (mov && window.matchMedia('(pointer: fine)').matches) {
+    document.querySelectorAll('.magnetico').forEach((b) => {
+      b.addEventListener('pointermove', (e) => {
+        const r = b.getBoundingClientRect();
+        const dx = (e.clientX - r.left - r.width / 2) * 0.22;
+        const dy = (e.clientY - r.top - r.height / 2) * 0.35;
+        b.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
       });
-    },
-    { threshold: 0.3, rootMargin: '-10% 0px -50% 0px' }
-  );
-  document.querySelectorAll('section[id]').forEach((s) => sectionObserver.observe(s));
+      b.addEventListener('pointerleave', () => { b.style.transform = ''; });
+    });
+  }
 
   /* ── Pestañas del sistema real ───────────────────── */
   const tabs = document.querySelectorAll('.app__tab');
@@ -184,25 +293,16 @@
     setTimeout(cambiar, 220);
   }));
 
-  /* ── Reveal on scroll ───────────────────────────── */
-  const revealObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      });
-    },
-    { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
-  );
-
-  document.querySelectorAll('[data-reveal-stagger]').forEach((group) => {
-    Array.from(group.children).forEach((child, i) => {
-      if (child.hasAttribute('data-reveal')) child.style.setProperty('--reveal-delay', `${i * 90}ms`);
-    });
-  });
-
-  document.querySelectorAll('[data-reveal]').forEach((el) => revealObserver.observe(el));
+  /* ── Mensaje: crece con el texto ─────────────────── */
+  /* Donde el navegador no tiene field-sizing, se ajusta a mano. */
+  const mensaje = document.getElementById('message');
+  if (mensaje && !CSS.supports('field-sizing', 'content')) {
+    const crecer = () => {
+      mensaje.style.height = 'auto';
+      mensaje.style.height = `${mensaje.scrollHeight}px`;
+    };
+    mensaje.addEventListener('input', crecer);
+  }
 
   /* ── Enlaces que preeligen el tipo de consulta ─────── */
   /* "Solicitar presupuesto" desde un servicio deja marcado ese servicio en el formulario. */
