@@ -427,7 +427,7 @@
     /* Relay de Web3Forms para el hosting estático.
        La access key se pide gratis en https://web3forms.com con el mail del
        estudio: llega un mail con la clave y se pega acá. Es fija y no vence. */
-    const WEB3FORMS_KEY = 'dcea2867-da4a-4854-b353-7538e8f4c5da';
+    const WEB3FORMS_KEY = 'da33bf64-6baa-4b58-a68c-bd3c23d7073a';
     const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
     const CHECK_SVG = `
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
