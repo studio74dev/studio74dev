@@ -5,6 +5,17 @@
 (function () {
   'use strict';
 
+  /* ── Formulario: sin envío nativo ────────────────── */
+  /* Lo primero de todo: con JS, el action mailto (respaldo sin JS) se quita y
+     el envío nativo queda frenado, aunque algo de abajo falle. El envío real
+     lo hace el bloque "Contact form", al final. */
+  const formNativo = document.getElementById('contactForm');
+  if (formNativo) {
+    formNativo.removeAttribute('action');
+    formNativo.removeAttribute('enctype');
+    formNativo.addEventListener('submit', (e) => e.preventDefault());
+  }
+
   /* ── Canales pendientes ──────────────────────────── */
   /* Único lugar donde se cargan. Mientras estén vacíos, los bloques con
      data-canal quedan ocultos; al completarlos se muestran con su enlace. */
@@ -408,40 +419,60 @@
   }));
 
   /* ── Contact form ───────────────────────────────── */
-  /* Dos modos, en este orden:
-     1. Web3Forms — relay para hosting estático (GitHub Pages). Usa una sola
-        "access key" fija: a diferencia de FormSubmit, no hay activación por
-        formulario ni mails de confirmación.
-     2. mailto: — respaldo: abrimos el cliente de correo del visitante con el
-        mensaje precargado y lo avisamos en pantalla.
+  /* Se envía a Web3Forms (relay para hosting estático) con FormData y sin
+     cabeceras propias: así el pedido es "simple" y no hay preflight OPTIONS.
+     El sitio nunca abre el programa de correo por su cuenta: si el envío
+     falla, el visitante conserva lo que escribió y elige cómo seguir
+     (reintentar, copiar el correo, Gmail o su programa de correo).
      Nunca mostramos "mensaje enviado" si no se envió nada. */
   const form = document.getElementById('contactForm');
   if (form) {
     const submitBtn = form.querySelector('.btn--primary');
     const note = form.querySelector('.form__note');
     const startedInput = form.querySelector('[name="started"]');
+    const alternativas = document.getElementById('formAlternativas');
+    const aviso = document.getElementById('formAviso');
+    const reintentar = document.getElementById('formReintentar');
+    const copiar = document.getElementById('formCopiar');
+    const copiado = document.getElementById('formCopiado');
+    const correoTexto = document.getElementById('formCorreo');
+    const gmail = document.getElementById('formGmail');
+    const programa = document.getElementById('formPrograma');
     const originalBtnHTML = submitBtn ? submitBtn.innerHTML : '';
     const originalNote = note ? note.textContent : '';
+    const originalReintentar = reintentar ? reintentar.textContent : '';
+    const originalCopiar = copiar ? copiar.textContent : '';
     const CONTACT_EMAIL = 'studio74dev@gmail.com';
     /* Relay de Web3Forms para el hosting estático.
        La access key se pide gratis en https://web3forms.com con el mail del
        estudio: llega un mail con la clave y se pega acá. Es fija y no vence. */
     const WEB3FORMS_KEY = 'da33bf64-6baa-4b58-a68c-bd3c23d7073a';
     const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
+    const TIEMPO_MAXIMO = 12000; // ms por intento
+    const ESPERA_REINTENTO = 1500; // ms antes del único reintento automático
     /* Largos máximos: los mismos que el maxlength de index.html */
     const LIMITES = { name: 80, email: 120, message: 2000 };
+    const AVISOS = {
+      fallo: 'No pudimos enviar su consulta desde la página. Puede intentar de nuevo o escribirnos directamente.',
+      limite: 'Hay demasiados envíos en este momento. Espere un minuto e intente de nuevo, o escríbanos directamente.',
+      ilegible: 'No pudimos enviar su consulta desde la página. Puede intentar de nuevo en un minuto o escribirnos directamente.',
+    };
     const CHECK_SVG = `
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
           <polyline points="20 6 9 17 4 12" />
         </svg>`;
 
     let stateTimer = null;
+    let esperaTimer = null;
+    let copiadoTimer = null;
+    const dormir = (ms) => new Promise((r) => setTimeout(r, ms));
 
     const refreshStarted = () => {
       if (startedInput) startedInput.value = String(Math.floor(Date.now() / 1000));
     };
 
-    /* state: 'is-loading' | 'is-sent' | 'is-error' | null */
+    /* state: 'is-loading' | 'is-sent' | 'is-error' | null
+       ms: 0 deja el estado fijo hasta el próximo envío. */
     const setState = (state, opts = {}) => {
       const { btn = null, note: noteText = null, ms = 4200, reset = false } = opts;
       clearTimeout(stateTimer);
@@ -452,7 +483,7 @@
         if (btn) submitBtn.innerHTML = btn;
       }
       if (note && noteText) note.textContent = noteText;
-      if (state === 'is-loading') return;
+      if (state === 'is-loading' || !ms) return;
 
       stateTimer = setTimeout(() => {
         form.classList.remove('is-sent', 'is-error');
@@ -470,20 +501,61 @@
 
     refreshStarted();
 
-    const openMailto = (data) => {
-      const subject = `Consulta desde la web — ${data.get('service') || 'Proyecto'}`;
-      const body = [
+    /* Asunto y cuerpo con lo que el visitante cargó: para Gmail y el mailto */
+    const armarCorreo = (data) => ({
+      subject: `Consulta desde la web — ${data.get('service') || 'Proyecto'}`,
+      body: [
         `Nombre: ${data.get('name') || ''}`,
         `Email: ${data.get('email') || ''}`,
         `Tipo de proyecto: ${data.get('service') || ''}`,
         '',
         data.get('message') || '',
-      ].join('\n');
-      const a = document.createElement('a');
-      a.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+      ].join('\n'),
+    });
+
+    const ocultarAlternativas = () => {
+      clearInterval(esperaTimer);
+      if (alternativas) alternativas.hidden = true;
+      if (reintentar) {
+        reintentar.disabled = false;
+        reintentar.textContent = originalReintentar;
+      }
+    };
+
+    /* Fallo definitivo: aviso con foco y las salidas a mano. Los campos quedan como estaban.
+       Sin data (fallo interno), Gmail y el mailto quedan con el enlace simple del HTML. */
+    const mostrarFallo = (data, tipo, espera = 0) => {
+      setState('is-error', { btn: originalBtnHTML, ms: 0 });
+      if (!alternativas) return;
+      if (data) {
+        const { subject, body } = armarCorreo(data);
+        gmail.href = `https://mail.google.com/mail/?view=cm&fs=1&to=${CONTACT_EMAIL}`
+          + `&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        programa.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      }
+      aviso.textContent = AVISOS[tipo] || AVISOS.fallo;
+      copiado.textContent = '';
+      alternativas.hidden = false;
+      aviso.focus();
+
+      // Retry-After: "Reintentar" espera lo que pide el servicio
+      clearInterval(esperaTimer);
+      if (espera > 0) {
+        const hasta = Date.now() + espera * 1000;
+        const contar = () => {
+          const resta = Math.ceil((hasta - Date.now()) / 1000);
+          if (resta <= 0) {
+            clearInterval(esperaTimer);
+            reintentar.disabled = false;
+            reintentar.textContent = originalReintentar;
+            return;
+          }
+          reintentar.disabled = true;
+          reintentar.textContent = resta > 90 ? `Reintentar en ${Math.ceil(resta / 60)} min` : `Reintentar en ${resta} s`;
+        };
+        contar();
+        esperaTimer = setInterval(contar, 1000);
+      }
     };
 
     /* Vacío (solo espacios) o más largo que el límite: el campo queda inválido
@@ -502,40 +574,47 @@
       if (e.target.name in LIMITES) e.target.setCustomValidity('');
     });
 
-    /* 1) Web3Forms — relay para hosting estático.
-        Sin key todavía: devuelve false y seguimos con el mailto. */
-    const sendViaRelay = async (data) => {
-      if (!WEB3FORMS_KEY) return false;
+    const segundos = (retryAfter) => {
+      const n = parseInt(retryAfter, 10);
+      return Number.isFinite(n) && n > 0 ? n : 0;
+    };
+
+    /* Un intento contra Web3Forms. Devuelve el tipo de resultado:
+       'ok' | 'recuperable' (tiempo agotado, 5xx) | 'definitivo' (4xx) | 'limite' (429 legible)
+       | 'ilegible' (sin respuesta: red caída o un 429 que llega sin CORS) */
+    const intentar = async (data) => {
+      const payload = new FormData();
+      payload.append('access_key', WEB3FORMS_KEY);
+      payload.append('subject', armarCorreo(data).subject);
+      payload.append('from_name', 'Studio 74 · Web');
+      payload.append('name', data.get('name') || '');
+      payload.append('email', data.get('email') || '');
+      payload.append('replyto', data.get('email') || '');
+      payload.append('Tipo de proyecto', data.get('service') || '');
+      payload.append('message', data.get('message') || '');
+      payload.append('botcheck', ''); // vacío: una persona nunca marca la casilla
+
+      const ctrl = new AbortController();
+      const timeout = setTimeout(() => ctrl.abort(), TIEMPO_MAXIMO);
       try {
-        const ctrl = new AbortController();
-        const timeout = setTimeout(() => ctrl.abort(), 15000);
-        const res = await fetch(WEB3FORMS_ENDPOINT, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          signal: ctrl.signal,
-          body: JSON.stringify({
-            access_key: WEB3FORMS_KEY,
-            subject: `Consulta desde la web — ${data.get('service') || 'Proyecto'}`,
-            from_name: 'Studio 74 · Web',
-            name: data.get('name') || '',
-            email: data.get('email') || '',
-            replyto: data.get('email') || '',
-            'Tipo de proyecto': data.get('service') || '',
-            message: data.get('message') || '',
-            botcheck: data.get('botcheck') === 'on',
-          }),
-        });
-        clearTimeout(timeout);
+        const res = await fetch(WEB3FORMS_ENDPOINT, { method: 'POST', body: payload, signal: ctrl.signal });
         const info = await res.json().catch(() => null);
         // Web3Forms contesta { "success": true } solo si aceptó el envío.
-        return res.ok && !!info && info.success === true;
-      } catch (_) {
-        return false;
+        if (res.ok && info && info.success === true) return { tipo: 'ok' };
+        if (res.status === 429) return { tipo: 'limite', espera: segundos(res.headers.get('Retry-After')) };
+        if (res.status >= 500) return { tipo: 'recuperable' };
+        return { tipo: 'definitivo' };
+      } catch (err) {
+        if (err && err.name === 'AbortError') return { tipo: 'recuperable' };
+        // Sin respuesta legible: o no hay red, o Web3Forms cortó por límite (su 429
+        // llega sin cabeceras CORS y el navegador no deja leerlo). No se reintenta.
+        return { tipo: 'ilegible' };
+      } finally {
+        clearTimeout(timeout);
       }
     };
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
+    const enviar = async () => {
       if (!submitBtn) return;
       if (form.classList.contains('is-loading') || form.classList.contains('is-sent')) return;
 
@@ -554,20 +633,77 @@
       }
 
       const data = new FormData(form);
-      setState('is-loading', { btn: 'Enviando…' });
+      ocultarAlternativas();
+      setState('is-loading', { btn: 'Enviando…', note: 'Enviando su consulta…' });
 
-      const sent = () => setState('is-sent', { btn: `${CHECK_SVG} Consulta enviada`, reset: true });
+      let r = await intentar(data);
+      // Tiempo agotado o 5xx: un solo reintento. El 429 y lo ilegible no: empeoran el límite.
+      if (r.tipo === 'recuperable') {
+        await dormir(ESPERA_REINTENTO);
+        r = await intentar(data);
+      }
 
-      // 1) Relay por Web3Forms.
-      if (await sendViaRelay(data)) return sent();
+      if (r.tipo === 'ok') {
+        setState('is-sent', {
+          btn: `${CHECK_SVG} Consulta enviada`,
+          note: 'Consulta enviada. Le respondemos dentro de las 24 horas.',
+          ms: 8000,
+          reset: true,
+        });
+        return;
+      }
+      if (note) note.textContent = originalNote;
+      mostrarFallo(data, r.tipo in AVISOS ? r.tipo : 'fallo', r.espera);
+    };
 
-      // 2) Respaldo: primero el aviso (role="status") y después el correo del visitante.
-      setState('is-error', {
-        btn: 'Se abrió su correo',
-        note: 'No pudimos enviar el formulario desde la página; se abrió su correo para que nos escriba directamente.',
-        ms: 10000,
-      });
-      openMailto(data);
+    form.addEventListener('submit', async (e) => {
+      // Primero se frena el envío nativo: pase lo que pase después, no sale por el action.
+      try {
+        e.preventDefault();
+        await enviar();
+      } catch (_) {
+        mostrarFallo(null, 'fallo');
+      }
     });
+
+    if (reintentar) {
+      reintentar.addEventListener('click', () => {
+        if (typeof form.requestSubmit === 'function') form.requestSubmit(submitBtn);
+        else if (submitBtn) submitBtn.click();
+      });
+    }
+
+    /* Copiar correo: portapapeles si se puede; si no, queda seleccionado para copiarlo a mano */
+    const avisarCopia = (texto) => {
+      clearTimeout(copiadoTimer);
+      copiado.textContent = texto;
+      copiar.textContent = texto === 'Correo copiado' ? texto : originalCopiar;
+      copiadoTimer = setTimeout(() => {
+        copiar.textContent = originalCopiar;
+        copiado.textContent = '';
+      }, 3000);
+    };
+    const seleccionarCorreo = () => {
+      const rango = document.createRange();
+      rango.selectNodeContents(correoTexto);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(rango);
+      let ok = false;
+      try { ok = document.execCommand('copy'); } catch (_) { ok = false; }
+      avisarCopia(ok ? 'Correo copiado' : 'Correo seleccionado: cópielo desde el menú de su navegador.');
+    };
+    if (copiar && correoTexto) {
+      copiar.addEventListener('click', async () => {
+        if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+          try {
+            await navigator.clipboard.writeText(CONTACT_EMAIL);
+            avisarCopia('Correo copiado');
+            return;
+          } catch (_) { /* sin permiso: se selecciona */ }
+        }
+        seleccionarCorreo();
+      });
+    }
   }
 })();

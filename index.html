@@ -229,7 +229,7 @@
        La de los títulos se pide primero porque es la que se ve al cargar. -->
   <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="css/styles.css?v=17" />
+  <link rel="stylesheet" href="css/styles.css?v=18" />
   <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
        (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
@@ -808,6 +808,19 @@
               <p class="form__note" role="status" aria-live="polite">Respondemos en menos de 24 horas. Sus datos se
                 usan únicamente para responder la consulta.</p>
             </div>
+            <!-- Si el envío falla, el visitante elige cómo seguir (lo muestra js/main.js) -->
+            <div class="form__alternativas" id="formAlternativas" hidden>
+              <p class="form__aviso" id="formAviso" role="alert" tabindex="-1"></p>
+              <div class="form__acciones">
+                <button type="button" class="btn btn--borde" id="formReintentar">Reintentar</button>
+                <button type="button" class="btn btn--borde" id="formCopiar">Copiar correo</button>
+                <a class="btn btn--borde" id="formGmail" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=studio74dev@gmail.com"
+                  target="_blank" rel="noopener noreferrer" aria-label="Abrir en Gmail (pestaña nueva)">Abrir en Gmail</a>
+              </div>
+              <p class="form__directo">Correo del estudio: <span class="form__correo" id="formCorreo">studio74dev@gmail.com</span>
+                · <a id="formPrograma" href="mailto:studio74dev@gmail.com">Usar el programa de correo</a></p>
+              <p class="form__copiado" id="formCopiado" role="status" aria-live="polite"></p>
+            </div>
             <noscript><p class="form__note">Sin JavaScript, el formulario abre su aplicación de correo. También puede
                 escribirnos directamente a studio74dev@gmail.com.</p></noscript>
           </form>
@@ -867,7 +880,7 @@
     </div>
   </dialog>
 
-  <script src="js/main.js?v=18" defer></script>
+  <script src="js/main.js?v=19" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
