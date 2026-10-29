@@ -762,15 +762,15 @@
         </div>
 
         <div class="contacto__grilla">
-          <form class="form" id="contactForm" action="contact.php" method="post" novalidate data-escena="entrada">
+          <form class="form" id="contactForm" action="mailto:studio74dev@gmail.com" method="post" enctype="text/plain" novalidate data-escena="entrada">
             <div class="form__fila">
               <div class="grupo">
                 <label class="grupo__etiqueta" for="name">Nombre</label>
-                <input type="text" id="name" name="name" class="campo" autocomplete="name" required />
+                <input type="text" id="name" name="name" class="campo" autocomplete="name" maxlength="80" required />
               </div>
               <div class="grupo">
                 <label class="grupo__etiqueta" for="email">Correo electrónico</label>
-                <input type="email" id="email" name="email" class="campo" autocomplete="email" required />
+                <input type="email" id="email" name="email" class="campo" autocomplete="email" maxlength="120" required />
               </div>
             </div>
 
@@ -788,7 +788,7 @@
             <div class="grupo">
               <label class="grupo__etiqueta" for="message">Mensaje</label>
               <textarea id="message" name="message" class="campo campo--largo" rows="4" aria-describedby="messageAyuda"
-                required></textarea>
+                maxlength="2000" required></textarea>
               <p class="grupo__ayuda" id="messageAyuda">Cuéntenos sobre su negocio y qué necesita. Por ejemplo: «Tengo
                 un gimnasio y registro las cuotas en un cuaderno».</p>
             </div>
@@ -797,6 +797,7 @@
             <div class="form__hp" aria-hidden="true">
               <label for="company">Empresa (no completar)</label>
               <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+              <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true" autocomplete="off" />
             </div>
             <!-- Trampa de tiempo: la completa el JS al cargar la página -->
             <input type="hidden" name="started" id="formStarted" value="" />
@@ -807,6 +808,8 @@
               <p class="form__note" role="status" aria-live="polite">Respondemos en menos de 24 horas. Sus datos se
                 usan únicamente para responder la consulta.</p>
             </div>
+            <noscript><p class="form__note">Sin JavaScript, el formulario abre su aplicación de correo. También puede
+                escribirnos directamente a studio74dev@gmail.com.</p></noscript>
           </form>
 
           <div class="canales" data-escena="entrada">
@@ -864,7 +867,7 @@
     </div>
   </dialog>
 
-  <script src="js/main.js?v=17" defer></script>
+  <script src="js/main.js?v=18" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
