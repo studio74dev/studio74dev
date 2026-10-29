@@ -11,13 +11,11 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 | `index.html` | La landing completa (ver secciones abajo). Incluye los datos estructurados JSON-LD. |
 | `css/styles.css` | Todos los estilos. Paleta del logo y tokens por capítulo (ver "Paleta y capítulos"). |
 | `js/main.js` | Canales (WhatsApp y LinkedIn), intro de carga, índice, motor de scroll, teléfono de "Qué hacemos", botones magnéticos, pestañas del caso real y envío del formulario. |
-| `contact.php` | Relay del formulario para el hosting con PHP (Hostinger). |
 | `404.html` | Página de error propia. Lleva los estilos en línea, así que no depende del CSS. |
 | `assets/og.png` | Imagen que se ve al compartir el link (1200×630). |
 | `assets/img/` | Capturas de Club El Progreso, solo en WebP. |
 | `assets/isotipo/`, `assets/firma/` | Logo en sus variantes y firma de mail del equipo. La web no los usa. |
 | `docs/og-imagen.html` | Fuente de `assets/og.png` (ver "Imagen para compartir"). |
-| `docs/plantillas-email.md` | Plantillas para responder las consultas. La web no las usa. |
 | `robots.txt`, `sitemap.xml`, `favicon.*` | Lo de siempre. |
 
 ## Secciones de la landing
@@ -114,22 +112,27 @@ py -m http.server 8800 --bind 127.0.0.1
 
 Y abrir `http://127.0.0.1:8800/?intro`.
 
-> **No lo levantes con PHP en local.** `contact.php` con un sendmail de prueba contesta
-> "enviado" sin mandar nada: un falso éxito, justo lo que el sitio evita. El servidor
-> estático reproduce a GitHub Pages: el PHP falla, entra Web3Forms y el mail llega de verdad.
+El servidor estático reproduce a GitHub Pages: el formulario sale por Web3Forms y el mail
+llega de verdad.
 
-## Cómo sale el formulario
+## Formulario de contacto
 
-El orden está en `js/main.js`:
+El envío está en `js/main.js`:
 
-1. **`contact.php`** — para cuando el sitio viva en un hosting con PHP.
-2. **Web3Forms** — relay para hosting estático, que es lo que usa GitHub Pages hoy.
-3. **`mailto:`** — último recurso: abre el cliente de correo del visitante con el mensaje ya escrito.
+1. **Web3Forms** — el formulario se manda con `fetch` a `api.web3forms.com`. La clave
+   (`WEB3FORMS_KEY` en `js/main.js`) es pública a propósito: así funciona el servicio.
+   Sirve para *enviar* al mail del estudio, no para leer lo que llegó.
+2. **`mailto:`** — respaldo: si Web3Forms falla, se avisa en pantalla y se abre el cliente
+   de correo del visitante con el mensaje ya escrito, dirigido a `studio74dev@gmail.com`.
+   Sin JavaScript, el `action` del formulario también es ese `mailto:`.
 
-Si los tres fallan, el visitante ve el error. Nunca un "enviado" que no salió.
+Nunca se muestra un "enviado" que no salió.
 
-La key de Web3Forms es pública a propósito: así funciona el servicio. Sirve para *enviar*
-al mail del estudio, no para leer lo que llegó.
+**Anti-spam**: dos trampas invisibles que una persona no completa. El campo `company`
+(honeypot propio) y la casilla `botcheck` (la de Web3Forms, que además se manda en el
+envío y el servicio la revisa). Si alguna viene completa, el formulario simula el éxito
+y no envía nada. Los largos máximos (nombre 80, correo 120, mensaje 2000) están como
+`maxlength` en `index.html` y se validan también en `js/main.js` antes de enviar.
 
 ## Imagen para compartir
 

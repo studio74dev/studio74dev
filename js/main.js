@@ -408,13 +408,12 @@
   }));
 
   /* ── Contact form ───────────────────────────────── */
-  /* Tres modos, en este orden:
-     1. contact.php — hosting con PHP (Hostinger). No usa terceros.
-     2. Web3Forms — relay para hosting estático (GitHub Pages), donde el PHP
-        no corre. Usa una sola "access key" fija: a diferencia de FormSubmit,
-        no hay activación por formulario ni mails de confirmación.
-     3. mailto: — último recurso: abrimos el cliente de correo del
-        visitante con el mensaje precargado.
+  /* Dos modos, en este orden:
+     1. Web3Forms — relay para hosting estático (GitHub Pages). Usa una sola
+        "access key" fija: a diferencia de FormSubmit, no hay activación por
+        formulario ni mails de confirmación.
+     2. mailto: — respaldo: abrimos el cliente de correo del visitante con el
+        mensaje precargado y lo avisamos en pantalla.
      Nunca mostramos "mensaje enviado" si no se envió nada. */
   const form = document.getElementById('contactForm');
   if (form) {
@@ -429,6 +428,8 @@
        estudio: llega un mail con la clave y se pega acá. Es fija y no vence. */
     const WEB3FORMS_KEY = 'da33bf64-6baa-4b58-a68c-bd3c23d7073a';
     const WEB3FORMS_ENDPOINT = 'https://api.web3forms.com/submit';
+    /* Largos máximos: los mismos que el maxlength de index.html */
+    const LIMITES = { name: 80, email: 120, message: 2000 };
     const CHECK_SVG = `
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
           <polyline points="20 6 9 17 4 12" />
@@ -485,36 +486,23 @@
       a.remove();
     };
 
-    /* 1) contact.php — hosting con PHP. Devuelve 'sent' | 'limit' | 'fail' */
-    const sendViaPhp = async (data) => {
-      try {
-        const ctrl = new AbortController();
-        const timeout = setTimeout(() => ctrl.abort(), 10000);
-        const res = await fetch('contact.php', {
-          method: 'POST',
-          body: data,
-          headers: { Accept: 'application/json' },
-          signal: ctrl.signal,
-        });
-        clearTimeout(timeout);
-
-        if (res.status === 429) {
-          const info = await res.json().catch(() => null);
-          return {
-            state: 'limit',
-            message: (info && info.message) || 'Demasiados envíos seguidos. Intente nuevamente en unos minutos.',
-          };
-        }
-
-        const info = await res.json().catch(() => null);
-        return res.ok && info && info.ok ? { state: 'sent' } : { state: 'fail' };
-      } catch (_) {
-        // Sin PHP (GitHub Pages) o sin red: seguimos con el relay.
-        return { state: 'fail' };
-      }
+    /* Vacío (solo espacios) o más largo que el límite: el campo queda inválido
+       y el navegador muestra el aviso. maxlength no frena lo que llega por script. */
+    const validarLargos = () => {
+      Object.entries(LIMITES).forEach(([nombre, max]) => {
+        const campo = form.elements[nombre];
+        if (!campo) return;
+        let aviso = '';
+        if (campo.required && campo.value.trim() === '') aviso = 'Complete este campo.';
+        else if (campo.value.length > max) aviso = `Use como máximo ${max} caracteres.`;
+        campo.setCustomValidity(aviso);
+      });
     };
+    form.addEventListener('input', (e) => {
+      if (e.target.name in LIMITES) e.target.setCustomValidity('');
+    });
 
-    /* 2) Web3Forms — relay para hosting estático, donde el PHP no corre.
+    /* 1) Web3Forms — relay para hosting estático.
         Sin key todavía: devuelve false y seguimos con el mailto. */
     const sendViaRelay = async (data) => {
       if (!WEB3FORMS_KEY) return false;
@@ -534,6 +522,7 @@
             replyto: data.get('email') || '',
             'Tipo de proyecto': data.get('service') || '',
             message: data.get('message') || '',
+            botcheck: data.get('botcheck') === 'on',
           }),
         });
         clearTimeout(timeout);
@@ -550,14 +539,16 @@
       if (!submitBtn) return;
       if (form.classList.contains('is-loading') || form.classList.contains('is-sent')) return;
 
+      validarLargos();
       if (!form.checkValidity()) {
         form.reportValidity();
         return;
       }
 
-      // Honeypot lleno → bot: éxito falso, sin abrir nada.
+      // Honeypot lleno o botcheck marcado → bot: éxito falso, sin abrir nada.
       const hp = form.querySelector('[name="company"]');
-      if (hp && hp.value.trim() !== '') {
+      const botcheck = form.querySelector('[name="botcheck"]');
+      if ((hp && hp.value.trim() !== '') || (botcheck && botcheck.checked)) {
         setState('is-sent', { btn: `${CHECK_SVG} Consulta enviada`, reset: true });
         return;
       }
@@ -567,28 +558,16 @@
 
       const sent = () => setState('is-sent', { btn: `${CHECK_SVG} Consulta enviada`, reset: true });
 
-      // 1) Hosting con PHP (Hostinger): envío propio, sin terceros.
-      const php = await sendViaPhp(data);
-      if (php.state === 'sent') return sent();
-      if (php.state === 'limit') {
-        setState('is-error', {
-          btn: 'No se pudo enviar',
-          note: php.message,
-          ms: 6000,
-        });
-        return;
-      }
-
-      // 2) Hosting estático (GitHub Pages): relay por Web3Forms.
+      // 1) Relay por Web3Forms.
       if (await sendViaRelay(data)) return sent();
 
-      // 3) Último recurso: abrimos el correo del visitante.
-      openMailto(data);
-      setState('is-sent', {
+      // 2) Respaldo: primero el aviso (role="status") y después el correo del visitante.
+      setState('is-error', {
         btn: 'Se abrió su correo',
-        note: 'El mensaje quedó listo en su aplicación de correo: solo resta enviarlo.',
-        ms: 6000,
+        note: 'No pudimos enviar el formulario desde la página; se abrió su correo para que nos escriba directamente.',
+        ms: 10000,
       });
+      openMailto(data);
     });
   }
 })();
