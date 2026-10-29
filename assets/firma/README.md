@@ -26,7 +26,7 @@ No los usa la web: son para Gmail (y a futuro para presupuestos o newsletters).
 > Cada persona del equipo cambia `Mariano` y su rol por los propios como una firma
 > aparte: Gmail permite guardar varias.
 
-> El logo se carga desde `https://studio74dev.github.io/assets/firma/…`, así que aparece
+> El logo se carga desde `https://studio74dev.com.ar/assets/firma/…`, así que aparece
 > una vez que estos archivos estén en el repositorio pusheado. Si todavía no está,
 > podés pegar la imagen a mano en el editor de la firma y Gmail la aloja.
 

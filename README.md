@@ -1,6 +1,6 @@
 # Studio 74 — sitio
 
-Sitio del estudio: **[studio74dev.github.io](https://studio74dev.github.io/)**
+Sitio del estudio: **[studio74dev.com.ar](https://studio74dev.com.ar/)**
 
 HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada más.
 
@@ -157,7 +157,9 @@ Dos cosas a tener en cuenta:
 
 - Número de WhatsApp del estudio (constante `CANALES` en `js/main.js`).
 - Medios de pago aceptados, en la pregunta frecuente y en el JSON-LD (hoy dice que se detallan en el presupuesto).
-- Dominio propio `studio74dev.com` (hoy `studio74dev.github.io` es provisional). Cuando
-  esté, hay que actualizar `canonical`, `og:url`, `og:image`, las URLs de `sitemap.xml`,
-  `robots.txt`, el JSON-LD de `index.html`, el pie de `docs/og-imagen.html` y el mail de la firma.
+- Dominio propio `studio74dev.com.ar` (sin www; www redirige al dominio sin www). El `CNAME`
+  y las URLs absolutas (`canonical`, `og:url`, `og:image`, `sitemap.xml`, `robots.txt`, JSON-LD,
+  404, firmas e imagen para compartir) ya apuntan a él. Falta el DNS (registros A del dominio sin
+  www a las IP de GitHub Pages y CNAME de `www` a `studio74dev.github.io`), cargar el dominio
+  en Settings → Pages y activar "Enforce HTTPS".
 - Testimonio real de un cliente (con autorización) y capturas de los proyectos en desarrollo.
