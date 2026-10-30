@@ -79,7 +79,7 @@ Los únicos canales de contacto para el público (URLs exactas):
 
 - Correo: `studio74dev@gmail.com`
 - Instagram: https://www.instagram.com/studio74dev/
-- LinkedIn: https://www.linkedin.com/in/studio-dev-368410447/
+- LinkedIn: https://www.linkedin.com/company/studio74dev/
 - Facebook: https://www.facebook.com/people/Studio74Dev/61595921825522/
 - Sitio: https://studio74dev.com.ar/
 
@@ -93,7 +93,7 @@ se completa la constante `CANALES` al principio de `js/main.js`:
 ```js
 const CANALES = {
   whatsapp: '5492254123456', // con código de país, sin "+" ni espacios
-  linkedin: 'https://www.linkedin.com/company/...',
+  linkedin: 'https://www.linkedin.com/company/studio74dev/',
 };
 ```
 
@@ -183,7 +183,6 @@ Dos cosas a tener en cuenta:
 - **Medios de pago** aceptados, en la pregunta frecuente y en el JSON-LD (hoy dice que se detallan en el presupuesto).
 - **Aviso de privacidad** (Ley 25.326): falta definir quién es el responsable de los datos.
 - **Prueba en un iPhone real** (Safari).
-- **Company Page de LinkedIn**: hoy se enlaza un perfil.
 - **CSP** (Content Security Policy) por `<meta>`.
 - **hCaptcha o Turnstile** en el formulario, solo si aparece spam.
 - Testimonio real de un cliente (con autorización) y capturas de los proyectos en desarrollo.
