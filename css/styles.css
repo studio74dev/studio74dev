@@ -2016,12 +2016,62 @@ b {
   color: var(--suave);
 }
 
-.form.is-error .form__note {
+/* Envío fallido: el aviso (el único texto en rojo) y las salidas a mano */
+.form__alternativas {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.form__alternativas[hidden] {
+  display: none;
+}
+
+.form__aviso {
+  font-weight: 600;
   color: #FF8A80;
 }
 
-[data-theme='claro'] .form.is-error .form__note {
+[data-theme='claro'] .form__aviso {
   color: #B3261E;
+}
+
+.form__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.form__acciones .btn {
+  min-height: 44px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.92rem;
+}
+
+.form__acciones .btn:disabled {
+  cursor: not-allowed;
+}
+
+.form__directo,
+.form__copiado {
+  font-size: 0.88rem;
+  color: var(--suave);
+}
+
+.form__directo a,
+.form__correo {
+  color: var(--texto);
+}
+
+.form__directo a {
+  text-underline-offset: 3px;
+}
+
+.form__correo {
+  user-select: all;
+}
+
+.form__copiado:empty {
+  display: none;
 }
 
 .canales {

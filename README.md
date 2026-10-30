@@ -119,12 +119,24 @@ llega de verdad.
 
 El envío está en `js/main.js`:
 
-1. **Web3Forms** — el formulario se manda con `fetch` a `api.web3forms.com`. La clave
-   (`WEB3FORMS_KEY` en `js/main.js`) es pública a propósito: así funciona el servicio.
-   Sirve para *enviar* al mail del estudio, no para leer lo que llegó.
-2. **`mailto:`** — respaldo: si Web3Forms falla, se avisa en pantalla y se abre el cliente
-   de correo del visitante con el mensaje ya escrito, dirigido a `studio74dev@gmail.com`.
-   Sin JavaScript, el `action` del formulario también es ese `mailto:`.
+1. **Web3Forms** — el formulario se manda con `fetch` a `api.web3forms.com`, como `FormData`
+   y sin cabeceras propias: así el pedido es "simple" y el navegador no hace el preflight
+   `OPTIONS`. La clave (`WEB3FORMS_KEY` en `js/main.js`) es pública a propósito: así funciona
+   el servicio. Sirve para *enviar* al mail del estudio, no para leer lo que llegó.
+   - Tiempo máximo de 12 s por intento.
+   - Tiempo agotado o error 5xx: **un** reintento automático a los 1,5 s.
+   - Error 4xx (clave o dominio rechazado): sin reintento.
+   - 429 legible: sin reintento, porque empeora el límite; si trae `Retry-After`,
+     "Reintentar" espera ese tiempo.
+   - Sin respuesta legible (`Failed to fetch`): sin reintento y con un aviso neutral. Puede
+     ser una red caída o el 429 de Web3Forms, que limita por IP y responde sin cabeceras
+     CORS: el navegador no deja distinguirlos.
+2. **Si falla**: el sitio **nunca** abre el programa de correo por su cuenta. Los campos
+   quedan como estaban y aparece el aviso con **Reintentar**, **Copiar correo**, **Abrir en
+   Gmail** (pestaña nueva, con el mensaje cargado) y el enlace "Usar el programa de correo"
+   (`mailto:`), además del correo del estudio como texto.
+3. **Sin JavaScript**: el `action` del formulario es `mailto:studio74dev@gmail.com` y un
+   `<noscript>` muestra el correo. Con JS, `js/main.js` quita ese `action` al arrancar.
 
 Nunca se muestra un "enviado" que no salió.
 
