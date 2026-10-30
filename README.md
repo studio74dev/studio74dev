@@ -33,7 +33,7 @@ Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` 
 8. **Caso real** (`#caso`, base): en pantallas anchas la ventana de Club El Progreso se apoya y se endereza; en el celular va suelta y la imagen se recorre con el dedo. Sus pestañas funcionan y **Ampliar** (o tocar la imagen) la abre a tamaño real en un visor (`<dialog>`).
 9. **Sin letra chica** (`#diferencia`, base): los compromisos concretos en un mosaico, con un trazo que se completa.
 10. **Proceso** (`#proceso`, alt): la línea se dibuja con el scroll y enciende cada paso.
-11. **El estudio** (`#estudio`, base): los cuatro desarrolladores full stack con su formación (Licenciatura en Sistemas y Técnico en Software) y el enlace al GitHub de la organización.
+11. **El estudio** (`#estudio`, base): los cuatro desarrolladores full stack con su formación (Licenciatura en Sistemas y Técnico en Software).
 12. **Preguntas frecuentes** (`#preguntas`, alt).
 13. **Contacto** (`#contacto`, base): formulario simple con etiquetas visibles (nombre, correo, tipo de consulta y mensaje) y, al lado, los canales directos.
 14. **Pie** con redes y la marca a todo el ancho.
@@ -73,9 +73,19 @@ Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` 
 - Para cambiar cuánto dura una escena fija, se cambia su `--alto` en `styles.css`. La del problema la calcula el JS según el ancho de las tarjetas.
 - Se anima solo `transform`, `opacity` y `clip-path`, para que vaya fluido en celulares. En el celular la barra va sin desenfoque (`backdrop-filter` se recalcula en cada cuadro).
 
-### Redes y canales
+### Canales oficiales
 
-Correo, Instagram, LinkedIn y GitHub (secundario, solo en el pie) están activos.
+Los únicos canales de contacto para el público (URLs exactas):
+
+- Correo: `studio74dev@gmail.com`
+- Instagram: https://www.instagram.com/studio74dev/
+- LinkedIn: https://www.linkedin.com/in/studio-dev-368410447/
+- Facebook: https://www.facebook.com/people/Studio74Dev/61595921825522/
+- Sitio: https://studio74dev.com.ar/
+
+Aparecen en el índice a pantalla completa, en Contacto, en el pie, en `sameAs` del JSON-LD y en las
+firmas de Gmail (`assets/firma/`). Si cambia alguno, hay que cambiarlo en todos esos lugares.
+GitHub no es un canal para el público: no se enlaza desde la web.
 
 **WhatsApp** está en el HTML pero oculto. Para activarlo no se toca el HTML:
 se completa la constante `CANALES` al principio de `js/main.js`:
@@ -88,8 +98,7 @@ const CANALES = {
 ```
 
 Cada bloque con `data-canal="whatsapp"` se muestra solo con su enlace, que abre la conversación
-con el mensaje de `MENSAJE_WHATSAPP`. LinkedIn ya está escrito en el HTML y en `sameAs` del JSON-LD;
-si cambia la URL, hay que cambiarla en los tres lugares (índice, contacto y pie) y en el JSON-LD.
+con el mensaje de `MENSAJE_WHATSAPP`. Hoy no hay número: es para una próxima versión.
 
 ### Animaciones
 
@@ -168,13 +177,13 @@ Dos cosas a tener en cuenta:
 - El CSS y el JS se piden con `?v=N`. **Subí ese número cada vez que los toques**, si no,
   quien ya visitó el sitio va a seguir viendo la versión vieja por diez minutos.
 
-## Pendientes anotados
+## Pendientes para una próxima versión
 
-- Número de WhatsApp del estudio (constante `CANALES` en `js/main.js`).
-- Medios de pago aceptados, en la pregunta frecuente y en el JSON-LD (hoy dice que se detallan en el presupuesto).
-- Dominio propio `studio74dev.com.ar` (sin www; www redirige al dominio sin www). El `CNAME`
-  y las URLs absolutas (`canonical`, `og:url`, `og:image`, `sitemap.xml`, `robots.txt`, JSON-LD,
-  404, firmas e imagen para compartir) ya apuntan a él. Falta el DNS (registros A del dominio sin
-  www a las IP de GitHub Pages y CNAME de `www` a `studio74dev.github.io`), cargar el dominio
-  en Settings → Pages y activar "Enforce HTTPS".
+- **WhatsApp del estudio**: cargar el número en la constante `CANALES` de `js/main.js`.
+- **Medios de pago** aceptados, en la pregunta frecuente y en el JSON-LD (hoy dice que se detallan en el presupuesto).
+- **Aviso de privacidad** (Ley 25.326): falta definir quién es el responsable de los datos.
+- **Prueba en un iPhone real** (Safari).
+- **Company Page de LinkedIn**: hoy se enlaza un perfil.
+- **CSP** (Content Security Policy) por `<meta>`.
+- **hCaptcha o Turnstile** en el formulario, solo si aparece spam.
 - Testimonio real de un cliente (con autorización) y capturas de los proyectos en desarrollo.

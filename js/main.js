@@ -429,7 +429,6 @@
   if (form) {
     const submitBtn = form.querySelector('.btn--primary');
     const note = form.querySelector('.form__note');
-    const startedInput = form.querySelector('[name="started"]');
     const alternativas = document.getElementById('formAlternativas');
     const aviso = document.getElementById('formAviso');
     const reintentar = document.getElementById('formReintentar');
@@ -467,10 +466,6 @@
     let copiadoTimer = null;
     const dormir = (ms) => new Promise((r) => setTimeout(r, ms));
 
-    const refreshStarted = () => {
-      if (startedInput) startedInput.value = String(Math.floor(Date.now() / 1000));
-    };
-
     /* state: 'is-loading' | 'is-sent' | 'is-error' | null
        ms: 0 deja el estado fijo hasta el próximo envío. */
     const setState = (state, opts = {}) => {
@@ -492,14 +487,9 @@
           submitBtn.innerHTML = originalBtnHTML;
         }
         if (note) note.textContent = originalNote;
-        if (reset) {
-          form.reset();
-          refreshStarted();
-        }
+        if (reset) form.reset();
       }, ms);
     };
-
-    refreshStarted();
 
     /* Asunto y cuerpo con lo que el visitante cargó: para Gmail y el mailto */
     const armarCorreo = (data) => ({
