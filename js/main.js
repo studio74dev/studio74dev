@@ -21,7 +21,7 @@
      data-canal quedan ocultos; al completarlos se muestran con su enlace. */
   const CANALES = {
     whatsapp: '', // TODO: número con código de país, sin "+" ni espacios. Ej.: '5492254123456'
-    linkedin: 'https://www.linkedin.com/in/studio-dev-368410447/',
+    linkedin: 'https://www.linkedin.com/company/studio74dev/',
   };
   const MENSAJE_WHATSAPP = 'Hola, quisiera solicitar un presupuesto.';
 
