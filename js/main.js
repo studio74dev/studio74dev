@@ -20,10 +20,11 @@
   /* Único lugar donde se cargan. Mientras estén vacíos, los bloques con
      data-canal quedan ocultos; al completarlos se muestran con su enlace. */
   const CANALES = {
-    whatsapp: '', // TODO: número con código de país, sin "+" ni espacios. Ej.: '5492254123456'
+    whatsapp: '5492254424691', // con código de país, sin "+" ni espacios (se muestra como 2254 42-4691)
     linkedin: 'https://www.linkedin.com/company/studio74dev/',
   };
-  const MENSAJE_WHATSAPP = 'Hola, quisiera solicitar un presupuesto.';
+  // Queda abierto a propósito: el visitante termina la frase
+  const MENSAJE_WHATSAPP = 'Hola studio74dev, vengo de la web y quiero consultar por';
 
   const enlaces = {
     whatsapp: CANALES.whatsapp && `https://wa.me/${CANALES.whatsapp}?text=${encodeURIComponent(MENSAJE_WHATSAPP)}`,
@@ -32,7 +33,9 @@
   document.querySelectorAll('[data-canal]').forEach((bloque) => {
     const href = enlaces[bloque.dataset.canal];
     if (!href) return;
-    bloque.querySelectorAll('a').forEach((a) => { a.href = href; });
+    // El bloque puede ser el enlace mismo (el botón flotante) o contenerlo
+    const destinos = bloque.matches('a') ? [bloque] : bloque.querySelectorAll('a');
+    destinos.forEach((a) => { a.href = href; });
     bloque.hidden = false;
   });
 
@@ -149,6 +152,7 @@
     header.dataset.tema = temaAntes;
     document.body.style.overflow = '';
     setTimeout(() => { indice.hidden = true; }, mov ? 600 : 0);
+    pedir(); // el WhatsApp flotante vuelve si corresponde
     if (volverAlBoton) menuBoton.focus();
   };
 
@@ -158,6 +162,7 @@
     header.dataset.tema = 'base';
     menuBoton.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
+    pedir(); // el WhatsApp flotante se oculta mientras el índice está abierto
     requestAnimationFrame(() => requestAnimationFrame(() => indice.classList.add('abierto')));
     indice.querySelector('a').focus({ preventScroll: true });
   };
@@ -198,6 +203,9 @@
   const problema = document.querySelector('.problema');
   const pista = document.getElementById('problemaPista');
   const linksBarra = Array.from(document.querySelectorAll('.nav__links a'));
+  const waFlotante = document.getElementById('waFlotante');
+  const iPortada = capitulos.findIndex((c) => c.id === 'inicio');
+  const iContacto = capitulos.findIndex((c) => c.id === 'contacto');
   const clamp = (v) => Math.min(1, Math.max(0, v));
   const continuas = escenas.filter((el) => el.dataset.escena !== 'entrada');
   let entradas = escenas.filter((el) => el.dataset.escena === 'entrada');
@@ -303,6 +311,19 @@
       const temaRiel = temaDe(rielEn);
       if (riel.dataset.tema !== temaRiel) riel.dataset.tema = temaRiel;
       riel.style.setProperty('--progreso', clamp(y / Math.max(1, total - vh)).toFixed(4));
+    }
+
+    // WhatsApp flotante: aparece cuando se deja la portada (que ya tiene sus
+    // acciones) y se va al llegar a Contacto (que tiene WhatsApp en sus canales).
+    // Toma el tema del capítulo que tiene debajo, como el riel.
+    if (waFlotante && !waFlotante.hidden) {
+      const visible = menuBoton.getAttribute('aria-expanded') !== 'true'
+        && (iPortada < 0 || rectsCap[iPortada].bottom < vh * 0.5)
+        && (iContacto < 0 || rectsCap[iContacto].top > vh * 0.75);
+      if (waFlotante.classList.contains('is-visible') !== visible) waFlotante.classList.toggle('is-visible', visible);
+      const bajoBoton = vh - 44;
+      const temaWa = temaDe(capitulos.find((c, i) => rectsCap[i].top <= bajoBoton && rectsCap[i].bottom > bajoBoton));
+      if (waFlotante.dataset.tema !== temaWa) waFlotante.dataset.tema = temaWa;
     }
 
     // Sección actual en la barra (el capítulo que cruza el centro de la pantalla)
