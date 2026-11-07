@@ -611,6 +611,12 @@ b {
   transition: clip-path 0.6s var(--ease-io);
 }
 
+/* Cerrado, fuera de la página: el display de arriba le ganaba a hidden y sus
+   enlaces, invisibles por el clip-path, seguían recibiendo foco con Tab */
+.indice[hidden] {
+  display: none;
+}
+
 .indice.abierto {
   clip-path: inset(0 0 0 0);
 }
