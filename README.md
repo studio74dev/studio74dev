@@ -88,7 +88,7 @@ firmas de Gmail (`assets/firma/`). Si cambia alguno, hay que cambiarlo en todos 
 GitHub no es un canal para el público: no se enlaza desde la web.
 
 **WhatsApp**: `+54 9 2254 42-4691`. Donde se muestra como texto va `2254 42-4691`, y en el
-JSON-LD como en la ficha de Google, `02254 42-4691`. El número del enlace se carga en un solo lugar,
+JSON-LD en formato internacional, `+54 2254 42-4691`. El número del enlace se carga en un solo lugar,
 la constante `CANALES` al principio de `js/main.js`:
 
 ```js
