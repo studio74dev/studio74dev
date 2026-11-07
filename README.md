@@ -24,7 +24,7 @@ En el orden de `index.html`. Todo el texto va en registro formal (usted o neutro
 Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` o `senal`).
 
 1. **Intro de carga** (`#intro`): líneas que se dibujan, el 74 trazándose, "STUDIO 74" letra por letra y un contador que sigue la carga real. Al llegar a 100 aparece **Entrar**; si nadie lo toca, entra sola. La pantalla se abre en dos y el logo vuela a la barra.
-2. **Barra**: fina, esmerilada y siempre visible. El isotipo (sin "STUDIO 74" al lado, para no repetir el 74), las secciones (en pantallas anchas, marcando la que se está leyendo), el botón de **tema claro/oscuro**, "Hablemos" (también en el celular) e **Índice**, que abre la navegación a pantalla completa. Toma el color del capítulo que tiene debajo. A la derecha, el **riel** de progreso: el trazo del 4 con el punto de la marca.
+2. **Barra**: fina, esmerilada y siempre visible. El isotipo (sin "STUDIO 74" al lado, para no repetir el 74), las secciones (en pantallas anchas, marcando la que se está leyendo), el botón de **tema claro/oscuro**, "Hablemos" (también en el celular) e **Índice**, que abre la navegación a pantalla completa. Toma el color del capítulo que tiene debajo. A la derecha, el **riel** de progreso: el trazo del 4 con el punto de la marca. Abajo a la derecha, entre la portada y Contacto, el **botón flotante de WhatsApp** (ver "Canales oficiales").
 3. **Portada** (`#inicio`, base): frase de valor centrada, con el 74 detrás, y las dos acciones. Al bajar, el texto se va, el 74 se enciende, los trazos del 7 y el 4 se separan y **el punto crece hasta cubrir la pantalla**: así se entra al capítulo siguiente.
 4. **Visión** (`#vision`, señal, azul): el manifiesto se enciende palabra por palabra con el scroll.
 5. **El problema** (`#problema`, base): los cinco problemas se deslizan en horizontal mientras se baja.
@@ -87,18 +87,30 @@ Aparecen en el índice a pantalla completa, en Contacto, en el pie, en `sameAs` 
 firmas de Gmail (`assets/firma/`). Si cambia alguno, hay que cambiarlo en todos esos lugares.
 GitHub no es un canal para el público: no se enlaza desde la web.
 
-**WhatsApp** está en el HTML pero oculto. Para activarlo no se toca el HTML:
-se completa la constante `CANALES` al principio de `js/main.js`:
+**WhatsApp**: `+54 9 2254 42-4691`. Donde se muestra como texto va `2254 42-4691`, y en el
+JSON-LD en formato internacional, `+54 2254 42-4691`. El número del enlace se carga en un solo lugar,
+la constante `CANALES` al principio de `js/main.js`:
 
 ```js
 const CANALES = {
-  whatsapp: '5492254123456', // con código de país, sin "+" ni espacios
+  whatsapp: '5492254424691', // con código de país, sin "+" ni espacios
   linkedin: 'https://www.linkedin.com/company/studio74dev/',
 };
 ```
 
-Cada bloque con `data-canal="whatsapp"` se muestra solo con su enlace, que abre la conversación
-con el mensaje de `MENSAJE_WHATSAPP`. Hoy no hay número: es para una próxima versión.
+Cada bloque con `data-canal="whatsapp"` recibe el enlace a `wa.me` con el mensaje de
+`MENSAJE_WHATSAPP` ("Hola studio74dev, vengo de la web y quiero consultar por", abierto para que
+el visitante lo termine) y recién ahí se muestra. **Sin JavaScript quedan ocultos**: nunca hay un
+enlace roto. Están en la portada (debajo de las dos acciones), en Contacto (primer canal), en el pie
+y en el **botón flotante**:
+
+- Abajo a la derecha, alineado con el riel. En el celular es un círculo de 56 px; desde 1024 px
+  suma el texto "WhatsApp".
+- Usa el azul de los botones (`--boton-fondo`), no el verde de WhatsApp: el sitio tiene un solo
+  acento. Toma el `data-tema` del capítulo que tiene debajo, así que sobre Visión se invierte a blanco.
+- Aparece al dejar la portada (que ya tiene sus acciones) y se va al llegar a Contacto (que ya
+  tiene WhatsApp) y mientras el índice está abierto. Lo decide el motor de scroll de `js/main.js`.
+- Oculto usa `visibility: hidden`, así no recibe foco con el teclado.
 
 ### Animaciones
 
@@ -179,7 +191,6 @@ Dos cosas a tener en cuenta:
 
 ## Pendientes para una próxima versión
 
-- **WhatsApp del estudio**: cargar el número en la constante `CANALES` de `js/main.js`.
 - **Medios de pago** aceptados, en la pregunta frecuente y en el JSON-LD (hoy dice que se detallan en el presupuesto).
 - **Aviso de privacidad** (Ley 25.326): falta definir quién es el responsable de los datos.
 - **Prueba en un iPhone real** (Safari).
