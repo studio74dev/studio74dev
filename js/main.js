@@ -20,7 +20,8 @@
   /* Único lugar donde se cargan. Mientras estén vacíos, los bloques con
      data-canal quedan ocultos; al completarlos se muestran con su enlace. */
   const CANALES = {
-    whatsapp: '5492254424691', // con código de país, sin "+" ni espacios (se muestra como 2254 42-4691)
+    // Por partes, para que no quede escrito de corrido: código de país, sin "+" ni espacios.
+    whatsapp: ['549', '2254', '42', '4691'].join(''),
     linkedin: 'https://www.linkedin.com/company/studio74dev/',
   };
   // Queda abierto a propósito: el visitante termina la frase

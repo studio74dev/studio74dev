@@ -87,16 +87,19 @@ Aparecen en el índice a pantalla completa, en Contacto, en el pie, en `sameAs` 
 firmas de Gmail (`assets/firma/`). Si cambia alguno, hay que cambiarlo en todos esos lugares.
 GitHub no es un canal para el público: no se enlaza desde la web.
 
-**WhatsApp**: `+54 9 2254 42-4691`. Donde se muestra como texto va `2254 42-4691`, y en el
-JSON-LD en formato internacional, `+54 2254 42-4691`. El número del enlace se carga en un solo lugar,
-la constante `CANALES` al principio de `js/main.js`:
+**WhatsApp**: el número **no se muestra en la web** ni va en el JSON-LD. Solo se usa dentro del
+enlace a `wa.me`, y se carga en un solo lugar, la constante `CANALES` al principio de `js/main.js`,
+armado por partes para que no quede escrito de corrido:
 
 ```js
 const CANALES = {
-  whatsapp: '5492254424691', // con código de país, sin "+" ni espacios
+  whatsapp: ['<código de país>', '<característica>', '<número en partes>'].join(''), // sin "+" ni espacios
   linkedin: 'https://www.linkedin.com/company/studio74dev/',
 };
 ```
+
+Los textos visibles dicen solo "WhatsApp" (portada) o "Abrir chat" (Contacto), y los `aria-label`
+tampoco nombran el número.
 
 Cada bloque con `data-canal="whatsapp"` recibe el enlace a `wa.me` con el mensaje de
 `MENSAJE_WHATSAPP` ("Hola studio74dev, vengo de la web y quiero consultar por", abierto para que
