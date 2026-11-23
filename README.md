@@ -136,8 +136,8 @@ py -m http.server 8800 --bind 127.0.0.1
 
 Y abrir `http://127.0.0.1:8800/?intro`.
 
-El servidor estático reproduce a GitHub Pages: el formulario sale por Web3Forms y el mail
-llega de verdad.
+El servidor estático reproduce lo que publica Cloudflare Pages: el formulario sale por
+Web3Forms y el mail llega de verdad.
 
 ## Formulario de contacto
 
@@ -179,18 +179,27 @@ porque las redes guardan la imagen vieja.
 
 ## Publicar
 
-El sitio se publica desde `main`. Para cambios grandes, la forma de trabajo es:
+Se publica en Cloudflare Pages (proyecto studio74dev) en cada merge a main; DNS en
+Cloudflare, cuenta studio74dev@gmail.com. El registro TXT google-site-verification no se
+borra (verifica Search Console).
+
+Para cambios grandes, la forma de trabajo es:
 
 1. Rama nueva, cambios y `git push`.
 2. Pull request contra `main` para que el equipo lo revise.
-3. Merge: GitHub Pages lo publica en uno o dos minutos (se ve en la pestaña **Actions**).
+3. Merge: Cloudflare Pages lo publica solo (el estado del deploy se ve en el panel de
+   Cloudflare, proyecto studio74dev).
+
+GitHub Pages está desactivado en este repo. El dominio ya no se configura con un archivo
+`CNAME`: se maneja desde Cloudflare.
 
 Dos cosas a tener en cuenta:
 
-- GitHub Pages manda `Cache-Control: max-age=600`, también para el HTML. Después de publicar
-  puede hacer falta un `Ctrl+Shift+R` para ver los cambios.
-- El CSS y el JS se piden con `?v=N`. **Subí ese número cada vez que los toques**, si no,
-  quien ya visitó el sitio va a seguir viendo la versión vieja por diez minutos.
+- El HTML sale con `Cache-Control: public, max-age=0, must-revalidate`: un cambio en
+  `index.html` se ve apenas termina el deploy.
+- El CSS, el JS y las imágenes salen con `max-age=14400` (cuatro horas) y se piden con
+  `?v=N`. **Subí ese número cada vez que los toques**, si no, quien ya visitó el sitio
+  va a seguir viendo la versión vieja hasta cuatro horas.
 
 ## Pendientes para una próxima versión
 
