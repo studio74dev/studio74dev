@@ -1,4 +1,4 @@
-# Studio 74 — sitio
+# studio74dev — sitio
 
 Sitio del estudio: **[studio74dev.com.ar](https://studio74dev.com.ar/)**
 
@@ -80,7 +80,7 @@ Los únicos canales de contacto para el público (URLs exactas):
 - Correo: `studio74dev@gmail.com`
 - Instagram: https://www.instagram.com/studio74dev/
 - LinkedIn: https://www.linkedin.com/company/studio74dev/
-- Facebook: https://www.facebook.com/people/Studio74Dev/61595921825522/
+- Facebook: https://www.facebook.com/studio74dev/
 - Sitio: https://studio74dev.com.ar/
 
 Aparecen en el índice a pantalla completa, en Contacto, en el pie, en `sameAs` del JSON-LD y en las

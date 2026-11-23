@@ -598,7 +598,7 @@
       const payload = new FormData();
       payload.append('access_key', WEB3FORMS_KEY);
       payload.append('subject', armarCorreo(data).subject);
-      payload.append('from_name', 'Studio 74 · Web');
+      payload.append('from_name', 'studio74dev · Web');
       payload.append('name', data.get('name') || '');
       payload.append('email', data.get('email') || '');
       payload.append('replyto', data.get('email') || '');
