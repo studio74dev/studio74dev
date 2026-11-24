@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   STUDIO 74 — STYLESHEET V10
+   STUDIO 74 — STYLESHEET V11
    Paleta: el logo en blanco y negro, con el punto en azul costa.
      Tinta #0B0B0C · Papel #F4F3EF · Señal (azul costa) #2F5BEA
    Acento de acción (solo botones de acción, --accion): A naranja boya #FF5A1F
@@ -21,9 +21,9 @@
 
    Cómo se mueve:
    - js/main.js calcula el avance de cada [data-escena] y lo deja en --p (0 a 1).
-     "pin": capítulos altos con una escena fija (sticky) que avanza con el scroll.
-     "entrada": el elemento entra en pantalla. "paso": lo atraviesa.
-     "recorrido": la línea del proceso.
+     "entrada": el elemento entra en pantalla (una sola vez, con IntersectionObserver).
+     "recorrido": la línea de los pasos de "Cómo trabajamos".
+     Ya no hay escenas fijas (sticky) ni giros 3D: la página fluye en una columna.
    - Todo lo animado vive bajo html.mov (hay JS y no hay reduced-motion).
      Sin esa clase la página se ve completa, quieta y en orden.
 ═══════════════════════════════════════════════════════ */

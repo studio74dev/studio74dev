@@ -10,7 +10,7 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 |---|---|
 | `index.html` | La landing completa (ver secciones abajo). Incluye los datos estructurados JSON-LD. |
 | `css/styles.css` | Todos los estilos. Paleta del logo y tokens por capítulo (ver "Paleta y capítulos"). |
-| `js/main.js` | Canales (WhatsApp y LinkedIn), intro de carga, índice, motor de scroll, teléfono de "Qué hacemos", botones magnéticos, pestañas del caso real y envío del formulario. |
+| `js/main.js` | Canales (WhatsApp y LinkedIn), intro de carga, tema, índice, motor de scroll, barra fija del celular, tachado de "¿Le pasa esto?", antes/después de Matemar, botones magnéticos, pestañas del caso real, visor y envío del formulario en 3 pasos. |
 | `404.html` | Página de error propia. Lleva los estilos en línea, así que no depende del CSS. |
 | `assets/og.png` | Imagen que se ve al compartir el link (1200×630). |
 | `assets/img/` | Capturas de Club El Progreso, solo en WebP. |
@@ -20,39 +20,74 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 
 ## Secciones de la landing
 
-En el orden de `index.html`. Todo el texto va en registro formal (usted o neutro, sin voseo).
-Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` o `senal`).
+En el orden de `index.html`. El texto va en registro formal (usted o neutro, sin voseo). Excepción
+decidida por el equipo: las acciones "Pedí tu diagnóstico gratis" van en vos/tu, tal como pidió el
+pedido original del rediseño.
 
-1. **Intro de carga** (`#intro`): líneas que se dibujan, el 74 trazándose, "STUDIO 74" letra por letra y un contador que sigue la carga real. Al llegar a 100 aparece **Entrar**; si nadie lo toca, entra sola. La pantalla se abre en dos y el logo vuela a la barra.
-2. **Barra**: fina, esmerilada y siempre visible. El isotipo (sin "STUDIO 74" al lado, para no repetir el 74), las secciones (en pantallas anchas, marcando la que se está leyendo), el botón de **tema claro/oscuro**, "Hablemos" (también en el celular) e **Índice**, que abre la navegación a pantalla completa. Toma el color del capítulo que tiene debajo. A la derecha, el **riel** de progreso: el trazo del 4 con el punto de la marca. Abajo a la derecha, entre la portada y Contacto, el **botón flotante de WhatsApp** (ver "Canales oficiales").
-3. **Portada** (`#inicio`, base): frase de valor centrada, con el 74 detrás, y las dos acciones. Al bajar, el texto se va, el 74 se enciende, los trazos del 7 y el 4 se separan y **el punto crece hasta cubrir la pantalla**: así se entra al capítulo siguiente.
-4. **Visión** (`#vision`, señal, azul): el manifiesto se enciende palabra por palabra con el scroll.
-5. **El problema** (`#problema`, base): los cinco problemas se deslizan en horizontal mientras se baja.
-6. **Bandas cruzadas**: dos cintas en diagonal, como los trazos del 7 y el 4, que corren con el scroll.
-7. **Qué hacemos** (`#servicios`, alt): un teléfono ilustrativo se arma a medida que se leen los tres pasos del paquete de entrada (página, Google Maps, WhatsApp). Debajo, el trabajo a medida en un mosaico de tarjetas. Los enlaces con `data-servicio` dejan marcado ese tipo en el formulario.
-8. **Caso real** (`#caso`, base): en pantallas anchas la ventana de Club El Progreso se apoya y se endereza; en el celular va suelta y la imagen se recorre con el dedo. Sus pestañas funcionan y **Ampliar** (o tocar la imagen) la abre a tamaño real en un visor (`<dialog>`).
-9. **Sin letra chica** (`#diferencia`, base): los compromisos concretos en un mosaico, con un trazo que se completa.
-10. **Proceso** (`#proceso`, alt): la línea se dibuja con el scroll y enciende cada paso.
-11. **El estudio** (`#estudio`, base): los cuatro desarrolladores full stack con su formación (Licenciatura en Sistemas y Técnico en Software).
-12. **Preguntas frecuentes** (`#preguntas`, alt).
-13. **Contacto** (`#contacto`, base): formulario simple con etiquetas visibles (nombre, correo, tipo de consulta y mensaje) y, al lado, los canales directos.
-14. **Pie** con redes y la marca a todo el ancho.
+Cada capítulo lleva su rótulo con número (`01`…`07`) y un `data-tema` que define su fondo: `base`,
+`alt` o `contra` (ver "Paleta, temas y capítulos"). Los ids `#inicio`, `#preguntas` y `#contacto`
+se conservan (los usa `404.html`); los demás son nuevos.
+
+1. **Intro de carga** (`#intro`): una mini historia de 2,2 s. Las consultas sueltas ("¿precio?",
+   "¿abren hoy?", "¿hacen envíos?", "¿siguen?") se ordenan en un pedido completo con ✓. Es decorativa
+   (`aria-hidden`, nada enfocable).
+2. **Barra** (fija arriba): el isotipo, los enlaces (Casos, Cómo trabajamos, Quiénes somos, Preguntas),
+   el botón de **tema claro/oscuro** y **Pedí tu diagnóstico gratis** (solo en pantallas de 760 px o
+   más; en el celular el CTA persistente es la barra inferior). Abajo, el **riel** de progreso e
+   **Índice**, que abre la navegación a pantalla completa con las 8 entradas de la landing.
+3. **Portada** (`#inicio`, base): título "Que ningún cliente se le escape.", una bajada, el botón
+   **Pedí tu diagnóstico gratis**, el enlace "Ver un caso real" y la línea de zona y presupuesto.
+   Todo entra en 390×844 sin desplazarse.
+4. **¿Le pasa esto?** (`#le-pasa`, contra, rótulo `01`): cuatro frases de dueños de comercios, en
+   tarjetas de una columna en el celular y dos columnas desde 760 px.
+5. **Qué resolvemos** (`#resolvemos`, base, rótulo `02`): cuatro soluciones, cada una con el dolor,
+   cómo se resuelve y el beneficio. Al bajar hasta cada una, su tarjeta y su dolor en "¿Le pasa esto?"
+   se tachan (sin movimiento reducido no se tacha nada). Cierra con el botón de diagnóstico y
+   "Presupuesto por escrito, sin cargo y sin compromiso."
+6. **Casos reales** (`#casos`, contra, rótulo `03`): **Matemar (Miramar)** con un deslizador
+   antes/después hecho en HTML y CSS (sin imágenes) y un testimonio pendiente, y **Club El Progreso**
+   con sus pestañas (Panel, Mapa de sombrillas, Recaudación) y **Ampliar**, que abre el visor
+   (`<dialog>`). Sin escena fija: en todos los anchos va en una columna.
+7. **Cómo trabajamos** (`#como-trabajamos`, base, rótulo `04`): tres pasos (Diagnóstico gratis,
+   Propuesta, Entrega) y, debajo, "Sin letra chica." con los cinco compromisos (el dominio es suyo,
+   presupuesto por escrito, atención en persona, respuesta en 24 horas y seguimiento después de la
+   entrega).
+8. **Quiénes somos** (`#quienes`, contra, rótulo `05`): la presentación del estudio y el equipo de
+   cuatro desarrolladores con su formación.
+9. **Preguntas frecuentes** (`#preguntas`, base, rótulo `06`): siete preguntas en `<details>`. Las
+   respuestas con `[TEXTO]` o `[REVISAR]` son pendientes de contenido.
+10. **Formulario de diagnóstico** (`#contacto`, contra, rótulo `07`): en tres pasos (ver "Formulario
+    de contacto"), con los canales directos al lado ("¿Prefiere escribirnos directo?").
+11. **Pie** (base) con la zona de servicio, redes y la marca.
+
+El trabajo a medida (sistemas, turnos y reservas, automatización, arreglos de sitios caídos) sigue en
+el JSON-LD, pero no se ve en la página (decisión del pedido).
+
+Hay una **barra fija inferior** solo en el celular (menos de 760 px): aparece al bajar de la portada,
+con el botón de diagnóstico y el WhatsApp, y se oculta al llegar a Contacto o con el índice abierto.
 
 ## Cosas a saber antes de tocar
 
 ### Intro de carga
 
-- Se muestra **una vez por sesión** (guarda `s74-intro` en `sessionStorage`) y **solo en pantallas de 760 px o más**: en el celular se entra directo a la portada. Para verla de nuevo (también en el celular): `?intro` en la URL.
+- Es la mini historia de 2,2 s de `#intro` (ver "Secciones de la landing"). Se muestra en **todos
+  los anchos** (el tráfico llega sobre todo desde el celular), **una vez por sesión** (guarda
+  `s74-intro` en `sessionStorage`). Para verla de nuevo: `?intro` en la URL.
+- Se saltea al instante con un toque o una tecla. La tecla no se consume: el comportamiento normal
+  sigue igual.
 - No aparece si el visitante tiene las animaciones reducidas en su dispositivo.
 - La activa el script del `<head>` poniendo la clase `con-intro` en `<html>`. **No uses `intro` como nombre de clase en `<html>`**: choca con el componente `.intro` (que arranca con `display: none`) y esconde toda la página.
-- Si algo falla, se cierra sola a los 8 segundos.
+- Termina con el final de su animación. Si algo falla, un respaldo la quita a los 2,6 s y una red de
+  seguridad a los 4 s.
 
 ### Paleta, temas y capítulos
 
-- El logo en blanco y negro con un solo color de acento: **tinta** `#0B0B0C`, **papel** `#F4F3EF` y **señal**, un azul costa `#2F5BEA` (más blanco y dos grises oscuros para las tarjetas). Sobre fondos oscuros, el texto de acento usa su versión clara `#8EA8FF`.
-- El acento vive en una sola variable (`--senal` en `styles.css`), con `--senal-claro` y `--sobre-senal` (texto encima). Para probar otro tono se cambian esas tres y se revisa el contraste.
+- El logo en blanco y negro con un solo color de marca: **tinta** `#0B0B0C`, **papel** `#F4F3EF` y **señal**, un azul costa `#2F5BEA` (más blanco y dos grises oscuros para las tarjetas). Sobre fondos oscuros, el texto de acento usa su versión clara `#8EA8FF`. El azul queda para enlaces, foco, marca y rótulos; no para botones de acción.
+- **Acento de acción (A/B)**: los botones de acción usan `--accion`, que puede ser **A** naranja boya `#FF5A1F` (default) o **B** amarillo arena `#FFC738`. Se elige con `?acento=a` o `?acento=b` en la URL (cualquier otro valor cae en A); el script del `<head>` pone `data-acento` en `<html>`. El texto del botón es tinta `#0B0B0C` (6,3:1 con A, 12,5:1 con B; el blanco no llega a 4,5:1). El borde del botón lo da `--boton-borde`: tinta en fondos claros y transparente en oscuros, porque el amarillo casi no se distingue del papel (1,4:1).
+- **Tokens del botón**: `--boton-fondo` y `--boton-texto` salen de `--accion` y `--sobre-accion`. Las clases `.btn--accion` (y `.nav__cta`, `#formSeguir`, `.barra-cta__btn`) los usan. `btn--senal` ya no existe.
+- El azul de marca vive en `--senal` (con `--senal-claro` y `--sobre-senal`). Para probar otro tono se cambian esas tres y se revisa el contraste. `--acento` es el texto de acento azul (no confundir con `--accion`).
 - **Tema claro y oscuro**: `html[data-theme="claro|oscuro"]`. Lo pone el script del `<head>` antes del primer pintado: el que eligió el visitante con el botón de la barra (guardado en `localStorage` como `s74-tema`) o, si nunca lo tocó, el del sistema.
-- Cada capítulo declara `data-tema="base|alt|senal"` y eso redefine `--fondo`, `--texto`, `--suave`, `--superficie`, `--boton-fondo`… según el tema. `base` y `alt` cambian con el tema; `senal` es verde en los dos. Para un capítulo nuevo alcanza con ponerle `class="capitulo"` y su `data-tema`.
+- Cada capítulo declara `data-tema="base|alt|contra|senal"` y eso redefine `--fondo`, `--texto`, `--suave`, `--superficie`, `--boton-fondo`… según el tema. `base` y `alt` cambian con el tema. `contra` invierte el tema del capítulo (papel en oscuro, tinta en claro) y alterna con los anteriores: es lo que da el ritmo claro/oscuro de la landing. `senal` es azul en los dos. Para un capítulo nuevo alcanza con ponerle `class="capitulo"` y su `data-tema`.
 - Contrastes: blanco sobre el azul 5,5:1, azul sobre papel 5:1, azul claro sobre tinta 8,6:1. Con `prefers-contrast: more` el texto secundario pasa a color pleno.
 
 ### Tipografía
@@ -64,13 +99,12 @@ Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` 
 
 ### Animaciones de scroll
 
-- `js/main.js` le da a cada `[data-escena]` una variable `--p` de 0 a 1, y el CSS la usa con `calc()`:
-  - `pin`: capítulos altos con una escena fija (`sticky`), como la portada, la visión, el problema y el caso.
-  - `paso`: el elemento atraviesa la pantalla (las bandas). `recorrido`: la línea del proceso.
-- `entrada` no usa `--p`: un `IntersectionObserver` le pone la clase `.visto` **una sola vez** cuando aparece y el CSS hace la transición. Así las tarjetas entran fluidas aunque el dedo vaya rápido o lento.
-- El motor lee todas las posiciones primero y escribe después (sin forzar el diseño varias veces por cuadro), y solo toca el estilo de lo que cambió.
-- Todo lo animado vive bajo `html.mov`, que pone el `<head>` solo si hay JavaScript y el dispositivo no pide movimiento reducido. **Sin `mov`, la página se ve completa y quieta**: es la versión accesible, no hay que mantener otra.
-- Para cambiar cuánto dura una escena fija, se cambia su `--alto` en `styles.css`. La del problema la calcula el JS según el ancho de las tarjetas.
+- La landing ya no tiene escenas fijas ni giros 3D. Lo que se mueve:
+  - `entrada` (`data-escena="entrada"`): tarjetas, dolores, soluciones, casos, compromisos y miembros del equipo. Un `IntersectionObserver` le pone la clase `.visto` **una sola vez** cuando aparece y el CSS hace la transición (opacidad y `translateY`, hasta 400 ms).
+  - `recorrido`: la línea de los pasos de "Cómo trabajamos".
+  - El tachado de "¿Le pasa esto?" (`.resuelto`), la barra fija y el deslizador de Matemar.
+- **`html.revelar`**: `js/main.js` pone esta clase al arrancar. Las entradas solo esconden texto si ese script corrió (las reglas van bajo `.mov.revelar`). Si el JS no carga, todo se ve.
+- Todo lo animado vive bajo `html.mov`, que pone el `<head>` solo si hay JavaScript y el dispositivo no pide movimiento reducido. **Sin `mov`, la página se ve completa y quieta**: es la versión accesible, no hay que mantener otra. Con `prefers-reduced-motion`, la intro, el tachado y las transiciones de la barra no se muestran.
 - Se anima solo `transform`, `opacity` y `clip-path`, para que vaya fluido en celulares. En el celular la barra va sin desenfoque (`backdrop-filter` se recalcula en cada cuadro).
 
 ### Canales oficiales
@@ -104,20 +138,24 @@ tampoco nombran el número.
 Cada bloque con `data-canal="whatsapp"` recibe el enlace a `wa.me` con el mensaje de
 `MENSAJE_WHATSAPP` ("Hola studio74dev, vengo de la web y quiero consultar por", abierto para que
 el visitante lo termine) y recién ahí se muestra. **Sin JavaScript quedan ocultos**: nunca hay un
-enlace roto. Están en la portada (debajo de las dos acciones), en Contacto (primer canal), en el pie
-y en el **botón flotante**:
+enlace roto. Están en Contacto (primer canal), en el pie y en los dos lugares flotantes, que
+dependen del ancho:
 
-- Abajo a la derecha, alineado con el riel. En el celular es un círculo de 56 px; desde 1024 px
-  suma el texto "WhatsApp".
-- Usa el azul de los botones (`--boton-fondo`), no el verde de WhatsApp: el sitio tiene un solo
-  acento. Toma el `data-tema` del capítulo que tiene debajo, así que sobre Visión se invierte a blanco.
-- Aparece al dejar la portada (que ya tiene sus acciones) y se va al llegar a Contacto (que ya
-  tiene WhatsApp) y mientras el índice está abierto. Lo decide el motor de scroll de `js/main.js`.
-- Oculto usa `visibility: hidden`, así no recibe foco con el teclado.
+- **Celular (menos de 760 px)**: la **barra fija inferior** (`#barraCta`) tiene el botón de
+  diagnóstico y, a la derecha, un ícono de WhatsApp de 52 px. El flotante no se muestra.
+  Respeta `env(safe-area-inset-bottom)` y reserva espacio al pie para no tapar contenido.
+- **Pantallas de 760 px o más**: el **botón flotante** (`#waFlotante`), abajo a la derecha, con el
+  texto "WhatsApp". La barra fija no existe.
+- En ambos casos usa el azul de marca (`--senal`), no el verde de WhatsApp: el sitio tiene un solo
+  color de marca. Toma el `data-tema` del capítulo que tiene debajo.
+- La barra fija aparece al bajar de la portada y se va al llegar a Contacto o con el índice abierto.
+  El flotante aparece al dejar la portada y se va al llegar a Contacto o con el índice abierto. Lo
+  decide el motor de scroll de `js/main.js`.
+- Oculto usa `visibility: hidden` o `hidden`, así no recibe foco con el teclado.
 
 ### Animaciones
 
-- Los elementos con `data-reveal` aparecen al hacer scroll. Sin JavaScript se ven igual.
+- Las entradas de scroll (`data-escena="entrada"`) aparecen al bajar. Sin JavaScript se ven igual.
 - Todo respeta `prefers-reduced-motion`.
 
 ### SEO
@@ -140,6 +178,29 @@ El servidor estático reproduce lo que publica Cloudflare Pages: el formulario s
 Web3Forms y el mail llega de verdad.
 
 ## Formulario de contacto
+
+El formulario (`#contactForm`, en `#contacto`) es de **diagnóstico en 3 pasos**. Con JavaScript, la
+página muestra un paso por vez, con "Paso n de 3" (anunciado con `aria-live`), la barra de avance,
+**Volver** y **Seguir**. Sin JavaScript, los tres bloques quedan en una sola página, en orden, con el
+botón **Pedir mi diagnóstico** al final.
+
+1. **¿Qué le está costando hoy?** Chips de opción múltiple (al menos uno): Consultas repetidas,
+   Pedidos desordenados, No aparezco en Google, No doy abasto en temporada, Otra.
+2. **Su negocio**: Rubro (texto, obligatorio), Localidad (lista de las 14 zonas de la landing más
+   "Otra", obligatoria) y, opcional, "¿Cómo atiende hoy?" (Solo en el local, Instagram, WhatsApp,
+   Ya tengo web).
+3. **¿Cómo lo contactamos?**: "Para cuándo" (obligatorio: Antes de la temporada, Este mes, Sin apuro),
+   Nombre (obligatorio), WhatsApp y Correo. Con uno de los dos alcanza; si faltan los dos, el
+   formulario avisa y no envía.
+
+"Seguir" valida solo el paso actual. "Volver" conserva lo cargado. En los pasos 1 y 2, Enter en un campo de texto
+equivale a "Seguir" y no envía. Tras un envío exitoso, el formulario vuelve al paso 1 y el botón
+muestra "Pedido enviado" con la nota "Recibimos su pedido. Le respondemos dentro de las 24 horas."
+Si el envío falla, se queda en el paso 3 con el aviso de reintento.
+
+El correo que llega tiene asunto `Diagnóstico desde la web — <rubro> (<localidad>)` y una línea por
+campo: Nombre, WhatsApp, Correo, Qué le está costando, Rubro, Localidad, Cómo atiende hoy y Para
+cuándo. Si hay correo, se responde a él (`replyto`).
 
 El envío está en `js/main.js`:
 
@@ -167,7 +228,7 @@ Nunca se muestra un "enviado" que no salió.
 **Anti-spam**: dos trampas invisibles que una persona no completa. El campo `company`
 (honeypot propio) y la casilla `botcheck` (la de Web3Forms, que además se manda en el
 envío y el servicio la revisa). Si alguna viene completa, el formulario simula el éxito
-y no envía nada. Los largos máximos (nombre 80, correo 120, mensaje 2000) están como
+y no envía nada. Los largos máximos (nombre 80, correo 120, rubro 80, WhatsApp 30) están como
 `maxlength` en `index.html` y se validan también en `js/main.js` antes de enviar.
 
 ## Imagen para compartir
