@@ -176,17 +176,6 @@
     if (e.key === 'Escape') cerrarIndice(true);
   });
 
-  /* ── Visión: el manifiesto, palabra por palabra ──── */
-  /* Cada palabra queda en un <span class="w"> con su índice; el CSS la
-     enciende cuando el avance del capítulo llega a ella. */
-  document.querySelectorAll('[data-palabras]').forEach((p) => {
-    const palabras = p.textContent.trim().split(/\s+/);
-    // El texto completo queda para lectores de pantalla; las palabras sueltas solo se ven
-    p.innerHTML = `<span class="visually-hidden">${palabras.join(' ')}</span>` +
-      palabras.map((w, i) => `<span class="w" style="--i:${i}" aria-hidden="true">${w}</span>`).join(' ');
-    p.style.setProperty('--n', palabras.length);
-  });
-
   /* ── Motor de scroll ─────────────────────────────── */
   /* Cada [data-escena] recibe --p entre 0 y 1 según el tipo:
      - pin: el capítulo es más alto que la pantalla; 0 cuando su borde de
@@ -195,14 +184,11 @@
        y el CSS hace la transición (fluida aunque el dedo vaya rápido o lento).
      - paso: 0 cuando asoma por abajo, 1 cuando se fue por arriba.
      - recorrido: la línea del proceso, que avanza con el centro de la pantalla.
-     También pinta el riel, el punto de la portada, el color de la barra y
-     marca en la barra la sección que se está leyendo. */
+     También pinta el riel, el color de la barra y marca en la barra la
+     sección que se está leyendo. */
   const escenas = Array.from(document.querySelectorAll('[data-escena]'));
   const capitulos = Array.from(document.querySelectorAll('.capitulo[data-tema]'));
   const riel = document.querySelector('.riel');
-  const heroPunto = document.getElementById('heroPunto');
-  const problema = document.querySelector('.problema');
-  const pista = document.getElementById('problemaPista');
   const linksBarra = Array.from(document.querySelectorAll('.nav__links a'));
   const waFlotante = document.getElementById('waFlotante');
   const iPortada = capitulos.findIndex((c) => c.id === 'inicio');
@@ -210,7 +196,6 @@
   const clamp = (v) => Math.min(1, Math.max(0, v));
   const continuas = escenas.filter((el) => el.dataset.escena !== 'entrada');
   let entradas = escenas.filter((el) => el.dataset.escena === 'entrada');
-  const indiceHero = continuas.findIndex((el) => el.contains(heroPunto));
   let altoBarra = header.offsetHeight;
 
   const mostrar = (el) => el.classList.add('visto');
@@ -230,19 +215,6 @@
 
   const medir = () => {
     altoBarra = header.offsetHeight;
-    // Pista horizontal: lo que sobra a la derecha es lo que hay que recorrer
-    if (problema && pista) {
-      const sobra = Math.max(0, pista.scrollWidth - window.innerWidth);
-      problema.style.setProperty('--distancia', `${sobra}px`);
-      problema.style.setProperty('--alto', `calc(100svh + ${sobra}px)`);
-    }
-    // Punto de la portada: escala necesaria para cubrir toda la pantalla
-    if (heroPunto) {
-      heroPunto.style.removeProperty('--escala');
-      ultimos.delete(heroPunto);
-      const lado = heroPunto.getBoundingClientRect().width || 1;
-      heroPunto.dataset.cubrir = String((Math.hypot(window.innerWidth, window.innerHeight) * 2.2) / lado);
-    }
   };
 
   let pendiente = false;
@@ -285,25 +257,10 @@
       entradas = [];
     }
 
-    // Portada: el punto crece en la segunda mitad del recorrido
-    let escala = 1;
-    if (heroPunto && mov && indiceHero >= 0) {
-      const t = clamp((valores[indiceHero] - 0.4) / 0.6);
-      const cubrir = parseFloat(heroPunto.dataset.cubrir) || 60;
-      escala = 1 + (cubrir - 1) * t * t * t;
-      const e = escala.toFixed(3);
-      if (ultimos.get(heroPunto) !== e) {
-        ultimos.set(heroPunto, e);
-        heroPunto.style.setProperty('--escala', e);
-      }
-    }
-
     // Barra y riel: toman el color del capítulo que tienen debajo
     const bajoBarra = altoBarra / 2;
     const actual = capitulos.find((c, i) => rectsCap[i].top <= bajoBarra && rectsCap[i].bottom > bajoBarra);
-    // Mientras el punto de la portada cubre la pantalla, ya es señal
-    const cubierto = escala > 20;
-    const temaDe = (c) => (!c ? 'base' : c.id === 'inicio' && cubierto ? 'senal' : c.dataset.tema);
+    const temaDe = (c) => (c ? c.dataset.tema : 'base');
     const temaBarra = temaDe(actual);
     if (menuBoton.getAttribute('aria-expanded') !== 'true' && header.dataset.tema !== temaBarra) header.dataset.tema = temaBarra;
 
@@ -350,21 +307,6 @@
   window.addEventListener('resize', () => { medir(); pedir(); });
   window.addEventListener('load', () => { medir(); pedir(); });
   if (document.fonts) document.fonts.ready.then(() => { medir(); pedir(); });
-
-  /* ── Qué hacemos: el teléfono sigue al paso que se lee ── */
-  const telefono = document.getElementById('telefono');
-  const pasosRelato = document.querySelectorAll('.relato__paso');
-  if (telefono && pasosRelato.length) {
-    const activar = (paso) => {
-      pasosRelato.forEach((p) => p.classList.toggle('is-activo', p === paso));
-      telefono.dataset.paso = paso.dataset.paso;
-    };
-    activar(pasosRelato[0]);
-    const observador = new IntersectionObserver((entradas) => {
-      entradas.forEach((e) => { if (e.isIntersecting) activar(e.target); });
-    }, { rootMargin: '-45% 0px -45% 0px' });
-    pasosRelato.forEach((p) => observador.observe(p));
-  }
 
   /* ── Botones magnéticos ──────────────────────────── */
   /* Siguen un poco al puntero; solo con mouse y con movimiento permitido. */

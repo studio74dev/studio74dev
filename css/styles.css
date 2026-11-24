@@ -74,7 +74,7 @@
   --ease-io: cubic-bezier(0.7, 0, 0.2, 1);
   --p: 1;
 
-  /* Fondos de los dos tipos de capítulo (las bandas cruzadas los usan juntos) */
+  /* Fondos de los tipos de capítulo base y alternativo */
   --fondo-base: var(--tinta);
   --fondo-alt: #141416;
 
@@ -259,8 +259,7 @@ b {
 .titulo,
 .subtitulo,
 .contacto__titulo,
-.indice__lista a,
-.banda {
+.indice__lista a {
   font-family: var(--font);
   font-stretch: 125%;
   font-weight: 900;
@@ -273,7 +272,6 @@ b {
 
 /* Íconos de línea con el mismo trazo */
 .btn svg,
-.medida__fila svg,
 .canal svg,
 .estudio__github svg,
 .nav__tema svg {
@@ -538,7 +536,7 @@ b {
 }
 
 .nav__cta {
-  display: inline-flex;
+  display: none;
   align-items: center;
   min-height: 32px;
   padding: 0 1rem;
@@ -567,7 +565,7 @@ b {
   cursor: pointer;
 }
 
-/* En el celular el índice queda como ícono, para que entre "Hablemos" */
+/* En el celular el índice queda como ícono, para dejar lugar al resto de la barra */
 .nav__menu-texto {
   display: none;
 }
@@ -671,329 +669,161 @@ b {
 }
 
 /* ── 00. Portada ─────────────────────────────────── */
-/* El contenido se centra con márgenes automáticos: si no entra en la
-   pantalla, crece hacia abajo y nunca queda debajo de la barra. */
-.hero__escena {
-  position: relative;
-  min-height: 100svh;
+/* Estática y pensada para el celular: título, bajada, botón y línea de
+   confianza entran en la primera pantalla. El contenido se centra con márgenes
+   automáticos: si no entra, crece hacia abajo y nunca queda bajo la barra. */
+.hero {
   display: flex;
-  flex-direction: column;
-  padding: calc(var(--header-height) + 1.5rem) 0 4.5rem;
-  overflow: hidden;
-  text-align: center;
-}
-
-/* El 74 gigante, centrado detrás del título */
-.hero__marca {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: min(84vw, 70svh);
-  aspect-ratio: 1;
-  transform: translate(-50%, -46%);
-  pointer-events: none;
-}
-
-.hero__marca svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.hero__marca path {
-  stroke: var(--trazo);
-  stroke-linecap: butt;
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-}
-
-.hero__siete,
-.hero__cuatro {
-  opacity: 0.1;
-}
-
-.hero__punto {
-  position: absolute;
-  left: 85%;
-  top: 86%;
-  width: 8%;
-  height: 8%;
-  z-index: 1;
-  background: var(--senal);
-  transform: scale(var(--escala, 1));
-  will-change: transform;
+  min-height: 100svh;
+  padding: calc(var(--header-height) + 1.25rem) 0 2rem;
 }
 
 .hero__contenido {
-  position: relative;
-  z-index: 2;
   width: var(--ancho);
   margin: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 
 .hero__title {
-  margin-top: 1.25rem;
-  font-size: clamp(2rem, min(8.6vw, 8.4svh), 6.4rem);
-  line-height: 0.9;
-}
-
-.linea {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.04em;
-}
-
-.linea > span {
-  display: inline-block;
-}
-
-.linea--suave {
-  color: var(--suave);
+  font-size: clamp(1.9rem, 9.2vw, 5rem);
+  line-height: 0.95;
 }
 
 .hero__lead {
-  margin-top: 1.75rem;
-  max-width: 42ch;
-  font-size: clamp(1.08rem, 1.6vw, 1.3rem);
+  margin-top: 1.25rem;
+  max-width: 44ch;
+  font-size: 1rem;
+  line-height: 1.5;
   color: var(--suave);
   text-wrap: pretty;
 }
 
 .hero__acciones {
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.75rem;
+  flex-direction: column;
+  align-items: stretch;
   width: 100%;
+  max-width: 22rem;
 }
 
-.hero__acciones .btn {
-  flex: 1 1 15rem;
-}
-
-.hero__coordenadas,
-.hero__bajar {
-  position: absolute;
-  bottom: 1.25rem;
-  z-index: 2;
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--suave);
-}
-
-.hero__coordenadas {
-  display: none;
-  right: max(1rem, calc((100% - 1180px) / 2));
-  text-align: right;
-}
-
-.hero__bajar {
-  left: 50%;
-  display: flex;
-  flex-direction: column;
+.hero__enlace {
+  display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  transform: translateX(-50%);
-  white-space: nowrap;
+  justify-content: center;
+  min-height: 48px;
+  font-weight: 600;
+  color: var(--texto);
+  text-underline-offset: 0.3em;
+  text-decoration-thickness: 1px;
 }
 
-.hero__bajar span {
-  position: relative;
-  order: 2;
-  width: 1px;
-  height: 28px;
-  overflow: hidden;
-  background: var(--linea);
-}
-
-.hero__bajar span::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--acento);
-  transform: translateY(-100%);
-}
-
-/* En pantallas bajas el aviso no entra junto a los botones */
-@media (max-height: 720px) {
-  .hero__bajar {
-    display: none;
-  }
-}
-
-/* ── 01. Visión ──────────────────────────────────── */
-.vision__escena {
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: safe center;
-  gap: 2.25rem;
-  width: var(--ancho);
-  margin-inline: auto;
-  padding: calc(var(--header-height) + 2rem) 0 4rem;
-  text-align: center;
-}
-
-.vision__texto {
-  max-width: 22ch;
-  font-size: clamp(1.9rem, min(5vw, 7svh), 4.6rem);
-  font-stretch: 112%;
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-}
-
-.vision__firma {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-/* ── 02. El problema ─────────────────────────────── */
-.problema__escena {
-  display: flex;
-  flex-direction: column;
-  justify-content: safe center;
-  gap: clamp(2rem, 5vh, 3.5rem);
-  min-height: 100svh;
-  padding: calc(var(--header-height) + 2rem) 0 3rem;
-  overflow: hidden;
-}
-
-.problema__cabeza {
-  width: var(--ancho);
-  margin-inline: auto;
-}
-
-.problema__cabeza .titulo {
-  font-size: clamp(2rem, min(5.2vw, 8svh), 4.6rem);
-}
-
-.problema__cabeza .bajada {
-  margin-top: 1.25rem;
-}
-
-.problema__ventana {
-  position: relative;
-}
-
-.problema__pista {
-  display: flex;
-  gap: 1rem;
-  padding: 0.25rem max(1rem, calc((100% - 1180px) / 2)) 1.5rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-}
-
-.sintoma {
-  flex: 0 0 min(380px, 80vw);
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  min-height: min(320px, 40svh);
-  padding: 2rem;
-  border-radius: var(--radio);
-  background: var(--superficie);
-  transition: transform 0.4s var(--ease);
-}
-
-.sintoma__n {
-  font-stretch: 125%;
-  font-weight: 900;
-  font-size: 3rem;
-  line-height: 1;
+.hero__enlace:hover {
   color: var(--acento);
 }
 
-.sintoma__tipo {
-  margin-top: auto;
-  padding-top: 2rem;
+.hero__confianza {
+  margin-top: 0.75rem;
+  max-width: 34ch;
   font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  letter-spacing: 0.03em;
   color: var(--suave);
 }
 
-.sintoma__texto {
-  margin-top: 0.6rem;
-  font-size: 1.25rem;
-  font-weight: 600;
+@media (min-width: 760px) {
+  .hero__title {
+    max-width: 16ch;
+  }
+
+  .hero__lead {
+    margin-top: 1.75rem;
+    font-size: 1.25rem;
+  }
+
+  .hero__acciones {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1.75rem;
+    margin-top: 2.25rem;
+    max-width: none;
+    width: auto;
+  }
+
+  .hero__confianza {
+    margin-top: 1.5rem;
+    font-size: 0.8rem;
+    max-width: none;
+  }
+}
+
+/* ── 01. ¿Le pasa esto? ──────────────────────────── */
+.le-pasa {
+  padding-block: clamp(4rem, 10vw, 7rem);
+}
+
+.dolores {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  display: grid;
+  gap: 1rem;
+}
+
+.dolor {
+  display: flex;
+  align-items: center;
+  min-height: 7rem;
+  padding: 1.5rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  box-shadow: inset 0 0 0 1px var(--linea);
+}
+
+.dolor__frase {
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 650;
   line-height: 1.3;
   letter-spacing: -0.015em;
+  text-wrap: pretty;
 }
 
-.problema__barra {
-  display: block;
-  width: min(320px, 60vw);
-  height: 3px;
-  margin: 0 auto;
-  border-radius: 3px;
-  background: var(--linea);
+@media (min-width: 760px) {
+  .dolores {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dolor {
+    min-height: 9rem;
+    padding: 2rem;
+  }
 }
 
-/* ── Bandas cruzadas ─────────────────────────────── */
-.bandas {
-  position: relative;
-  height: clamp(220px, 34vw, 360px);
-  overflow: hidden;
-  background: linear-gradient(var(--fondo-base) 50%, var(--fondo-alt) 50%);
+/* ── 02. Qué resolvemos ──────────────────────────── */
+.resolvemos {
+  padding-block: clamp(4rem, 10vw, 7rem);
 }
 
-.banda {
-  position: absolute;
-  left: -10%;
-  right: -10%;
-  top: 50%;
-  padding: 0.9rem 0;
-  font-size: clamp(1.2rem, 2.8vw, 2.2rem);
-  line-height: 1.1;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-.banda span {
-  display: inline-block;
-}
-
-.banda--senal {
-  z-index: 2;
-  background: var(--senal);
-  color: var(--sobre-senal);
-  transform: translateY(-50%) rotate(-6deg);
-}
-
-.banda--papel {
-  background: var(--tinta);
-  color: var(--papel);
-  transform: translateY(-50%) rotate(5deg);
-}
-
-[data-theme='oscuro'] .banda--papel {
-  background: var(--papel);
-  color: var(--tinta);
-}
-
-/* ── 03. Qué hacemos ─────────────────────────────── */
-.servicios {
-  padding-block: clamp(5rem, 12vw, 9rem);
-}
-
-.relato {
-  margin-top: clamp(3rem, 7vw, 5rem);
+.soluciones {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
   display: grid;
+  gap: 1rem;
 }
 
-.relato__rotulo {
+.solucion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.5rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  box-shadow: inset 0 0 0 1px var(--linea);
+}
+
+.solucion__dolor {
   font-family: var(--mono);
   font-size: 0.75rem;
   letter-spacing: 0.08em;
@@ -1001,383 +831,187 @@ b {
   color: var(--suave);
 }
 
-/* Celular: el teléfono queda arriba y los pasos pasan debajo */
-.relato__fijo {
-  position: sticky;
-  top: var(--header-height);
-  z-index: 2;
-  order: -1;
+.solucion__como {
+  font-size: 1.05rem;
+  color: var(--suave);
+  text-wrap: pretty;
+}
+
+.solucion__beneficio {
+  margin-top: auto;
+  padding-top: 0.5rem;
+  font-size: clamp(1.2rem, 2.2vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.solucion__beneficio b {
+  font-weight: 750;
+}
+
+/* Cierre de sección: botón de acción y una línea que quita el riesgo */
+.cierre {
+  margin-top: clamp(2.25rem, 6vw, 3.5rem);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem 0;
-  background: var(--fondo);
-  box-shadow: 0 12px 16px -4px var(--fondo);
+  gap: 0.9rem;
+  text-align: center;
 }
 
-.relato__nota {
-  margin-top: 0.75rem;
+.cierre .btn {
+  width: 100%;
+  max-width: 22rem;
+}
+
+.confianza {
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--suave);
+}
+
+@media (min-width: 760px) {
+  .soluciones {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .solucion {
+    padding: 2rem;
+  }
+
+  .cierre .btn {
+    width: auto;
+    max-width: none;
+  }
+}
+
+/* ── 03. Casos reales ────────────────────────────── */
+.casos {
+  padding-block: clamp(4rem, 10vw, 7rem);
+}
+
+.caso {
+  margin-top: clamp(2.5rem, 7vw, 4.5rem);
+}
+
+.caso__nombre {
+  font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  text-align: center;
+}
+
+.caso__texto {
+  max-width: 54ch;
+  margin: 1rem auto 0;
+  color: var(--suave);
+  text-wrap: pretty;
+}
+
+.caso__texto b {
+  color: var(--texto);
+}
+
+.caso > .bajada {
+  margin: 1rem auto 1.75rem;
+  text-align: center;
+}
+
+/* Antes y después de Matemar: dos paneles hechos en HTML y CSS, sin imágenes */
+.comparar {
+  position: relative;
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.comparar__antes,
+.comparar__despues {
+  position: relative;
+  min-height: 14rem;
+  padding: 3rem 1.25rem 1.25rem;
+  border-radius: var(--radio-s);
+  background: var(--superficie);
+  box-shadow: inset 0 0 0 1px var(--linea);
+}
+
+.comparar__rotulo {
+  position: absolute;
+  top: 1rem;
+  left: 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--suave);
+}
+
+.burbujas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.burbujas li {
+  padding: 0.6rem 1rem;
+  border-radius: 1.2rem 1.2rem 1.2rem 0.3rem;
+  background: var(--fondo);
+  box-shadow: inset 0 0 0 1px var(--linea-fuerte);
+  font-size: 1rem;
+}
+
+.burbujas li:nth-child(even) {
+  border-radius: 1.2rem 1.2rem 0.3rem 1.2rem;
+  margin-left: auto;
+}
+
+.pedido {
+  display: grid;
+  gap: 0.5rem;
+  padding: 1.25rem;
+  border-radius: var(--radio-s);
+  background: var(--fondo);
+  box-shadow: inset 0 0 0 1px var(--linea-fuerte);
+}
+
+.pedido__titulo {
+  font-weight: 700;
+  font-size: 1.15rem;
+}
+
+.pedido__items {
+  color: var(--suave);
+}
+
+.pedido__listo {
+  margin-top: 0.25rem;
+  font-weight: 650;
+  color: var(--acento);
+}
+
+.comparar__nota {
+  grid-column: 1 / -1;
+  font-family: var(--mono);
+  font-size: 0.72rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--suave);
 }
 
-.relato__paso {
-  min-height: 62svh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-block: 2rem;
-  transition: opacity 0.5s var(--ease);
+.testimonio {
+  max-width: 54ch;
+  margin: 1.75rem auto 0;
+  padding-left: 1.1rem;
+  border-left: 3px solid var(--linea-fuerte);
+  font-size: 1.1rem;
+  line-height: 1.45;
 }
 
-.relato__n {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--suave);
-}
-
-.relato__paso h3 {
-  margin-top: 0.75rem;
-  font-size: clamp(2rem, 4.4vw, 3.6rem);
-  font-weight: 800;
-  letter-spacing: -0.035em;
-}
-
-.relato__paso p {
-  margin-top: 1rem;
-  max-width: 40ch;
-  font-size: clamp(1.05rem, 1.5vw, 1.2rem);
-  color: var(--suave);
-}
-
-.relato__paso .btn {
-  align-self: flex-start;
-  margin-top: 2rem;
-}
-
-/* Teléfono ilustrativo */
-.telefono {
-  width: min(176px, 44vw);
-  aspect-ratio: 9 / 18.5;
-  padding: 9px;
-  border-radius: 38px;
-  background: var(--tinta);
-  box-shadow: 0 40px 80px -30px rgba(11, 11, 12, 0.5), inset 0 0 0 1.5px rgba(244, 243, 239, 0.14);
-}
-
-.telefono__pantalla {
-  position: relative;
-  height: 100%;
-  overflow: hidden;
-  border-radius: 30px;
-  background: #FFFFFF;
-  color: var(--tinta);
-  font-size: 10px;
-  line-height: 1.3;
-}
-
-.tel-web {
-  padding: 10px;
-}
-
-.tel-web__barra {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 8px;
-  border-radius: 999px;
-  background: var(--papel);
-  font-family: var(--mono);
-  font-size: 0.82em;
-  color: rgba(11, 11, 12, 0.7);
-}
-
-.tel-web__barra i {
-  width: 6px;
-  height: 6px;
-  background: var(--senal);
-  box-shadow: 0 0 0 1px var(--tinta);
-}
-
-.tel-web__hero {
-  margin-top: 10px;
-  display: grid;
-  gap: 4px;
-  padding: 26px 12px 14px;
-  border-radius: 12px;
-  background: var(--tinta);
-  color: var(--papel);
-}
-
-.tel-web__hero b {
-  font-size: 1.5em;
-  font-stretch: 110%;
-  font-weight: 900;
-  text-transform: uppercase;
-  line-height: 1;
-}
-
-.tel-web__hero span {
-  color: var(--senal-claro);
-  font-family: var(--mono);
-  font-size: 0.85em;
-}
-
-.tel-web__chips {
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.tel-web__chips span {
-  padding: 3px 7px;
-  border-radius: 999px;
-  box-shadow: inset 0 0 0 1px rgba(11, 11, 12, 0.2);
-  font-size: 0.9em;
-}
-
-.tel-web__lista {
-  margin-top: 12px;
-  display: grid;
-}
-
-.tel-web__lista span {
-  display: flex;
-  justify-content: space-between;
-  padding: 6px 0;
-  border-top: 1px solid rgba(11, 11, 12, 0.1);
-}
-
-.tel-web__lista b {
-  font-weight: 600;
-}
-
-.tel-web__lineas {
-  margin-top: 12px;
-  display: grid;
-  gap: 6px;
-}
-
-.tel-web__lineas i {
-  height: 6px;
-  border-radius: 3px;
-  background: var(--papel);
-}
-
-.tel-web__lineas i:nth-child(2) {
-  width: 82%;
-}
-
-.tel-web__lineas i:nth-child(3) {
-  width: 64%;
-}
-
-.tel-mapa,
-.tel-wa {
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
-  transition: transform 0.7s var(--ease), opacity 0.5s var(--ease);
-}
-
-.tel-mapa {
-  overflow: hidden;
-  border-radius: 14px;
-  background: #FFFFFF;
-  box-shadow: 0 -10px 30px -12px rgba(11, 11, 12, 0.35), inset 0 0 0 1px rgba(11, 11, 12, 0.1);
-  transform: translateY(125%);
-}
-
-.tel-mapa__lienzo {
-  position: relative;
-  height: 96px;
-  overflow: hidden;
-  background:
-    repeating-linear-gradient(0deg, transparent 0 15px, rgba(11, 11, 12, 0.06) 15px 16px),
-    repeating-linear-gradient(90deg, transparent 0 15px, rgba(11, 11, 12, 0.06) 15px 16px),
-    var(--papel);
-}
-
-/* La costa: el trazo diagonal del 7 */
-.tel-mapa__costa {
-  position: absolute;
-  left: 46%;
-  top: -20%;
-  width: 70%;
-  height: 160%;
-  background: rgba(11, 11, 12, 0.08);
-  transform: skewX(-26deg);
-}
-
-.tel-mapa__pin {
-  position: absolute;
-  left: 38%;
-  top: 40%;
-  width: 14px;
-  height: 14px;
-  background: var(--senal);
-  box-shadow: 0 0 0 2px var(--tinta);
-  opacity: 0;
-  transform: translateY(-30px);
-  transition: transform 0.6s cubic-bezier(0.3, 1.6, 0.5, 1) 0.35s, opacity 0.3s 0.35s;
-}
-
-.tel-mapa p {
-  display: grid;
-  padding: 8px 10px;
-}
-
-.tel-mapa p span {
-  color: rgba(11, 11, 12, 0.7);
-}
-
-.tel-wa {
-  display: grid;
-  gap: 8px;
-  opacity: 0;
-  transform: translateY(20px);
-}
-
-.tel-wa__burbuja {
-  justify-self: end;
-  max-width: 80%;
-  padding: 7px 10px;
-  border-radius: 14px 14px 4px 14px;
-  background: var(--tinta);
-  color: var(--papel);
-}
-
-.tel-wa__boton {
-  padding: 9px;
-  border-radius: 999px;
-  background: var(--senal);
-  color: var(--sobre-senal);
-  font-weight: 600;
-  text-align: center;
-}
-
-/* Lo que se suma en cada paso */
-.telefono[data-paso='2'] .tel-mapa,
-.telefono[data-paso='3'] .tel-mapa {
-  transform: none;
-}
-
-.telefono[data-paso='3'] .tel-mapa {
-  transform: translateY(-78px);
-}
-
-.telefono[data-paso='2'] .tel-mapa__pin,
-.telefono[data-paso='3'] .tel-mapa__pin {
-  opacity: 1;
-  transform: none;
-}
-
-.telefono[data-paso='3'] .tel-wa {
-  opacity: 1;
-  transform: none;
-}
-
-/* Trabajo a medida: mosaico de tarjetas */
-.medida {
-  margin-top: clamp(2rem, 5vw, 3rem);
-  display: grid;
-  gap: 1rem;
-}
-
-.medida__fila {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  min-height: 15rem;
-  padding: 2rem;
-  border-radius: var(--radio);
-  background: var(--superficie);
-  text-decoration: none;
-  overflow: hidden;
-  transition: transform 0.5s var(--ease), background-color 0.4s var(--ease), color 0.4s var(--ease);
-}
-
-.medida__fila:hover,
-.medida__fila:focus-visible {
-  transform: scale(1.015);
-  background: var(--senal);
-  color: var(--sobre-senal);
-}
-
-.medida__n {
-  font-stretch: 125%;
-  font-weight: 900;
-  font-size: 2.6rem;
-  line-height: 1;
-  color: var(--acento);
-  transition: color 0.4s var(--ease);
-}
-
-.medida__fila:hover .medida__n,
-.medida__fila:focus-visible .medida__n {
-  color: var(--sobre-senal);
-}
-
-.medida__nombre {
-  margin-top: auto;
-  padding-top: 2.5rem;
-  font-stretch: 125%;
-  font-weight: 900;
-  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
-  line-height: 0.95;
-  text-transform: uppercase;
-}
-
-.medida__desc {
-  margin-top: 0.75rem;
-  max-width: 42ch;
-  color: var(--suave);
-  transition: color 0.4s var(--ease);
-}
-
-.medida__fila:hover .medida__desc,
-.medida__fila:focus-visible .medida__desc {
-  color: rgba(255, 255, 255, 0.86);
-}
-
-.medida__fila svg {
-  position: absolute;
-  top: 2rem;
-  right: 2rem;
-  width: 28px;
-  height: 28px;
-  transition: transform 0.45s var(--ease);
-}
-
-.medida__fila:hover svg {
-  transform: rotate(45deg);
-}
-
-/* ── 04. Caso real ───────────────────────────────── */
-.caso__escena {
-  display: flex;
-  flex-direction: column;
-  justify-content: safe center;
-  gap: 1.75rem;
-  width: var(--ancho);
-  min-height: 100svh;
-  margin-inline: auto;
-  padding: calc(var(--header-height) + 1.5rem) 0 2.5rem;
-}
-
-.caso__cabeza .titulo {
-  margin-top: 0.9rem;
-  font-size: clamp(2rem, min(5.4vw, 8svh), 4.6rem);
-}
-
-.caso__cabeza .bajada {
-  margin-top: 0.9rem;
+@media (min-width: 760px) {
+  .comparar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .ventana {
@@ -1585,10 +1219,7 @@ b {
   font-weight: 600;
 }
 
-/* ── 05. Sin letra chica: mosaico ────────────────── */
-.diferencia {
-  padding-block: clamp(5rem, 12vw, 9rem);
-}
+/* Garantías: mosaico de compromisos (dentro de Cómo trabajamos) */
 
 .compromisos {
   margin-top: clamp(2.5rem, 6vw, 4rem);
@@ -1644,14 +1275,18 @@ b {
   color: var(--suave);
 }
 
-/* ── 06. Proceso ─────────────────────────────────── */
-.proceso {
+/* ── 04. Cómo trabajamos: pasos y garantías ─────── */
+.como {
   padding-block: clamp(5rem, 12vw, 9rem);
 }
 
-.proceso__grilla {
-  display: grid;
-  gap: 3.5rem;
+.como .pasos {
+  max-width: 760px;
+  margin: clamp(2.5rem, 6vw, 4rem) auto 0;
+}
+
+.como .subtitulo {
+  margin-top: clamp(3.5rem, 8vw, 5.5rem);
 }
 
 .pasos {
@@ -1722,8 +1357,8 @@ b {
   color: var(--suave);
 }
 
-/* ── 07. El estudio ──────────────────────────────── */
-.estudio {
+/* ── 05. Quiénes somos ───────────────────────────── */
+.quienes {
   padding-block: clamp(5rem, 12vw, 9rem);
 }
 
@@ -1763,11 +1398,6 @@ b {
   font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-}
-
-.persona__cargo {
-  font-size: 0.95rem;
-  font-weight: 600;
 }
 
 .persona__formacion {
@@ -1881,7 +1511,7 @@ b {
 
 .contacto__titulo {
   margin-top: 1.25rem;
-  font-size: clamp(2.6rem, 9.4vw, 8.6rem);
+  font-size: clamp(1.9rem, 8vw, 6.4rem);
   line-height: 0.88;
 }
 
@@ -2228,28 +1858,6 @@ b {
   }
 }
 
-/* Portada: WhatsApp como alternativa a las dos acciones, sin competir con ellas */
-.hero__whatsapp {
-  margin-top: 1.1rem;
-  font-family: var(--mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--suave);
-}
-
-.hero__whatsapp a {
-  display: inline-block;
-  padding-block: 0.4rem;
-  color: var(--texto);
-  text-underline-offset: 0.3em;
-  text-decoration-thickness: 1px;
-}
-
-.hero__whatsapp a:hover {
-  color: var(--acento);
-}
-
 /* ── Pie ─────────────────────────────────────────── */
 .footer {
   padding: 3rem 0 2rem;
@@ -2322,158 +1930,10 @@ b {
    MOVIMIENTO (solo con html.mov)
 ═══════════════════════════════════════════════════════ */
 
-@keyframes subir {
-  from {
-    transform: translateY(105%);
-  }
-}
-
-@keyframes trazar {
-  from {
-    stroke-dashoffset: 1;
-  }
-}
-
-@keyframes asomar {
-  from {
-    opacity: 0;
-  }
-}
-
-@keyframes bajar {
-  0% {
-    transform: translateY(-100%);
-  }
-
-  60%,
-  100% {
-    transform: translateY(100%);
-  }
-}
-
-/* Escenas fijas: el capítulo es alto y su escena queda pegada arriba */
-.mov [data-escena='pin'] {
-  height: var(--alto, 250svh);
-}
-
-.mov .hero {
-  --alto: 180svh;
-}
-
-.mov .vision {
-  --alto: 240svh;
-}
-
-.mov .caso {
-  --alto: 180svh;
-}
-
-.mov .hero__escena,
-.mov .vision__escena,
-.mov .problema__escena,
-.mov .caso__escena {
-  position: sticky;
-  top: 0;
-  height: 100svh;
-  min-height: 0;
-}
-
-/* Portada: entrada al cargar */
-.mov .linea > span {
-  animation: subir 1.1s var(--ease) both;
-}
-
-.mov .linea:nth-child(2) > span { animation-delay: 0.08s; }
-.mov .linea:nth-child(3) > span { animation-delay: 0.16s; }
-.mov .linea:nth-child(4) > span { animation-delay: 0.24s; }
-
-.mov .hero .rotulo,
-.mov .hero__lead,
-.mov .hero__acciones,
-.mov .hero__whatsapp,
-.mov .hero__coordenadas,
-.mov .hero__bajar {
-  animation: asomar 1s var(--ease) 0.5s both;
-}
-
-.mov .hero__marca path {
-  animation: trazar 1.6s var(--ease-io) both;
-}
-
-.mov .hero__marca path:nth-child(2) { animation-delay: 0.2s; }
-.mov .hero__cuatro path:nth-child(1) { animation-delay: 0.35s; }
-.mov .hero__cuatro path:nth-child(2) { animation-delay: 0.5s; }
-
-.mov .hero__punto {
-  animation: asomar 0.3s var(--ease) 1.2s both;
-}
-
-.mov .hero__bajar span::after {
-  animation: bajar 2.2s var(--ease-io) 1.5s infinite;
-}
-
-/* Portada: al bajar, el texto se va, el 74 se enciende y sus trazos se abren */
-.mov .hero {
-  --a: clamp(0, calc(var(--p) / 0.45), 1);
-}
-
-.mov .hero__siete,
-.mov .hero__cuatro {
-  opacity: calc(0.1 + var(--a) * 0.9);
-}
-
-.mov .hero__siete {
-  transform: translate(calc(var(--a) * -16%), calc(var(--a) * -12%));
-}
-
-.mov .hero__cuatro {
-  transform: translate(calc(var(--a) * 14%), calc(var(--a) * 10%));
-}
-
-.mov .hero__contenido,
-.mov .hero__coordenadas,
-.mov .hero__bajar {
-  opacity: calc(1 - var(--a) * 1.4);
-}
-
-.mov .hero__contenido {
-  transform: translateY(calc(var(--a) * -10svh)) scale(calc(1 - var(--a) * 0.08));
-}
-
-/* Visión: cada palabra se enciende a su turno */
-.mov .vision__texto .w {
-  opacity: clamp(0.22, calc(var(--p) * var(--n) * 1.25 - var(--i)), 1);
-}
-
-.mov .vision__firma {
-  opacity: clamp(0, calc((var(--p) - 0.8) * 6), 1);
-}
-
-/* El problema: la pista se desliza en horizontal */
-.mov .problema__pista {
-  overflow: visible;
-  transform: translateX(calc(var(--p) * var(--distancia, 0px) * -1));
-  will-change: transform;
-}
-
-.mov .problema__barra {
-  background: linear-gradient(var(--acento), var(--acento)) 0 0 / calc(var(--p) * 100%) 100% no-repeat, var(--linea);
-}
-
-/* Bandas: cada una corre hacia un lado */
-.mov .banda--senal span {
-  transform: translateX(calc(var(--p) * -30%));
-}
-
-.mov .banda--papel span {
-  transform: translateX(calc(-30% + var(--p) * 30%));
-}
-
 /* Entradas: se revelan una sola vez al aparecer, con una transición propia.
    No siguen al scroll, así se ven fluidas aunque el dedo vaya rápido o lento. */
 .mov .cabeza[data-escena='entrada'],
 .mov .subtitulo,
-.mov .medida li,
 .mov .preguntas,
 .mov .form,
 .mov .canales {
@@ -2499,7 +1959,7 @@ b {
 /* Proceso: cada paso entra desde la línea */
 .mov .paso {
   opacity: 0;
-  transform: translate3d(24px, 0, 0);
+  transform: translate3d(0, 24px, 0);
   transition: opacity 0.7s var(--ease), transform 0.8s var(--ease);
 }
 
@@ -2509,40 +1969,15 @@ b {
 }
 
 /* En los mosaicos, cada tarjeta llega un poco después que la anterior */
-.mov .medida li:nth-child(2),
 .mov .persona:nth-child(2),
 .mov .compromiso:nth-child(2) { transition-delay: 0.08s; }
-.mov .medida li:nth-child(3),
 .mov .persona:nth-child(3),
 .mov .compromiso:nth-child(3) { transition-delay: 0.16s; }
-.mov .medida li:nth-child(4),
 .mov .persona:nth-child(4),
 .mov .compromiso:nth-child(4) { transition-delay: 0.24s; }
 
 /* Pasado el hover, sin demora */
 .mov .persona.visto:hover { transition-delay: 0s; }
-
-.mov .relato__paso {
-  opacity: 0.4;
-}
-
-.mov .relato__paso.is-activo {
-  opacity: 1;
-}
-
-/* Caso real: la ventana se apoya y se endereza */
-.mov .caso {
-  --b: clamp(0, calc(var(--p) / 0.5), 1);
-}
-
-.mov .ventana {
-  transform: perspective(1400px) rotateX(calc((1 - var(--b)) * 32deg)) scale(calc(0.8 + var(--b) * 0.2));
-  opacity: calc(0.3 + var(--b) * 0.7);
-}
-
-.mov .datos {
-  opacity: clamp(0, calc((var(--p) - 0.45) * 4), 1);
-}
 
 /* Sin letra chica: el trazo se completa y la frase se descubre */
 .mov .compromiso::before {
@@ -2811,8 +2246,7 @@ html.intro-volando .nav__logo-icon {
 html.con-intro .nav__links,
 html.con-intro .nav__tema,
 html.con-intro .nav__cta,
-html.con-intro .nav__menu,
-html.con-intro .hero__escena {
+html.con-intro .nav__menu {
   opacity: 0;
   transform: translateY(24px);
 }
@@ -2820,18 +2254,8 @@ html.con-intro .hero__escena {
 .nav__links,
 .nav__tema,
 .nav__cta,
-.nav__menu,
-.hero__escena {
+.nav__menu {
   transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
-}
-
-.hero__escena {
-  transition-delay: 0.2s;
-}
-
-/* Mientras está la intro, la portada espera para animarse */
-html.con-intro .hero * {
-  animation-play-state: paused !important;
 }
 
 @keyframes intro-trazo {
@@ -2868,10 +2292,6 @@ html.con-intro .hero * {
 ═══════════════════════════════════════════════════════ */
 
 @media (min-width: 560px) {
-  .hero__acciones .btn {
-    flex: 0 0 auto;
-  }
-
   .datos {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -2899,8 +2319,8 @@ html.con-intro .hero * {
     --ancho: min(1180px, calc(100% - 4rem));
   }
 
-  .hero__coordenadas {
-    display: block;
+  .nav__cta {
+    display: inline-flex;
   }
 
   .ventana__barra {
@@ -2914,20 +2334,6 @@ html.con-intro .hero * {
 
   .equipo {
     grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  .medida {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .medida__fila {
-    min-height: 19rem;
-    padding: 2.5rem;
-  }
-
-  .medida__fila svg {
-    top: 2.5rem;
-    right: 2.5rem;
   }
 
   /* Mosaico: el primer compromiso ocupa todo el ancho */
@@ -2994,73 +2400,6 @@ html.con-intro .hero * {
     margin-right: 1rem;
   }
 
-  .hero__title {
-    font-size: clamp(2rem, min(6.6vw, 9.6svh), 6.4rem);
-  }
-
-  .hero__marca {
-    width: min(64vw, 78svh);
-  }
-
-  /* Qué hacemos: pasos a la izquierda, teléfono fijo a la derecha */
-  .relato {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 4rem;
-  }
-
-  .relato__fijo {
-    order: 0;
-    align-self: start;
-    top: 0;
-    height: 100svh;
-    justify-content: center;
-    padding: var(--header-height) 0 0;
-    background: none;
-  }
-
-  .relato__paso {
-    min-height: 90svh;
-  }
-
-  .telefono {
-    width: min(300px, 32svh);
-  }
-
-  .telefono__pantalla {
-    font-size: 13px;
-  }
-
-  .tel-mapa__lienzo {
-    height: 130px;
-  }
-
-  .telefono[data-paso='3'] .tel-mapa {
-    transform: translateY(-96px);
-  }
-
-  /* La ventana entra completa en la pantalla fija */
-  .ventana {
-    width: min(100%, calc((100svh - 380px) * 2.05));
-  }
-
-  .proceso__grilla {
-    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-    gap: 5rem;
-    align-items: start;
-  }
-
-  /* El proceso es la única cabeza alineada a la izquierda: queda fija junto a los pasos */
-  .proceso__cabeza {
-    position: sticky;
-    top: calc(var(--header-height) + 3rem);
-    align-items: flex-start;
-    text-align: left;
-  }
-
-  .proceso__cabeza .titulo {
-    font-size: min(3.6vw, 3.6rem);
-  }
-
   .contacto__grilla {
     grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   }
@@ -3075,82 +2414,6 @@ html.con-intro .hero * {
     background: color-mix(in srgb, var(--fondo) 96%, transparent);
   }
 
-  /* Portada: la entrada es más corta */
-  .mov .linea > span {
-    animation-duration: 0.7s;
-  }
-
-  .mov .hero .rotulo,
-  .mov .hero__lead,
-  .mov .hero__acciones,
-  .mov .hero__whatsapp,
-  .mov .hero__coordenadas,
-  .mov .hero__bajar {
-    animation-duration: 0.6s;
-    animation-delay: 0.2s;
-  }
-
-  /* El problema: la cabeza más compacta y tarjetas a la medida de su texto,
-     para que todo (tarjetas y barra) entre en la pantalla fija */
-  .problema__escena {
-    gap: 1.5rem;
-    padding: calc(var(--header-height) + 1.25rem) 0 1.5rem;
-  }
-
-  .problema__cabeza .titulo {
-    font-size: clamp(1.6rem, 7.4vw, 2.2rem);
-  }
-
-  .problema__cabeza .bajada {
-    margin-top: 0.75rem;
-    font-size: 0.95rem;
-  }
-
-  .problema__pista {
-    padding-bottom: 1rem;
-  }
-
-  .sintoma {
-    min-height: 0;
-    padding: 1.5rem;
-  }
-
-  .sintoma__n {
-    font-size: 2.25rem;
-  }
-
-  .sintoma__tipo {
-    padding-top: 1.25rem;
-  }
-
-  .sintoma__texto {
-    font-size: 1.1rem;
-  }
-
-  /* Caso real: sin escena fija ni giro 3D; la pantalla se recorre con el dedo */
-  .mov .caso {
-    height: auto;
-  }
-
-  .mov .caso__escena {
-    position: static;
-    height: auto;
-    min-height: 0;
-  }
-
-  .caso__escena {
-    padding-block: clamp(4rem, 14vw, 6rem);
-  }
-
-  .mov .ventana {
-    transform: none;
-    opacity: 1;
-  }
-
-  .mov .datos {
-    opacity: 1;
-  }
-
   .app__marco {
     overflow-x: auto;
     overscroll-behavior-x: contain;
@@ -3163,13 +2426,6 @@ html.con-intro .hero * {
   }
 }
 
-/* Pantallas muy bajas: la bajada del problema se resigna para que entren las tarjetas */
-@media (max-width: 759px) and (max-height: 600px) {
-  .problema__cabeza .bajada {
-    display: none;
-  }
-}
-
 /* Más contraste si el sistema lo pide: texto secundario pleno y líneas marcadas */
 @media (prefers-contrast: more) {
   :root,
@@ -3179,7 +2435,6 @@ html.con-intro .hero * {
     --linea-fuerte: var(--texto);
   }
 
-  .linea--suave,
   .titulo em {
     color: var(--texto);
   }
