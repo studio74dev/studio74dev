@@ -151,7 +151,19 @@
         revelar.unobserve(e.target);
       });
     }, { rootMargin: '0px 0px -8% 0px' });
-    entradas.forEach((el) => revelar.observe(el));
+    // Regla general: lo que ya está en la primera pantalla no arranca oculto
+    // (se muestra en el mismo cuadro en que corre el script, sin transición).
+    const primera = entradas.filter((el) => el.getBoundingClientRect().top < window.innerHeight);
+    primera.forEach((el) => {
+      el.classList.add('sin-transicion');
+      mostrar(el);
+    });
+    if (primera.length) {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        primera.forEach((el) => el.classList.remove('sin-transicion'));
+      }));
+    }
+    entradas.filter((el) => !primera.includes(el)).forEach((el) => revelar.observe(el));
   } else {
     entradas.forEach(mostrar);
     entradas = [];

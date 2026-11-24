@@ -31,9 +31,11 @@
   <link rel="apple-touch-icon" href="/assets/favicon-180.png" />
 
   <!-- Fuentes propias, sin pasar por otro dominio. Rutas desde la raíz: valen igual en /proyectos/ y /proyectos/matemar/ -->
+  <!-- Imagen de primera pantalla: se pide antes que las fuentes -->
+  <link rel="preload" as="image" href="/assets/img/casos/matemar/matemar-inicio-720.webp" imagesrcset="/assets/img/casos/matemar/matemar-inicio-720.webp 720w, /assets/img/casos/matemar/matemar-inicio-1440.webp 1440w" imagesizes="(min-width: 760px) 600px, calc(100vw - 56px)" fetchpriority="high" />
   <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="/css/styles.css?v=32" />
+  <link rel="stylesheet" href="/css/styles.css?v=33" />
   <!-- data-theme, acento y "mov": igual que en la home (ver index.html) -->
   <script>
     (function () {
@@ -56,6 +58,8 @@
 </head>
 
 <body>
+
+  <a class="saltar" href="#contenido">Saltar al contenido</a>
 
   <!-- Barra: logo, secciones, tema, "Pedí tu diagnóstico gratis" y el índice a pantalla completa.
        data-tema cambia según el capítulo que tiene debajo (base, alt o señal). -->
@@ -108,7 +112,6 @@
       <li><a href="/#quienes"><span>06</span>Quiénes somos</a></li>
       <li><a href="/#preguntas"><span>07</span>Preguntas</a></li>
       <li><a href="/#contacto"><span>08</span>Diagnóstico gratis</a></li>
-      <li><a href="/proyectos/"><span>09</span>Proyectos</a></li>
       <li><a href="/proyectos/"><span>09</span>Proyectos</a></li>
     </ol>
     <div class="indice__pie">
@@ -174,7 +177,7 @@
               <div class="dispositivo dispositivo--note">
                 <div class="ventana">
                   <div class="ventana__barra" aria-hidden="true"><span class="ventana__puntos"><i></i><i></i><i></i></span></div>
-                  <img src="/assets/img/casos/matemar/matemar-inicio-1440.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Inicio del sitio de Matemar en una notebook">
+                  <img src="/assets/img/casos/matemar/matemar-inicio-720.webp" srcset="/assets/img/casos/matemar/matemar-inicio-720.webp 720w, /assets/img/casos/matemar/matemar-inicio-1440.webp 1440w" sizes="(min-width: 760px) 600px, calc(100vw - 56px)" width="1440" height="900" fetchpriority="high" decoding="async" alt="Inicio del sitio de Matemar en una notebook">
                 </div>
                 <span class="dispositivo__base" aria-hidden="true"></span>
               </div>
@@ -225,7 +228,7 @@
     </div>
   </footer>
 
-  <script src="/js/main.js?v=32" defer></script>
+  <script src="/js/main.js?v=33" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
