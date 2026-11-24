@@ -309,7 +309,7 @@
        La de los títulos se pide primero porque es la que se ve al cargar. -->
   <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="css/styles.css?v=24" />
+  <link rel="stylesheet" href="css/styles.css?v=25" />
   <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
        (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
@@ -326,6 +326,9 @@
         tema = window.matchMedia('(prefers-color-scheme: light)').matches ? 'claro' : 'oscuro';
       }
       d.dataset.theme = tema;
+      // Acento de acción: ?acento=a|b (por defecto A)
+      var m = /[?&]acento=([ab])(?:&|$)/i.exec(location.search);
+      d.dataset.acento = m ? m[1].toLowerCase() : 'a';
       try {
         var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!quieto) d.classList.add('mov');
@@ -436,7 +439,7 @@
   <!-- Barra fija inferior, solo en el celular (< 760 px): acción principal y WhatsApp.
        Oculta sin JavaScript (hidden); js/main.js la muestra entre la portada y Contacto. -->
   <div class="barra-cta" id="barraCta" data-tema="base" hidden>
-    <a href="#contacto" class="btn btn--senal barra-cta__btn">Pedí tu diagnóstico gratis</a>
+    <a href="#contacto" class="btn btn--accion barra-cta__btn">Pedí tu diagnóstico gratis</a>
     <a class="barra-cta__wa" data-canal="whatsapp" href="#" target="_blank" rel="noopener noreferrer"
       aria-label="WhatsApp (se abre en una pestaña nueva)" hidden>
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -453,7 +456,7 @@
         <h1 id="hero-title" class="hero__title">Que ningún cliente se le escape.</h1>
         <p class="hero__lead">Entendemos cómo trabaja su negocio y convertimos lo que hoy le cuesta resolver en una solución digital a su medida: una página, un bot, un sistema o una app.</p>
         <div class="hero__acciones">
-          <a href="#contacto" class="btn btn--senal">Pedí tu diagnóstico gratis</a>
+          <a href="#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
           <a href="#casos" class="hero__enlace">Ver un caso real</a>
         </div>
         <p class="hero__confianza">Pinamar, Madariaga y toda la Costa Atlántica · Presupuesto por escrito, sin compromiso.</p>
@@ -461,7 +464,7 @@
     </section>
 
     <!-- 01. ¿Le pasa esto? Los dolores del comerciante, en primera persona -->
-    <section id="le-pasa" class="le-pasa capitulo" data-tema="alt" aria-labelledby="le-pasa-title">
+    <section id="le-pasa" class="le-pasa capitulo" data-tema="contra" aria-labelledby="le-pasa-title">
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">01</span>Problemas</p>
@@ -514,14 +517,14 @@
           </li>
         </ol>
         <div class="cierre">
-          <a href="#contacto" class="btn btn--senal">Pedí tu diagnóstico gratis</a>
+          <a href="#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
           <p class="confianza">Presupuesto por escrito, sin cargo y sin compromiso.</p>
         </div>
       </div>
     </section>
 
     <!-- 03. Casos reales: Matemar (antes y después) y Club El Progreso -->
-    <section id="casos" class="casos capitulo" data-tema="alt" aria-labelledby="casos-title">
+    <section id="casos" class="casos capitulo" data-tema="contra" aria-labelledby="casos-title">
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">03</span>Casos</p>
@@ -596,7 +599,7 @@
         </article>
 
         <div class="cierre">
-          <a href="#contacto" class="btn btn--senal">Pedí tu diagnóstico gratis</a>
+          <a href="#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
           <p class="confianza">El dominio queda a su nombre.</p>
         </div>
       </div>
@@ -652,14 +655,14 @@
         </ul>
 
         <div class="cierre">
-          <a href="#contacto" class="btn btn--senal">Pedí tu diagnóstico gratis</a>
+          <a href="#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
           <p class="confianza">Respondemos en menos de 24 horas.</p>
         </div>
       </div>
     </section>
 
     <!-- 05. Quiénes somos: el equipo y la Ruta 74 -->
-    <section id="quienes" class="quienes capitulo" data-tema="alt" aria-labelledby="quienes-title">
+    <section id="quienes" class="quienes capitulo" data-tema="contra" aria-labelledby="quienes-title">
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">05</span>Equipo</p>
@@ -738,7 +741,7 @@
     </section>
 
     <!-- 07. Diagnóstico gratis: el formulario se completa como una frase -->
-    <section id="contacto" class="contacto capitulo" data-tema="base" aria-labelledby="contacto-title">
+    <section id="contacto" class="contacto capitulo" data-tema="contra" aria-labelledby="contacto-title">
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">07</span>Diagnóstico</p>
@@ -841,7 +844,7 @@
             </div>
 
             <div class="form__pie">
-              <button type="submit" class="btn btn--senal btn--primary magnetico">Pedir mi diagnóstico
+              <button type="submit" class="btn btn--accion btn--primary magnetico">Pedir mi diagnóstico
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button>
               <p class="confianza">Gratis y sin compromiso. Presupuesto por escrito.</p>
               <p class="form__note" role="status" aria-live="polite">Respondemos en menos de 24 horas. Sus datos se
@@ -923,7 +926,7 @@
     </div>
   </dialog>
 
-  <script src="js/main.js?v=25" defer></script>
+  <script src="js/main.js?v=26" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

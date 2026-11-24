@@ -2,6 +2,9 @@
    STUDIO 74 — STYLESHEET V10
    Paleta: el logo en blanco y negro, con el punto en azul costa.
      Tinta #0B0B0C · Papel #F4F3EF · Señal (azul costa) #2F5BEA
+   Acento de acción (solo botones de acción, --accion): A naranja boya #FF5A1F
+   (default) o B amarillo arena #FFC738, con ?acento=a|b. Texto del botón en
+   tinta (6,3:1 con A, 12,5:1 con B); en fondos claros lleva borde tinta.
    El azul cumple AA con texto blanco encima (5,5:1) y sobre papel (5:1).
    Sobre fondos oscuros, el acento de texto es su versión clara #8EA8FF (8,6:1).
    Archivo (títulos en ancho 125 % y peso 900, y texto), Geist Mono
@@ -11,7 +14,8 @@
    - html[data-theme] es "oscuro" o "claro" (botón de la barra; si no se
      eligió, el del sistema). Lo pone el <head> antes del primer pintado.
    - Cada capítulo declara data-tema: "base" (fondo de la página), "alt"
-     (fondo alternativo) o "senal" (verde, igual en los dos temas).
+     (fondo alternativo), "contra" (invierte el tema: papel en oscuro, tinta en claro)
+     o "senal" (azul, igual en los dos temas).
      Los tokens se redefinen por tema y por capítulo; la barra y el riel
      copian el del capítulo de abajo.
 
@@ -62,6 +66,13 @@
   --senal-claro: #8EA8FF;
   --sobre-senal: #FFFFFF;
 
+  /* Acento de acción (solo botones de acción): A naranja boya (default), B amarillo arena.
+     Se elige con ?acento=a|b (el <head> pone html[data-acento]). */
+  --acento-a: #FF5A1F;
+  --acento-b: #FFC738;
+  --accion: var(--acento-a);
+  --sobre-accion: var(--tinta);
+
   --font: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
   --marca: 'Michroma', 'Archivo', sans-serif;
@@ -82,6 +93,10 @@
   interpolate-size: allow-keywords;
 }
 
+html[data-acento='b'] {
+  --accion: var(--acento-b);
+}
+
 [data-theme='claro'] {
   --fondo-base: var(--papel);
   --fondo-alt: #FFFFFF;
@@ -100,8 +115,11 @@
   --acento: var(--senal-claro);
   --foco: var(--senal-claro);
   --superficie: #18181B;
-  --boton-fondo: var(--senal);
-  --boton-texto: var(--sobre-senal);
+  --marca-fondo: var(--senal);
+  --marca-texto: var(--sobre-senal);
+  --boton-fondo: var(--accion);
+  --boton-texto: var(--sobre-accion);
+  --boton-borde: transparent;
   --trazo: var(--papel);
   --punto: var(--senal);
 }
@@ -115,8 +133,11 @@
   --acento: var(--senal-claro);
   --foco: var(--senal-claro);
   --superficie: #202024;
-  --boton-fondo: var(--senal);
-  --boton-texto: var(--sobre-senal);
+  --marca-fondo: var(--senal);
+  --marca-texto: var(--sobre-senal);
+  --boton-fondo: var(--accion);
+  --boton-texto: var(--sobre-accion);
+  --boton-borde: transparent;
   --trazo: var(--papel);
   --punto: var(--senal);
 }
@@ -131,8 +152,11 @@
   --acento: var(--senal);
   --foco: var(--senal);
   --superficie: #FFFFFF;
-  --boton-fondo: var(--senal);
-  --boton-texto: var(--sobre-senal);
+  --marca-fondo: var(--senal);
+  --marca-texto: var(--sobre-senal);
+  --boton-fondo: var(--accion);
+  --boton-texto: var(--sobre-accion);
+  --boton-borde: var(--tinta);
   --trazo: var(--tinta);
   --punto: var(--senal);
 }
@@ -146,8 +170,11 @@
   --acento: var(--senal);
   --foco: var(--senal);
   --superficie: var(--papel);
-  --boton-fondo: var(--senal);
-  --boton-texto: var(--sobre-senal);
+  --marca-fondo: var(--senal);
+  --marca-texto: var(--sobre-senal);
+  --boton-fondo: var(--accion);
+  --boton-texto: var(--sobre-accion);
+  --boton-borde: var(--tinta);
   --trazo: var(--tinta);
   --punto: var(--senal);
 }
@@ -162,10 +189,46 @@
   --acento: var(--sobre-senal);
   --foco: var(--sobre-senal);
   --superficie: rgba(255, 255, 255, 0.08);
-  --boton-fondo: var(--sobre-senal);
-  --boton-texto: var(--senal);
+  --marca-fondo: var(--sobre-senal);
+  --marca-texto: var(--senal);
+  --boton-fondo: var(--accion);
+  --boton-texto: var(--sobre-accion);
+  --boton-borde: var(--tinta);
   --trazo: var(--sobre-senal);
   --punto: var(--sobre-senal);
+}
+
+/* Contra: el capítulo que invierte el tema (papel en oscuro, tinta en claro).
+   Mismos nombres de tokens que base y alt. */
+[data-tema='contra'] {
+  --fondo: var(--papel);
+  --texto: var(--tinta);
+  --suave: rgba(11, 11, 12, 0.7);
+  --linea: rgba(11, 11, 12, 0.1);
+  --linea-fuerte: rgba(11, 11, 12, 0.24);
+  --acento: var(--senal);
+  --foco: var(--senal);
+  --superficie: #FFFFFF;
+  --marca-fondo: var(--senal);
+  --marca-texto: var(--sobre-senal);
+  --boton-fondo: var(--accion);
+  --boton-texto: var(--sobre-accion);
+  --boton-borde: var(--tinta);
+  --trazo: var(--tinta);
+  --punto: var(--senal);
+}
+
+[data-theme='claro'] [data-tema='contra'] {
+  --fondo: var(--tinta);
+  --texto: var(--papel);
+  --suave: rgba(244, 243, 239, 0.7);
+  --linea: rgba(244, 243, 239, 0.12);
+  --linea-fuerte: rgba(244, 243, 239, 0.24);
+  --acento: var(--senal-claro);
+  --foco: var(--senal-claro);
+  --superficie: #18181B;
+  --boton-borde: transparent;
+  --trazo: var(--papel);
 }
 
 *,
@@ -408,14 +471,16 @@ b {
   transform: translateX(4px);
 }
 
-/* Principal: señal sobre oscuro, tinta sobre claro */
-.btn--senal {
+/* Acción: el único lugar donde va el acento (--accion). Texto tinta (AA con A y B);
+   sobre fondos claros lleva borde tinta (--boton-borde) para separarse del papel. */
+.btn--accion {
   background: var(--boton-fondo);
   color: var(--boton-texto);
+  box-shadow: inset 0 0 0 1.5px var(--boton-borde);
 }
 
-.btn--senal:hover {
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--boton-fondo) 22%, transparent);
+.btn--accion:hover {
+  box-shadow: inset 0 0 0 1.5px var(--boton-borde), 0 0 0 6px color-mix(in srgb, var(--boton-fondo) 22%, transparent);
 }
 
 /* Invertido: el color del texto como fondo */
@@ -543,6 +608,7 @@ b {
   border-radius: 999px;
   background: var(--boton-fondo);
   color: var(--boton-texto);
+  box-shadow: inset 0 0 0 1.5px var(--boton-borde);
   font-weight: 600;
   font-size: 0.82rem;
   text-decoration: none;
@@ -1202,8 +1268,8 @@ b {
 }
 
 .app__tab.is-on {
-  background: var(--boton-fondo);
-  color: var(--boton-texto);
+  background: var(--marca-fondo);
+  color: var(--marca-texto);
 }
 
 .app__vista {
@@ -1738,8 +1804,8 @@ b {
 }
 
 .opcion input:checked + span {
-  background: var(--boton-fondo);
-  color: var(--boton-texto);
+  background: var(--marca-fondo);
+  color: var(--marca-texto);
   box-shadow: none;
 }
 
@@ -1867,6 +1933,7 @@ select.campo:focus-visible {
   width: 100%;
   background: var(--boton-fondo);
   color: var(--boton-texto);
+  box-shadow: inset 0 0 0 1.5px var(--boton-borde);
 }
 
 .form--pasos .form__paso:not(.is-actual) {
@@ -2041,7 +2108,7 @@ select.campo:focus-visible {
 /* Píldora del mismo azul que los botones (no el verde de WhatsApp: el sitio
    tiene un solo acento). js/main.js le pone .is-visible entre la portada y
    Contacto, y el data-tema del capítulo que tiene debajo: sobre Visión (azul)
-   se invierte a blanco, como los .btn--senal. Sin JS queda con hidden. */
+   se invierte a blanco, como los botones sobre azul. Sin JS queda con hidden. */
 .wa-flotante {
   position: fixed;
   right: calc(1rem + env(safe-area-inset-right, 0px));
@@ -2055,8 +2122,8 @@ select.campo:focus-visible {
   width: 56px;
   height: 56px;
   border-radius: 999px;
-  background: var(--boton-fondo);
-  color: var(--boton-texto);
+  background: var(--marca-fondo);
+  color: var(--marca-texto);
   font-weight: 600;
   font-size: 1rem;
   text-decoration: none;
@@ -2080,7 +2147,7 @@ select.campo:focus-visible {
 }
 
 .wa-flotante:hover {
-  box-shadow: 0 0 0 6px color-mix(in srgb, var(--boton-fondo) 22%, transparent);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--marca-fondo) 22%, transparent);
 }
 
 .wa-flotante svg {
