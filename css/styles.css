@@ -542,7 +542,7 @@ b {
   align-items: center;
   gap: 0.6rem;
   margin-right: auto;
-  min-height: 44px;
+  min-height: 48px;
   text-decoration: none;
 }
 
@@ -1259,7 +1259,7 @@ b {
 }
 
 .app__tab {
-  min-height: 34px;
+  min-height: 48px;
   padding: 0.3rem 0.95rem;
   border: 0;
   border-radius: 999px;
@@ -1299,7 +1299,7 @@ b {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  min-height: 40px;
+  min-height: 48px;
   padding: 0.4rem 0.9rem;
   border: 0;
   border-radius: 999px;
@@ -2298,7 +2298,7 @@ select.campo:focus-visible {
 .red {
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
+  min-height: 48px;
   text-decoration: none;
   background: linear-gradient(var(--acento), var(--acento)) 0 calc(100% - 10px) / 0 2px no-repeat;
   transition: background-size 0.35s var(--ease);
