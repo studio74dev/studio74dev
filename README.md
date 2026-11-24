@@ -10,10 +10,9 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 |---|---|
 | `index.html` | La landing completa (ver secciones abajo). Incluye los datos estructurados JSON-LD. |
 | `css/styles.css` | Todos los estilos. Paleta del logo y tokens por capítulo (ver "Paleta y capítulos"). |
-| `js/main.js` | Canales (WhatsApp y LinkedIn), intro de carga, índice, motor de scroll, teléfono de "Qué hacemos", botones magnéticos, pestañas del caso real y envío del formulario. |
+| `js/main.js` | Canales (WhatsApp y LinkedIn), intro de carga, índice, motor de scroll, teléfono de "Qué hacemos", botones magnéticos, envío del formulario. |
 | `404.html` | Página de error propia. Lleva los estilos en línea, así que no depende del CSS. |
 | `assets/og.png` | Imagen que se ve al compartir el link (1200×630). |
-| `assets/img/` | Capturas de Club El Progreso, solo en WebP. |
 | `assets/isotipo/`, `assets/firma/` | Logo en sus variantes y firma de mail del equipo. La web no los usa. |
 | `docs/og-imagen.html` | Fuente de `assets/og.png` (ver "Imagen para compartir"). |
 | `robots.txt`, `sitemap.xml`, `favicon.*` | Lo de siempre. |
@@ -30,7 +29,6 @@ Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` 
 5. **El problema** (`#problema`, base): los cinco problemas se deslizan en horizontal mientras se baja.
 6. **Bandas cruzadas**: dos cintas en diagonal, como los trazos del 7 y el 4, que corren con el scroll.
 7. **Qué hacemos** (`#servicios`, alt): un teléfono ilustrativo se arma a medida que se leen los tres pasos del paquete de entrada (página, Google Maps, WhatsApp). Debajo, el trabajo a medida en un mosaico de tarjetas. Los enlaces con `data-servicio` dejan marcado ese tipo en el formulario.
-8. **Caso real** (`#caso`, base): en pantallas anchas la ventana de Club El Progreso se apoya y se endereza; en el celular va suelta y la imagen se recorre con el dedo. Sus pestañas funcionan y **Ampliar** (o tocar la imagen) la abre a tamaño real en un visor (`<dialog>`).
 9. **Sin letra chica** (`#diferencia`, base): los compromisos concretos en un mosaico, con un trazo que se completa.
 10. **Proceso** (`#proceso`, alt): la línea se dibuja con el scroll y enciende cada paso.
 11. **El estudio** (`#estudio`, base): los cuatro desarrolladores full stack con su formación (Licenciatura en Sistemas y Técnico en Software).
@@ -65,7 +63,7 @@ Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` 
 ### Animaciones de scroll
 
 - `js/main.js` le da a cada `[data-escena]` una variable `--p` de 0 a 1, y el CSS la usa con `calc()`:
-  - `pin`: capítulos altos con una escena fija (`sticky`), como la portada, la visión, el problema y el caso.
+  - `pin`: capítulos altos con una escena fija (`sticky`), como la portada, la visión y el problema.
   - `paso`: el elemento atraviesa la pantalla (las bandas). `recorrido`: la línea del proceso.
 - `entrada` no usa `--p`: un `IntersectionObserver` le pone la clase `.visto` **una sola vez** cuando aparece y el CSS hace la transición. Así las tarjetas entran fluidas aunque el dedo vaya rápido o lento.
 - El motor lee todas las posiciones primero y escribe después (sin forzar el diseño varias veces por cuadro), y solo toca el estilo de lo que cambió.
