@@ -309,7 +309,7 @@
        La de los títulos se pide primero porque es la que se ve al cargar. -->
   <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="css/styles.css?v=22" />
+  <link rel="stylesheet" href="css/styles.css?v=23" />
   <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
        (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
@@ -750,34 +750,89 @@
 
         <div class="contacto__grilla">
           <form class="form" id="contactForm" action="mailto:studio74dev@gmail.com" method="post" enctype="text/plain" novalidate data-escena="entrada">
-            <div class="form__fila">
+            <div class="form__progreso" hidden>
+              <p id="formPasoTexto" aria-live="polite">Paso 1 de 3</p>
+              <span class="form__barra"><i></i></span>
+            </div>
+
+            <fieldset class="form__paso" data-paso="1">
+              <legend tabindex="-1">¿Qué le está costando hoy?</legend>
+              <div class="opciones">
+                <label class="opcion"><input type="checkbox" name="costo" value="Consultas repetidas" /><span>Consultas repetidas</span></label>
+                <label class="opcion"><input type="checkbox" name="costo" value="Pedidos desordenados" /><span>Pedidos desordenados</span></label>
+                <label class="opcion"><input type="checkbox" name="costo" value="No aparezco en Google" /><span>No aparezco en Google</span></label>
+                <label class="opcion"><input type="checkbox" name="costo" value="No doy abasto en temporada" /><span>No doy abasto en temporada</span></label>
+                <label class="opcion"><input type="checkbox" name="costo" value="Otra" /><span>Otra</span></label>
+              </div>
+            </fieldset>
+
+            <fieldset class="form__paso" data-paso="2">
+              <legend tabindex="-1">Su negocio</legend>
+              <div class="grupo">
+                <label class="grupo__etiqueta" for="rubro">Rubro</label>
+                <input type="text" id="rubro" name="rubro" class="campo" maxlength="80" aria-describedby="rubroAyuda" required />
+                <p class="grupo__ayuda" id="rubroAyuda">Por ejemplo: almacén, peluquería, hospedaje.</p>
+              </div>
+              <div class="grupo">
+                <label class="grupo__etiqueta" for="localidad">Localidad</label>
+                <select id="localidad" name="localidad" class="campo" required>
+                  <option value="">Elija una localidad</option>
+                  <option value="Pinamar">Pinamar</option>
+                  <option value="Villa Gesell">Villa Gesell</option>
+                  <option value="General Juan Madariaga">General Juan Madariaga</option>
+                  <option value="Cariló">Cariló</option>
+                  <option value="Ostende">Ostende</option>
+                  <option value="Valeria del Mar">Valeria del Mar</option>
+                  <option value="Mar de las Pampas">Mar de las Pampas</option>
+                  <option value="Mar del Plata">Mar del Plata</option>
+                  <option value="Miramar">Miramar</option>
+                  <option value="Dolores">Dolores</option>
+                  <option value="San Clemente del Tuyú">San Clemente del Tuyú</option>
+                  <option value="Santa Teresita">Santa Teresita</option>
+                  <option value="Mar de Ajó">Mar de Ajó</option>
+                  <option value="San Bernardo del Tuyú">San Bernardo del Tuyú</option>
+                  <option value="Otra">Otra</option>
+                </select>
+              </div>
+              <fieldset class="grupo">
+                <legend class="grupo__etiqueta">¿Cómo atiende hoy? (opcional)</legend>
+                <div class="opciones">
+                  <label class="opcion"><input type="checkbox" name="atencion" value="Solo en el local" /><span>Solo en el local</span></label>
+                  <label class="opcion"><input type="checkbox" name="atencion" value="Instagram" /><span>Instagram</span></label>
+                  <label class="opcion"><input type="checkbox" name="atencion" value="WhatsApp" /><span>WhatsApp</span></label>
+                  <label class="opcion"><input type="checkbox" name="atencion" value="Ya tengo web" /><span>Ya tengo web</span></label>
+                </div>
+              </fieldset>
+            </fieldset>
+
+            <fieldset class="form__paso" data-paso="3">
+              <legend tabindex="-1">¿Cómo lo contactamos?</legend>
+              <fieldset class="grupo">
+                <legend class="grupo__etiqueta">¿Para cuándo lo necesita?</legend>
+                <div class="opciones">
+                  <label class="opcion"><input type="radio" name="cuando" value="Antes de la temporada" required /><span>Antes de la temporada</span></label>
+                  <label class="opcion"><input type="radio" name="cuando" value="Este mes" /><span>Este mes</span></label>
+                  <label class="opcion"><input type="radio" name="cuando" value="Sin apuro" /><span>Sin apuro</span></label>
+                </div>
+              </fieldset>
               <div class="grupo">
                 <label class="grupo__etiqueta" for="name">Nombre</label>
                 <input type="text" id="name" name="name" class="campo" autocomplete="name" maxlength="80" required />
               </div>
               <div class="grupo">
+                <label class="grupo__etiqueta" for="whatsapp">WhatsApp</label>
+                <input type="tel" id="whatsapp" name="whatsapp" class="campo" inputmode="tel" autocomplete="tel" maxlength="30" aria-describedby="contactoAyuda" />
+              </div>
+              <div class="grupo">
                 <label class="grupo__etiqueta" for="email">Correo electrónico</label>
-                <input type="email" id="email" name="email" class="campo" autocomplete="email" maxlength="120" required />
+                <input type="email" id="email" name="email" class="campo" autocomplete="email" maxlength="120" aria-describedby="contactoAyuda" />
               </div>
-            </div>
-
-            <fieldset class="grupo form__servicios">
-              <legend class="grupo__etiqueta">Tipo de consulta</legend>
-              <div class="opciones">
-                <label class="opcion"><input type="radio" name="service" value="Paquete de entrada" required /><span>Paquete de entrada</span></label>
-                <label class="opcion"><input type="radio" name="service" value="Sistema a medida" /><span>Sistema a medida</span></label>
-                <label class="opcion"><input type="radio" name="service" value="Turnos y reservas" /><span>Turnos y reservas</span></label>
-                <label class="opcion"><input type="radio" name="service" value="Automatización" /><span>Automatización</span></label>
-                <label class="opcion"><input type="radio" name="service" value="Otra consulta" /><span>Otra consulta</span></label>
-              </div>
+              <p class="grupo__ayuda" id="contactoAyuda">Déjenos su WhatsApp o su correo: con uno alcanza.</p>
             </fieldset>
 
-            <div class="grupo">
-              <label class="grupo__etiqueta" for="message">Mensaje</label>
-              <textarea id="message" name="message" class="campo campo--largo" rows="4" aria-describedby="messageAyuda"
-                maxlength="2000" required></textarea>
-              <p class="grupo__ayuda" id="messageAyuda">Cuéntenos sobre su negocio y qué necesita. Por ejemplo: «Tengo
-                un gimnasio y registro las cuotas en un cuaderno».</p>
+            <div class="form__nav" hidden>
+              <button type="button" class="form__volver" id="formVolver">Volver</button>
+              <button type="button" class="btn btn--grande" id="formSeguir">Seguir</button>
             </div>
 
             <!-- Anti-spam: honeypot invisible (los bots suelen completarlo) -->
@@ -788,8 +843,9 @@
             </div>
 
             <div class="form__pie">
-              <button type="submit" class="btn btn--senal btn--primary magnetico">Enviar consulta
+              <button type="submit" class="btn btn--senal btn--primary magnetico">Pedir mi diagnóstico
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button>
+              <p class="confianza">Gratis y sin compromiso. Presupuesto por escrito.</p>
               <p class="form__note" role="status" aria-live="polite">Respondemos en menos de 24 horas. Sus datos se
                 usan únicamente para responder la consulta.</p>
             </div>
@@ -869,7 +925,7 @@
     </div>
   </dialog>
 
-  <script src="js/main.js?v=23" defer></script>
+  <script src="js/main.js?v=24" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

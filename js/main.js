@@ -364,24 +364,6 @@
     ampliar.hidden = true;
   }
 
-  /* ── Mensaje: crece con el texto ─────────────────── */
-  /* Donde el navegador no tiene field-sizing, se ajusta a mano. */
-  const mensaje = document.getElementById('message');
-  if (mensaje && !CSS.supports('field-sizing', 'content')) {
-    const crecer = () => {
-      mensaje.style.height = 'auto';
-      mensaje.style.height = `${mensaje.scrollHeight}px`;
-    };
-    mensaje.addEventListener('input', crecer);
-  }
-
-  /* ── Enlaces que preeligen el tipo de consulta ─────── */
-  /* "Solicitar presupuesto" desde un servicio deja marcado ese servicio en el formulario. */
-  document.querySelectorAll('[data-servicio]').forEach((a) => a.addEventListener('click', () => {
-    const radio = document.querySelector(`#contactForm input[name="service"][value="${a.dataset.servicio}"]`);
-    if (radio) radio.checked = true;
-  }));
-
   /* ── Contact form ───────────────────────────────── */
   /* Se envía a Web3Forms (relay para hosting estático) con FormData y sin
      cabeceras propias: así el pedido es "simple" y no hay preflight OPTIONS.
@@ -391,6 +373,68 @@
      Nunca mostramos "mensaje enviado" si no se envió nada. */
   const form = document.getElementById('contactForm');
   if (form) {
+    /* ── Pasos: 1 de 3 (sin JS todo queda en una sola página) ── */
+    const progreso = form.querySelector('.form__progreso');
+    const pasoTexto = document.getElementById('formPasoTexto');
+    const barra = form.querySelector('.form__barra i');
+    const nav = form.querySelector('.form__nav');
+    const volver = document.getElementById('formVolver');
+    const seguir = document.getElementById('formSeguir');
+    const pasos = Array.from(form.querySelectorAll('.form__paso'));
+    const TOTAL = pasos.length;
+    let pasoActual = 1;
+    const irA = (n, enfocar) => {
+      pasoActual = Math.min(TOTAL, Math.max(1, n));
+      pasos.forEach((p) => p.classList.toggle('is-actual', Number(p.dataset.paso) === pasoActual));
+      form.dataset.paso = String(pasoActual);
+      if (pasoTexto) pasoTexto.textContent = `Paso ${pasoActual} de ${TOTAL}`;
+      if (barra) barra.style.setProperty('--p', String(pasoActual / TOTAL));
+      if (volver) volver.hidden = pasoActual === 1;
+      if (seguir) seguir.hidden = pasoActual === TOTAL;
+      if (!enfocar) return;
+      const leyenda = pasos[pasoActual - 1].querySelector(':scope > legend');
+      if (leyenda) leyenda.focus({ preventScroll: false });
+      // El borde superior del formulario tiene que quedar a la vista, debajo de la barra
+      const tope = form.getBoundingClientRect().top - header.offsetHeight - 8;
+      if (tope < 0) window.scrollBy({ top: tope, behavior: 'auto' });
+    };
+    const validarPaso = () => {
+      if (pasoActual === 1) {
+        const cajas = Array.from(form.querySelectorAll('input[name="costo"]'));
+        const alguna = cajas.some((c) => c.checked);
+        cajas[0].setCustomValidity(alguna ? '' : 'Elija al menos una opción.');
+        if (!alguna) { cajas[0].reportValidity(); return false; }
+        return true;
+      }
+      if (pasoActual === 2) {
+        const rubroEl = form.elements.rubro;
+        const loc = form.elements.localidad;
+        rubroEl.setCustomValidity(rubroEl.value.trim() === '' ? 'Complete este campo.' : '');
+        if (!rubroEl.checkValidity()) { rubroEl.reportValidity(); return false; }
+        if (!loc.checkValidity()) { loc.reportValidity(); return false; }
+        return true;
+      }
+      return true;
+    };
+    form.classList.add('form--pasos');
+    if (progreso) progreso.hidden = false;
+    if (nav) nav.hidden = false;
+    irA(1, false);
+    if (seguir) seguir.addEventListener('click', () => { if (validarPaso()) irA(pasoActual + 1, true); });
+    if (volver) volver.addEventListener('click', () => irA(pasoActual - 1, true));
+    form.addEventListener('change', (e) => {
+      if (e.target.name === 'costo') form.querySelector('input[name="costo"]').setCustomValidity('');
+    });
+    // Enter en los pasos 1 y 2 avanza, no envía
+    form.addEventListener('keydown', (e) => {
+      if (e.key !== 'Enter' || pasoActual === TOTAL) return;
+      const t = e.target;
+      if (t.tagName === 'INPUT' && (t.type === 'text' || t.type === 'checkbox')) {
+        e.preventDefault();
+        if (validarPaso()) irA(pasoActual + 1, true);
+      }
+    });
+
     const submitBtn = form.querySelector('.btn--primary');
     const note = form.querySelector('.form__note');
     const alternativas = document.getElementById('formAlternativas');
@@ -414,7 +458,7 @@
     const TIEMPO_MAXIMO = 12000; // ms por intento
     const ESPERA_REINTENTO = 1500; // ms antes del único reintento automático
     /* Largos máximos: los mismos que el maxlength de index.html */
-    const LIMITES = { name: 80, email: 120, message: 2000 };
+    const LIMITES = { name: 80, email: 120, rubro: 80, whatsapp: 30 };
     const AVISOS = {
       fallo: 'No pudimos enviar su consulta desde la página. Puede intentar de nuevo o escribirnos directamente.',
       limite: 'Hay demasiados envíos en este momento. Espere un minuto e intente de nuevo, o escríbanos directamente.',
@@ -451,19 +495,22 @@
           submitBtn.innerHTML = originalBtnHTML;
         }
         if (note) note.textContent = originalNote;
-        if (reset) form.reset();
+        if (reset) { form.reset(); irA(1, false); }
       }, ms);
     };
 
     /* Asunto y cuerpo con lo que el visitante cargó: para Gmail y el mailto */
     const armarCorreo = (data) => ({
-      subject: `Consulta desde la web — ${data.get('service') || 'Proyecto'}`,
+      subject: `Diagnóstico desde la web — ${data.get('rubro') || ''} (${data.get('localidad') || ''})`,
       body: [
         `Nombre: ${data.get('name') || ''}`,
-        `Email: ${data.get('email') || ''}`,
-        `Tipo de proyecto: ${data.get('service') || ''}`,
-        '',
-        data.get('message') || '',
+        `WhatsApp: ${data.get('whatsapp') || ''}`,
+        `Correo: ${data.get('email') || ''}`,
+        `Qué le está costando: ${data.getAll('costo').join(', ')}`,
+        `Rubro: ${data.get('rubro') || ''}`,
+        `Localidad: ${data.get('localidad') || ''}`,
+        `Cómo atiende hoy: ${data.getAll('atencion').join(', ') || 'No indicó'}`,
+        `Para cuándo: ${data.get('cuando') || ''}`,
       ].join('\n'),
     });
 
@@ -523,6 +570,12 @@
         else if (campo.value.length > max) aviso = `Use como máximo ${max} caracteres.`;
         campo.setCustomValidity(aviso);
       });
+      // Con uno de los dos alcanza: WhatsApp o correo
+      const wa = form.elements.whatsapp;
+      const mail = form.elements.email;
+      if (wa && mail && !wa.validationMessage && wa.value.trim() === '' && mail.value.trim() === '') {
+        wa.setCustomValidity('Déjenos su WhatsApp o su correo.');
+      }
     };
     form.addEventListener('input', (e) => {
       if (e.target.name in LIMITES) e.target.setCustomValidity('');
@@ -541,11 +594,15 @@
       payload.append('access_key', WEB3FORMS_KEY);
       payload.append('subject', armarCorreo(data).subject);
       payload.append('from_name', 'studio74dev · Web');
-      payload.append('name', data.get('name') || '');
-      payload.append('email', data.get('email') || '');
-      payload.append('replyto', data.get('email') || '');
-      payload.append('Tipo de proyecto', data.get('service') || '');
-      payload.append('message', data.get('message') || '');
+      payload.append('Nombre', data.get('name') || '');
+      payload.append('WhatsApp', data.get('whatsapp') || '');
+      payload.append('Correo', data.get('email') || '');
+      if ((data.get('email') || '').trim() !== '') payload.append('replyto', data.get('email'));
+      payload.append('Qué le está costando', data.getAll('costo').join(', '));
+      payload.append('Rubro', data.get('rubro') || '');
+      payload.append('Localidad', data.get('localidad') || '');
+      payload.append('Cómo atiende hoy', data.getAll('atencion').join(', ') || 'No indicó');
+      payload.append('Para cuándo', data.get('cuando') || '');
       payload.append('botcheck', ''); // vacío: una persona nunca marca la casilla
 
       const ctrl = new AbortController();
@@ -582,7 +639,7 @@
       const hp = form.querySelector('[name="company"]');
       const botcheck = form.querySelector('[name="botcheck"]');
       if ((hp && hp.value.trim() !== '') || (botcheck && botcheck.checked)) {
-        setState('is-sent', { btn: `${CHECK_SVG} Consulta enviada`, reset: true });
+        setState('is-sent', { btn: `${CHECK_SVG} Pedido enviado`, reset: true });
         return;
       }
 
@@ -599,8 +656,8 @@
 
       if (r.tipo === 'ok') {
         setState('is-sent', {
-          btn: `${CHECK_SVG} Consulta enviada`,
-          note: 'Consulta enviada. Le respondemos dentro de las 24 horas.',
+          btn: `${CHECK_SVG} Pedido enviado`,
+          note: 'Recibimos su pedido. Le respondemos dentro de las 24 horas.',
           ms: 8000,
           reset: true,
         });

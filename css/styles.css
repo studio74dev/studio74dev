@@ -1627,6 +1627,146 @@ b {
   outline-offset: 3px;
 }
 
+/* Chips del formulario: 2 por fila en celular, mínimo 48 px de alto */
+.opcion {
+  flex: 1 1 calc(50% - 0.25rem);
+  min-width: 0;
+}
+
+.opcion span {
+  width: 100%;
+  min-height: 48px;
+  padding: 0.5rem 1rem;
+  border-radius: 24px;
+  line-height: 1.25;
+}
+
+select.campo {
+  min-height: 48px;
+  padding-right: 2.5rem;
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--texto) 50%), linear-gradient(135deg, var(--texto) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+select.campo:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 3px;
+}
+
+/* Pasos: sin JS todo queda visible en una sola página */
+.form__paso {
+  display: grid;
+  gap: 1.25rem;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.form__paso > legend {
+  padding: 0;
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.form__paso > legend:focus {
+  outline: none;
+}
+
+.form__progreso {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.form__progreso[hidden] {
+  display: none;
+}
+
+.form__progreso p {
+  font-size: 0.85rem;
+  color: var(--suave);
+}
+
+.form__barra {
+  display: block;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--linea-fuerte);
+}
+
+.form__barra i {
+  display: block;
+  height: 100%;
+  background: var(--acento);
+  transform-origin: left center;
+  transform: scaleX(var(--p, 0.3333));
+}
+
+.mov .form__barra i {
+  transition: transform 0.3s var(--ease);
+}
+
+.form__nav {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  gap: 0.5rem;
+}
+
+.form__nav[hidden],
+.form__nav [hidden] {
+  display: none;
+}
+
+.form__volver {
+  min-height: 48px;
+  padding: 0 1rem;
+  border: 0;
+  background: none;
+  color: var(--suave);
+  font: inherit;
+  font-size: 0.95rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.form__volver:hover {
+  color: var(--texto);
+}
+
+.btn--grande {
+  width: 100%;
+  background: var(--boton-fondo);
+  color: var(--boton-texto);
+}
+
+.form--pasos .form__paso:not(.is-actual) {
+  display: none;
+}
+
+.form--pasos .form__pie {
+  display: none;
+}
+
+.form--pasos[data-paso='3'] .form__pie {
+  display: flex;
+}
+
+.form__pie .confianza {
+  flex: 1 1 100%;
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--suave);
+}
+
 .form__hp {
   position: absolute;
   left: -9999px;
@@ -2298,6 +2438,25 @@ html.con-intro .nav__menu {
 
   .form__pie .btn {
     flex: 0 0 auto;
+  }
+
+  .opcion {
+    flex: 0 0 auto;
+  }
+
+  .opcion span {
+    width: auto;
+    border-radius: 999px;
+  }
+
+  .form__nav {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .btn--grande {
+    width: auto;
   }
 
   .form__note {
