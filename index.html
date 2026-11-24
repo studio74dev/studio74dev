@@ -309,7 +309,7 @@
        La de los títulos se pide primero porque es la que se ve al cargar. -->
   <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="css/styles.css?v=30" />
+  <link rel="stylesheet" href="css/styles.css?v=31" />
   <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
        (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
@@ -391,6 +391,7 @@
       <li><a href="#quienes"><span>06</span>Quiénes somos</a></li>
       <li><a href="#preguntas"><span>07</span>Preguntas</a></li>
       <li><a href="#contacto"><span>08</span>Diagnóstico gratis</a></li>
+      <li><a href="/proyectos/"><span>09</span>Proyectos</a></li>
     </ol>
     <div class="indice__pie">
       <a href="mailto:studio74dev@gmail.com" aria-label="Escribir a studio74dev@gmail.com">studio74dev@gmail.com</a>
@@ -428,7 +429,7 @@
     <svg class="ruta" id="ruta" aria-hidden="true" focusable="false"><path class="ruta__fondo" /><path class="ruta__trazo" pathLength="1" /></svg>
 
     <!-- 00. Portada: estática. El h1 es lo primero que se pinta, por eso no se anima. -->
-    <section id="inicio" class="hero capitulo" data-tema="base" aria-labelledby="hero-title">
+    <section id="inicio" class="hero capitulo" data-portada data-tema="base" aria-labelledby="hero-title">
       <span class="hito" aria-hidden="true"></span>
       <div class="hero__contenido">
         <h1 id="hero-title" class="hero__title">Que ningún cliente se le escape.</h1>
@@ -591,6 +592,7 @@
               </div>
               <input type="range" class="comparar__control" min="0" max="100" value="50" aria-label="Comparar antes y después" hidden />
             </div>
+            <a class="caso__ver" href="/proyectos/matemar/">Ver el caso</a>
             <!-- Testimonio de Valen: oculto hasta tener su autorización. -->
           </article>
 
@@ -599,6 +601,7 @@
             <a href="#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
           </article>
         </div>
+        <a class="casos__todos" href="/proyectos/">Ver todos los proyectos</a>
       </div>
     </section>
 
@@ -939,7 +942,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=30" defer></script>
+  <script src="js/main.js?v=31" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

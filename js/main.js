@@ -134,7 +134,7 @@
   // Sin animation-timeline: el CSS usa --progreso (html.sin-sda)
   if (!(window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()'))) root.classList.add('sin-sda');
   if (barraCta) barraCta.hidden = false;
-  const iPortada = capitulos.findIndex((c) => c.id === 'inicio');
+  const iPortada = capitulos.findIndex((c) => c.hasAttribute('data-portada'));
   const iContacto = capitulos.findIndex((c) => c.id === 'contacto');
   const clamp = (v) => Math.min(1, Math.max(0, v));
   const continuas = escenas.filter((el) => el.dataset.escena !== 'entrada');
