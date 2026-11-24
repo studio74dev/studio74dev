@@ -16,8 +16,8 @@
    - Cada capítulo declara data-tema: "base" (fondo de la página), "alt"
      (fondo alternativo), "contra" (invierte el tema: papel en oscuro, tinta en claro)
      o "senal" (azul, igual en los dos temas).
-     Los tokens se redefinen por tema y por capítulo; la barra y el riel
-     copian el del capítulo de abajo.
+     Los tokens se redefinen por tema y por capítulo; la barra y la Ruta 74
+     (hitos) copian el del capítulo de abajo.
 
    Cómo se mueve:
    - js/main.js calcula el avance de cada [data-escena] y lo deja en --p (0 a 1).
@@ -373,8 +373,34 @@ b {
 /* ── Piezas comunes ──────────────────────────────── */
 .capitulo {
   position: relative;
+  overflow: clip;
   background: var(--fondo);
   color: var(--texto);
+  /* Fondo: grilla de 48 px casi invisible (<= 5 %) y luz azul suave. Siguen al tema del capítulo */
+  --grilla: color-mix(in srgb, var(--texto) 4.5%, transparent);
+  --luz-1: color-mix(in srgb, var(--senal) 13%, transparent);
+  --luz-2: color-mix(in srgb, var(--senal-claro) 8%, transparent);
+}
+
+/* Grilla y luz: detrás del contenido (z 0), que va por encima (z 1). inset -20 px arriba y
+   abajo para que el parallax (hasta 20 px, ver "Fondo con parallax") no deje bordes */
+.capitulo::before {
+  content: '';
+  position: absolute;
+  inset: -20px 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(60% 55% at 88% 8%, var(--luz-1), transparent 70%),
+    radial-gradient(50% 45% at 8% 92%, var(--luz-2), transparent 70%),
+    linear-gradient(var(--grilla) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grilla) 1px, transparent 1px);
+  background-size: auto, auto, 48px 48px, 48px 48px;
+}
+
+.capitulo > :not(.hito) {
+  position: relative;
+  z-index: 1;
 }
 
 .contenedor {
@@ -915,17 +941,14 @@ b {
   color: var(--suave);
 }
 
-/* Riel de progreso: el trazo del 4 y el punto */
-.riel {
-  display: none;
-}
-
 /* ── 00. Portada ─────────────────────────────────── */
 /* Estática y pensada para el celular: título, bajada y botón
    entran en la primera pantalla. El contenido se centra con márgenes
    automáticos: si no entra, crece hacia abajo y nunca queda bajo la barra. */
 .hero {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   min-height: 100svh;
   padding: calc(var(--header-height) + 1.25rem) 0 2rem;
 }
@@ -933,7 +956,7 @@ b {
 .hero__contenido {
   width: var(--ancho);
   /* En celular el título arranca arriba, pegado a la barra; en escritorio va centrado */
-  margin: 0 auto auto;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -978,9 +1001,84 @@ b {
   color: var(--acento);
 }
 
+/* Celular animado del inicio: abajo del CTA en celular, a la derecha desde 760 px */
+.hero__escena {
+  --tel-ancho: min(40vw, 150px);
+  position: relative;
+  width: min(100%, 20rem);
+  margin-top: 1rem;
+  padding-bottom: 3.25rem;
+  display: flex;
+  justify-content: center;
+}
+
+.hero__visual {
+  display: grid;
+  place-items: center;
+}
+
+.hero__pausa {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 48px;
+  height: 48px;
+  margin-left: -24px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  border: 1.5px solid var(--linea-fuerte);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--texto);
+  cursor: pointer;
+}
+
+.hero__pausa:hover {
+  border-color: var(--texto);
+}
+
+/* Dos barras (pausar); con aria-pressed="true", un triángulo (reanudar) */
+.hero__pausa span {
+  display: block;
+  width: 14px;
+  height: 16px;
+  background: linear-gradient(90deg, currentColor 0 4px, transparent 4px 10px, currentColor 10px 14px);
+}
+
+.hero__pausa[aria-pressed='true'] span {
+  width: 14px;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+/* Sin movimiento (o sin JS) no hay nada que pausar */
+html:not(.mov) .hero__pausa {
+  display: none;
+}
+
 @media (min-width: 760px) {
+  .hero {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+    padding-inline: max(2rem, calc((100% - 1180px) / 2));
+  }
+
   .hero__contenido {
-    margin: auto;
+    margin: 0;
+    width: auto;
+    flex: 1 1 0;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .hero__escena {
+    --tel-ancho: min(26vw, 250px);
+    flex: 0 0 auto;
+    width: auto;
+    margin: 0 1rem 0 0;
   }
 
   .hero__title {
@@ -995,7 +1093,7 @@ b {
   .hero__acciones {
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 1.75rem;
     margin-top: 2.25rem;
     max-width: none;
@@ -2235,7 +2333,7 @@ select.campo:focus-visible {
   position: fixed;
   right: calc(1rem + env(safe-area-inset-right, 0px));
   bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
-  /* Igual que el riel: por debajo del índice (65) y de la barra (70) */
+  /* Por debajo del índice (65) y de la barra (70) */
   z-index: 60;
   display: inline-flex;
   align-items: center;
@@ -2283,7 +2381,7 @@ select.campo:focus-visible {
 }
 
 @media (min-width: 760px) {
-  /* Alineado con el riel, que queda arriba y a la misma distancia del borde */
+  /* Un poco más separado del borde en pantallas anchas */
   .wa-flotante {
     right: calc(1.25rem + env(safe-area-inset-right, 0px));
     bottom: calc(1.25rem + env(safe-area-inset-bottom, 0px));
@@ -2595,39 +2693,26 @@ select.campo:focus-visible {
 }
 
 
-/* ── Intro "mini historia" ───────────────────────── */
-/* Solo existe con html.con-intro (JS + sin reduced-motion + primera vez en la sesión
-   o ?intro). Dura 2,2 s: 0-0,9 s entran las burbujas de consultas sueltas; 0,9-1,5 s
-   se ordenan hacia el centro y aparece el pedido completo; 1,6-2,2 s se desvanece.
-   No tapa nada del HTML de abajo: la portada y la barra están desde el principio.
-   Solo transform y opacity. */
-.intro {
-  display: none;
-}
-
-html.con-intro .intro {
-  display: grid;
-  place-items: center;
-  color-scheme: dark;
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  background: var(--tinta);
-  animation: intro-salida 0.6s var(--ease) 1.6s forwards;
-}
-
-.intro__tel {
+/* ── Celular animado (inicio) ────────────────────── */
+/* Decorativo. Sin html.mov queda quieto en su estado final: burbujas alineadas arriba
+   y el pedido con el ✓. Con html.mov hay un loop de 8 s (solo transform y opacity):
+   0-2 s las burbujas entran sueltas y torcidas · 2-4 s se alinean y se achican hacia
+   el pedido, que aparece con el ✓ · 4-6,5 s quieto · 6,5-8 s se desvanece y recomienza.
+   La pausa (.tel--pausa, botón) y .tel--fuera (inicio fuera de pantalla o pestaña oculta)
+   congelan el loop. */
+.tel {
   position: relative;
-  width: min(46vw, 168px);
+  width: var(--tel-ancho, 150px);
   aspect-ratio: 9 / 17;
-  border: 3px solid rgba(244, 243, 239, 0.5);
+  border: 3px solid #3B3B40;
   border-radius: 26px;
   padding: 22px 10px 12px;
   background: #151517;
-  animation: intro-tel 0.5s var(--ease) both;
+  color-scheme: dark;
+  overflow: hidden;
 }
 
-.intro__muesca {
+.tel__muesca {
   position: absolute;
   top: 7px;
   left: 50%;
@@ -2638,138 +2723,288 @@ html.con-intro .intro {
   background: rgba(244, 243, 239, 0.25);
 }
 
-.intro__pantalla {
+.tel__pantalla {
   position: relative;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 8px;
+  gap: 6px;
 }
 
-.intro__burbuja {
+.tel__burbuja {
   align-self: flex-start;
-  padding: 7px 11px;
+  padding: 6px 10px;
   border-radius: 14px 14px 14px 4px;
   background: var(--papel);
   color: var(--tinta);
   font-family: var(--mono);
-  font-size: 0.72rem;
+  font-size: 0.66rem;
   line-height: 1.2;
   white-space: nowrap;
-  opacity: 0;
-  animation: intro-burbuja 1.2s var(--ease-io) both;
 }
 
-.intro__burbuja:nth-child(1) { --dy: 63px; --rot: -4deg; animation-delay: 0s; }
-.intro__burbuja:nth-child(2) { --dy: 21px; --rot: 3deg; animation-delay: 0.15s; align-self: flex-end; border-radius: 14px 14px 4px 14px; }
-.intro__burbuja:nth-child(3) { --dy: -21px; --rot: -2deg; animation-delay: 0.3s; }
-.intro__burbuja:nth-child(4) { --dy: -63px; --rot: 4deg; animation-delay: 0.45s; align-self: flex-end; border-radius: 14px 14px 4px 14px; }
+.tel__burbuja:nth-child(2) { --x0: 14px; --y0: 70px; --r0: 4deg; align-self: flex-end; border-radius: 14px 14px 4px 14px; }
+.tel__burbuja:nth-child(1) { --x0: -10px; --y0: 120px; --r0: -5deg; }
+.tel__burbuja:nth-child(3) { --x0: -4px; --y0: 30px; --r0: -2deg; }
 
-.intro__pedido {
+.tel__pedido {
   position: absolute;
   left: 0;
   right: 0;
-  top: 50%;
+  bottom: 12%;
   display: grid;
   gap: 6px;
-  margin-top: -44px;
   padding: 10px;
   border-radius: 10px;
   background: var(--papel);
   color: var(--tinta);
   font-family: var(--mono);
-  font-size: 0.7rem;
-  opacity: 0;
-  animation: intro-pedido 0.5s var(--ease) 0.9s both;
+  font-size: 0.64rem;
 }
 
-.intro__pedido b {
+.tel__pedido b {
   font-weight: 700;
 }
 
-.intro__pedido i {
+.tel__pedido i {
   display: block;
   height: 6px;
   border-radius: 3px;
   background: rgba(11, 11, 12, 0.18);
 }
 
-.intro__pedido i:nth-of-type(2) {
+.tel__pedido i:nth-of-type(2) {
   width: 70%;
 }
 
-.intro__pedido em {
+.tel__pedido em {
   font-style: normal;
   font-weight: 700;
   color: var(--senal);
-  opacity: 0;
-  transform: scale(0.8);
-  transform-origin: left center;
-  animation: intro-check 0.3s var(--ease) 1.25s both;
 }
 
-@keyframes intro-tel {
-  from {
-    opacity: 0;
-    transform: translate3d(0, 12px, 0);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
+html.mov .tel__burbuja {
+  animation: tel-burbuja 8s var(--ease-io) infinite;
 }
 
-@keyframes intro-burbuja {
+html.mov .tel__pedido {
+  animation: tel-pedido 8s var(--ease) infinite;
+}
+
+html.mov .tel__pedido em {
+  animation: tel-check 8s var(--ease) infinite;
+}
+
+.tel--pausa,
+.tel--pausa *,
+.tel--fuera,
+.tel--fuera * {
+  animation-play-state: paused !important;
+}
+
+@keyframes tel-burbuja {
   0% {
     opacity: 0;
-    transform: translate3d(0, 24px, 0) scale(0.8);
+    transform: translate3d(var(--x0), var(--y0), 0) rotate(var(--r0)) scale(1.15);
   }
-  35% {
+  18% {
     opacity: 1;
-    transform: translate3d(0, 0, 0) rotate(var(--rot)) scale(1);
   }
-  65% {
+  25% {
     opacity: 1;
-    transform: translate3d(0, 0, 0) rotate(var(--rot)) scale(1);
+    transform: translate3d(var(--x0), var(--y0), 0) rotate(var(--r0)) scale(1.15);
+  }
+  50%,
+  81.25% {
+    opacity: 1;
+    transform: none;
   }
   100% {
     opacity: 0;
-    transform: translate3d(0, var(--dy), 0) scale(0.3);
-  }
-}
-
-@keyframes intro-pedido {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-  to {
-    opacity: 1;
     transform: none;
   }
 }
 
-@keyframes intro-check {
-  to {
+@keyframes tel-pedido {
+  0%,
+  30% {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0) scale(0.92);
+  }
+  48%,
+  81.25% {
     opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
     transform: none;
   }
 }
 
-@keyframes intro-salida {
-  to {
+@keyframes tel-check {
+  0%,
+  46% {
     opacity: 0;
-    visibility: hidden;
+    transform: scale(0.8);
+  }
+  54%,
+  81.25% {
+    opacity: 1;
+    transform: none;
+  }
+  100% {
+    opacity: 0;
+    transform: none;
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .intro {
-    display: none !important;
+
+/* ── Ruta 74 y barra de progreso ─────────────────── */
+/* La Ruta 74 es un SVG (primer hijo de <main>) que arma js/main.js (trazarRuta): nace
+   bajo el 74 de la barra y pasa por un hito en cada capítulo. En celular es una línea
+   fina por el borde izquierdo (7 px); desde 760 px sigue dos carriles dentro del margen
+   libre. Va encima de los fondos y debajo del contenido y de la barra.
+   El trazo se dibuja con el scroll: animation-timeline: scroll() y, si el navegador no
+   lo tiene, html.sin-sda + --progreso escrito por main.js. Con reduced-motion (o sin
+   html.mov) la ruta está completa y los hitos encendidos. Sin JS no se ve. */
+:root {
+  --ruta-x: 7px;
+  --ruta-ancho: 14px;
+}
+
+main {
+  position: relative;
+}
+
+.ruta {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--ruta-ancho);
+  height: 100%;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.ruta path {
+  fill: none;
+  stroke: var(--senal);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* El camino completo, apenas marcado: el texto cambia de color entre capítulos y el
+   SVG queda fuera de ellos, así que usa el azul de la marca a baja opacidad */
+.ruta__fondo {
+  opacity: 0.22;
+}
+
+.ruta__trazo {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+html.mov .ruta__trazo {
+  stroke-dashoffset: 1;
+}
+
+.hito {
+  position: absolute;
+  left: var(--ruta-x);
+  top: 0;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  margin: -5px 0 0 -5px;
+  background: var(--fondo);
+  box-shadow: inset 0 0 0 2px var(--senal);
+  pointer-events: none;
+}
+
+/* Encendido: es una marca de avance, mínima (10 px) y lejos de los botones de acción */
+.hito.encendido {
+  background: var(--accion);
+  box-shadow: 0 0 0 1.5px var(--tinta);
+}
+
+html.mov .hito {
+  transition: background-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+html:not(.js) .ruta,
+html:not(.js) .hito,
+html:not(.js) .progreso {
+  display: none;
+}
+
+.progreso {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 75;
+  height: 3px;
+  pointer-events: none;
+}
+
+.progreso span {
+  display: block;
+  height: 100%;
+  background: var(--senal);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+@keyframes ruta-dibujo {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes progreso {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+@supports (animation-timeline: scroll()) {
+  html.mov .ruta__trazo {
+    animation: ruta-dibujo linear both;
+    animation-timeline: scroll(root block);
+  }
+
+  html.mov .progreso span {
+    animation: progreso linear both;
+    animation-timeline: scroll(root block);
   }
 }
 
+/* Respaldo sin animation-timeline: main.js escribe --progreso (0 a 1) en .ruta y .progreso */
+html.mov.sin-sda .ruta__trazo {
+  animation: none;
+  stroke-dashoffset: calc(1 - var(--progreso, 0));
+}
+
+html.sin-sda .progreso span,
+html:not(.mov) .progreso span {
+  animation: none;
+  transform: scaleX(var(--progreso, 0));
+}
+
+/* ── Fondo con parallax ──────────────────────────── */
+/* La luz y la grilla de .capitulo::before se desplazan hasta 20 px (de +20 a -20) mientras
+   la sección cruza la pantalla. Solo con html.mov y animation-timeline: view(); sin soporte
+   o con reduced-motion queda quieto (no hay respaldo en JS). */
+@keyframes luz {
+  from { transform: translateY(20px); }
+  to { transform: translateY(-20px); }
+}
+
+@supports (animation-timeline: view()) {
+  html.mov .capitulo::before {
+    animation: luz linear both;
+    animation-timeline: view();
+  }
+}
 
 /* ═══════════════════════════════════════════════════════
    PANTALLAS MÁS ANCHAS (mobile first)
@@ -2820,6 +3055,13 @@ html.con-intro .intro {
 @media (min-width: 760px) {
   :root {
     --ancho: min(1180px, calc(100% - 4rem));
+    /* Carriles dentro del margen libre: entre 12 y 64 px del borde */
+    --ruta-x: clamp(12px, calc(max(32px, (100vw - 1180px) / 2) * 0.4), 64px);
+    --ruta-ancho: calc(var(--ruta-x) * 2);
+  }
+
+  .ruta path {
+    stroke-width: 2;
   }
 
   .nav__cta {
@@ -2850,47 +3092,6 @@ html.con-intro .intro {
 
   .compromiso:first-child {
     grid-column: 1 / -1;
-  }
-
-  /* Riel de progreso a la derecha */
-  .riel {
-    display: block;
-    position: fixed;
-    right: 1.25rem;
-    top: 50%;
-    z-index: 60;
-    width: 2px;
-    height: 34vh;
-    color: var(--texto);
-    transform: translateY(-50%);
-    transition: color 0.3s var(--ease), opacity 0.3s var(--ease);
-  }
-
-  .riel__linea {
-    position: absolute;
-    inset: 0;
-    background: currentColor;
-    opacity: 0.18;
-  }
-
-  .riel::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: currentColor;
-    transform: scaleY(var(--progreso, 0));
-    transform-origin: top;
-  }
-
-  .riel__punto {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    width: 10px;
-    height: 10px;
-    background: var(--senal);
-    box-shadow: 0 0 0 1.5px var(--tinta);
-    transform: translate(-50%, calc(var(--progreso, 0) * 34vh - 50%));
   }
 }
 

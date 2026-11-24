@@ -309,12 +309,11 @@
        La de los títulos se pide primero porque es la que se ve al cargar. -->
   <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="css/styles.css?v=29" />
+  <link rel="stylesheet" href="css/styles.css?v=30" />
   <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
        (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
-       La intro (mini historia de 2,2 s) se muestra una vez por sesión, también en el celular,
-       salvo con reduced-motion (o siempre con ?intro, menos con reduced-motion). -->
+       Sin intro: la mini historia vive dentro del inicio (celular animado), sin tapar la carga. -->
   <script>
     (function () {
       var d = document.documentElement;
@@ -332,8 +331,6 @@
       try {
         var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!quieto) d.classList.add('mov');
-        var forzar = /[?&]intro\b/.test(location.search);
-        if (!quieto && (forzar || !sessionStorage.getItem('s74-intro'))) d.classList.add('con-intro');
       } catch (e) { }
     })();
   </script>
@@ -342,26 +339,6 @@
 <body>
 
   <a class="saltar" href="#contenido">Saltar al contenido</a>
-
-  <!-- Intro "mini historia" (2,2 s): las consultas sueltas se ordenan en un pedido completo.
-       Decorativa: aria-hidden, nada enfocable. Se saltea con un toque o una tecla. -->
-  <div class="intro" id="intro" aria-hidden="true">
-    <div class="intro__tel">
-      <span class="intro__muesca"></span>
-      <div class="intro__pantalla">
-        <span class="intro__burbuja">¿precio?</span>
-        <span class="intro__burbuja">¿abren hoy?</span>
-        <span class="intro__burbuja">¿hacen envíos?</span>
-        <span class="intro__burbuja">¿siguen?</span>
-        <div class="intro__pedido">
-          <b>Pedido completo</b>
-          <i></i>
-          <i></i>
-          <em>Presupuesto ✓</em>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Barra: logo, secciones, tema, "Pedí tu diagnóstico gratis" y el índice a pantalla completa.
        data-tema cambia según el capítulo que tiene debajo (base, alt o señal). -->
@@ -400,6 +377,9 @@
     </nav>
   </header>
 
+  <!-- Barra de progreso de lectura: decorativa, 3 px arriba de todo -->
+  <div class="progreso" aria-hidden="true"><span></span></div>
+
   <!-- Índice a pantalla completa -->
   <div class="indice" id="indice" data-tema="base" hidden>
     <ol class="indice__lista">
@@ -418,12 +398,6 @@
       <a href="https://www.linkedin.com/company/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de studio74dev (se abre en una pestaña nueva)">LinkedIn</a>
       <a href="https://www.facebook.com/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="Facebook de studio74dev (se abre en una pestaña nueva)">Facebook</a>
     </div>
-  </div>
-
-  <!-- Riel de progreso: el trazo vertical del 4 con el punto de la marca -->
-  <div class="riel" aria-hidden="true">
-    <span class="riel__linea"></span>
-    <span class="riel__punto"></span>
   </div>
 
   <!-- WhatsApp flotante. Oculto sin JavaScript (hidden); js/main.js le pone el enlace
@@ -450,8 +424,12 @@
 
   <main id="contenido">
 
+    <!-- Ruta 74: el trazo que nace del 74 y pasa por cada sección. Lo arma js/main.js (trazarRuta) -->
+    <svg class="ruta" id="ruta" aria-hidden="true" focusable="false"><path class="ruta__fondo" /><path class="ruta__trazo" pathLength="1" /></svg>
+
     <!-- 00. Portada: estática. El h1 es lo primero que se pinta, por eso no se anima. -->
     <section id="inicio" class="hero capitulo" data-tema="base" aria-labelledby="hero-title">
+      <span class="hito" aria-hidden="true"></span>
       <div class="hero__contenido">
         <h1 id="hero-title" class="hero__title">Que ningún cliente se le escape.</h1>
         <p class="hero__lead">Una página, un bot o un sistema, a la medida de su negocio.</p>
@@ -460,11 +438,31 @@
           <a href="#casos" class="hero__enlace">Ver un caso real</a>
         </div>
       </div>
-      <div class="hero__visual" aria-hidden="true"></div>
+      <!-- Celular animado (loop de 8 s, decorativo). El botón de pausa va fuera del aria-hidden. -->
+      <div class="hero__escena">
+        <div class="hero__visual" aria-hidden="true">
+          <div class="tel">
+            <span class="tel__muesca"></span>
+            <div class="tel__pantalla">
+              <span class="tel__burbuja">¿precio?</span>
+              <span class="tel__burbuja">¿abren hoy?</span>
+              <span class="tel__burbuja">¿hacen envíos?</span>
+              <div class="tel__pedido">
+                <b>Pedido completo</b>
+                <i></i>
+                <i></i>
+                <em>Presupuesto ✓</em>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="hero__pausa" aria-pressed="false" aria-label="Pausar la animación"><span aria-hidden="true"></span></button>
+      </div>
     </section>
 
     <!-- 01. ¿Le pasa esto? Los dolores del comerciante, en primera persona -->
     <section id="le-pasa" class="le-pasa capitulo" data-tema="contra" aria-labelledby="le-pasa-title">
+      <span class="hito" aria-hidden="true"></span>
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">02</span>Problemas</p>
@@ -504,6 +502,7 @@
 
     <!-- 02. Qué resolvemos: cada dolor con su solución y su beneficio -->
     <section id="resolvemos" class="resolvemos capitulo" data-tema="base" aria-labelledby="resolvemos-title">
+      <span class="hito" aria-hidden="true"></span>
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">03</span>Soluciones</p>
@@ -565,6 +564,7 @@
 
     <!-- 03. Casos reales: Matemar (antes y después) -->
     <section id="casos" class="casos capitulo" data-tema="contra" aria-labelledby="casos-title">
+      <span class="hito" aria-hidden="true"></span>
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">04</span>Casos</p>
@@ -604,6 +604,7 @@
 
     <!-- 04. Cómo trabajamos: tres pasos y las garantías (sin letra chica) -->
     <section id="como-trabajamos" class="como capitulo" data-tema="base" aria-labelledby="como-title">
+      <span class="hito" aria-hidden="true"></span>
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">05</span>Proceso</p>
@@ -673,6 +674,7 @@
 
     <!-- 05. Quiénes somos: el equipo y la Ruta 74 -->
     <section id="quienes" class="quienes capitulo" data-tema="contra" aria-labelledby="quienes-title">
+      <span class="hito" aria-hidden="true"></span>
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">06</span>Equipo</p>
@@ -710,6 +712,7 @@
     <!-- 06. Preguntas frecuentes. Si cambian, actualizar también el FAQPage del JSON-LD
          (solo las preguntas cuya respuesta ya es definitiva, sin marcas pendientes). -->
     <section id="preguntas" class="preguntas-sec capitulo" data-tema="base" aria-labelledby="preguntas-title">
+      <span class="hito" aria-hidden="true"></span>
       <div class="contenedor preguntas-sec__grilla">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">07</span>Preguntas</p>
@@ -755,6 +758,7 @@
 
     <!-- 07. Diagnóstico gratis: el formulario se completa como una frase -->
     <section id="contacto" class="contacto capitulo" data-tema="contra" aria-labelledby="contacto-title">
+      <span class="hito" aria-hidden="true"></span>
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">08</span>Diagnóstico</p>
@@ -935,7 +939,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=29" defer></script>
+  <script src="js/main.js?v=30" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

@@ -47,46 +47,7 @@
   // Animaciones de scroll: solo si el <head> puso html.mov
   const mov = document.documentElement.classList.contains('mov');
 
-  /* ── Intro: mini historia ────────────────────────── */
-  /* Dura 2,2 s en CSS (la termina el animationend de intro-salida). Se guarda
-     que ya se vio, y se saltea con un toque o una tecla. Si algo falla, un
-     respaldo a los 2,6 s y una red de seguridad a los 4 s la quitan. */
   const root = document.documentElement;
-  const intro = document.getElementById('intro');
-  if (intro && root.classList.contains('con-intro')) {
-    let terminada = false;
-    const quitar = () => {
-      document.removeEventListener('pointerdown', saltear, true);
-      document.removeEventListener('keydown', terminar, true);
-    };
-    const terminar = () => {
-      if (terminada) return;
-      terminada = true;
-      root.classList.remove('con-intro');
-      intro.remove();
-      quitar();
-    };
-    // Toque: se cierra la intro y ese mismo toque (pointerup/click) no llega a lo de abajo
-    const saltear = (e) => {
-      if (terminada) return;
-      e.preventDefault();
-      terminar();
-      const frenar = (ev) => { ev.preventDefault(); ev.stopPropagation(); };
-      document.addEventListener('click', frenar, { capture: true, once: true });
-      setTimeout(() => document.removeEventListener('click', frenar, true), 400);
-    };
-    try {
-      sessionStorage.setItem('s74-intro', '1');
-    } catch (_) { /* sin storage: se vuelve a ver la próxima vez */ }
-
-    intro.addEventListener('animationend', (e) => {
-      if (e.animationName === 'intro-salida') terminar();
-    });
-    document.addEventListener('pointerdown', saltear, { capture: true });
-    document.addEventListener('keydown', terminar, { once: true, capture: true });
-    setTimeout(terminar, 2600);
-    setTimeout(terminar, 4000);
-  }
 
   /* ── Tema claro / oscuro ─────────────────────────── */
   /* El <head> ya puso html[data-theme] (lo guardado o el del sistema).
@@ -160,14 +121,18 @@
        y el CSS hace la transición (fluida aunque el dedo vaya rápido o lento).
      - paso: 0 cuando asoma por abajo, 1 cuando se fue por arriba.
      - recorrido: la línea del proceso, que avanza con el centro de la pantalla.
-     También pinta el riel, el color de la barra y marca en la barra la
-     sección que se está leyendo. */
+     También pinta el color de la barra, marca en la barra la sección que se
+     está leyendo y, sin animation-timeline, el avance de la Ruta 74. */
   const escenas = Array.from(document.querySelectorAll('[data-escena]'));
   const capitulos = Array.from(document.querySelectorAll('.capitulo[data-tema]'));
-  const riel = document.querySelector('.riel');
   const linksBarra = Array.from(document.querySelectorAll('.nav__links a'));
   const waFlotante = document.getElementById('waFlotante');
   const barraCta = document.getElementById('barraCta');
+  const ruta = document.getElementById('ruta');
+  const barraProgreso = document.querySelector('.progreso');
+  let ultimoAvance = '';
+  // Sin animation-timeline: el CSS usa --progreso (html.sin-sda)
+  if (!(window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()'))) root.classList.add('sin-sda');
   if (barraCta) barraCta.hidden = false;
   const iPortada = capitulos.findIndex((c) => c.id === 'inicio');
   const iContacto = capitulos.findIndex((c) => c.id === 'contacto');
@@ -261,23 +226,29 @@
       entradas = [];
     }
 
-    // Barra y riel: toman el color del capítulo que tienen debajo
+    // La barra toma el color del capítulo que tiene debajo
     const bajoBarra = altoBarra / 2;
     const actual = capitulos.find((c, i) => rectsCap[i].top <= bajoBarra && rectsCap[i].bottom > bajoBarra);
     const temaDe = (c) => (c ? c.dataset.tema : 'base');
     const temaBarra = temaDe(actual);
     if (menuBoton.getAttribute('aria-expanded') !== 'true' && header.dataset.tema !== temaBarra) header.dataset.tema = temaBarra;
 
-    const rielEn = capitulos.find((c, i) => rectsCap[i].top <= vh / 2 && rectsCap[i].bottom > vh / 2);
-    if (riel) {
-      const temaRiel = temaDe(rielEn);
-      if (riel.dataset.tema !== temaRiel) riel.dataset.tema = temaRiel;
-      riel.style.setProperty('--progreso', clamp(y / Math.max(1, total - vh)).toFixed(4));
+    const centroEn = capitulos.find((c, i) => rectsCap[i].top <= vh / 2 && rectsCap[i].bottom > vh / 2);
+
+    // Ruta 74 y barra de progreso: con animation-timeline los mueve el CSS. Sin él (html.sin-sda)
+    // o sin movimiento, se escribe --progreso (solo en esos dos elementos, no en <html>).
+    if (root.classList.contains('sin-sda') || !mov) {
+      const avance = clamp(y / Math.max(1, total - vh)).toFixed(4);
+      if (avance !== ultimoAvance) {
+        ultimoAvance = avance;
+        if (ruta) ruta.style.setProperty('--progreso', avance);
+        if (barraProgreso) barraProgreso.style.setProperty('--progreso', avance);
+      }
     }
 
     // WhatsApp flotante: aparece cuando se deja la portada (que ya tiene sus
     // acciones) y se va al llegar a Contacto (que tiene WhatsApp en sus canales).
-    // Toma el tema del capítulo que tiene debajo, como el riel.
+    // Toma el tema del capítulo que tiene debajo.
     if (waFlotante && !waFlotante.hidden) {
       const visible = menuBoton.getAttribute('aria-expanded') !== 'true'
         && (iPortada < 0 || rectsCap[iPortada].bottom < vh * 0.5)
@@ -301,7 +272,7 @@
     }
 
     // Sección actual en la barra (el capítulo que cruza el centro de la pantalla)
-    const id = rielEn ? `#${rielEn.id}` : '';
+    const id = centroEn ? `#${centroEn.id}` : '';
     linksBarra.forEach((a) => {
       const es = a.getAttribute('href') === id;
       a.classList.toggle('is-actual', es);
@@ -323,6 +294,75 @@
   window.addEventListener('resize', () => { medir(); pedir(); });
   window.addEventListener('load', () => { medir(); pedir(); });
   if (document.fonts) document.fonts.ready.then(() => { medir(); pedir(); });
+
+  /* ── Ruta 74: trazado y hitos ────────────────────── */
+  /* Mide el rótulo de cada capítulo, ubica su hito y arma el camino: nace bajo el 74 de la
+     barra y pasa por cada hito con curvas de tangente vertical. En celular (< 760 px) va
+     recta por el borde izquierdo; desde 760 px alterna entre dos carriles del margen. Se
+     rehace al cargar, al llegar las fuentes y cuando cambia el alto de <main>. */
+  const main = document.getElementById('contenido');
+  const hitos = main ? Array.from(main.querySelectorAll(':scope > .capitulo > .hito')) : [];
+  // Posición de un elemento dentro de su ancestro (sin transformaciones: offsetTop)
+  const dentroDe = (el, tope) => {
+    let y = 0;
+    for (let e = el; e && e !== tope; e = e.offsetParent) y += e.offsetTop;
+    return y;
+  };
+  const trazarRuta = () => {
+    if (!ruta || !main || !hitos.length) return;
+    const H = main.offsetHeight;
+    ruta.style.height = `${H}px`;
+    const W = ruta.getBoundingClientRect().width;
+    ruta.setAttribute('viewBox', `0 0 ${W.toFixed(2)} ${H}`);
+    const ancho = window.matchMedia('(min-width: 760px)').matches;
+    const puntos = hitos.map((h) => {
+      const cap = h.parentElement;
+      const ancla = cap.querySelector('.rotulo') || cap.querySelector('h1, h2');
+      const y = ancla ? dentroDe(ancla, cap) + Math.min(ancla.offsetHeight / 2, 24) : 24;
+      h.style.top = `${y.toFixed(1)}px`;
+      return { x: h.offsetLeft + h.offsetWidth / 2, y: cap.offsetTop + y };
+    });
+    const xr = puntos[0].x;
+    const bow = ancho ? xr * 0.5 : 0;
+    const todos = [{ x: xr, y: 0 }].concat(puntos, [{ x: xr, y: H }]);
+    const f = (n) => n.toFixed(1);
+    let d = `M${f(todos[0].x)} ${f(todos[0].y)}`;
+    for (let i = 1; i < todos.length; i++) {
+      const a = todos[i - 1];
+      const b = todos[i];
+      const medio = (a.y + b.y) / 2;
+      const k = (medio - a.y) * 0.55;
+      const bx = xr + (i % 2 ? bow : -bow);
+      d += `C${f(a.x)} ${f(a.y + k)} ${f(bx)} ${f(medio - k)} ${f(bx)} ${f(medio)}`
+        + `C${f(bx)} ${f(medio + k)} ${f(b.x)} ${f(b.y - k)} ${f(b.x)} ${f(b.y)}`;
+    }
+    ruta.querySelectorAll('path').forEach((p) => p.setAttribute('d', d));
+  };
+  if (ruta && main && hitos.length) {
+    let espera = null;
+    const retrazar = () => { clearTimeout(espera); espera = setTimeout(trazarRuta, 150); };
+    trazarRuta();
+    window.addEventListener('load', trazarRuta);
+    if (document.fonts) document.fonts.ready.then(trazarRuta);
+    if ('ResizeObserver' in window) new ResizeObserver(retrazar).observe(main);
+    else window.addEventListener('resize', retrazar);
+
+    // Hitos: se encienden una sola vez cuando el capítulo llega al 60 % superior de la pantalla
+    // (o ya quedó arriba). Sin movimiento, la ruta está completa y todos encendidos.
+    const encender = (h) => h.classList.add('encendido');
+    if (!mov || !('IntersectionObserver' in window)) {
+      hitos.forEach(encender);
+    } else {
+      const luz = new IntersectionObserver((lista) => {
+        lista.forEach((e) => {
+          if (!e.isIntersecting && e.boundingClientRect.top > 0) return;
+          encender(e.target);
+          luz.unobserve(e.target);
+        });
+      }, { rootMargin: '0px 0px -40% 0px' });
+      hitos.forEach((h) => luz.observe(h));
+    }
+  }
 
   /* ── "¿Le pasa esto?": tachado al llegar a cada solución ── */
   /* Solo con movimiento. Al entrar (o haber quedado arriba) la solución n,
@@ -373,6 +413,30 @@
       });
       b.addEventListener('pointerleave', () => { b.style.transform = ''; });
     });
+  }
+
+  /* ── Celular animado del inicio: pausa ────────────── */
+  /* El loop dura más de 5 s: hay botón de pausa (WCAG 2.2.2). Además se frena solo
+     cuando el inicio sale de pantalla o la pestaña queda oculta. */
+  const tel = document.querySelector('.hero .tel');
+  const pausa = document.querySelector('.hero__pausa');
+  if (tel) {
+    let enPantalla = true;
+    const actualizarFuera = () => tel.classList.toggle('tel--fuera', !enPantalla || document.hidden);
+    if (pausa) {
+      pausa.addEventListener('click', () => {
+        const pausado = tel.classList.toggle('tel--pausa');
+        pausa.setAttribute('aria-pressed', String(pausado));
+      });
+    }
+    const inicio = document.getElementById('inicio');
+    if (inicio && 'IntersectionObserver' in window) {
+      new IntersectionObserver((lista) => {
+        enPantalla = lista[lista.length - 1].isIntersecting;
+        actualizarFuera();
+      }).observe(inicio);
+    }
+    document.addEventListener('visibilitychange', actualizarFuera);
   }
 
   /* ── Contact form ───────────────────────────────── */
