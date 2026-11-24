@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   STUDIO 74 — STYLESHEET V11
+   STUDIO 74 — STYLESHEET V12
    Paleta: el logo en blanco y negro, con el punto en azul costa.
      Tinta #0B0B0C · Papel #F4F3EF · Señal (azul costa) #2F5BEA
    Acento de acción (solo botones de acción, --accion): A naranja boya #FF5A1F
@@ -3003,6 +3003,8 @@ html:not(.mov) .progreso span {
   html.mov .capitulo::before {
     animation: luz linear both;
     animation-timeline: view();
+    /* capa propia: sin esto cada cuadro repinta los degradados de las 8 secciones (TBT alto) */
+    will-change: transform;
   }
 }
 

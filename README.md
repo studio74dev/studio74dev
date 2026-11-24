@@ -9,9 +9,13 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 | Archivo | Qué es |
 |---|---|
 | `index.html` | La landing completa (ver secciones abajo). Incluye los datos estructurados JSON-LD. |
+| `proyectos/index.html` | Lista de proyectos (`/proyectos/`). Cada subpágina copia el `<head>`, la barra y el pie de la home y usa rutas absolutas (`/css/...`). |
+| `proyectos/matemar/index.html` | Página del caso Matemar: datos, capturas reales y el pedido ilustrado. |
 | `css/styles.css` | Todos los estilos. Paleta del logo y tokens por capítulo (ver "Paleta y capítulos"). |
-| `js/main.js` | Canales (WhatsApp y LinkedIn), intro de carga, tema, índice, motor de scroll, barra fija del celular, tachado de "¿Le pasa esto?", antes/después de Matemar, botones magnéticos, pestañas del caso real, visor y envío del formulario en 3 pasos. |
+| `js/main.js` | Canales (WhatsApp y LinkedIn), celular animado del inicio (con pausa), tema, índice, motor de scroll, Ruta 74 y barra de progreso, barra fija del celular, tachado de "¿Le pasa esto?", antes/después de Matemar, botones magnéticos y envío del formulario en 3 pasos. |
 | `404.html` | Página de error propia. Lleva los estilos en línea, así que no depende del CSS. |
+| `assets/img/stock/` | Fotos de stock ilustrativas (webp, duotono) y `CREDITOS.md` con banco, autor, licencia, hash y verificación de que no son IA. |
+| `assets/img/casos/matemar/` | Capturas reales de matemar.pages.dev (390 y 1440 px), con la fecha en la página del caso. |
 | `assets/og.png` | Imagen que se ve al compartir el link (1200×630). |
 | `assets/isotipo/`, `assets/firma/` | Logo en sus variantes y firma de mail del equipo. La web no los usa. |
 | `docs/og-imagen.html` | Fuente de `assets/og.png` (ver "Imagen para compartir"). |
@@ -27,36 +31,45 @@ Cada capítulo lleva su rótulo con número (`01`…`07`) y un `data-tema` que d
 `alt` o `contra` (ver "Paleta, temas y capítulos"). Los ids `#inicio`, `#preguntas` y `#contacto`
 se conservan (los usa `404.html`); los demás son nuevos.
 
-1. **Intro de carga** (`#intro`): una mini historia de 2,2 s. Las consultas sueltas ("¿precio?",
-   "¿abren hoy?", "¿hacen envíos?", "¿siguen?") se ordenan en un pedido completo con ✓. Es decorativa
-   (`aria-hidden`, nada enfocable).
+1. **Celular animado** (dentro de `#inicio`): ya no hay intro de pantalla completa. Un celular hecho en CSS
+   muestra en loop de 8 s cómo las consultas sueltas ("¿precio?", "¿abren hoy?", "¿hacen envíos?") se
+   ordenan en un pedido completo con ✓. Es decorativo (`aria-hidden`), tiene un botón de pausa
+   (WCAG 2.2.2), se pausa solo fuera de pantalla y con la pestaña oculta, y con movimiento reducido
+   o sin JS queda quieto en el estado final.
 2. **Barra** (fija arriba): el isotipo, los enlaces (Casos, Cómo trabajamos, Quiénes somos, Preguntas),
    el botón de **tema claro/oscuro** y **Pedí tu diagnóstico gratis** (solo en pantallas de 760 px o
-   más; en el celular el CTA persistente es la barra inferior). Abajo, el **riel** de progreso e
-   **Índice**, que abre la navegación a pantalla completa con las 8 entradas de la landing.
-3. **Portada** (`#inicio`, base): título "Que ningún cliente se le escape.", una bajada, el botón
-   **Pedí tu diagnóstico gratis**, el enlace "Ver un caso real" y la línea de zona y presupuesto.
-   Todo entra en 390×844 sin desplazarse.
-4. **¿Le pasa esto?** (`#le-pasa`, contra, rótulo `01`): cuatro frases de dueños de comercios, en
-   tarjetas de una columna en el celular y dos columnas desde 760 px.
-5. **Qué resolvemos** (`#resolvemos`, base, rótulo `02`): cuatro soluciones, cada una con el dolor,
-   cómo se resuelve y el beneficio. Al bajar hasta cada una, su tarjeta y su dolor en "¿Le pasa esto?"
-   se tachan (sin movimiento reducido no se tacha nada). Cierra con el botón de diagnóstico y
-   "Presupuesto por escrito, sin cargo y sin compromiso."
-6. **Casos reales** (`#casos`, contra, rótulo `03`): **Matemar (Miramar)** con un deslizador
-   antes/después hecho en HTML y CSS (sin imágenes). El testimonio queda oculto hasta tener la
-   autorización. Sin escena fija: en todos los anchos va en una columna.
-7. **Cómo trabajamos** (`#como-trabajamos`, base, rótulo `04`): tres pasos (Diagnóstico gratis,
-   Propuesta, Entrega) y, debajo, "Sin letra chica." con los cinco compromisos (el dominio es suyo,
-   presupuesto por escrito, atención en persona, respuesta en 24 horas y seguimiento después de la
-   entrega).
-8. **Quiénes somos** (`#quienes`, contra, rótulo `05`): la presentación del estudio y el equipo de
-   cuatro desarrolladores con su formación.
+   más; en el celular el CTA persistente es la barra inferior). Arriba de todo, la **barra de
+   progreso** de lectura; la **Ruta 74** reemplaza al indicador anterior. **Índice** abre la navegación a pantalla
+   completa con las 8 entradas de la landing y "Proyectos".
+3. **Portada** (`#inicio`, base): título "Que ningún cliente se le escape.", una línea de apoyo, el botón
+   **Pedí tu diagnóstico gratis**, el enlace "Ver un caso real" y el celular animado. Todo entra en
+   390×844 sin desplazarse.
+4. **¿Le pasa esto?** (`#le-pasa`, contra, rótulo `01`): cuatro frases (sin comillas) con una foto
+   ilustrativa de stock cada una, rotulada "Foto ilustrativa".
+5. **Qué resolvemos** (`#resolvemos`, base, rótulo `02`): mockup de notebook y celular con capturas
+   reales de Matemar y cuatro soluciones (dolor y beneficio). El "Cómo" de cada una está en un
+   desplegable. Al bajar hasta cada una, su tarjeta y su dolor en "¿Le pasa esto?" se tachan (sin
+   movimiento reducido no se tacha nada). Cierra con el botón de diagnóstico.
+6. **Casos reales** (`#casos`, contra, rótulo `03`): tarjeta de **Matemar (Miramar)** con deslizador
+   antes (ilustración) / después (captura real) y "Ver el caso", más la tarjeta "¿El próximo caso es
+   el suyo?" y "Ver todos los proyectos". El detalle vive en `proyectos/matemar/`. El testimonio queda
+   oculto hasta tener la autorización.
+7. **Cómo trabajamos** (`#como-trabajamos`, base, rótulo `04`): foto ilustrativa, tres pasos con una
+   línea cada uno y "Sin letra chica." con cinco compromisos, cada uno en un desplegable (el dominio
+   es suyo, presupuesto por escrito, atención en persona, respuesta en 24 horas hábiles y
+   seguimiento después de la entrega).
+8. **Quiénes somos** (`#quienes`, contra, rótulo `05`): una línea de presentación y el equipo de
+   cuatro desarrolladores con su formación. La foto propia (pasarela de Pinamar o Ruta 74) es un
+   placeholder `[FOTO]` hasta que se deje en `assets/fuentes/`.
 9. **Preguntas frecuentes** (`#preguntas`, base, rótulo `06`): siete preguntas en `<details>`. Las
    respuestas con `[TEXTO]` o `[REVISAR]` son pendientes de contenido.
-10. **Formulario de diagnóstico** (`#contacto`, contra, rótulo `07`): en tres pasos (ver "Formulario
-    de contacto"), con los canales directos al lado ("¿Prefiere escribirnos directo?").
-11. **Pie** (base) con la zona de servicio, redes y la marca.
+10. **Formulario de diagnóstico** (`#contacto`, contra, rótulo `07`): una bajada corta, "Qué revisamos"
+    en un desplegable y el formulario en tres pasos (ver "Formulario de contacto"), con los canales
+    directos al lado.
+11. **Pie** (base): zona de servicio, **horario** (lunes a viernes de 9 a 15), los **6 servicios** de la
+    ficha de Google (páginas web y landings, fichas de Google Maps, bots y WhatsApp Business, tiendas
+    online, sistemas a medida, automatización de pedidos, cobros y reservas), redes y la marca.
+    Horario y servicios deben coincidir con la ficha de Google.
 
 El trabajo a medida (sistemas, turnos y reservas, automatización, arreglos de sitios caídos) sigue en
 el JSON-LD, pero no se ve en la página (decisión del pedido).
@@ -66,17 +79,13 @@ con el botón de diagnóstico y el WhatsApp, y se oculta al llegar a Contacto o 
 
 ## Cosas a saber antes de tocar
 
-### Intro de carga
+### Celular animado del inicio
 
-- Es la mini historia de 2,2 s de `#intro` (ver "Secciones de la landing"). Se muestra en **todos
-  los anchos** (el tráfico llega sobre todo desde el celular), **una vez por sesión** (guarda
-  `s74-intro` en `sessionStorage`). Para verla de nuevo: `?intro` en la URL.
-- Se saltea al instante con un toque o una tecla. La tecla no se consume: el comportamiento normal
-  sigue igual.
-- No aparece si el visitante tiene las animaciones reducidas en su dispositivo.
-- La activa el script del `<head>` poniendo la clase `con-intro` en `<html>`. **No uses `intro` como nombre de clase en `<html>`**: choca con el componente `.intro` (que arranca con `display: none`) y esconde toda la página.
-- Termina con el final de su animación. Si algo falla, un respaldo la quita a los 2,6 s y una red de
-  seguridad a los 4 s.
+- Vive dentro de `#inicio` (`.hero__visual`, `aria-hidden`). Loop de 8 s con `@keyframes` que animan solo
+  `transform` y `opacity`, bajo `html.mov`. No hay overlay ni almacenamiento de sesión: no hay nada que "saltear".
+- El botón `.hero__pausa` (48 px) alterna la clase `.tel--pausa`; un `IntersectionObserver` y
+  `document.hidden` también lo pausan.
+- Sin `mov` (movimiento reducido o sin JS) queda quieto en el estado final y el botón se oculta.
 
 ### Paleta, temas y capítulos
 
@@ -95,15 +104,24 @@ con el botón de diagnóstico y el WhatsApp, y se oculta al llegar a Contacto o 
 - **Geist Mono** para rótulos chicos y **Michroma** solo para la marca ("STUDIO 74").
 - Las palabras muy largas en los títulos llevan guiones suaves (`&shy;`) para cortar bien en el celular.
 
-### Animaciones de scroll
+### Animaciones de scroll y Ruta 74
 
 - La landing ya no tiene escenas fijas ni giros 3D. Lo que se mueve:
   - `entrada` (`data-escena="entrada"`): tarjetas, dolores, soluciones, casos, compromisos y miembros del equipo. Un `IntersectionObserver` le pone la clase `.visto` **una sola vez** cuando aparece y el CSS hace la transición (opacidad y `translateY`, hasta 400 ms).
   - `recorrido`: la línea de los pasos de "Cómo trabajamos".
+  - **Ruta 74**: un SVG (`#ruta`) en el margen izquierdo, que nace debajo del 74 de la barra y pasa por un
+    hito (`.hito`) por capítulo. `trazarRuta()` en `js/main.js` arma el camino; se dibuja con
+    `animation-timeline: scroll()`. Sin ese soporte, la clase `sin-sda` en `<html>` activa un respaldo
+    que escribe `--progreso` desde el scroll. Los hitos se encienden una sola vez (`.encendido`).
+  - **Barra de progreso** (`.progreso`): 3 px arriba, mismo mecanismo (scroll-driven o `sin-sda`). Queda
+    con movimiento reducido porque informa y no se mueve sola.
+  - **Parallax** de la luz de fondo (`.capitulo::before`): hasta 20 px con `animation-timeline: view()`,
+    sin respaldo JS. Lleva `will-change: transform`: sin eso Lighthouse móvil bajaba a ~75 por repintar los
+    degradados de las 8 secciones.
   - El tachado de "¿Le pasa esto?" (`.resuelto`), la barra fija y el deslizador de Matemar.
 - **`html.revelar`**: `js/main.js` pone esta clase al arrancar. Las entradas solo esconden texto si ese script corrió (las reglas van bajo `.mov.revelar`). Si el JS no carga, todo se ve.
-- Todo lo animado vive bajo `html.mov`, que pone el `<head>` solo si hay JavaScript y el dispositivo no pide movimiento reducido. **Sin `mov`, la página se ve completa y quieta**: es la versión accesible, no hay que mantener otra. Con `prefers-reduced-motion`, la intro, el tachado y las transiciones de la barra no se muestran.
-- Se anima solo `transform`, `opacity` y `clip-path`, para que vaya fluido en celulares. En el celular la barra va sin desenfoque (`backdrop-filter` se recalcula en cada cuadro).
+- Todo lo animado vive bajo `html.mov`, que pone el `<head>` solo si hay JavaScript y el dispositivo no pide movimiento reducido. **Sin `mov`, la página se ve completa y quieta**: es la versión accesible, no hay que mantener otra. Con `prefers-reduced-motion`, el celular, la Ruta 74 completa, el tachado y las transiciones de la barra quedan quietos.
+- Se anima solo `transform`, `opacity` y `clip-path` (la excepción es `stroke-dashoffset` de la Ruta 74), para que vaya fluido en celulares. En el celular la barra va sin desenfoque (`backdrop-filter` se recalcula en cada cuadro).
 
 ### Canales oficiales
 
@@ -156,9 +174,19 @@ dependen del ancho:
 - Las entradas de scroll (`data-escena="entrada"`) aparecen al bajar. Sin JavaScript se ven igual.
 - Todo respeta `prefers-reduced-motion`.
 
+### Imágenes
+
+- Solo `.webp`, `.avif` o `.svg`, con `alt`, `width`, `height` y `loading="lazy"` (menos en `#inicio`).
+- **Fotos de stock** (`assets/img/stock/`): solo de Pexels, Unsplash o Pixabay, sin IA, nunca presentadas como
+  clientes ni junto a testimonios, siempre con el rótulo "Foto ilustrativa". Cada una figura en `CREDITOS.md`.
+  Van recortadas a 4:3, en duotono de marca (`#0B0B0C` a `#8EA8FF`) y de hasta 150 KB (480 y 960 px).
+- Para regenerarlas: poner el original en `docs/_stock/originales/` y abrir `docs/fotos.html` (conversor en
+  canvas; los parámetros van en la URL) con el servidor local.
+- Las capturas de Matemar llevan la fecha en la página del caso.
+
 ### SEO
 
-- Un solo `h1` (el de la portada).
+- Un solo `h1` por página. `sitemap.xml` lista 3 URLs: `/`, `/proyectos/` y `/proyectos/matemar/` (cada una con su `title`, `description` y `canonical`).
 - JSON-LD con `Organization`/`ProfessionalService` (zona de servicio y catálogo), `Place`, `WebSite` y `FAQPage`. Si cambian las preguntas de `#preguntas`, actualizá también las del JSON-LD.
 - Las fuentes (Archivo, Geist Mono y Michroma) cargan sin bloquear el primer pintado.
 
@@ -170,7 +198,7 @@ Cualquier servidor de archivos estáticos sirve:
 py -m http.server 8800 --bind 127.0.0.1
 ```
 
-Y abrir `http://127.0.0.1:8800/?intro`.
+Y abrir `http://127.0.0.1:8800/`.
 
 El servidor estático reproduce lo que publica Cloudflare Pages: el formulario sale por
 Web3Forms y el mail llega de verdad.
@@ -193,7 +221,7 @@ botón **Pedir mi diagnóstico** al final.
 
 "Seguir" valida solo el paso actual. "Volver" conserva lo cargado. En los pasos 1 y 2, Enter en un campo de texto
 equivale a "Seguir" y no envía. Tras un envío exitoso, el formulario vuelve al paso 1 y el botón
-muestra "Pedido enviado" con la nota "Recibimos su pedido. Le respondemos dentro de las 24 horas."
+muestra "Pedido enviado" con la nota "Recibimos su pedido. Le respondemos dentro de las 24 horas hábiles."
 Si el envío falla, se queda en el paso 3 con el aviso de reintento.
 
 El correo que llega tiene asunto `Diagnóstico desde la web — <rubro> (<localidad>)` y una línea por
