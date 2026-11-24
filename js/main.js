@@ -375,48 +375,6 @@
     });
   }
 
-  /* ── Pestañas del sistema real ───────────────────── */
-  const tabs = document.querySelectorAll('.app__tab');
-  const vista = document.querySelector('#appVista img');
-  const tabActual = () => document.querySelector('.app__tab.is-on');
-  tabs.forEach((tab) => tab.addEventListener('click', () => {
-    if (tab.classList.contains('is-on')) return;
-    tabs.forEach((t) => {
-      t.classList.toggle('is-on', t === tab);
-      t.setAttribute('aria-selected', String(t === tab));
-    });
-    const cambiar = () => {
-      vista.src = tab.dataset.img;
-      vista.alt = tab.dataset.alt;
-      vista.classList.remove('is-cambiando');
-    };
-    if (reduceMotion) return cambiar();
-    vista.classList.add('is-cambiando');
-    setTimeout(cambiar, 220);
-  }));
-
-  /* ── Visor: la pantalla del sistema a tamaño real ── */
-  const visor = document.getElementById('visor');
-  const ampliar = document.getElementById('appAmpliar');
-  if (visor && vista && typeof visor.showModal === 'function') {
-    const visorImagen = document.getElementById('visorImagen');
-    const abrirVisor = () => {
-      visorImagen.src = vista.src;
-      visorImagen.alt = vista.alt;
-      document.getElementById('visorTitulo').textContent = tabActual() ? tabActual().textContent : '';
-      visor.showModal();
-      const lienzo = visor.querySelector('.visor__lienzo');
-      lienzo.scrollLeft = 0;
-      lienzo.scrollTop = 0;
-    };
-    ampliar.addEventListener('click', abrirVisor);
-    vista.addEventListener('click', abrirVisor);
-    // Tocar fuera de la imagen también cierra
-    visor.addEventListener('click', (e) => { if (e.target === visor) visor.close(); });
-  } else if (ampliar) {
-    ampliar.hidden = true;
-  }
-
   /* ── Contact form ───────────────────────────────── */
   /* Se envía a Web3Forms (relay para hosting estático) con FormData y sin
      cabeceras propias: así el pedido es "simple" y no hay preflight OPTIONS.
@@ -710,7 +668,7 @@
       if (r.tipo === 'ok') {
         setState('is-sent', {
           btn: `${CHECK_SVG} Pedido enviado`,
-          note: 'Recibimos su pedido. Le respondemos dentro de las 24 horas.',
+          note: 'Recibimos su pedido. Le respondemos dentro de las 24 horas hábiles.',
           ms: 8000,
           reset: true,
         });

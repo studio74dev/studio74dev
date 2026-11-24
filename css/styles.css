@@ -451,6 +451,183 @@ b {
   vertical-align: baseline;
 }
 
+/* ── Imágenes y mockups ──────────────────────────── */
+/* Foto de stock (con duotono ya horneado en el archivo): siempre lleva "Foto ilustrativa" */
+.foto {
+  margin: 0;
+}
+
+.foto img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radio-s);
+}
+
+.foto__nota {
+  margin-top: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--suave);
+}
+
+/* Foto que todavía no está: recuadro gris con la leyenda de qué va */
+.foto--pendiente {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  padding: 0.75rem;
+  border-radius: var(--radio-s);
+  background: #8A8A8F;
+  color: #0B0B0C;
+  text-align: center;
+}
+
+.foto--pendiente p {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  line-height: 1.4;
+  font-weight: 600;
+  text-wrap: balance;
+}
+
+.foto--ancha {
+  max-width: 44rem;
+  margin: clamp(2rem, 5vw, 3rem) auto 0;
+  aspect-ratio: 16 / 9;
+}
+
+.foto--ancha p {
+  font-size: 0.85rem;
+}
+
+/* Celular en CSS: marco con la pantalla adentro */
+.dispositivo--cel {
+  position: relative;
+  aspect-ratio: 9 / 17;
+  padding: 22px 10px 12px;
+  border: 3px solid rgba(244, 243, 239, 0.5);
+  border-radius: 26px;
+  background: #151517;
+  box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.6);
+}
+
+.dispositivo--cel::before {
+  content: '';
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  width: 34px;
+  height: 6px;
+  margin-left: -17px;
+  border-radius: 999px;
+  background: rgba(244, 243, 239, 0.25);
+}
+
+.dispositivo--cel img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 8px;
+}
+
+/* Notebook: ventana con barra y base fina */
+.dispositivo--note .ventana__barra {
+  min-height: 0;
+  padding: 0.55rem 0.8rem;
+}
+
+.ventana__puntos {
+  display: inline-flex;
+  gap: 5px;
+}
+
+.ventana__puntos i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--linea-fuerte);
+}
+
+.dispositivo--note .ventana img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.dispositivo--note .ventana {
+  border: 3px solid var(--linea-fuerte);
+  border-radius: 12px 12px 4px 4px;
+  box-shadow: 0 40px 80px -40px color-mix(in srgb, var(--senal) 35%, transparent);
+}
+
+.dispositivo__base {
+  display: block;
+  width: 100%;
+  height: 10px;
+  border-radius: 0 0 14px 14px;
+  background: var(--linea-fuerte);
+}
+
+/* Desplegable chico ("Cómo", "Qué revisamos"): el summary tiene 48 px de alto táctil */
+.mas {
+  margin-top: 0.25rem;
+}
+
+.mas summary {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 48px;
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  list-style: none;
+  cursor: pointer;
+  color: var(--texto);
+}
+
+.mas summary::-webkit-details-marker {
+  display: none;
+}
+
+.mas summary::after {
+  content: '+';
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.mas[open] summary::after {
+  content: '\2212';
+}
+
+.mas summary:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.mas p {
+  max-width: 54ch;
+  padding-bottom: 0.5rem;
+  color: var(--suave);
+  text-wrap: pretty;
+}
+
+.cabeza .mas {
+  text-align: center;
+}
+
+.cabeza .mas summary {
+  justify-content: center;
+}
+
 /* ── Botones: píldoras ───────────────────────────── */
 .btn {
   display: inline-flex;
@@ -744,8 +921,8 @@ b {
 }
 
 /* ── 00. Portada ─────────────────────────────────── */
-/* Estática y pensada para el celular: título, bajada, botón y línea de
-   confianza entran en la primera pantalla. El contenido se centra con márgenes
+/* Estática y pensada para el celular: título, bajada y botón
+   entran en la primera pantalla. El contenido se centra con márgenes
    automáticos: si no entra, crece hacia abajo y nunca queda bajo la barra. */
 .hero {
   display: flex;
@@ -801,16 +978,6 @@ b {
   color: var(--acento);
 }
 
-.hero__confianza {
-  margin-top: 0.75rem;
-  max-width: 34ch;
-  font-family: var(--mono);
-  font-size: 0.76rem;
-  line-height: 1.5;
-  letter-spacing: 0.03em;
-  color: var(--suave);
-}
-
 @media (min-width: 760px) {
   .hero__contenido {
     margin: auto;
@@ -834,12 +1001,6 @@ b {
     max-width: none;
     width: auto;
   }
-
-  .hero__confianza {
-    margin-top: 1.5rem;
-    font-size: 0.8rem;
-    max-width: none;
-  }
 }
 
 /* ── 01. ¿Le pasa esto? ──────────────────────────── */
@@ -854,10 +1015,12 @@ b {
 }
 
 .dolor {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
   align-items: center;
+  gap: 1rem;
   min-height: 7rem;
-  padding: 1.5rem;
+  padding: 1rem;
   border-radius: var(--radio);
   background: var(--superficie);
   box-shadow: inset 0 0 0 1px var(--linea);
@@ -877,8 +1040,15 @@ b {
   }
 
   .dolor {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    gap: 1.25rem;
     min-height: 9rem;
-    padding: 2rem;
+    padding: 1.25rem;
+  }
+
+  .dolor__frase {
+    padding-inline: 0.5rem;
   }
 }
 
@@ -929,6 +1099,30 @@ b {
   font-weight: 750;
 }
 
+/* Visual de Qué resolvemos: notebook con el catálogo y celular con el botón de WhatsApp */
+.resolvemos__visual {
+  position: relative;
+  max-width: 44rem;
+  margin: clamp(2rem, 5vw, 3.5rem) auto 0;
+}
+
+.resolvemos__visual .dispositivo--cel {
+  position: absolute;
+  right: -0.25rem;
+  bottom: 1.25rem;
+  width: 30%;
+  max-width: 11rem;
+}
+
+.resolvemos__nota {
+  margin-top: 1.25rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: var(--suave);
+}
+
 /* Cierre de sección: botón de acción y una línea que quita el riesgo */
 .cierre {
   margin-top: clamp(2.25rem, 6vw, 3.5rem);
@@ -971,8 +1165,38 @@ b {
   padding-block: clamp(4rem, 10vw, 7rem);
 }
 
-.caso {
+.casos__lista {
   margin-top: clamp(2.5rem, 7vw, 4.5rem);
+  display: grid;
+  gap: 2rem;
+}
+
+.caso--proximo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  min-height: 14rem;
+  padding: 2rem 1.5rem;
+  border-radius: var(--radio);
+  background: var(--superficie);
+  box-shadow: inset 0 0 0 1px var(--linea);
+  text-align: center;
+}
+
+.caso__rubro {
+  margin-top: 0.4rem;
+  text-align: center;
+  color: var(--suave);
+}
+
+@media (min-width: 760px) {
+  .casos__lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem;
+    align-items: stretch;
+  }
 }
 
 .caso__nombre {
@@ -982,28 +1206,18 @@ b {
   text-align: center;
 }
 
-.caso__texto {
-  max-width: 54ch;
-  margin: 1rem auto 0;
-  color: var(--suave);
-  text-wrap: pretty;
-}
-
-.caso__texto b {
-  color: var(--texto);
-}
-
 .caso > .bajada {
   margin: 1rem auto 1.75rem;
   text-align: center;
 }
 
-/* Antes y después de Matemar: dos paneles hechos en HTML y CSS, sin imágenes */
+/* Antes y después de Matemar: "Antes" es una ilustración en HTML y CSS; "Después" es una captura real */
 .comparar {
   position: relative;
   display: grid;
   gap: 1rem;
-  margin-top: 1.75rem;
+  max-width: 24rem;
+  margin: 1.5rem auto 0;
 }
 
 .comparar__antes,
@@ -1070,15 +1284,6 @@ b {
   color: var(--acento);
 }
 
-.comparar__nota {
-  grid-column: 1 / -1;
-  font-family: var(--mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--suave);
-}
-
 .testimonio {
   max-width: 54ch;
   margin: 1.75rem auto 0;
@@ -1100,31 +1305,61 @@ b {
   display: none;
 }
 
+.comparar__despues img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: top;
+  border-radius: var(--radio-s);
+}
+
 .comparar--activo {
   --corte: 50%;
   grid-template-columns: minmax(0, 1fr);
   touch-action: pan-y;
+  aspect-ratio: 4 / 5;
+  container-type: inline-size;
+}
+
+.comparar--activo .comparar__despues {
+  padding: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.comparar--activo .comparar__despues img {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  aspect-ratio: auto;
+  border-radius: 0;
+}
+
+.comparar--activo .comparar__rotulo {
+  max-width: calc(50% - 1.75rem);
+  line-height: 1.3;
+}
+
+.comparar--activo .comparar__despues .comparar__rotulo {
+  z-index: 1;
+  padding: 0.3rem 0.6rem;
+  border-radius: 14px;
+  background: var(--fondo);
+  text-align: right;
 }
 
 .comparar--activo .comparar__antes,
 .comparar--activo .comparar__despues {
   grid-area: 1 / 1;
-  min-height: 15rem;
+  min-height: 0;
 }
 
 .comparar--activo .comparar__despues {
   clip-path: inset(0 0 0 var(--corte));
 }
 
-.comparar--activo .comparar__despues {
-  display: grid;
-  justify-items: end;
-  align-content: center;
-}
-
-.comparar--activo .pedido {
-  width: min(100%, 18rem);
-}
 
 .comparar--activo .burbujas {
   max-width: 22rem;
@@ -1135,10 +1370,6 @@ b {
 .comparar--activo .comparar__despues .comparar__rotulo {
   left: auto;
   right: 1.25rem;
-}
-
-.comparar--activo .comparar__nota {
-  grid-area: 2 / 1;
 }
 
 /* Línea del corte: va en el panel de abajo, pegada al borde izquierdo del recorte */
@@ -1184,6 +1415,7 @@ b {
   width: 48px;
   height: 48px;
   margin-top: calc(7.5rem - 24px);
+  margin-top: calc(62.5cqw - 24px);
   border: 3px solid var(--papel);
   border-radius: 50%;
   background: var(--senal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 7l-5 5 5 5M15 7l5 5-5 5'/%3E%3C/svg%3E") center / 26px no-repeat;
@@ -1251,156 +1483,6 @@ b {
   background: var(--senal);
 }
 
-/* Control segmentado */
-.app__tabs {
-  display: flex;
-  gap: 2px;
-  margin-inline: auto;
-  padding: 3px;
-  border-radius: 999px;
-  background: var(--linea);
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.app__tab {
-  min-height: 48px;
-  padding: 0.3rem 0.95rem;
-  border: 0;
-  border-radius: 999px;
-  background: transparent;
-  color: var(--suave);
-  font-size: 0.8rem;
-  font-weight: 500;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: background-color 0.25s var(--ease), color 0.25s var(--ease);
-}
-
-.app__tab:hover {
-  color: var(--texto);
-}
-
-.app__tab.is-on {
-  background: var(--marca-fondo);
-  color: var(--marca-texto);
-}
-
-.app__vista {
-  position: relative;
-  background: #fff;
-}
-
-.app__vista img {
-  width: 100%;
-  cursor: zoom-in;
-  transition: opacity 0.25s var(--ease);
-}
-
-.app__ampliar {
-  position: absolute;
-  right: 0.75rem;
-  bottom: 0.75rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  min-height: 48px;
-  padding: 0.4rem 0.9rem;
-  border: 0;
-  border-radius: 999px;
-  background: rgba(11, 11, 12, 0.82);
-  color: #fff;
-  font: inherit;
-  font-size: 0.8rem;
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.app__ampliar svg {
-  width: 16px;
-  height: 16px;
-}
-
-/* Visor a pantalla completa */
-.visor {
-  width: 100%;
-  max-width: none;
-  height: 100%;
-  max-height: none;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: #0B0B0C;
-  color: #fff;
-}
-
-.visor::backdrop {
-  background: rgba(0, 0, 0, 0.85);
-}
-
-.visor[open] {
-  display: flex;
-  flex-direction: column;
-}
-
-.visor__barra {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: max(0.5rem, env(safe-area-inset-top)) 1rem 0.5rem;
-}
-
-.visor__titulo {
-  flex: 1;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.visor__cerrar {
-  display: grid;
-  place-items: center;
-  width: 44px;
-  height: 44px;
-  border: 0;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.14);
-  color: #fff;
-  cursor: pointer;
-}
-
-.visor__cerrar svg {
-  width: 20px;
-  height: 20px;
-}
-
-/* La imagen va a su tamaño real: se recorre con el dedo y se puede pellizcar */
-.visor__lienzo {
-  flex: 1;
-  display: grid;
-  place-items: center;
-  overflow: auto;
-  overscroll-behavior: contain;
-  background: #fff;
-}
-
-.visor__lienzo img {
-  width: 1024px;
-  max-width: none;
-  height: auto;
-}
-
-@media (min-width: 1100px) {
-  .visor__lienzo img {
-    width: min(1024px * 1.4, 96vw);
-  }
-}
-
-.app__vista img.is-cambiando {
-  opacity: 0;
-}
-
 .datos {
   display: grid;
   gap: 1rem 2rem;
@@ -1430,15 +1512,44 @@ b {
 
 .compromiso {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 2rem;
-  min-height: 13rem;
-  padding: 2rem;
+  padding: 1rem 1.5rem 1rem 2rem;
   border-radius: var(--radio);
   background: var(--superficie);
   overflow: hidden;
+}
+
+.compromiso summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 48px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.compromiso summary::-webkit-details-marker {
+  display: none;
+}
+
+.compromiso summary::after {
+  content: '+';
+  flex: none;
+  font-family: var(--mono);
+  font-size: 1.5rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0;
+}
+
+.compromiso details[open] summary::after {
+  content: '\2212';
+}
+
+.compromiso summary:focus-visible {
+  outline: 2px solid var(--foco);
+  outline-offset: 4px;
+  border-radius: 8px;
 }
 
 /* El trazo de señal recorre el borde de arriba al entrar */
@@ -1473,6 +1584,7 @@ b {
 
 .compromiso__detalle {
   max-width: 36ch;
+  padding-bottom: 0.75rem;
   color: var(--suave);
 }
 
@@ -2294,6 +2406,13 @@ select.campo:focus-visible {
   color: var(--suave);
 }
 
+.footer__horario,
+.footer__servicios {
+  margin-top: 0.6rem;
+  max-width: 52ch;
+  color: var(--suave);
+}
+
 .redes {
   display: flex;
   flex-wrap: wrap;
@@ -2726,13 +2845,11 @@ html.con-intro .intro {
   }
 
   .compromiso {
-    min-height: 16rem;
-    padding: 2.5rem;
+    padding: 1.25rem 2rem 1.25rem 2.5rem;
   }
 
   .compromiso:first-child {
     grid-column: 1 / -1;
-    min-height: 20rem;
   }
 
   /* Riel de progreso a la derecha */
@@ -2798,16 +2915,6 @@ html.con-intro .intro {
     background: color-mix(in srgb, var(--fondo) 96%, transparent);
   }
 
-  .app__marco {
-    overflow-x: auto;
-    overscroll-behavior-x: contain;
-    scrollbar-width: none;
-  }
-
-  .app__marco img {
-    width: 720px;
-    max-width: none;
-  }
 }
 
 /* Más contraste si el sistema lo pide: texto secundario pleno y líneas marcadas */

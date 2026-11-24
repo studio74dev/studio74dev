@@ -309,7 +309,7 @@
        La de los títulos se pide primero porque es la que se ve al cargar. -->
   <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="css/styles.css?v=28" />
+  <link rel="stylesheet" href="css/styles.css?v=29" />
   <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
        (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
@@ -454,13 +454,13 @@
     <section id="inicio" class="hero capitulo" data-tema="base" aria-labelledby="hero-title">
       <div class="hero__contenido">
         <h1 id="hero-title" class="hero__title">Que ningún cliente se le escape.</h1>
-        <p class="hero__lead">Entendemos cómo trabaja su negocio y convertimos lo que hoy le cuesta resolver en una solución digital a su medida: una página, un bot, un sistema o una app.</p>
+        <p class="hero__lead">Una página, un bot o un sistema, a la medida de su negocio.</p>
         <div class="hero__acciones">
           <a href="#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
           <a href="#casos" class="hero__enlace">Ver un caso real</a>
         </div>
-        <p class="hero__confianza">Pinamar, Madariaga y toda la Costa Atlántica · Presupuesto por escrito, sin compromiso.</p>
       </div>
+      <div class="hero__visual" aria-hidden="true"></div>
     </section>
 
     <!-- 01. ¿Le pasa esto? Los dolores del comerciante, en primera persona -->
@@ -472,16 +472,31 @@
         </div>
         <ul class="dolores">
           <li class="dolor" data-dolor="1" data-escena="entrada">
-            <p class="dolor__frase"><span>“Contesto lo mismo veinte veces por día.”</span></p>
+            <figure class="foto">
+              <img src="assets/img/stock/mensajes-480.webp" srcset="assets/img/stock/mensajes-480.webp 480w, assets/img/stock/mensajes-960.webp 960w" sizes="(min-width: 760px) 45vw, 40vw" width="480" height="360" loading="lazy" decoding="async" alt="Mano sosteniendo un celular con varias notificaciones en la pantalla de bloqueo">
+              <figcaption class="foto__nota">Foto ilustrativa</figcaption>
+            </figure>
+            <p class="dolor__frase"><span>Contesto lo mismo veinte veces por día.</span></p>
           </li>
           <li class="dolor" data-dolor="2" data-escena="entrada">
-            <p class="dolor__frase"><span>“Los pedidos me llegan desordenados por historias y WhatsApp.”</span></p>
+            <figure class="foto">
+              <img src="assets/img/stock/mostrador-480.webp" srcset="assets/img/stock/mostrador-480.webp 480w, assets/img/stock/mostrador-960.webp 960w" sizes="(min-width: 760px) 45vw, 40vw" width="480" height="360" loading="lazy" decoding="async" alt="Mostrador con un posnet, una notebook y un cuaderno de anotaciones">
+              <figcaption class="foto__nota">Foto ilustrativa</figcaption>
+            </figure>
+            <p class="dolor__frase"><span>Los pedidos me llegan desordenados por historias y WhatsApp.</span></p>
           </li>
           <li class="dolor" data-dolor="3" data-escena="entrada">
-            <p class="dolor__frase"><span>“En Google no aparezco, o figuran mal mis horarios.”</span></p>
+            <figure class="foto">
+              <img src="assets/img/stock/mapa-480.webp" srcset="assets/img/stock/mapa-480.webp 480w, assets/img/stock/mapa-960.webp 960w" sizes="(min-width: 760px) 45vw, 40vw" width="480" height="360" loading="lazy" decoding="async" alt="Persona en la calle mirando una aplicación de mapa en su celular">
+              <figcaption class="foto__nota">Foto ilustrativa</figcaption>
+            </figure>
+            <p class="dolor__frase"><span>En Google no aparezco, o figuran mal mis horarios.</span></p>
           </li>
           <li class="dolor" data-dolor="4" data-escena="entrada">
-            <p class="dolor__frase"><span>“En temporada no doy abasto y se me escapan consultas.”</span></p>
+            <figure class="foto foto--pendiente">
+              <p>[FOTO: escena 4, local lleno en temporada en la costa]</p>
+            </figure>
+            <p class="dolor__frase"><span>En temporada no doy abasto y se me escapan consultas.</span></p>
           </li>
         </ul>
       </div>
@@ -494,26 +509,51 @@
           <p class="rotulo"><span class="rotulo__n">03</span>Soluciones</p>
           <h2 id="resolvemos-title" class="titulo">Qué resolvemos</h2>
         </div>
+        <figure class="resolvemos__visual" data-escena="entrada">
+          <div class="dispositivo dispositivo--note">
+            <div class="ventana">
+              <div class="ventana__barra" aria-hidden="true"><span class="ventana__puntos"><i></i><i></i><i></i></span></div>
+              <img src="assets/img/casos/matemar/matemar-catalogo-1440.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Catálogo de yerbas de Matemar en una notebook">
+            </div>
+            <span class="dispositivo__base" aria-hidden="true"></span>
+          </div>
+          <div class="dispositivo dispositivo--cel">
+            <img src="assets/img/casos/matemar/matemar-whatsapp-390.webp" width="780" height="1688" loading="lazy" decoding="async" alt="Pedido de Matemar listo para enviar por WhatsApp, en el celular">
+          </div>
+          <figcaption class="resolvemos__nota">Trabajo real: Matemar, Miramar.</figcaption>
+        </figure>
         <ol class="soluciones">
           <li class="solucion" data-dolor="1" data-escena="entrada">
             <p class="solucion__dolor"><span>Consultas repetidas</span></p>
-            <p class="solucion__como">Respuestas automáticas por WhatsApp con lo que más le preguntan.</p>
             <p class="solucion__beneficio"><b>Usted contesta solo lo que importa.</b></p>
+            <details class="mas">
+              <summary>Cómo</summary>
+              <p class="solucion__como">Respuestas automáticas por WhatsApp con lo que más le preguntan.</p>
+            </details>
           </li>
           <li class="solucion" data-dolor="2" data-escena="entrada">
             <p class="solucion__dolor"><span>Pedidos desordenados</span></p>
-            <p class="solucion__como">Una página con su catálogo donde el cliente arma el pedido y le llega listo.</p>
             <p class="solucion__beneficio"><b>Recibe el pedido completo, con presupuesto.</b></p>
+            <details class="mas">
+              <summary>Cómo</summary>
+              <p class="solucion__como">Una página con su catálogo donde el cliente arma el pedido y le llega listo.</p>
+            </details>
           </li>
           <li class="solucion" data-dolor="3" data-escena="entrada">
             <p class="solucion__dolor"><span>No aparece en Google</span></p>
-            <p class="solucion__como">Su ficha de Google ordenada y una página propia.</p>
             <p class="solucion__beneficio"><b>Lo encuentran cuando lo buscan.</b></p>
+            <details class="mas">
+              <summary>Cómo</summary>
+              <p class="solucion__como">Su ficha de Google ordenada y una página propia.</p>
+            </details>
           </li>
           <li class="solucion" data-dolor="4" data-escena="entrada">
             <p class="solucion__dolor"><span>Temporada</span></p>
-            <p class="solucion__como">Un sistema de turnos, reservas o pedidos a su medida.</p>
             <p class="solucion__beneficio"><b>Atiende a más gente sin sumar trabajo.</b></p>
+            <details class="mas">
+              <summary>Cómo</summary>
+              <p class="solucion__como">Un sistema de turnos, reservas o pedidos a su medida.</p>
+            </details>
           </li>
         </ol>
         <div class="cierre">
@@ -531,38 +571,33 @@
           <h2 id="casos-title" class="titulo">Casos reales</h2>
         </div>
 
-        <article class="caso" data-escena="entrada">
-          <h3 class="caso__nombre">Matemar (Miramar)</h3>
-          <p class="caso__texto"><b>Antes:</b> Vendía solo por historias de Instagram y las consultas llegaban sueltas.</p>
-          <p class="caso__texto"><b>Después:</b> Una página con sus yerbas uruguayas donde el cliente arma el pedido. Le llega ordenado y con presupuesto, y solo trata con quien quiere comprar.</p>
-          <div class="comparar" id="comparar">
-            <div class="comparar__antes">
-              <p class="comparar__rotulo">Antes</p>
-              <ul class="burbujas">
-                <li>¿precio?</li>
-                <li>¿abren hoy?</li>
-                <li>¿hacen envíos?</li>
-                <li>¿siguen?</li>
-              </ul>
-            </div>
-            <div class="comparar__despues">
-              <p class="comparar__rotulo">Después</p>
-              <div class="pedido">
-                <p class="pedido__titulo">Pedido armado</p>
-                <p class="pedido__items">Canarias Tradicional · Baldo · Sara Coco · Rei Verde Premium</p>
-                <p class="pedido__listo">Presupuesto listo ✓</p>
+        <div class="casos__lista">
+          <article class="caso" data-escena="entrada">
+            <h3 class="caso__nombre">Matemar</h3>
+            <p class="caso__rubro">Yerbas uruguayas · Miramar</p>
+            <div class="comparar" id="comparar">
+              <div class="comparar__antes">
+                <p class="comparar__rotulo">Antes · ilustración</p>
+                <ul class="burbujas">
+                  <li>¿precio?</li>
+                  <li>¿abren hoy?</li>
+                  <li>¿hacen envíos?</li>
+                  <li>¿siguen?</li>
+                </ul>
               </div>
+              <div class="comparar__despues">
+                <p class="comparar__rotulo">Después · captura real</p>
+                <img src="assets/img/casos/matemar/matemar-catalogo-390.webp" width="780" height="1688" loading="lazy" decoding="async" alt="Catálogo de yerbas de Matemar en el celular">
+              </div>
+              <input type="range" class="comparar__control" min="0" max="100" value="50" aria-label="Comparar antes y después" hidden />
             </div>
-            <input type="range" class="comparar__control" min="0" max="100" value="50" aria-label="Comparar antes y después" hidden />
-            <p class="comparar__nota">Ilustración</p>
-          </div>
-          <!-- Testimonio de Valen: oculto hasta tener su autorización. -->
-        </article>
+            <!-- Testimonio de Valen: oculto hasta tener su autorización. -->
+          </article>
 
-
-        <div class="cierre">
-          <a href="#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
-          <p class="confianza">El dominio queda a su nombre.</p>
+          <article class="caso caso--proximo" data-escena="entrada">
+            <h3 class="caso__nombre">¿El próximo caso es el suyo?</h3>
+            <a href="#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
+          </article>
         </div>
       </div>
     </section>
@@ -574,51 +609,64 @@
           <p class="rotulo"><span class="rotulo__n">05</span>Proceso</p>
           <h2 id="como-title" class="titulo">Cómo trabajamos</h2>
         </div>
+        <figure class="foto foto--pendiente foto--ancha" data-escena="entrada">
+          <p>[FOTO: escena 5, dos personas conversando en un mostrador]</p>
+        </figure>
         <ol class="pasos" data-escena="recorrido">
           <li class="paso" data-escena="entrada">
             <span class="paso__n">01</span>
             <h3>Diagnóstico gratis</h3>
-            <p>Revisamos cómo trabaja su negocio hoy y qué le está costando, por mensaje, por correo o en persona.</p>
+            <p>Revisamos cómo trabaja su negocio hoy y qué le está costando.</p>
           </li>
           <li class="paso" data-escena="entrada">
             <span class="paso__n">02</span>
             <h3>Propuesta</h3>
-            <p>Un presupuesto por escrito con qué incluye, qué no, el plazo y el costo. Sin cargo y sin compromiso.</p>
+            <p>Un presupuesto por escrito con qué incluye, qué no, el plazo y el costo.</p>
           </li>
           <li class="paso" data-escena="entrada">
             <span class="paso__n">03</span>
             <h3>Entrega</h3>
-            <p>Lo ve avanzar y lo prueba antes de la entrega. Si lo necesita, seguimos con hosting y mantenimiento por cuota mensual.</p>
+            <p>Lo ve avanzar y lo prueba antes de la entrega.</p>
           </li>
         </ol>
 
         <h3 class="subtitulo" data-escena="entrada">Sin letra chica.</h3>
         <ul class="compromisos">
           <li class="compromiso" data-escena="entrada">
-            <p class="compromiso__frase"><span>El dominio es suyo.</span></p>
-            <p class="compromiso__detalle">Se registra a su nombre desde el primer día y, si decide no seguir con nosotros, le transferimos el sitio a una cuenta propia.</p>
+            <details>
+              <summary class="compromiso__frase"><span>El dominio es suyo.</span></summary>
+              <p class="compromiso__detalle">Se registra a su nombre desde el primer día y, si decide no seguir con nosotros, le transferimos el sitio a una cuenta propia.</p>
+            </details>
           </li>
           <li class="compromiso" data-escena="entrada">
-            <p class="compromiso__frase"><span>Presupuesto por escrito.</span></p>
-            <p class="compromiso__detalle">Qué incluye, qué no, el plazo y el costo, antes de empezar.</p>
+            <details>
+              <summary class="compromiso__frase"><span>Presupuesto por escrito.</span></summary>
+              <p class="compromiso__detalle">Qué incluye, qué no, el plazo y el costo, antes de empezar.</p>
+            </details>
           </li>
           <li class="compromiso" data-escena="entrada">
-            <p class="compromiso__frase"><span>Atención en persona.</span></p>
-            <p class="compromiso__detalle">Reuniones presenciales en toda la zona, de San Clemente a Miramar.</p>
+            <details>
+              <summary class="compromiso__frase"><span>Atención en persona.</span></summary>
+              <p class="compromiso__detalle">Reuniones presenciales en toda la zona, de San Clemente a Miramar.</p>
+            </details>
           </li>
           <li class="compromiso" data-escena="entrada">
-            <p class="compromiso__frase"><span>Respuesta en 24 horas.</span></p>
-            <p class="compromiso__detalle">Toda consulta recibe respuesta en menos de un día.</p>
+            <details>
+              <summary class="compromiso__frase"><span>Respuesta en 24 horas hábiles.</span></summary>
+              <p class="compromiso__detalle">Toda consulta recibe respuesta en menos de un día.</p>
+            </details>
           </li>
           <li class="compromiso" data-escena="entrada">
-            <p class="compromiso__frase"><span>Seguimos después de la entrega.</span></p>
-            <p class="compromiso__detalle">Hosting, mantenimiento y cambios menores con una cuota mensual.</p>
+            <details>
+              <summary class="compromiso__frase"><span>Seguimos después de la entrega.</span></summary>
+              <p class="compromiso__detalle">Hosting, mantenimiento y cambios menores con una cuota mensual.</p>
+            </details>
           </li>
         </ul>
 
         <div class="cierre">
           <a href="#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
-          <p class="confianza">Respondemos en menos de 24 horas.</p>
+          <p class="confianza">Respondemos en menos de 24 horas hábiles.</p>
         </div>
       </div>
     </section>
@@ -629,8 +677,11 @@
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">06</span>Equipo</p>
           <h2 id="quienes-title" class="titulo">Quiénes somos</h2>
-          <p class="bajada">Cuatro desarrolladores entre Pinamar y Madariaga, unidos por la Ruta 74, el 74 del logo. Atendemos en persona en toda la zona.</p>
+          <p class="bajada">Cuatro desarrolladores entre Pinamar y Madariaga, unidos por la Ruta 74, el 74 del logo.</p>
         </div>
+        <figure class="foto foto--pendiente foto--ancha" data-escena="entrada">
+          <p>[FOTO: pasarela de Pinamar o Ruta 74, propia]</p>
+        </figure>
         <ul class="equipo">
           <li class="persona" data-escena="entrada">
             <span class="persona__inicial" aria-hidden="true">M</span>
@@ -708,7 +759,11 @@
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">08</span>Diagnóstico</p>
           <h2 id="contacto-title" class="contacto__titulo">Pedí tu diagnóstico gratis<i class="hero__fin" aria-hidden="true"></i></h2>
-          <p class="bajada">Revisamos cómo lo encuentran hoy: su ficha de Google, sus redes y su web, si aparece bien en las búsquedas, y cómo toma pedidos o reservas. Con eso le armamos una propuesta a medida. Sin costo y sin compromiso.</p>
+          <p class="bajada">Revisamos cómo lo encuentran hoy y le armamos una propuesta a medida. Sin costo y sin compromiso.</p>
+          <details class="mas">
+            <summary>Qué revisamos</summary>
+            <p>Su ficha de Google, sus redes y su web, si aparece bien en las búsquedas, y cómo toma pedidos o reservas.</p>
+          </details>
         </div>
 
         <div class="contacto__grilla">
@@ -809,7 +864,7 @@
               <button type="submit" class="btn btn--accion btn--primary magnetico">Pedir mi diagnóstico
                 <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button>
               <p class="confianza">Gratis y sin compromiso. Presupuesto por escrito.</p>
-              <p class="form__note" role="status" aria-live="polite">Respondemos en menos de 24 horas. Sus datos se
+              <p class="form__note" role="status" aria-live="polite">Respondemos en menos de 24 horas hábiles. Sus datos se
                 usan únicamente para responder la consulta.</p>
             </div>
             <!-- Si el envío falla, el visitante elige cómo seguir (lo muestra js/main.js) -->
@@ -861,8 +916,12 @@
   <footer class="footer capitulo" data-tema="base">
     <div class="contenedor">
       <div class="footer__fila">
-        <p class="footer__zona">Software y presencia digital para comercios de Pinamar, Madariaga y toda la
-          Costa Atlántica, de San Clemente a Miramar.</p>
+        <div class="footer__datos">
+          <p class="footer__zona">Software y presencia digital para comercios de Pinamar, Madariaga y toda la
+            Costa Atlántica, de San Clemente a Miramar.</p>
+          <p class="footer__horario">Lunes a viernes de 9 a 15.</p>
+          <p class="footer__servicios">Páginas web y landings · Fichas de Google Maps · Bots y WhatsApp Business · Tiendas online · Sistemas a medida · Automatización de pedidos, cobros y reservas</p>
+        </div>
         <ul class="redes" aria-label="Canales oficiales de studio74dev">
           <li><a class="red" href="https://www.instagram.com/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de studio74dev (se abre en una pestaña nueva)">Instagram</a></li>
           <li><a class="red" href="https://www.linkedin.com/company/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de studio74dev (se abre en una pestaña nueva)">LinkedIn</a></li>
@@ -876,9 +935,7 @@
     </div>
   </footer>
 
-  <!-- Visor de la pantalla del sistema: se puede desplazar y hacer zoom -->
-
-  <script src="js/main.js?v=28" defer></script>
+  <script src="js/main.js?v=29" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
