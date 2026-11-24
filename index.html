@@ -309,7 +309,7 @@
        La de los títulos se pide primero porque es la que se ve al cargar. -->
   <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="css/styles.css?v=27" />
+  <link rel="stylesheet" href="css/styles.css?v=28" />
   <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
        (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
@@ -523,7 +523,7 @@
       </div>
     </section>
 
-    <!-- 03. Casos reales: Matemar (antes y después) y Club El Progreso -->
+    <!-- 03. Casos reales: Matemar (antes y después) -->
     <section id="casos" class="casos capitulo" data-tema="contra" aria-labelledby="casos-title">
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
@@ -534,7 +534,7 @@
         <article class="caso" data-escena="entrada">
           <h3 class="caso__nombre">Matemar (Miramar)</h3>
           <p class="caso__texto"><b>Antes:</b> Vendía solo por historias de Instagram y las consultas llegaban sueltas.</p>
-          <p class="caso__texto"><b>Después:</b> Una página con sus hierbas donde el cliente arma el pedido. Le llega ordenado y con presupuesto, y solo trata con quien quiere comprar.</p>
+          <p class="caso__texto"><b>Después:</b> Una página con sus yerbas uruguayas donde el cliente arma el pedido. Le llega ordenado y con presupuesto, y solo trata con quien quiere comprar.</p>
           <div class="comparar" id="comparar">
             <div class="comparar__antes">
               <p class="comparar__rotulo">Antes</p>
@@ -549,54 +549,16 @@
               <p class="comparar__rotulo">Después</p>
               <div class="pedido">
                 <p class="pedido__titulo">Pedido armado</p>
-                <p class="pedido__items">[TEXTO: 2 o 3 productos reales del catálogo de Matemar]</p>
+                <p class="pedido__items">Canarias Tradicional · Baldo · Sara Coco · Rei Verde Premium</p>
                 <p class="pedido__listo">Presupuesto listo ✓</p>
               </div>
             </div>
             <input type="range" class="comparar__control" min="0" max="100" value="50" aria-label="Comparar antes y después" hidden />
             <p class="comparar__nota">Ilustración</p>
           </div>
-          <blockquote class="testimonio">[TEXTO: testimonio de Valen, pendiente de autorización]</blockquote>
+          <!-- Testimonio de Valen: oculto hasta tener su autorización. -->
         </article>
 
-        <article class="caso" data-escena="entrada">
-          <h3 class="caso__nombre">Club El Progreso</h3>
-          <p class="bajada">Sistema de gestión que utiliza a diario la administración de un club de playa: socios y
-            grupos familiares, mapa de sombrillas, tarifas y cobranzas, con permisos por usuario.</p>
-
-        <div class="ventana">
-          <div class="ventana__barra">
-            <span class="ventana__archivo">CLUB EL PROGRESO</span>
-            <div class="app__tabs" role="tablist" aria-label="Pantallas del sistema">
-              <button type="button" role="tab" class="app__tab is-on" aria-selected="true" aria-controls="appVista"
-                data-img="assets/img/progreso-dashboard.webp"
-                data-alt="Panel principal del club con métricas y resumen de ocupación">Panel</button>
-              <button type="button" role="tab" class="app__tab" aria-selected="false" aria-controls="appVista"
-                data-img="assets/img/progreso-mapa.webp"
-                data-alt="Mapa de sombrillas y pileta del club, con el estado de cada lugar">Mapa de sombrillas</button>
-              <button type="button" role="tab" class="app__tab" aria-selected="false" aria-controls="appVista"
-                data-img="assets/img/progreso-recaudacion.webp"
-                data-alt="Módulo de recaudación y estado de cobranzas">Recaudación</button>
-            </div>
-            <span class="ventana__estado"><span class="punto" aria-hidden="true"></span>En producción</span>
-          </div>
-          <div class="app__vista" id="appVista" role="tabpanel">
-            <div class="app__marco">
-              <img src="assets/img/progreso-dashboard.webp" width="1024" height="470"
-                alt="Panel principal del club con métricas y resumen de ocupación" loading="lazy" decoding="async" />
-            </div>
-            <button type="button" class="app__ampliar" id="appAmpliar" aria-haspopup="dialog">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7" /></svg>
-              Ampliar</button>
-          </div>
-        </div>
-
-        <dl class="datos">
-          <div class="dato"><dt>Tipo</dt><dd>Sistema de gestión a medida</dd></div>
-          <div class="dato"><dt>Módulos</dt><dd>Socios, sombrillas, tarifas y cobranzas</dd></div>
-          <div class="dato"><dt>Estado</dt><dd>En producción, de uso diario</dd></div>
-        </dl>
-        </article>
 
         <div class="cierre">
           <a href="#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
@@ -746,7 +708,7 @@
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">08</span>Diagnóstico</p>
           <h2 id="contacto-title" class="contacto__titulo">Pedí tu diagnóstico gratis<i class="hero__fin" aria-hidden="true"></i></h2>
-          <p class="bajada">Revisamos su ficha de Google, sus redes y su web, y le mandamos un informe corto con lo que puede mejorar. Sin compromiso. [REVISAR: confirmar qué incluye el diagnóstico]</p>
+          <p class="bajada">Revisamos cómo lo encuentran hoy: su ficha de Google, sus redes y su web, si aparece bien en las búsquedas, y cómo toma pedidos o reservas. Con eso le armamos una propuesta a medida. Sin costo y sin compromiso.</p>
         </div>
 
         <div class="contacto__grilla">
@@ -915,18 +877,8 @@
   </footer>
 
   <!-- Visor de la pantalla del sistema: se puede desplazar y hacer zoom -->
-  <dialog class="visor" id="visor" aria-label="Pantalla del sistema ampliada">
-    <form method="dialog" class="visor__barra">
-      <span class="visor__titulo" id="visorTitulo"></span>
-      <button type="submit" class="visor__cerrar" aria-label="Cerrar">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
-    </form>
-    <div class="visor__lienzo">
-      <img id="visorImagen" src="data:," width="1024" height="470" alt="" />
-    </div>
-  </dialog>
 
-  <script src="js/main.js?v=27" defer></script>
+  <script src="js/main.js?v=28" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

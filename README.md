@@ -13,7 +13,6 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 | `js/main.js` | Canales (WhatsApp y LinkedIn), intro de carga, tema, índice, motor de scroll, barra fija del celular, tachado de "¿Le pasa esto?", antes/después de Matemar, botones magnéticos, pestañas del caso real, visor y envío del formulario en 3 pasos. |
 | `404.html` | Página de error propia. Lleva los estilos en línea, así que no depende del CSS. |
 | `assets/og.png` | Imagen que se ve al compartir el link (1200×630). |
-| `assets/img/` | Capturas de Club El Progreso, solo en WebP. |
 | `assets/isotipo/`, `assets/firma/` | Logo en sus variantes y firma de mail del equipo. La web no los usa. |
 | `docs/og-imagen.html` | Fuente de `assets/og.png` (ver "Imagen para compartir"). |
 | `robots.txt`, `sitemap.xml`, `favicon.*` | Lo de siempre. |
@@ -45,9 +44,8 @@ se conservan (los usa `404.html`); los demás son nuevos.
    se tachan (sin movimiento reducido no se tacha nada). Cierra con el botón de diagnóstico y
    "Presupuesto por escrito, sin cargo y sin compromiso."
 6. **Casos reales** (`#casos`, contra, rótulo `03`): **Matemar (Miramar)** con un deslizador
-   antes/después hecho en HTML y CSS (sin imágenes) y un testimonio pendiente, y **Club El Progreso**
-   con sus pestañas (Panel, Mapa de sombrillas, Recaudación) y **Ampliar**, que abre el visor
-   (`<dialog>`). Sin escena fija: en todos los anchos va en una columna.
+   antes/después hecho en HTML y CSS (sin imágenes). El testimonio queda oculto hasta tener la
+   autorización. Sin escena fija: en todos los anchos va en una columna.
 7. **Cómo trabajamos** (`#como-trabajamos`, base, rótulo `04`): tres pasos (Diagnóstico gratis,
    Propuesta, Entrega) y, debajo, "Sin letra chica." con los cinco compromisos (el dominio es suyo,
    presupuesto por escrito, atención en persona, respuesta en 24 horas y seguimiento después de la

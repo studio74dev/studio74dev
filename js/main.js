@@ -177,8 +177,9 @@
   let altoBarra = header.offsetHeight;
 
   const mostrar = (el) => el.classList.add('visto');
+  let revelar = null;
   if ('IntersectionObserver' in window) {
-    const revelar = new IntersectionObserver((lista) => {
+    revelar = new IntersectionObserver((lista) => {
       lista.forEach((e) => {
         if (!e.isIntersecting) return;
         mostrar(e.target);
@@ -190,6 +191,31 @@
     entradas.forEach(mostrar);
     entradas = [];
   }
+
+  // Al saltar a una sección con un enlace (#contacto, etc.), su contenido se ve
+  // completo apenas llega: sin esperar la entrada ni verla a medio aparecer.
+  const revelarDestino = (hash) => {
+    if (!hash || hash.length < 2) return;
+    let destino = null;
+    try { destino = document.querySelector(hash); } catch (e) { return; }
+    if (!destino) return;
+    const seccion = destino.closest('.capitulo') || destino;
+    const lista = [seccion].concat(Array.from(seccion.querySelectorAll("[data-escena='entrada']")))
+      .filter((el) => el.dataset && el.dataset.escena === 'entrada');
+    lista.forEach((el) => {
+      el.classList.add('sin-transicion');
+      mostrar(el);
+      if (revelar) revelar.unobserve(el);
+    });
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      lista.forEach((el) => el.classList.remove('sin-transicion'));
+    }));
+  };
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest ? e.target.closest('a[href^="#"]') : null;
+    if (a) revelarDestino(a.getAttribute('href'));
+  });
+  if (location.hash) revelarDestino(location.hash);
 
   const medir = () => {
     altoBarra = header.offsetHeight;

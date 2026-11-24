@@ -755,7 +755,8 @@ b {
 
 .hero__contenido {
   width: var(--ancho);
-  margin: auto;
+  /* En celular el título arranca arriba, pegado a la barra; en escritorio va centrado */
+  margin: 0 auto auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -811,6 +812,10 @@ b {
 }
 
 @media (min-width: 760px) {
+  .hero__contenido {
+    margin: auto;
+  }
+
   .hero__title {
     max-width: 16ch;
   }
@@ -2358,6 +2363,12 @@ select.campo:focus-visible {
 .mov.revelar [data-escena='entrada'].visto {
   opacity: 1;
   transform: none;
+}
+
+/* Destino de un enlace: aparece completo, sin transición (main.js la quita dos frames después) */
+.mov.revelar .sin-transicion,
+.mov.revelar .sin-transicion * {
+  transition: none !important;
 }
 
 /* La persona conserva el cambio de color al pasar el mouse */
