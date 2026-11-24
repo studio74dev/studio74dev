@@ -55,13 +55,25 @@
   const intro = document.getElementById('intro');
   if (intro && root.classList.contains('con-intro')) {
     let terminada = false;
+    const quitar = () => {
+      document.removeEventListener('pointerdown', saltear, true);
+      document.removeEventListener('keydown', terminar, true);
+    };
     const terminar = () => {
       if (terminada) return;
       terminada = true;
       root.classList.remove('con-intro');
       intro.remove();
-      document.removeEventListener('pointerdown', terminar, true);
-      document.removeEventListener('keydown', terminar, true);
+      quitar();
+    };
+    // Toque: se cierra la intro y ese mismo toque (pointerup/click) no llega a lo de abajo
+    const saltear = (e) => {
+      if (terminada) return;
+      e.preventDefault();
+      terminar();
+      const frenar = (ev) => { ev.preventDefault(); ev.stopPropagation(); };
+      document.addEventListener('click', frenar, { capture: true, once: true });
+      setTimeout(() => document.removeEventListener('click', frenar, true), 400);
     };
     try {
       sessionStorage.setItem('s74-intro', '1');
@@ -70,8 +82,7 @@
     intro.addEventListener('animationend', (e) => {
       if (e.animationName === 'intro-salida') terminar();
     });
-    // Sin impedir el comportamiento normal de la tecla ni del toque
-    document.addEventListener('pointerdown', terminar, { once: true, capture: true });
+    document.addEventListener('pointerdown', saltear, { capture: true });
     document.addEventListener('keydown', terminar, { once: true, capture: true });
     setTimeout(terminar, 2600);
     setTimeout(terminar, 4000);
