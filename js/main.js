@@ -5,6 +5,9 @@
 (function () {
   'use strict';
 
+  // Las entradas de scroll solo esconden texto si este script corrió (html.mov.revelar)
+  document.documentElement.classList.add('revelar');
+
   /* ── Formulario: sin envío nativo ────────────────── */
   /* Lo primero de todo: con JS, el action mailto (respaldo sin JS) se quita y
      el envío nativo queda frenado, aunque algo de abajo falle. El envío real
@@ -44,72 +47,34 @@
   // Animaciones de scroll: solo si el <head> puso html.mov
   const mov = document.documentElement.classList.contains('mov');
 
-  /* ── Intro: carga, "Entrar" y apertura ───────────── */
-  /* El contador sigue la carga real (página y fuentes), con un mínimo para
-     que se vea la animación. Al llegar a 100 aparece "Entrar"; si nadie lo
-     toca, entra solo. Al entrar, la pantalla se abre en dos y el 74 vuela
-     hasta el logo de la barra. */
+  /* ── Intro: mini historia ────────────────────────── */
+  /* Dura 2,2 s en CSS (la termina el animationend de intro-salida). Se guarda
+     que ya se vio, y se saltea con un toque o una tecla. Si algo falla, un
+     respaldo a los 2,6 s y una red de seguridad a los 4 s la quitan. */
   const root = document.documentElement;
   const intro = document.getElementById('intro');
   if (intro && root.classList.contains('con-intro')) {
-    const marca = document.getElementById('introMarca');
-    const destino = document.querySelector('.nav__logo-icon');
-    const pct = document.getElementById('introPct');
-    const entrar = document.getElementById('introEntrar');
-    let estado = 'cargando';
-
+    let terminada = false;
     const terminar = () => {
-      if (estado === 'fin') return;
-      estado = 'fin';
-      root.classList.remove('con-intro', 'intro-volando');
-      intro.remove();
-      try {
-        sessionStorage.setItem('s74-intro', '1');
-      } catch (_) { /* sin storage: se vuelve a ver la próxima vez */ }
-    };
-
-    const abrir = () => {
-      if (estado === 'abriendo' || estado === 'fin') return;
-      estado = 'abriendo';
-      const a = marca.getBoundingClientRect();
-      const b = destino.getBoundingClientRect();
-      marca.style.transform = `translate(${b.left - a.left}px, ${b.top - a.top}px) scale(${b.width / a.width})`;
-      intro.classList.add('is-abriendo');
-      root.classList.add('intro-volando');
+      if (terminada) return;
+      terminada = true;
       root.classList.remove('con-intro');
-      setTimeout(terminar, 1000);
+      intro.remove();
+      document.removeEventListener('pointerdown', terminar, true);
+      document.removeEventListener('keydown', terminar, true);
     };
+    try {
+      sessionStorage.setItem('s74-intro', '1');
+    } catch (_) { /* sin storage: se vuelve a ver la próxima vez */ }
 
-    // Carga real: espera al load y a las fuentes, con 1,2 s mínimos de animación
-    const cargado = Promise.all([
-      new Promise((r) => (document.readyState === 'complete' ? r() : window.addEventListener('load', r, { once: true }))),
-      document.fonts ? document.fonts.ready.catch(() => { }) : Promise.resolve(),
-    ]);
-    let listo = false;
-    cargado.then(() => { listo = true; });
-    const t0 = performance.now();
-    const contar = (t) => {
-      if (estado !== 'cargando') return;
-      const minimo = Math.min((t - t0) / 1200, 1);
-      const valor = Math.floor((listo ? minimo : Math.min(minimo, 0.9)) * 100);
-      pct.textContent = String(valor).padStart(2, '0');
-      if (valor >= 100) {
-        estado = 'lista';
-        intro.classList.add('is-lista');
-        entrar.focus({ preventScroll: true });
-        setTimeout(abrir, 800);
-        return;
-      }
-      requestAnimationFrame(contar);
-    };
-    requestAnimationFrame(contar);
-
-    entrar.addEventListener('click', abrir);
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') abrir();
+    intro.addEventListener('animationend', (e) => {
+      if (e.animationName === 'intro-salida') terminar();
     });
-    // Red de seguridad: si algo traba la secuencia, la intro se va sola
-    setTimeout(abrir, 8000);
+    // Sin impedir el comportamiento normal de la tecla ni del toque
+    document.addEventListener('pointerdown', terminar, { once: true, capture: true });
+    document.addEventListener('keydown', terminar, { once: true, capture: true });
+    setTimeout(terminar, 2600);
+    setTimeout(terminar, 4000);
   }
 
   /* ── Tema claro / oscuro ─────────────────────────── */
@@ -191,6 +156,8 @@
   const riel = document.querySelector('.riel');
   const linksBarra = Array.from(document.querySelectorAll('.nav__links a'));
   const waFlotante = document.getElementById('waFlotante');
+  const barraCta = document.getElementById('barraCta');
+  if (barraCta) barraCta.hidden = false;
   const iPortada = capitulos.findIndex((c) => c.id === 'inicio');
   const iContacto = capitulos.findIndex((c) => c.id === 'contacto');
   const clamp = (v) => Math.min(1, Math.max(0, v));
@@ -284,6 +251,18 @@
       if (waFlotante.dataset.tema !== temaWa) waFlotante.dataset.tema = temaWa;
     }
 
+    // Barra fija inferior (celular): pasada la portada y hasta Contacto, sin el índice abierto.
+    // Toma el tema del capítulo que tiene debajo, como el WhatsApp flotante.
+    if (barraCta) {
+      const visibleBarra = menuBoton.getAttribute('aria-expanded') !== 'true'
+        && iPortada >= 0 && rectsCap[iPortada].bottom < vh * 0.3
+        && (iContacto < 0 || rectsCap[iContacto].top > vh);
+      if (barraCta.classList.contains('is-visible') !== visibleBarra) barraCta.classList.toggle('is-visible', visibleBarra);
+      const bajoBarraCta = vh - 36;
+      const temaCta = temaDe(capitulos.find((c, i) => rectsCap[i].top <= bajoBarraCta && rectsCap[i].bottom > bajoBarraCta));
+      if (barraCta.dataset.tema !== temaCta) barraCta.dataset.tema = temaCta;
+    }
+
     // Sección actual en la barra (el capítulo que cruza el centro de la pantalla)
     const id = rielEn ? `#${rielEn.id}` : '';
     linksBarra.forEach((a) => {
@@ -307,6 +286,43 @@
   window.addEventListener('resize', () => { medir(); pedir(); });
   window.addEventListener('load', () => { medir(); pedir(); });
   if (document.fonts) document.fonts.ready.then(() => { medir(); pedir(); });
+
+  /* ── "¿Le pasa esto?": tachado al llegar a cada solución ── */
+  /* Solo con movimiento. Al entrar (o haber quedado arriba) la solución n,
+     se marca .resuelto su dolor y su rótulo; una sola vez. */
+  if (mov && 'IntersectionObserver' in window) {
+    const tachar = new IntersectionObserver((lista) => {
+      lista.forEach((e) => {
+        const arriba = !e.isIntersecting && e.boundingClientRect.bottom <= 0;
+        if (!e.isIntersecting && !arriba) return;
+        const n = e.target.dataset.dolor;
+        const dolor = document.querySelector(`#le-pasa .dolor[data-dolor="${n}"]`);
+        if (dolor) dolor.classList.add('resuelto');
+        const rotulo = e.target.querySelector('.solucion__dolor');
+        if (rotulo) rotulo.classList.add('resuelto');
+        tachar.unobserve(e.target);
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('#resolvemos .solucion[data-dolor]').forEach((el) => tachar.observe(el));
+  }
+
+  /* ── Antes / después de Matemar ──────────────────── */
+  /* Sin JS los dos paneles quedan uno debajo del otro. Con JS se superponen y el
+     deslizador mueve el corte (--corte). El centro de la manija (48 px) recorre
+     el ancho menos media manija a cada lado, por eso el calc(). */
+  const comparar = document.getElementById('comparar');
+  const control = comparar && comparar.querySelector('.comparar__control');
+  if (control) {
+    const mover = () => {
+      const v = Number(control.value);
+      comparar.style.setProperty('--corte', `calc(24px + (100% - 48px) * ${v / 100})`);
+      control.setAttribute('aria-valuetext', `Antes ${v} %, después ${100 - v} %`);
+    };
+    control.hidden = false;
+    comparar.classList.add('comparar--activo');
+    control.addEventListener('input', mover);
+    mover();
+  }
 
   /* ── Botones magnéticos ──────────────────────────── */
   /* Siguen un poco al puntero; solo con mouse y con movimiento permitido. */

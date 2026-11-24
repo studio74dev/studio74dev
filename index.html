@@ -309,12 +309,12 @@
        La de los títulos se pide primero porque es la que se ve al cargar. -->
   <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="css/styles.css?v=23" />
+  <link rel="stylesheet" href="css/styles.css?v=24" />
   <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
        (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
-       La intro se muestra una vez por sesión en pantallas anchas (o siempre con ?intro).
-       En el celular se entra directo a la portada. -->
+       La intro (mini historia de 2,2 s) se muestra una vez por sesión, también en el celular,
+       salvo con reduced-motion (o siempre con ?intro, menos con reduced-motion). -->
   <script>
     (function () {
       var d = document.documentElement;
@@ -330,8 +330,7 @@
         var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!quieto) d.classList.add('mov');
         var forzar = /[?&]intro\b/.test(location.search);
-        var chico = window.matchMedia('(max-width: 759px)').matches;
-        if (!quieto && (forzar || (!chico && !sessionStorage.getItem('s74-intro')))) d.classList.add('con-intro');
+        if (!quieto && (forzar || !sessionStorage.getItem('s74-intro'))) d.classList.add('con-intro');
       } catch (e) { }
     })();
   </script>
@@ -341,37 +340,23 @@
 
   <a class="saltar" href="#contenido">Saltar al contenido</a>
 
-  <!-- Intro: pantalla de carga con líneas, el 74 y la marca. Termina con "Entrar". -->
-  <div class="intro" id="intro">
-    <div class="intro__mitad intro__mitad--arriba" aria-hidden="true"></div>
-    <div class="intro__mitad intro__mitad--abajo" aria-hidden="true"></div>
-    <svg class="intro__lineas" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d="M980 0V760a40 40 0 0 0 40 40H1600" pathLength="1" />
-      <path d="M1180 0V600" pathLength="1" />
-      <path d="M760 900A420 420 0 0 1 1180 480" pathLength="1" />
-      <path d="M1180 600L1480 300" pathLength="1" />
-      <path d="M0 700H520a40 40 0 0 1 40 40V900" pathLength="1" />
-    </svg>
-    <p class="intro__esquina intro__esquina--arriba" aria-hidden="true">©2026<br />studio74dev</p>
-    <p class="intro__esquina intro__esquina--abajo" aria-hidden="true">Estudio de desarrollo<br />studio74dev@gmail.com</p>
-    <p class="intro__carga" aria-hidden="true"><span id="introPct">00</span></p>
-
-    <div class="intro__centro">
-      <div class="intro__marca" id="introMarca" aria-hidden="true">
-        <svg class="intro__logo" viewBox="0 0 100 100" focusable="false">
-          <g class="intro__trazos" fill="none">
-            <path d="M7.7 10.9H64L13 88" stroke-width="6.2" pathLength="1" />
-            <path d="M7.7 90.4H18" stroke-width="6.4" pathLength="1" />
-            <path d="M90 7.7V78" stroke-width="5.5" pathLength="1" />
-            <path d="M90 19L52 59.5M50 60.5H90" stroke-width="4.2" pathLength="1" />
-          </g>
-          <rect class="intro__punto" x="85" y="86" width="8" height="8" />
-        </svg>
+  <!-- Intro "mini historia" (2,2 s): las consultas sueltas se ordenan en un pedido completo.
+       Decorativa: aria-hidden, nada enfocable. Se saltea con un toque o una tecla. -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro__tel">
+      <span class="intro__muesca"></span>
+      <div class="intro__pantalla">
+        <span class="intro__burbuja">¿precio?</span>
+        <span class="intro__burbuja">¿abren hoy?</span>
+        <span class="intro__burbuja">¿hacen envíos?</span>
+        <span class="intro__burbuja">¿siguen?</span>
+        <div class="intro__pedido">
+          <b>Pedido completo</b>
+          <i></i>
+          <i></i>
+          <em>Presupuesto ✓</em>
+        </div>
       </div>
-      <p class="intro__palabra" aria-hidden="true">
-        <span>s</span><span>t</span><span>u</span><span>d</span><span>i</span><span>o</span><span>7</span><span>4</span><span>d</span><span>e</span><span>v</span>
-      </p>
-      <button type="button" class="intro__entrar" id="introEntrar">Entrar</button>
     </div>
   </div>
 
@@ -448,6 +433,18 @@
     <span class="wa-flotante__texto" aria-hidden="true">WhatsApp</span>
   </a>
 
+  <!-- Barra fija inferior, solo en el celular (< 760 px): acción principal y WhatsApp.
+       Oculta sin JavaScript (hidden); js/main.js la muestra entre la portada y Contacto. -->
+  <div class="barra-cta" id="barraCta" data-tema="base" hidden>
+    <a href="#contacto" class="btn btn--senal barra-cta__btn">Pedí tu diagnóstico gratis</a>
+    <a class="barra-cta__wa" data-canal="whatsapp" href="#" target="_blank" rel="noopener noreferrer"
+      aria-label="WhatsApp (se abre en una pestaña nueva)" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.28-.2-.57-.35m-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.9 0-3.17-1.24-6.16-3.48-8.4" />
+      </svg>
+    </a>
+  </div>
+
   <main id="contenido">
 
     <!-- 00. Portada: estática. El h1 es lo primero que se pinta, por eso no se anima. -->
@@ -472,16 +469,16 @@
         </div>
         <ul class="dolores">
           <li class="dolor" data-dolor="1" data-escena="entrada">
-            <p class="dolor__frase">“Contesto lo mismo veinte veces por día.”</p>
+            <p class="dolor__frase"><span>“Contesto lo mismo veinte veces por día.”</span></p>
           </li>
           <li class="dolor" data-dolor="2" data-escena="entrada">
-            <p class="dolor__frase">“Los pedidos me llegan desordenados por historias y WhatsApp.”</p>
+            <p class="dolor__frase"><span>“Los pedidos me llegan desordenados por historias y WhatsApp.”</span></p>
           </li>
           <li class="dolor" data-dolor="3" data-escena="entrada">
-            <p class="dolor__frase">“En Google no aparezco, o figuran mal mis horarios.”</p>
+            <p class="dolor__frase"><span>“En Google no aparezco, o figuran mal mis horarios.”</span></p>
           </li>
           <li class="dolor" data-dolor="4" data-escena="entrada">
-            <p class="dolor__frase">“En temporada no doy abasto y se me escapan consultas.”</p>
+            <p class="dolor__frase"><span>“En temporada no doy abasto y se me escapan consultas.”</span></p>
           </li>
         </ul>
       </div>
@@ -496,22 +493,22 @@
         </div>
         <ol class="soluciones">
           <li class="solucion" data-dolor="1" data-escena="entrada">
-            <p class="solucion__dolor">Consultas repetidas</p>
+            <p class="solucion__dolor"><span>Consultas repetidas</span></p>
             <p class="solucion__como">Respuestas automáticas por WhatsApp con lo que más le preguntan.</p>
             <p class="solucion__beneficio"><b>Usted contesta solo lo que importa.</b></p>
           </li>
           <li class="solucion" data-dolor="2" data-escena="entrada">
-            <p class="solucion__dolor">Pedidos desordenados</p>
+            <p class="solucion__dolor"><span>Pedidos desordenados</span></p>
             <p class="solucion__como">Una página con su catálogo donde el cliente arma el pedido y le llega listo.</p>
             <p class="solucion__beneficio"><b>Recibe el pedido completo, con presupuesto.</b></p>
           </li>
           <li class="solucion" data-dolor="3" data-escena="entrada">
-            <p class="solucion__dolor">No aparece en Google</p>
+            <p class="solucion__dolor"><span>No aparece en Google</span></p>
             <p class="solucion__como">Su ficha de Google ordenada y una página propia.</p>
             <p class="solucion__beneficio"><b>Lo encuentran cuando lo buscan.</b></p>
           </li>
           <li class="solucion" data-dolor="4" data-escena="entrada">
-            <p class="solucion__dolor">Temporada</p>
+            <p class="solucion__dolor"><span>Temporada</span></p>
             <p class="solucion__como">Un sistema de turnos, reservas o pedidos a su medida.</p>
             <p class="solucion__beneficio"><b>Atiende a más gente sin sumar trabajo.</b></p>
           </li>
@@ -553,6 +550,7 @@
                 <p class="pedido__listo">Presupuesto listo ✓</p>
               </div>
             </div>
+            <input type="range" class="comparar__control" min="0" max="100" value="50" aria-label="Comparar antes y después" hidden />
             <p class="comparar__nota">Ilustración</p>
           </div>
           <blockquote class="testimonio">[TEXTO: testimonio de Valen, pendiente de autorización]</blockquote>
@@ -925,7 +923,7 @@
     </div>
   </dialog>
 
-  <script src="js/main.js?v=24" defer></script>
+  <script src="js/main.js?v=25" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
