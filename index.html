@@ -308,8 +308,10 @@
   <!-- Fuentes propias (solo el juego latino), sin pasar por otro dominio.
        La de los títulos se pide primero porque es la que se ve al cargar. -->
   <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <!-- Imagen LCP del inicio (misma que el <img> de #inicio) -->
+  <link rel="preload" as="image" href="assets/img/stock/inicio-mar-1280.webp" imagesrcset="assets/img/stock/inicio-mar-640.webp 640w, assets/img/stock/inicio-mar-960.webp 960w, assets/img/stock/inicio-mar-1280.webp 1280w, assets/img/stock/inicio-mar-1920.webp 1920w" imagesizes="(min-width: 1100px) 1080px, 100vw" fetchpriority="high" />
 
-  <link rel="stylesheet" href="css/styles.css?v=34" />
+  <link rel="stylesheet" href="css/styles.css?v=35" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        "con-carga": la carga inicial (el 74 que vuela al logo), solo si hay JS, no hay
@@ -420,33 +422,29 @@
     <!-- 00. Portada: estática. El h1 es lo primero que se pinta, por eso no se anima. -->
     <section id="inicio" class="hero capitulo" data-portada data-tema="tinta" aria-labelledby="hero-title">
       <div class="hero__contenido">
-        <h1 id="hero-title" class="hero__title">Que ningún cliente se le escape.</h1>
-        <p class="hero__lead">Una página, un bot o un sistema, a la medida de su negocio.</p>
+        <p class="rotulo mono">Estudio de desarrollo · Costa Atlántica</p>
+        <h1 id="hero-title" class="hero__title cond"><span class="linea">Tu negocio,</span> <span class="linea">encontrado</span> <span class="linea"><span class="resalte">y ordenado.</span></span></h1>
+        <p class="hero__lead">Webs, sistemas a medida, bots de WhatsApp y automatización para negocios de la Costa, de San Clemente a Miramar.</p>
         <div class="hero__acciones">
-          <a href="#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
-          <a href="#casos" class="hero__enlace">Ver un caso real</a>
+          <a href="#contacto" class="btn btn--accion" data-evento="diagnostico-inicio">Pedí tu diagnóstico gratis →</a>
+          <a href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" class="btn btn--borde" data-evento="whatsapp-inicio" target="_blank" rel="noopener noreferrer" aria-label="Escribinos por WhatsApp (se abre en una pestaña nueva)">Escribinos por WhatsApp</a>
         </div>
       </div>
-      <!-- Celular animado (loop de 8 s, decorativo). El botón de pausa va fuera del aria-hidden. -->
-      <div class="hero__escena">
-        <div class="hero__visual" aria-hidden="true">
-          <div class="tel">
-            <span class="tel__muesca"></span>
-            <div class="tel__pantalla">
-              <span class="tel__burbuja">¿precio?</span>
-              <span class="tel__burbuja">¿abren hoy?</span>
-              <span class="tel__burbuja">¿hacen envíos?</span>
-              <div class="tel__pedido">
-                <b>Pedido completo</b>
-                <i></i>
-                <i></i>
-                <em>Presupuesto ✓</em>
-              </div>
-            </div>
-          </div>
-        </div>
-        <button type="button" class="hero__pausa" aria-pressed="false" aria-label="Pausar la animación"><span aria-hidden="true"></span></button>
-      </div>
+      <!-- Medio del inicio: foto de stock en blanco y negro (es la imagen LCP) y, encima, un video corto
+           en loop que el JS carga recién después del load (ver main.js, "Video del inicio"). Créditos en
+           assets/img/stock/CREDITOS.md. -->
+      <figure class="hero__medio" data-sobre-foto>
+        <img class="hero__par" src="assets/img/stock/inicio-mar-1280.webp" srcset="assets/img/stock/inicio-mar-640.webp 640w, assets/img/stock/inicio-mar-960.webp 960w, assets/img/stock/inicio-mar-1280.webp 1280w, assets/img/stock/inicio-mar-1920.webp 1920w" sizes="(min-width: 1100px) 1080px, 100vw" width="1920" height="1080" fetchpriority="high" decoding="async" alt="Playa de Pinamar con oleaje, en blanco y negro" />
+        <video class="hero__video hero__par" muted loop playsinline preload="none" data-src="assets/video/inicio.mp4" aria-hidden="true" tabindex="-1"></video>
+        <!-- [FOTO: reemplazo futuro opcional del inicio · foto propia mejor (Ruta 74, Madariaga o Pinamar) o video corto en loop, mudo y liviano]
+             Para cambiarla: reemplazar el src/srcset del img de arriba (ver README, "Cómo cambiar la foto o el video del inicio")
+             o el data-src del video por otro mp4 (sin audio, <= 1,5 MB). -->
+        <button type="button" class="hero__pausa" aria-pressed="false" aria-label="Pausar el video del inicio" hidden><span aria-hidden="true"></span></button>
+        <p class="hero__lugar mono">Pinamar · Ruta 74 · Madariaga</p>
+      </figure>
+      <figure class="hero__cel">
+        <img class="hero__cel-img" src="assets/img/casos/matemar/matemar-catalogo-390.webp" srcset="assets/img/casos/matemar/matemar-catalogo-260.webp 260w, assets/img/casos/matemar/matemar-catalogo-390.webp 780w" sizes="(min-width: 900px) 14vw, 120px" width="780" height="1688" fetchpriority="low" decoding="async" alt="Web de Matemar en el celular, trabajo de studio74dev" />
+      </figure>
     </section>
 
     <!-- 01. ¿Le pasa esto? Los dolores del comerciante, en primera persona -->
@@ -923,7 +921,7 @@
     </div>
   </footer>
 
-  <script src="js/main.js?v=34" defer></script>
+  <script src="js/main.js?v=35" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

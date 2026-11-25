@@ -833,25 +833,30 @@ b {
 }
 
 /* ── 00. Portada ─────────────────────────────────── */
-/* Estática y pensada para el celular: título, bajada y botón
-   entran en la primera pantalla. El contenido se centra con márgenes
-   automáticos: si no entra, crece hacia abajo y nunca queda bajo la barra. */
+/* Foto/video de stock en blanco y negro como protagonista, con el título encima.
+   Celular (< 900 px): la foto arriba (46svh), el título sube sobre su borde inferior y
+   la bajada y los dos botones quedan en la primera pantalla.
+   Compu: la foto a la derecha (máx. 1080 px), el título la cruza y el celular de Matemar
+   se superpone arriba a la derecha. La imagen mide 112 % del marco: es el margen del parallax. */
 .hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  position: relative;
+  display: block;
   min-height: 100svh;
-  padding: calc(var(--header-height) + 1.25rem) 0 2rem;
+  padding: calc(var(--header-height) + 46svh - 7.5rem) 0 2rem;
+  overflow-x: clip;
 }
 
 .hero__contenido {
+  position: relative;
+  z-index: 2;
   width: var(--ancho);
-  /* En celular el título arranca arriba, pegado a la barra; en escritorio va centrado */
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+}
+
+.hero__contenido .rotulo {
+  justify-content: flex-start;
+  margin-bottom: 0.9rem;
+  color: var(--acento-texto);
 }
 
 .hero__title {
@@ -859,12 +864,23 @@ b {
   line-height: 0.86;
 }
 
+.hero__title .linea {
+  display: block;
+}
+
+.resalte {
+  display: inline-block;
+  padding: 0.04em 0.1em 0;
+  background: var(--papel);
+  color: var(--tinta);
+}
+
 .hero__lead {
   margin-top: 1.25rem;
   max-width: 44ch;
   font-size: 1rem;
   line-height: 1.5;
-  color: var(--suave);
+  color: var(--texto-2);
   text-wrap: pretty;
 }
 
@@ -872,57 +888,92 @@ b {
   margin-top: 1.5rem;
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  gap: 0.75rem;
   width: 100%;
-  max-width: 22rem;
 }
 
-.hero__enlace {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  font-weight: 600;
+.hero__acciones .btn {
+  width: 100%;
+}
+
+.hero__medio {
+  position: absolute;
+  z-index: 0;
+  top: var(--header-height);
+  left: 0;
+  right: 0;
+  height: 46svh;
+  margin: 0;
+  overflow: clip;
+  background: var(--superficie-tinta);
+}
+
+/* Degradado tinta en la zona del texto (sin filter) */
+.hero__medio::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--tinta) 0%, rgba(11, 11, 12, 0.72) 24%, rgba(11, 11, 12, 0) 62%);
+  pointer-events: none;
+}
+
+.hero__par {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 112%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* El video solo existe con movimiento; arranca transparente y aparece al reproducirse */
+.hero__video {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+
+html.mov .hero__video {
+  display: block;
+}
+
+html.mov .hero__video.hero__video--activo {
+  opacity: 1;
+}
+
+.hero__lugar {
+  position: absolute;
+  z-index: 2;
+  left: 1rem;
+  top: 1rem;
+  margin: 0;
+  padding: 0.5rem 0.65rem;
+  background: var(--tinta);
   color: var(--texto);
-  text-underline-offset: 0.3em;
-  text-decoration-thickness: 1px;
+  font-size: 0.68rem;
 }
 
-.hero__enlace:hover {
-  color: var(--acento);
-}
-
-/* Celular animado del inicio: abajo del CTA en celular, a la derecha desde 760 px */
-.hero__escena {
-  --tel-ancho: min(40vw, 150px);
-  position: relative;
-  width: min(100%, 20rem);
-  margin-top: 1rem;
-  padding-bottom: 3.25rem;
-  display: flex;
-  justify-content: center;
-}
-
-.hero__visual {
-  display: grid;
-  place-items: center;
-}
-
+/* Pausa del video (WCAG 2.2.2): el JS la muestra solo mientras el video se reproduce */
 .hero__pausa {
   position: absolute;
-  left: 50%;
-  bottom: 0;
+  z-index: 3;
+  right: 1rem;
+  bottom: 1rem;
   width: 48px;
   height: 48px;
-  margin-left: -24px;
   display: grid;
   place-items: center;
   padding: 0;
   border: 1.5px solid var(--linea-fuerte);
-  border-radius: 999px;
-  background: transparent;
+  border-radius: 0;
+  background: rgba(11, 11, 12, 0.7);
   color: var(--texto);
   cursor: pointer;
+}
+
+.hero__pausa[hidden] {
+  display: none;
 }
 
 .hero__pausa:hover {
@@ -938,58 +989,114 @@ b {
 }
 
 .hero__pausa[aria-pressed='true'] span {
-  width: 14px;
   background: currentColor;
   clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
 
-/* Sin movimiento (o sin JS) no hay nada que pausar */
-html:not(.mov) .hero__pausa {
-  display: none;
+/* Captura de Matemar en el celular, arriba a la derecha */
+.hero__cel {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--header-height) + 1rem);
+  right: 1rem;
+  width: clamp(96px, 28vw, 120px);
+  margin: 0;
+  border: 6px solid var(--tinta);
+  background: var(--tinta);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
 }
 
-@media (min-width: 760px) {
+.hero__cel-img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (min-width: 900px) {
   .hero {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    gap: 3rem;
-    padding-inline: max(2rem, calc((100% - 1180px) / 2));
+    min-height: max(100svh, 720px);
+    padding: calc(var(--header-height) + 2.5rem) max(2rem, calc((100% - 1440px) / 2)) 3rem;
   }
 
   .hero__contenido {
+    width: min(64%, 780px);
     margin: 0;
-    width: auto;
-    flex: 1 1 0;
-    align-items: flex-start;
-    text-align: left;
-  }
-
-  .hero__escena {
-    --tel-ancho: min(26vw, 250px);
-    flex: 0 0 auto;
-    width: auto;
-    margin: 0 1rem 0 0;
-  }
-
-  .hero__title {
-    max-width: 16ch;
   }
 
   .hero__lead {
     margin-top: 1.75rem;
+    max-width: 38ch;
     font-size: 1.25rem;
   }
 
   .hero__acciones {
     flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1.75rem;
+    flex-wrap: wrap;
     margin-top: 2.25rem;
-    max-width: none;
+  }
+
+  .hero__acciones .btn {
     width: auto;
   }
+
+  .hero__medio {
+    top: calc(var(--header-height) + 9rem);
+    left: auto;
+    right: max(2rem, calc((100% - 1440px) / 2));
+    width: min(62%, 1080px);
+    height: auto;
+    aspect-ratio: 16 / 10;
+  }
+
+  .hero__medio::after {
+    background: linear-gradient(to right, var(--tinta) 0%, rgba(11, 11, 12, 0.7) 22%, rgba(11, 11, 12, 0) 55%);
+  }
+
+  .hero__lugar {
+    left: auto;
+    top: auto;
+    right: 4.5rem;
+    bottom: 1rem;
+  }
+
+  .hero__cel {
+    top: calc(var(--header-height) + 1.5rem);
+    right: max(2rem, calc((100% - 1440px) / 2 + 1.5rem));
+    width: clamp(120px, 14vw, 200px);
+  }
+}
+
+/* Parallax: la foto sube hasta 6 % de su alto y el celular baja 24 px (solo transform, sin escala).
+   Con soporte, lo mueve el scroll (view timeline); en navegadores viejos, el JS escribe --py. */
+@keyframes hero-par {
+  from { transform: translateY(0); }
+  to { transform: translateY(-6%); }
+}
+
+@keyframes hero-cel {
+  from { transform: translateY(0); }
+  to { transform: translateY(24px); }
+}
+
+@supports (animation-timeline: view()) {
+  html.mov .hero__par,
+  html.mov .hero__cel {
+    animation: hero-par linear both;
+    animation-timeline: view();
+    animation-range: exit 0% exit 100%;
+  }
+
+  html.mov .hero__cel {
+    animation-name: hero-cel;
+  }
+}
+
+html.mov.par-js .hero__par {
+  transform: translateY(calc(var(--py, 0) * -6%));
+}
+
+html.mov.par-js .hero__cel {
+  transform: translateY(calc(var(--py, 0) * 24px));
 }
 
 /* ── 01. ¿Le pasa esto? ──────────────────────────── */
@@ -2582,173 +2689,6 @@ select.campo:focus-visible {
 
 .mov.revelar .footer__marca.visto span {
   transform: none;
-}
-
-
-/* ── Celular animado (inicio) ────────────────────── */
-/* Decorativo. Sin html.mov queda quieto en su estado final: burbujas alineadas arriba
-   y el pedido con el ✓. Con html.mov hay un loop de 8 s (solo transform y opacity):
-   0-2 s las burbujas entran sueltas y torcidas · 2-4 s se alinean y se achican hacia
-   el pedido, que aparece con el ✓ · 4-6,5 s quieto · 6,5-8 s se desvanece y recomienza.
-   La pausa (.tel--pausa, botón) y .tel--fuera (inicio fuera de pantalla o pestaña oculta)
-   congelan el loop. */
-.tel {
-  position: relative;
-  width: var(--tel-ancho, 150px);
-  aspect-ratio: 9 / 17;
-  border: 3px solid #3B3B40;
-  border-radius: 26px;
-  padding: 22px 10px 12px;
-  background: #151517;
-  color-scheme: dark;
-  overflow: hidden;
-}
-
-.tel__muesca {
-  position: absolute;
-  top: 7px;
-  left: 50%;
-  width: 34px;
-  height: 6px;
-  margin-left: -17px;
-  border-radius: 999px;
-  background: rgba(244, 243, 239, 0.25);
-}
-
-.tel__pantalla {
-  position: relative;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.tel__burbuja {
-  align-self: flex-start;
-  padding: 6px 10px;
-  border-radius: 14px 14px 14px 4px;
-  background: var(--papel);
-  color: var(--tinta);
-  font-family: var(--mono);
-  font-size: 0.66rem;
-  line-height: 1.2;
-  white-space: nowrap;
-}
-
-.tel__burbuja:nth-child(2) { --x0: 14px; --y0: 70px; --r0: 4deg; align-self: flex-end; border-radius: 14px 14px 4px 14px; }
-.tel__burbuja:nth-child(1) { --x0: -10px; --y0: 120px; --r0: -5deg; }
-.tel__burbuja:nth-child(3) { --x0: -4px; --y0: 30px; --r0: -2deg; }
-
-.tel__pedido {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 12%;
-  display: grid;
-  gap: 6px;
-  padding: 10px;
-  border-radius: 10px;
-  background: var(--papel);
-  color: var(--tinta);
-  font-family: var(--mono);
-  font-size: 0.64rem;
-}
-
-.tel__pedido b {
-  font-weight: 700;
-}
-
-.tel__pedido i {
-  display: block;
-  height: 6px;
-  border-radius: 3px;
-  background: rgba(11, 11, 12, 0.18);
-}
-
-.tel__pedido i:nth-of-type(2) {
-  width: 70%;
-}
-
-.tel__pedido em {
-  font-style: normal;
-  font-weight: 700;
-  color: var(--senal);
-}
-
-html.mov .tel__burbuja {
-  animation: tel-burbuja 8s var(--ease-io) infinite;
-}
-
-html.mov .tel__pedido {
-  animation: tel-pedido 8s var(--ease) infinite;
-}
-
-html.mov .tel__pedido em {
-  animation: tel-check 8s var(--ease) infinite;
-}
-
-.tel--pausa,
-.tel--pausa *,
-.tel--fuera,
-.tel--fuera * {
-  animation-play-state: paused !important;
-}
-
-@keyframes tel-burbuja {
-  0% {
-    opacity: 0;
-    transform: translate3d(var(--x0), var(--y0), 0) rotate(var(--r0)) scale(1.15);
-  }
-  18% {
-    opacity: 1;
-  }
-  25% {
-    opacity: 1;
-    transform: translate3d(var(--x0), var(--y0), 0) rotate(var(--r0)) scale(1.15);
-  }
-  50%,
-  81.25% {
-    opacity: 1;
-    transform: none;
-  }
-  100% {
-    opacity: 0;
-    transform: none;
-  }
-}
-
-@keyframes tel-pedido {
-  0%,
-  30% {
-    opacity: 0;
-    transform: translate3d(0, 10px, 0) scale(0.92);
-  }
-  48%,
-  81.25% {
-    opacity: 1;
-    transform: none;
-  }
-  100% {
-    opacity: 0;
-    transform: none;
-  }
-}
-
-@keyframes tel-check {
-  0%,
-  46% {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  54%,
-  81.25% {
-    opacity: 1;
-    transform: none;
-  }
-  100% {
-    opacity: 0;
-    transform: none;
-  }
 }
 
 

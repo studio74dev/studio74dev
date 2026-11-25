@@ -31,18 +31,15 @@ Cada capítulo lleva su rótulo con número (`01`…`07`) y un `data-tema` que d
 `alt` o `contra` (ver "Paleta, temas y capítulos"). Los ids `#inicio`, `#preguntas` y `#contacto`
 se conservan (los usa `404.html`); los demás son nuevos.
 
-1. **Celular animado** (dentro de `#inicio`): ya no hay intro de pantalla completa. Un celular hecho en CSS
-   muestra en loop de 8 s cómo las consultas sueltas ("¿precio?", "¿abren hoy?", "¿hacen envíos?") se
-   ordenan en un pedido completo con ✓. Es decorativo (`aria-hidden`), tiene un botón de pausa
-   (WCAG 2.2.2), se pausa solo fuera de pantalla y con la pestaña oculta, y con movimiento reducido
-   o sin JS queda quieto en el estado final.
+1. **Foto y video del inicio** (dentro de `#inicio`): foto de stock en blanco y negro con un video corto en loop encima y la captura de Matemar
+   en un celular arriba a la derecha (ver "Foto y video del inicio").
 2. **Barra** (fija arriba): el isotipo, los enlaces (Casos, Cómo trabajamos, Quiénes somos, Preguntas),
    el botón de **tema claro/oscuro** y **Pedí tu diagnóstico gratis** (solo en pantallas de 760 px o
    más; en el celular el CTA persistente es la barra inferior). Arriba de todo, la **barra de
    progreso** de lectura; la **Ruta 74** reemplaza al indicador anterior. **Índice** abre la navegación a pantalla
    completa con las 8 entradas de la landing y "Proyectos".
-3. **Portada** (`#inicio`, base): título "Que ningún cliente se le escape.", una línea de apoyo, el botón
-   **Pedí tu diagnóstico gratis**, el enlace "Ver un caso real" y el celular animado. Todo entra en
+3. **Portada** (`#inicio`, base): título "Tu negocio, encontrado y ordenado.", la bajada, el botón
+   **Pedí tu diagnóstico gratis** y **Escribinos por WhatsApp**. Todo entra en
    390×844 sin desplazarse.
 4. **¿Le pasa esto?** (`#le-pasa`, contra, rótulo `01`): cuatro frases (sin comillas) con una foto
    ilustrativa de stock cada una, rotulada "Foto ilustrativa".
@@ -79,13 +76,22 @@ con el botón de diagnóstico y el WhatsApp, y se oculta al llegar a Contacto o 
 
 ## Cosas a saber antes de tocar
 
-### Celular animado del inicio
+### Foto y video del inicio
 
-- Vive dentro de `#inicio` (`.hero__visual`, `aria-hidden`). Loop de 8 s con `@keyframes` que animan solo
-  `transform` y `opacity`, bajo `html.mov`. No hay overlay ni almacenamiento de sesión: no hay nada que "saltear".
-- El botón `.hero__pausa` (48 px) alterna la clase `.tel--pausa`; un `IntersectionObserver` y
-  `document.hidden` también lo pausan.
-- Sin `mov` (movimiento reducido o sin JS) queda quieto en el estado final y el botón se oculta.
+- `#inicio` lleva una foto de stock en blanco y negro (`figure.hero__medio`, es la imagen LCP: sin `lazy`, `fetchpriority="high"`)
+  y, encima, un video corto en loop (`assets/video/inicio.mp4`). El video **no** está en el HTML como fuente: el JS le pone el `src`
+  recién después del `load`, y solo con `html.mov` (sin reduced-motion) y sin conexión ahorrada (`saveData`). Si algo falla, queda la foto.
+- Como dura más de 5 s, hay botón de pausa (`.hero__pausa`, WCAG 2.2.2), y el video se frena solo fuera de pantalla o con la pestaña oculta.
+- Arriba a la derecha va la captura de Matemar en el celular (`figure.hero__cel`). Parallax suave: la foto sube hasta 6 % y el celular
+  baja 24 px (solo `transform`, sin escala ni filtros). Con `animation-timeline: view()` lo hace el CSS; sin soporte, el JS escribe `--py`.
+
+### Cómo cambiar la foto o el video del inicio
+
+- **Foto**: mínimo 1600 px de ancho, en webp y de hasta 150 KB (la más grande). Generar 640, 960, 1280 y 1920 px y actualizar el `src`, el `srcset`,
+  el `<link rel="preload">` del `<head>` y el `poster` del video. Si es propia, agregarla a `assets/img/propias/` y a `CREDITOS.md`.
+- **Video**: sin audio, mp4 H.264 (`yuv420p`, `+faststart`), de unos 10 s en loop y de hasta 1,5 MB; cambiar el `data-src` del `<video>`.
+  Si dura más de 5 s se mantiene el botón de pausa.
+- El comentario `[FOTO: reemplazo futuro opcional del inicio…]` en `index.html` marca el lugar.
 
 ### Paleta, temas y capítulos
 

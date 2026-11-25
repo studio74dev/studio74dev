@@ -343,28 +343,77 @@
     });
   }
 
-  /* ── Celular animado del inicio: pausa ────────────── */
-  /* El loop dura más de 5 s: hay botón de pausa (WCAG 2.2.2). Además se frena solo
-     cuando el inicio sale de pantalla o la pestaña queda oculta. */
-  const tel = document.querySelector('.hero .tel');
-  const pausa = document.querySelector('.hero__pausa');
-  if (tel) {
-    let enPantalla = true;
-    const actualizarFuera = () => tel.classList.toggle('tel--fuera', !enPantalla || document.hidden);
-    if (pausa) {
-      pausa.addEventListener('click', () => {
-        const pausado = tel.classList.toggle('tel--pausa');
-        pausa.setAttribute('aria-pressed', String(pausado));
-      });
+  /* ── Inicio: video y parallax ─────────────────────── */
+  const inicioEl = document.getElementById('inicio');
+  const raiz = document.documentElement;
+  if (inicioEl && raiz.classList.contains('mov')) {
+    /* Video: se pide recién después del load (para no competir con la imagen LCP) y solo si no hay
+       reduced-motion (html.mov ya lo garantiza) ni conexión ahorrada. Si falla, queda la foto.
+       Dura más de 5 s: hay botón de pausa (WCAG 2.2.2) y se frena solo fuera de pantalla. */
+    const video = inicioEl.querySelector('.hero__video');
+    const pausa = inicioEl.querySelector('.hero__pausa');
+    const con = navigator.connection;
+    if (video && video.dataset.src && !(con && con.saveData)) {
+      let pausadoPorUsuario = false;
+      let visible = true;
+      const sincronizar = () => {
+        if (pausadoPorUsuario || !visible || document.hidden) video.pause();
+        else video.play().catch(() => {});
+      };
+      const arrancar = () => {
+        const foto = inicioEl.querySelector('.hero__medio img');
+        if (foto && foto.currentSrc) video.poster = foto.currentSrc; /* la misma foto que ya está cargada: sin pedido extra */
+        video.src = video.dataset.src;
+        video.addEventListener('playing', () => {
+          video.classList.add('hero__video--activo');
+          if (pausa) pausa.hidden = false;
+        }, { once: true });
+        sincronizar();
+      };
+      if (pausa) {
+        pausa.addEventListener('click', () => {
+          pausadoPorUsuario = !pausadoPorUsuario;
+          pausa.setAttribute('aria-pressed', String(pausadoPorUsuario));
+          pausa.setAttribute('aria-label', pausadoPorUsuario ? 'Reanudar el video del inicio' : 'Pausar el video del inicio');
+          sincronizar();
+        });
+      }
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((lista) => {
+          visible = lista[lista.length - 1].isIntersecting;
+          if (video.src) sincronizar();
+        }).observe(inicioEl);
+      }
+      document.addEventListener('visibilitychange', () => { if (video.src) sincronizar(); });
+      const lanzar = () => (window.requestIdleCallback ? requestIdleCallback(arrancar, { timeout: 2500 }) : setTimeout(arrancar, 800));
+      if (document.readyState === 'complete') lanzar();
+      else window.addEventListener('load', lanzar, { once: true });
     }
-    const inicio = document.getElementById('inicio');
-    if (inicio && 'IntersectionObserver' in window) {
+
+    /* Parallax de respaldo (sin animation-timeline): escribe --py (0 a 1) mientras el inicio está a la vista.
+       Con soporte lo hace el CSS solo y esto no corre (a menos que se fuerce la clase par-js). */
+    const soporta = window.CSS && CSS.supports && CSS.supports('animation-timeline: view()');
+    if (!soporta) raiz.classList.add('par-js');
+    let encima = true;
+    let cuadro = 0;
+    const escribir = () => {
+      cuadro = 0;
+      if (soporta && !raiz.classList.contains('par-js')) return;
+      const alto = inicioEl.offsetHeight || 1;
+      const p = Math.min(1, Math.max(0, window.scrollY / alto));
+      inicioEl.style.setProperty('--py', p.toFixed(3));
+    };
+    const alScroll = () => { if (!cuadro) cuadro = requestAnimationFrame(escribir); };
+    if ('IntersectionObserver' in window) {
       new IntersectionObserver((lista) => {
-        enPantalla = lista[lista.length - 1].isIntersecting;
-        actualizarFuera();
-      }).observe(inicio);
+        const ahora = lista[lista.length - 1].isIntersecting;
+        if (ahora === encima) return;
+        encima = ahora;
+        if (encima) window.addEventListener('scroll', alScroll, { passive: true });
+        else window.removeEventListener('scroll', alScroll);
+      }).observe(inicioEl);
     }
-    document.addEventListener('visibilitychange', actualizarFuera);
+    window.addEventListener('scroll', alScroll, { passive: true });
   }
 
   /* ── Contact form ───────────────────────────────── */
