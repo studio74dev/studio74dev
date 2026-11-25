@@ -3003,6 +3003,63 @@ html.mov .quienes__video.hero__video--activo {
   }
 }
 
+/* ── Subpáginas al lenguaje A (3.12) ─────────────── */
+.subportada {
+  padding-top: calc(var(--header-height) + clamp(3rem, 8vw, 6rem));
+}
+
+.subportada .titulo {
+  font-size: var(--t-h1);
+}
+
+.subportada__acciones {
+  justify-content: flex-start;
+}
+
+.proyecto,
+.caso--proximo {
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--texto);
+}
+
+.caso--proximo {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.caso--proximo .caso__nombre,
+.proyecto .caso__nombre {
+  text-align: left;
+}
+
+.proyecto .caso__rubro,
+.pedido--caso {
+  text-align: left;
+}
+
+.dispositivo--note .ventana {
+  border: 1px solid var(--tinta);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.dispositivo__base {
+  display: none;
+}
+
+.pedido {
+  border-radius: 0;
+}
+
+.datos {
+  text-align: left;
+}
+
+.proyecto__acciones {
+  justify-content: flex-start;
+}
+
 /* Más contraste si el sistema lo pide: texto secundario pleno y líneas marcadas */
 @media (prefers-contrast: more) {
   :root,

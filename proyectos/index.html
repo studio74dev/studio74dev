@@ -35,7 +35,7 @@
   <link rel="preload" as="image" href="/assets/img/casos/matemar/matemar-inicio-720.webp" imagesrcset="/assets/img/casos/matemar/matemar-inicio-720.webp 720w, /assets/img/casos/matemar/matemar-inicio-1440.webp 1440w" imagesizes="(min-width: 760px) 600px, calc(100vw - 56px)" fetchpriority="high" />
   <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="/css/styles.css?v=35" />
+  <link rel="stylesheet" href="/css/styles.css?v=37" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        Sin estas clases la página se ve completa y quieta. -->
@@ -91,14 +91,16 @@
   <div class="indice" id="indice" data-tema="tinta" hidden>
     <ol class="indice__lista">
       <li><a href="/#inicio"><span>01</span>Inicio</a></li>
-      <li><a href="/#te-pasa"><span>02</span>¿Le pasa esto?</a></li>
-      <li><a href="/#resolvemos"><span>03</span>Qué resolvemos</a></li>
-      <li><a href="/#casos"><span>04</span>Casos reales</a></li>
+      <li><a href="/#servicios"><span>02</span>Servicios</a></li>
+      <li><a href="/#te-pasa"><span>03</span>¿Te pasa esto?</a></li>
+      <li><a href="/#numeros"><span>04</span>Números</a></li>
       <li><a href="/#como-trabajamos"><span>05</span>Cómo trabajamos</a></li>
-      <li><a href="/#quienes"><span>06</span>Quiénes somos</a></li>
-      <li><a href="/#preguntas"><span>07</span>Preguntas</a></li>
-      <li><a href="/#contacto"><span>08</span>Diagnóstico gratis</a></li>
-      <li><a href="/proyectos/"><span>09</span>Proyectos</a></li>
+      <li><a href="/#que-incluye"><span>06</span>Qué revisamos</a></li>
+      <li><a href="/#casos"><span>07</span>Caso Matemar</a></li>
+      <li><a href="/#quienes"><span>08</span>Quiénes somos</a></li>
+      <li><a href="/#preguntas"><span>09</span>Preguntas</a></li>
+      <li><a href="/#contacto"><span>10</span>Diagnóstico gratis</a></li>
+      <li><a href="/proyectos/"><span>11</span>Proyectos</a></li>
     </ol>
     <div class="indice__pie">
       <a data-evento="mail-indice" href="mailto:studio74dev@gmail.com" aria-label="Escribir a studio74dev@gmail.com">studio74dev@gmail.com</a>
@@ -110,7 +112,7 @@
 
   <!-- WhatsApp flotante. js/main.js decide cuándo se ve: después de la portada y antes de Contacto. -->
   <a class="wa-flotante" id="waFlotante" href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" data-evento="whatsapp-flotante" target="_blank" rel="noopener noreferrer"
-    aria-label="Escríbanos por WhatsApp (se abre en una pestaña nueva)">
+    aria-label="Escribinos por WhatsApp (se abre en una pestaña nueva)">
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.28-.2-.57-.35m-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.9 0-3.17-1.24-6.16-3.48-8.4" />
     </svg>
@@ -137,7 +139,7 @@
       <div class="contenedor">
         <div class="cabeza">
           <p class="rotulo"><span class="rotulo__n">01</span>Casos</p>
-          <h1 id="proyectos-title" class="titulo">Proyectos</h1>
+          <h1 id="proyectos-title" class="titulo cond">Proyectos</h1>
           <p class="bajada">Casos reales, contados en corto.</p>
         </div>
       </div>
@@ -148,7 +150,7 @@
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
           <p class="rotulo"><span class="rotulo__n">02</span>Trabajo real</p>
-          <h2 id="proyectos-lista-title" class="titulo">Casos reales</h2>
+          <h2 id="proyectos-lista-title" class="titulo cond">Casos reales</h2>
         </div>
 
         <ul class="proyectos">
@@ -156,12 +158,11 @@
             <article class="proyecto" data-escena="entrada">
               <div class="dispositivo dispositivo--note">
                 <div class="ventana">
-                  <div class="ventana__barra" aria-hidden="true"><span class="ventana__puntos"><i></i><i></i><i></i></span></div>
                   <img src="/assets/img/casos/matemar/matemar-inicio-720.webp" srcset="/assets/img/casos/matemar/matemar-inicio-720.webp 720w, /assets/img/casos/matemar/matemar-inicio-1440.webp 1440w" sizes="(min-width: 760px) 600px, calc(100vw - 56px)" width="1440" height="900" fetchpriority="high" decoding="async" alt="Inicio del sitio de Matemar en una notebook">
                 </div>
                 <span class="dispositivo__base" aria-hidden="true"></span>
               </div>
-              <h3 class="caso__nombre">Matemar</h3>
+              <h3 class="caso__nombre cond">Matemar</h3>
               <p class="caso__rubro">Yerbas uruguayas · Miramar</p>
               <dl class="datos">
                 <div class="dato"><dt>Problema</dt><dd>Vendía solo por historias de Instagram y las consultas llegaban sueltas.</dd></div>
@@ -176,7 +177,7 @@
           </li>
           <li>
             <article class="caso caso--proximo" data-escena="entrada">
-              <h3 class="caso__nombre">¿El próximo caso es el suyo?</h3>
+              <h3 class="caso__nombre cond">¿El próximo caso es el tuyo?</h3>
               <a href="/#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
             </article>
           </li>
@@ -208,7 +209,7 @@
     </div>
   </footer>
 
-  <script src="/js/main.js?v=35" defer></script>
+  <script src="/js/main.js?v=37" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
