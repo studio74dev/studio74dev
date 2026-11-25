@@ -5,6 +5,59 @@
 (function () {
   'use strict';
 
+  /* ── Carga inicial ───────────────────────────────── */
+  /* Solo si el <head> puso html.con-carga. El CSS hace la subida, el cierre de los costados
+     y el fundido (si este script falla, la carga se va sola a los 2,5 s). Acá solo se hace el
+     vuelo del 74 al logo (FLIP, calculado en el momento del vuelo) y el cierre anticipado con
+     un click, un toque o una tecla. */
+  (function () {
+    const raiz = document.documentElement;
+    const carga = document.getElementById('carga');
+    if (!carga || !raiz.classList.contains('con-carga')) return;
+
+    let temporizadores = [];
+    const terminar = () => {
+      temporizadores.forEach(clearTimeout);
+      temporizadores = [];
+      ['click', 'keydown', 'touchstart'].forEach((ev) => window.removeEventListener(ev, terminar, true));
+      if (!raiz.classList.contains('con-carga')) return;
+      carga.getAnimations({ subtree: true }).forEach((an) => an.cancel());
+      raiz.classList.remove('con-carga');
+    };
+    ['click', 'keydown', 'touchstart'].forEach((ev) => window.addEventListener(ev, terminar, { capture: true, passive: true }));
+    carga.addEventListener('animationend', (e) => { if (e.animationName === 'carga-fuera') terminar(); });
+
+    const volar = () => {
+      const el = carga.querySelector('.carga__74');
+      const logo = document.querySelector('.nav__logo-icon');
+      if (!el || !logo || !el.animate) return;
+      const primero = el.getBoundingClientRect();
+      const ultimo = logo.getBoundingClientRect();
+      // Si la barra no está a la vista, no se vuela: el CSS cierra la carga
+      if (!primero.height || !ultimo.width || ultimo.bottom <= 0) return;
+      const escala = ultimo.height / primero.height;
+      const dx = (ultimo.left + ultimo.width / 2) - (primero.left + primero.width / 2);
+      const dy = (ultimo.top + ultimo.height / 2) - (primero.top + primero.height / 2);
+      el.style.transformOrigin = 'center';
+      el.animate(
+        [{ transform: 'none' }, { transform: `translate(${dx}px, ${dy}px) scale(${escala})` }],
+        { duration: 650, easing: 'cubic-bezier(.7,0,.2,1)', fill: 'forwards' }
+      );
+    };
+
+    // El reloj de la secuencia es el de las animaciones CSS (arrancan en el primer pintado,
+    // no en el inicio de la navegación): el vuelo empieza a 1,4 s de ese momento.
+    const ref = carga.getAnimations().find((an) => an.animationName === 'carga-fuera');
+    const programar = (t0) => {
+      const espera = t0 + 1400 - performance.now();
+      if (espera < -200) return; // llegó tarde: el CSS cierra la carga solo
+      temporizadores.push(setTimeout(volar, Math.max(0, espera)));
+      temporizadores.push(setTimeout(terminar, Math.max(0, t0 + 2550 - performance.now())));
+    };
+    if (ref && ref.ready) ref.ready.then(() => programar(ref.startTime == null ? performance.now() : ref.startTime));
+    else programar(performance.now());
+  })();
+
   // Las entradas de scroll solo esconden texto si este script corrió (html.mov.revelar)
   document.documentElement.classList.add('revelar');
 
@@ -19,69 +72,17 @@
     formNativo.addEventListener('submit', (e) => e.preventDefault());
   }
 
-  /* ── Canales pendientes ──────────────────────────── */
-  /* Único lugar donde se cargan. Mientras estén vacíos, los bloques con
-     data-canal quedan ocultos; al completarlos se muestran con su enlace. */
-  const CANALES = {
-    // Por partes, para que no quede escrito de corrido: código de país, sin "+" ni espacios.
-    whatsapp: ['549', '2254', '42', '4691'].join(''),
-    linkedin: 'https://www.linkedin.com/company/studio74dev/',
-  };
-  // Queda abierto a propósito: el visitante termina la frase
-  const MENSAJE_WHATSAPP = 'Hola studio74dev, vengo de la web y quiero consultar por';
-
-  const enlaces = {
-    whatsapp: CANALES.whatsapp && `https://wa.me/${CANALES.whatsapp}?text=${encodeURIComponent(MENSAJE_WHATSAPP)}`,
-    linkedin: CANALES.linkedin,
-  };
-  document.querySelectorAll('[data-canal]').forEach((bloque) => {
-    const href = enlaces[bloque.dataset.canal];
-    if (!href) return;
-    // El bloque puede ser el enlace mismo (el botón flotante) o contenerlo
-    const destinos = bloque.matches('a') ? [bloque] : bloque.querySelectorAll('a');
-    destinos.forEach((a) => { a.href = href; });
-    bloque.hidden = false;
-  });
-
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   // Animaciones de scroll: solo si el <head> puso html.mov
   const mov = document.documentElement.classList.contains('mov');
 
   const root = document.documentElement;
 
-  /* ── Tema claro / oscuro ─────────────────────────── */
-  /* El <head> ya puso html[data-theme] (lo guardado o el del sistema).
-     El botón lo alterna y lo recuerda; si nunca se tocó, sigue al sistema. */
-  const temaBoton = document.getElementById('temaBoton');
-  const metaColor = document.querySelector('meta[name="theme-color"]');
-  const pintarTema = () => {
-    const claro = root.dataset.theme === 'claro';
-    if (temaBoton) temaBoton.setAttribute('aria-label', claro ? 'Cambiar a tema oscuro' : 'Cambiar a tema claro');
-    if (metaColor) metaColor.content = claro ? '#F4F3EF' : '#0B0B0C';
-  };
-  pintarTema();
-  if (temaBoton) {
-    temaBoton.addEventListener('click', () => {
-      root.dataset.theme = root.dataset.theme === 'claro' ? 'oscuro' : 'claro';
-      try {
-        localStorage.setItem('s74-tema', root.dataset.theme);
-      } catch (_) { /* sin storage: vale para esta visita */ }
-      pintarTema();
-    });
-  }
-  window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e) => {
-    let elegido = null;
-    try { elegido = localStorage.getItem('s74-tema'); } catch (_) { /* sin storage */ }
-    if (elegido) return;
-    root.dataset.theme = e.matches ? 'claro' : 'oscuro';
-    pintarTema();
-  });
-
   /* ── Índice a pantalla completa ──────────────────── */
   const header = document.getElementById('header');
   const menuBoton = document.getElementById('menuBoton');
   const indice = document.getElementById('indice');
-  let temaAntes = 'base';
+  let temaAntes = 'tinta';
 
   const cerrarIndice = (volverAlBoton) => {
     if (menuBoton.getAttribute('aria-expanded') !== 'true') return;
@@ -97,7 +98,7 @@
   const abrirIndice = () => {
     indice.hidden = false;
     temaAntes = header.dataset.tema;
-    header.dataset.tema = 'base';
+    header.dataset.tema = 'tinta';
     menuBoton.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
     pedir(); // el WhatsApp flotante se oculta mientras el índice está abierto
@@ -122,17 +123,12 @@
      - paso: 0 cuando asoma por abajo, 1 cuando se fue por arriba.
      - recorrido: la línea del proceso, que avanza con el centro de la pantalla.
      También pinta el color de la barra, marca en la barra la sección que se
-     está leyendo y, sin animation-timeline, el avance de la Ruta 74. */
+     está leyendo y el avance de los revelados. */
   const escenas = Array.from(document.querySelectorAll('[data-escena]'));
   const capitulos = Array.from(document.querySelectorAll('.capitulo[data-tema]'));
   const linksBarra = Array.from(document.querySelectorAll('.nav__links a'));
   const waFlotante = document.getElementById('waFlotante');
   const barraCta = document.getElementById('barraCta');
-  const ruta = document.getElementById('ruta');
-  const barraProgreso = document.querySelector('.progreso');
-  let ultimoAvance = '';
-  // Sin animation-timeline: el CSS usa --progreso (html.sin-sda)
-  if (!(window.CSS && CSS.supports && CSS.supports('animation-timeline: scroll()'))) root.classList.add('sin-sda');
   if (barraCta) barraCta.hidden = false;
   const iPortada = capitulos.findIndex((c) => c.hasAttribute('data-portada'));
   const iContacto = capitulos.findIndex((c) => c.id === 'contacto');
@@ -241,25 +237,14 @@
     // La barra toma el color del capítulo que tiene debajo
     const bajoBarra = altoBarra / 2;
     const actual = capitulos.find((c, i) => rectsCap[i].top <= bajoBarra && rectsCap[i].bottom > bajoBarra);
-    const temaDe = (c) => (c ? c.dataset.tema : 'base');
+    const temaDe = (c) => (c ? c.dataset.tema : 'tinta');
     const temaBarra = temaDe(actual);
     if (menuBoton.getAttribute('aria-expanded') !== 'true' && header.dataset.tema !== temaBarra) header.dataset.tema = temaBarra;
 
     const centroEn = capitulos.find((c, i) => rectsCap[i].top <= vh / 2 && rectsCap[i].bottom > vh / 2);
 
-    // Ruta 74 y barra de progreso: con animation-timeline los mueve el CSS. Sin él (html.sin-sda)
-    // o sin movimiento, se escribe --progreso (solo en esos dos elementos, no en <html>).
-    if (root.classList.contains('sin-sda') || !mov) {
-      const avance = clamp(y / Math.max(1, total - vh)).toFixed(4);
-      if (avance !== ultimoAvance) {
-        ultimoAvance = avance;
-        if (ruta) ruta.style.setProperty('--progreso', avance);
-        if (barraProgreso) barraProgreso.style.setProperty('--progreso', avance);
-      }
-    }
-
     // WhatsApp flotante: aparece cuando se deja la portada (que ya tiene sus
-    // acciones) y se va al llegar a Contacto (que tiene WhatsApp en sus canales).
+    // acciones) y se va al llegar a Contacto (que ya tiene su propio enlace de WhatsApp).
     // Toma el tema del capítulo que tiene debajo.
     if (waFlotante && !waFlotante.hidden) {
       const visible = menuBoton.getAttribute('aria-expanded') !== 'true'
@@ -307,75 +292,6 @@
   window.addEventListener('load', () => { medir(); pedir(); });
   if (document.fonts) document.fonts.ready.then(() => { medir(); pedir(); });
 
-  /* ── Ruta 74: trazado y hitos ────────────────────── */
-  /* Mide el rótulo de cada capítulo, ubica su hito y arma el camino: nace bajo el 74 de la
-     barra y pasa por cada hito con curvas de tangente vertical. En celular (< 760 px) va
-     recta por el borde izquierdo; desde 760 px alterna entre dos carriles del margen. Se
-     rehace al cargar, al llegar las fuentes y cuando cambia el alto de <main>. */
-  const main = document.getElementById('contenido');
-  const hitos = main ? Array.from(main.querySelectorAll(':scope > .capitulo > .hito')) : [];
-  // Posición de un elemento dentro de su ancestro (sin transformaciones: offsetTop)
-  const dentroDe = (el, tope) => {
-    let y = 0;
-    for (let e = el; e && e !== tope; e = e.offsetParent) y += e.offsetTop;
-    return y;
-  };
-  const trazarRuta = () => {
-    if (!ruta || !main || !hitos.length) return;
-    const H = main.offsetHeight;
-    ruta.style.height = `${H}px`;
-    const W = ruta.getBoundingClientRect().width;
-    ruta.setAttribute('viewBox', `0 0 ${W.toFixed(2)} ${H}`);
-    const ancho = window.matchMedia('(min-width: 760px)').matches;
-    const puntos = hitos.map((h) => {
-      const cap = h.parentElement;
-      const ancla = cap.querySelector('.rotulo') || cap.querySelector('h1, h2');
-      const y = ancla ? dentroDe(ancla, cap) + Math.min(ancla.offsetHeight / 2, 24) : 24;
-      h.style.top = `${y.toFixed(1)}px`;
-      return { x: h.offsetLeft + h.offsetWidth / 2, y: cap.offsetTop + y };
-    });
-    const xr = puntos[0].x;
-    const bow = ancho ? xr * 0.5 : 0;
-    const todos = [{ x: xr, y: 0 }].concat(puntos, [{ x: xr, y: H }]);
-    const f = (n) => n.toFixed(1);
-    let d = `M${f(todos[0].x)} ${f(todos[0].y)}`;
-    for (let i = 1; i < todos.length; i++) {
-      const a = todos[i - 1];
-      const b = todos[i];
-      const medio = (a.y + b.y) / 2;
-      const k = (medio - a.y) * 0.55;
-      const bx = xr + (i % 2 ? bow : -bow);
-      d += `C${f(a.x)} ${f(a.y + k)} ${f(bx)} ${f(medio - k)} ${f(bx)} ${f(medio)}`
-        + `C${f(bx)} ${f(medio + k)} ${f(b.x)} ${f(b.y - k)} ${f(b.x)} ${f(b.y)}`;
-    }
-    ruta.querySelectorAll('path').forEach((p) => p.setAttribute('d', d));
-  };
-  if (ruta && main && hitos.length) {
-    let espera = null;
-    const retrazar = () => { clearTimeout(espera); espera = setTimeout(trazarRuta, 150); };
-    trazarRuta();
-    window.addEventListener('load', trazarRuta);
-    if (document.fonts) document.fonts.ready.then(trazarRuta);
-    if ('ResizeObserver' in window) new ResizeObserver(retrazar).observe(main);
-    else window.addEventListener('resize', retrazar);
-
-    // Hitos: se encienden una sola vez cuando el capítulo llega al 60 % superior de la pantalla
-    // (o ya quedó arriba). Sin movimiento, la ruta está completa y todos encendidos.
-    const encender = (h) => h.classList.add('encendido');
-    if (!mov || !('IntersectionObserver' in window)) {
-      hitos.forEach(encender);
-    } else {
-      const luz = new IntersectionObserver((lista) => {
-        lista.forEach((e) => {
-          if (!e.isIntersecting && e.boundingClientRect.top > 0) return;
-          encender(e.target);
-          luz.unobserve(e.target);
-        });
-      }, { rootMargin: '0px 0px -40% 0px' });
-      hitos.forEach((h) => luz.observe(h));
-    }
-  }
-
   /* ── "¿Le pasa esto?": tachado al llegar a cada solución ── */
   /* Solo con movimiento. Al entrar (o haber quedado arriba) la solución n,
      se marca .resuelto su dolor y su rótulo; una sola vez. */
@@ -385,7 +301,7 @@
         const arriba = !e.isIntersecting && e.boundingClientRect.bottom <= 0;
         if (!e.isIntersecting && !arriba) return;
         const n = e.target.dataset.dolor;
-        const dolor = document.querySelector(`#le-pasa .dolor[data-dolor="${n}"]`);
+        const dolor = document.querySelector(`#te-pasa .dolor[data-dolor="${n}"]`);
         if (dolor) dolor.classList.add('resuelto');
         const rotulo = e.target.querySelector('.solucion__dolor');
         if (rotulo) rotulo.classList.add('resuelto');

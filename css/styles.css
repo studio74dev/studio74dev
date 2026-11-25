@@ -1,44 +1,52 @@
 /* ═══════════════════════════════════════════════════════
-   STUDIO 74 — STYLESHEET V12
-   Paleta: el logo en blanco y negro, con el punto en azul costa.
-     Tinta #0B0B0C · Papel #F4F3EF · Señal (azul costa) #2F5BEA
-   Acento de acción (solo botones de acción, --accion): A naranja boya #FF5A1F
-   (default) o B amarillo arena #FFC738, con ?acento=a|b. Texto del botón en
-   tinta (6,3:1 con A, 12,5:1 con B); en fondos claros lleva borde tinta.
-   El azul cumple AA con texto blanco encima (5,5:1) y sobre papel (5:1).
-   Sobre fondos oscuros, el acento de texto es su versión clara #8EA8FF (8,6:1).
-   Archivo (títulos en ancho 125 % y peso 900, y texto), Geist Mono
-   (rótulos), Michroma (marca).
+   STUDIO 74 — STYLESHEET V13 · opción A "Ruta 74"
+   Paleta fija de 4 colores:
+     Tinta #0B0B0C · Papel #F4F3EF · Azul #2F5BEA · Celeste #8EA8FF
+   Contraste medido (no negociable):
+   - Celeste sobre tinta 8,6:1 (acento de texto chico sobre negro).
+   - Azul sobre tinta 3,6:1: solo números y títulos de 24 px o más (o 18,7 px en negrita).
+   - Azul sobre papel 5:1. Blanco sobre azul 5,5:1. Papel sobre azul 5:1.
+   - Celeste sobre papel 2:1: prohibido para texto. Tinta sobre azul 3,6:1: solo texto grande.
+   Ritmo: las secciones alternan tinta y papel con cortes netos (sin degradés entre
+   secciones). Hay un solo bloque grande azul: la franja de números.
+   Tipografía: Archivo condensada (font-stretch 62 %, peso 900, mayúsculas) para los
+   títulos; Geist Mono chica para etiquetas; Archivo normal para el texto.
 
-   Temas:
-   - html[data-theme] es "oscuro" o "claro" (botón de la barra; si no se
-     eligió, el del sistema). Lo pone el <head> antes del primer pintado.
-   - Cada capítulo declara data-tema: "base" (fondo de la página), "alt"
-     (fondo alternativo), "contra" (invierte el tema: papel en oscuro, tinta en claro)
-     o "senal" (azul, igual en los dos temas).
-     Los tokens se redefinen por tema y por capítulo; la barra y la Ruta 74
-     (hitos) copian el del capítulo de abajo.
+   Temas por sección:
+   - Cada sección declara data-tema="tinta" | "papel" | "azul". Los tokens (--fondo,
+     --texto, --texto-2, --linea, --acento…) se redefinen por tema. La barra, el
+     WhatsApp flotante y la barra fija copian el tema de la sección que tienen debajo.
+   - No hay tema claro/oscuro del sitio: el único lugar que sigue el tema del sistema es
+     la carga inicial (blanco y negro invertido).
 
    Cómo se mueve:
-   - js/main.js calcula el avance de cada [data-escena] y lo deja en --p (0 a 1).
-     "entrada": el elemento entra en pantalla (una sola vez, con IntersectionObserver).
-     "recorrido": la línea de los pasos de "Cómo trabajamos".
-     Ya no hay escenas fijas (sticky) ni giros 3D: la página fluye en una columna.
    - Todo lo animado vive bajo html.mov (hay JS y no hay reduced-motion).
      Sin esa clase la página se ve completa, quieta y en orden.
+   - js/main.js calcula el avance de cada [data-escena] y lo deja en --p (0 a 1).
 ═══════════════════════════════════════════════════════ */
 
 /* Fuentes propias: juego latino (español completo). Archivo es variable en ancho y peso. */
 @font-face {
   font-family: 'Archivo';
   font-style: normal;
-  font-weight: 400 900;
-  font-stretch: 100% 125%;
-  /* optional: se precarga y casi siempre llega antes del primer pintado; si no,
-     esa visita sigue con la del sistema en vez de saltar (la portada se movía) */
-  font-display: optional;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  /* swap: los títulos condensados enormes se ven siempre; el salto se acota con el
+     fallback ajustado (Archivo Fallback) */
+  font-display: swap;
   src: url('../assets/fonts/archivo-latin.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Respaldo con las métricas de Archivo para acotar el salto del swap */
+@font-face {
+  font-family: 'Archivo Fallback';
+  src: local('Arial');
+  font-weight: 100 900;
+  size-adjust: 100%;
+  ascent-override: 87%;
+  descent-override: 21%;
+  line-gap-override: 0%;
 }
 
 @font-face {
@@ -50,192 +58,104 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-@font-face {
-  font-family: 'Michroma';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url('../assets/fonts/michroma-latin.woff2') format('woff2');
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-}
-
 :root {
   --tinta: #0B0B0C;
   --papel: #F4F3EF;
-  --senal: #2F5BEA;
-  --senal-claro: #8EA8FF;
-  --sobre-senal: #FFFFFF;
+  --azul: #2F5BEA;
+  --celeste: #8EA8FF;
+  --blanco: #FFFFFF;
+  --superficie-tinta: #1C1C1F;
 
-  /* Acento de acción (solo botones de acción): A naranja boya (default), B amarillo arena.
-     Se elige con ?acento=a|b (el <head> pone html[data-acento]). */
-  --acento-a: #FF5A1F;
-  --acento-b: #FFC738;
-  --accion: var(--acento-a);
-  --sobre-accion: var(--tinta);
+  /* Nombres anteriores, todavía usados por componentes */
+  --senal: var(--azul);
+  --senal-claro: var(--celeste);
+  --sobre-senal: var(--blanco);
 
-  --font: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font: 'Archivo', 'Archivo Fallback', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --marca: 'Michroma', 'Archivo', sans-serif;
 
   --ancho: min(1180px, calc(100% - 2rem));
-  --header-height: 52px;
-  --radio: 28px;
-  --radio-s: 18px;
+  --header-height: 60px;
+  --radio: 0;
+  --radio-s: 0;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --ease-io: cubic-bezier(0.7, 0, 0.2, 1);
   --p: 1;
 
-  /* Fondos de los tipos de capítulo base y alternativo */
-  --fondo-base: var(--tinta);
-  --fondo-alt: #141416;
+  /* Escala tipográfica */
+  --t-h1: clamp(56px, 10.5vw, 168px);
+  --t-h2: clamp(44px, 7vw, 104px);
+  --t-h3: clamp(28px, 3.2vw, 44px);
+  --t-texto: clamp(17px, 1.25vw, 20px);
 
   color-scheme: dark;
   interpolate-size: allow-keywords;
 }
 
-html[data-acento='b'] {
-  --accion: var(--acento-b);
-}
-
-[data-theme='claro'] {
-  --fondo-base: var(--papel);
-  --fondo-alt: #FFFFFF;
-  color-scheme: light;
-}
-
-/* Tokens por tema y capítulo. Texto secundario: 7:1 o más sobre tinta y papel,
-   4,5:1 o más sobre el azul. */
+/* Tokens por sección. Texto secundario: 72 % (7:1 o más sobre tinta y papel);
+   sobre el azul sube a 90 % para mantener 4,5:1. */
 :root,
-[data-tema='base'] {
+[data-tema='tinta'] {
   --fondo: var(--tinta);
   --texto: var(--papel);
-  --suave: rgba(244, 243, 239, 0.68);
-  --linea: rgba(244, 243, 239, 0.12);
-  --linea-fuerte: rgba(244, 243, 239, 0.24);
-  --acento: var(--senal-claro);
-  --foco: var(--senal-claro);
-  --superficie: #18181B;
-  --marca-fondo: var(--senal);
-  --marca-texto: var(--sobre-senal);
-  --boton-fondo: var(--accion);
-  --boton-texto: var(--sobre-accion);
+  --texto-2: rgba(244, 243, 239, 0.72);
+  --linea: rgba(244, 243, 239, 0.16);
+  --linea-fuerte: rgba(244, 243, 239, 0.32);
+  --acento-texto: var(--celeste);
+  --foco: var(--celeste);
+  --superficie: var(--superficie-tinta);
+  --marca-fondo: var(--azul);
+  --marca-texto: var(--blanco);
+  --boton-fondo: var(--azul);
+  --boton-texto: var(--blanco);
   --boton-borde: transparent;
-  --trazo: var(--papel);
-  --punto: var(--senal);
+  --punto: var(--azul);
   --error: #FF8A80;
 }
 
-[data-tema='alt'] {
-  --fondo: #141416;
-  --texto: var(--papel);
-  --suave: rgba(244, 243, 239, 0.7);
-  --linea: rgba(244, 243, 239, 0.12);
-  --linea-fuerte: rgba(244, 243, 239, 0.24);
-  --acento: var(--senal-claro);
-  --foco: var(--senal-claro);
-  --superficie: #202024;
-  --marca-fondo: var(--senal);
-  --marca-texto: var(--sobre-senal);
-  --boton-fondo: var(--accion);
-  --boton-texto: var(--sobre-accion);
-  --boton-borde: transparent;
-  --trazo: var(--papel);
-  --punto: var(--senal);
-  --error: #FF8A80;
-}
-
-[data-theme='claro'],
-[data-theme='claro'] [data-tema='base'] {
+[data-tema='papel'] {
   --fondo: var(--papel);
   --texto: var(--tinta);
-  --suave: rgba(11, 11, 12, 0.7);
-  --linea: rgba(11, 11, 12, 0.1);
-  --linea-fuerte: rgba(11, 11, 12, 0.24);
-  --acento: var(--senal);
-  --foco: var(--senal);
-  --superficie: #FFFFFF;
-  --marca-fondo: var(--senal);
-  --marca-texto: var(--sobre-senal);
-  --boton-fondo: var(--accion);
-  --boton-texto: var(--sobre-accion);
-  --boton-borde: var(--tinta);
-  --trazo: var(--tinta);
-  --punto: var(--senal);
+  --texto-2: rgba(11, 11, 12, 0.72);
+  --linea: rgba(11, 11, 12, 0.16);
+  --linea-fuerte: rgba(11, 11, 12, 0.32);
+  --acento-texto: var(--azul);
+  --foco: var(--azul);
+  --superficie: var(--blanco);
+  --marca-fondo: var(--azul);
+  --marca-texto: var(--blanco);
+  --boton-fondo: var(--azul);
+  --boton-texto: var(--blanco);
+  --boton-borde: transparent;
+  --punto: var(--azul);
   --error: #B3261E;
 }
 
-[data-theme='claro'] [data-tema='alt'] {
-  --fondo: #FFFFFF;
-  --texto: var(--tinta);
-  --suave: rgba(11, 11, 12, 0.7);
-  --linea: rgba(11, 11, 12, 0.1);
-  --linea-fuerte: rgba(11, 11, 12, 0.24);
-  --acento: var(--senal);
-  --foco: var(--senal);
-  --superficie: var(--papel);
-  --marca-fondo: var(--senal);
-  --marca-texto: var(--sobre-senal);
-  --boton-fondo: var(--accion);
-  --boton-texto: var(--sobre-accion);
-  --boton-borde: var(--tinta);
-  --trazo: var(--tinta);
-  --punto: var(--senal);
-  --error: #B3261E;
-}
-
-[data-tema='senal'],
-[data-theme='claro'] [data-tema='senal'] {
-  --fondo: var(--senal);
-  --texto: var(--sobre-senal);
-  --suave: rgba(255, 255, 255, 0.9);
-  --linea: rgba(255, 255, 255, 0.2);
-  --linea-fuerte: rgba(255, 255, 255, 0.4);
-  --acento: var(--sobre-senal);
-  --foco: var(--sobre-senal);
+/* Azul: el único bloque grande de este color (la franja de números) */
+[data-tema='azul'] {
+  --fondo: var(--azul);
+  --texto: var(--blanco);
+  --texto-2: rgba(255, 255, 255, 0.9);
+  --linea: rgba(255, 255, 255, 0.32);
+  --linea-fuerte: rgba(255, 255, 255, 0.6);
+  --acento-texto: var(--blanco);
+  --foco: var(--blanco);
   --superficie: rgba(255, 255, 255, 0.08);
-  --marca-fondo: var(--sobre-senal);
-  --marca-texto: var(--senal);
-  --boton-fondo: var(--accion);
-  --boton-texto: var(--sobre-accion);
-  --boton-borde: var(--tinta);
-  --trazo: var(--sobre-senal);
-  --punto: var(--sobre-senal);
-  --error: #FFFFFF;
-}
-
-/* Contra: el capítulo que invierte el tema (papel en oscuro, tinta en claro).
-   Mismos nombres de tokens que base y alt. */
-[data-tema='contra'] {
-  --fondo: var(--papel);
-  --texto: var(--tinta);
-  --suave: rgba(11, 11, 12, 0.7);
-  --linea: rgba(11, 11, 12, 0.1);
-  --linea-fuerte: rgba(11, 11, 12, 0.24);
-  --acento: var(--senal);
-  --foco: var(--senal);
-  --superficie: #FFFFFF;
-  --marca-fondo: var(--senal);
-  --marca-texto: var(--sobre-senal);
-  --boton-fondo: var(--accion);
-  --boton-texto: var(--sobre-accion);
-  --boton-borde: var(--tinta);
-  --trazo: var(--tinta);
-  --punto: var(--senal);
-  --error: #B3261E;
-}
-
-[data-theme='claro'] [data-tema='contra'] {
-  --fondo: var(--tinta);
-  --texto: var(--papel);
-  --suave: rgba(244, 243, 239, 0.7);
-  --linea: rgba(244, 243, 239, 0.12);
-  --linea-fuerte: rgba(244, 243, 239, 0.24);
-  --acento: var(--senal-claro);
-  --foco: var(--senal-claro);
-  --superficie: #18181B;
+  --marca-fondo: var(--papel);
+  --marca-texto: var(--tinta);
+  --boton-fondo: var(--papel);
+  --boton-texto: var(--tinta);
   --boton-borde: transparent;
-  --trazo: var(--papel);
-  --error: #FF8A80;
+  --punto: var(--blanco);
+  --error: var(--blanco);
+}
+
+/* Alias que usan los componentes */
+:root,
+[data-tema] {
+  --suave: var(--texto-2);
+  --acento: var(--acento-texto);
+  --trazo: var(--texto);
 }
 
 *,
@@ -255,7 +175,7 @@ html {
 
 body {
   font-family: var(--font);
-  font-size: 1.0625rem;
+  font-size: var(--t-texto);
   line-height: 1.55;
   color: var(--texto);
   background: var(--fondo);
@@ -324,27 +244,38 @@ b {
 }
 
 /* Títulos grandes: grotesca extendida, negra y en mayúsculas */
+.cond,
 .display,
 .hero__title,
+.paso h3,
+.caso__nombre,
 .titulo,
 .subtitulo,
 .contacto__titulo,
 .indice__lista a {
   font-family: var(--font);
-  font-stretch: 125%;
+  font-stretch: 62%;
   font-weight: 900;
+  line-height: 0.86;
   text-transform: uppercase;
-  letter-spacing: -0.012em;
+  letter-spacing: -0.01em;
   /* Palabras largas en el celular: cortan por los guiones suaves (&shy;) del HTML */
   hyphens: manual;
   overflow-wrap: break-word;
 }
 
+/* Utilidades: condensada y mono */
+.mono {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 /* Íconos de línea con el mismo trazo */
 .btn svg,
 .canal svg,
-.estudio__github svg,
-.nav__tema svg {
+.estudio__github svg {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
@@ -358,7 +289,7 @@ b {
   left: 0.75rem;
   z-index: 200;
   padding: 0.6rem 1rem;
-  border-radius: 999px;
+  border-radius: 0;
   background: var(--senal);
   color: var(--sobre-senal);
   font-weight: 600;
@@ -376,29 +307,9 @@ b {
   overflow: clip;
   background: var(--fondo);
   color: var(--texto);
-  /* Fondo: grilla de 48 px casi invisible (<= 5 %) y luz azul suave. Siguen al tema del capítulo */
-  --grilla: color-mix(in srgb, var(--texto) 4.5%, transparent);
-  --luz-1: color-mix(in srgb, var(--senal) 13%, transparent);
-  --luz-2: color-mix(in srgb, var(--senal-claro) 8%, transparent);
 }
 
-/* Grilla y luz: detrás del contenido (z 0), que va por encima (z 1). inset -20 px arriba y
-   abajo para que el parallax (hasta 20 px, ver "Fondo con parallax") no deje bordes */
-.capitulo::before {
-  content: '';
-  position: absolute;
-  inset: -20px 0;
-  z-index: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(60% 55% at 88% 8%, var(--luz-1), transparent 70%),
-    radial-gradient(50% 45% at 8% 92%, var(--luz-2), transparent 70%),
-    linear-gradient(var(--grilla) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grilla) 1px, transparent 1px);
-  background-size: auto, auto, 48px 48px, 48px 48px;
-}
-
-.capitulo > :not(.hito) {
+.capitulo > * {
   position: relative;
   z-index: 1;
 }
@@ -425,22 +336,22 @@ b {
   gap: 0.6rem;
   font-family: var(--mono);
   font-size: 0.78rem;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--suave);
+  color: var(--acento);
 }
 
 .rotulo__n {
   padding: 0.12rem 0.5rem;
-  border-radius: 999px;
+  border-radius: 0;
   background: var(--texto);
   color: var(--fondo);
 }
 
 .titulo {
   margin-top: 1.25rem;
-  font-size: clamp(2.1rem, 5.2vw, 4.8rem);
-  line-height: 0.92;
+  font-size: var(--t-h2);
+  line-height: 0.86;
 }
 
 .titulo em {
@@ -462,8 +373,8 @@ b {
 
 .subtitulo {
   margin-top: clamp(5rem, 10vw, 8rem);
-  font-size: clamp(1.6rem, 3.6vw, 3rem);
-  line-height: 0.95;
+  font-size: var(--t-h3);
+  line-height: 0.9;
   text-align: center;
 }
 
@@ -654,17 +565,17 @@ b {
   justify-content: center;
 }
 
-/* ── Botones: píldoras ───────────────────────────── */
+/* ── Botones: rectos y grandes ───────────────────── */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.6rem;
-  min-height: 52px;
-  padding: 0.8rem 1.7rem;
+  min-height: 56px;
+  padding: 1rem 1.5rem;
   border: 0;
-  border-radius: 999px;
-  font-weight: 600;
+  border-radius: 0;
+  font-weight: 700;
   font-size: 1rem;
   text-decoration: none;
   cursor: pointer;
@@ -681,8 +592,7 @@ b {
   transform: translateX(4px);
 }
 
-/* Acción: el único lugar donde va el acento (--accion). Texto tinta (AA con A y B);
-   sobre fondos claros lleva borde tinta (--boton-borde) para separarse del papel. */
+/* Acción: azul con texto blanco (sobre el bloque azul, papel con texto tinta). */
 .btn--accion {
   background: var(--boton-fondo);
   color: var(--boton-texto);
@@ -704,13 +614,14 @@ b {
 }
 
 .btn--borde {
-  background: var(--fondo);
-  box-shadow: inset 0 0 0 1.5px var(--linea-fuerte);
+  background: transparent;
+  box-shadow: inset 0 0 0 2px var(--texto);
   color: var(--texto);
 }
 
 .btn--borde:hover {
-  box-shadow: inset 0 0 0 1.5px var(--texto);
+  background: var(--texto);
+  color: var(--fondo);
 }
 
 .btn:disabled {
@@ -724,10 +635,10 @@ b {
   inset: 0 0 auto;
   z-index: 70;
   color: var(--texto);
-  background: color-mix(in srgb, var(--fondo) 74%, transparent);
+  background: color-mix(in srgb, var(--fondo) 86%, transparent);
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
-  box-shadow: 0 1px 0 var(--linea);
+  border-bottom: 1px solid var(--linea);
   transition: color 0.3s var(--ease), background-color 0.3s var(--ease);
 }
 
@@ -749,10 +660,18 @@ b {
   text-decoration: none;
 }
 
-/* El isotipo solo (sin "STUDIO 74" al lado): trazos del color del texto y el punto en azul */
+/* El isotipo (el 74 que vuela al logo en la carga) y la marca al lado, en minúscula */
 .nav__logo-icon {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
+  color: var(--texto);
+}
+
+.nav__marca {
+  font-weight: 600;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+  text-transform: none;
   color: var(--texto);
 }
 
@@ -768,7 +687,10 @@ b {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
-  font-size: 0.82rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--suave);
   text-decoration: none;
   transition: color 0.2s var(--ease);
@@ -779,48 +701,17 @@ b {
   color: var(--texto);
 }
 
-.nav__tema {
-  display: inline-grid;
-  place-items: center;
-  width: 48px;
-  height: 48px;
-  border: 0;
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-  transition: background-color 0.2s var(--ease);
-}
-
-.nav__tema:hover {
-  background: var(--linea);
-}
-
-.nav__tema svg {
-  width: 20px;
-  height: 20px;
-  transition: transform 0.6s var(--ease-io);
-}
-
-.nav__tema path {
-  fill: currentColor;
-  stroke: none;
-}
-
-[data-theme='claro'] .nav__tema svg {
-  transform: rotate(180deg);
-}
-
 .nav__cta {
   display: none;
   align-items: center;
-  min-height: 32px;
-  padding: 0 1rem;
-  border-radius: 999px;
+  min-height: 40px;
+  padding: 0 1.1rem;
+  border-radius: 0;
   background: var(--boton-fondo);
   color: var(--boton-texto);
   box-shadow: inset 0 0 0 1.5px var(--boton-borde);
-  font-weight: 600;
-  font-size: 0.82rem;
+  font-weight: 700;
+  font-size: 0.9rem;
   text-decoration: none;
   transition: transform 0.35s var(--ease), background-color 0.3s var(--ease), color 0.3s var(--ease);
 }
@@ -834,7 +725,7 @@ b {
   min-height: 48px;
   padding: 0;
   border: 0;
-  border-radius: 999px;
+  border-radius: 0;
   background: transparent;
   font-family: var(--mono);
   font-size: 0.72rem;
@@ -906,8 +797,8 @@ b {
   display: flex;
   align-items: baseline;
   gap: 1rem;
-  font-size: clamp(1.5rem, 4.6vw, 3.4rem);
-  line-height: 1.1;
+  font-size: clamp(32px, min(7vw, 8.5vh), 80px);
+  line-height: 0.95;
   text-decoration: none;
   transition: color 0.25s var(--ease), transform 0.35s var(--ease);
 }
@@ -964,8 +855,8 @@ b {
 }
 
 .hero__title {
-  font-size: clamp(1.9rem, 9.2vw, 5rem);
-  line-height: 0.95;
+  font-size: var(--t-h1);
+  line-height: 0.86;
 }
 
 .hero__lead {
@@ -1298,9 +1189,9 @@ html:not(.mov) .hero__pausa {
 }
 
 .caso__nombre {
-  font-size: clamp(1.5rem, 3.4vw, 2.4rem);
-  font-weight: 800;
-  letter-spacing: -0.035em;
+  font-size: var(--t-h3);
+  font-weight: 900;
+  letter-spacing: -0.01em;
   text-align: center;
 }
 
@@ -1664,16 +1555,16 @@ html:not(.mov) .hero__pausa {
 }
 
 .compromiso__frase {
-  font-stretch: 125%;
+  font-stretch: 62%;
   font-weight: 900;
-  font-size: clamp(1.5rem, 3.2vw, 2.6rem);
-  line-height: 0.95;
-  letter-spacing: -0.012em;
+  font-size: var(--t-h3);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
 }
 
 .compromiso:first-child .compromiso__frase {
-  font-size: clamp(2rem, 5.6vw, 4.8rem);
+  font-size: var(--t-h2);
 }
 
 .compromiso__frase span {
@@ -1757,9 +1648,9 @@ html:not(.mov) .hero__pausa {
 
 .paso h3 {
   margin-top: 0.6rem;
-  font-size: clamp(1.6rem, 3.4vw, 2.6rem);
-  font-weight: 800;
-  letter-spacing: -0.035em;
+  font-size: var(--t-h3);
+  font-weight: 900;
+  letter-spacing: -0.01em;
 }
 
 .paso p {
@@ -1797,7 +1688,7 @@ html:not(.mov) .hero__pausa {
 }
 
 .persona__inicial {
-  font-stretch: 125%;
+  font-stretch: 62%;
   font-weight: 900;
   font-size: clamp(2.8rem, 6vw, 4.4rem);
   line-height: 1;
@@ -1922,8 +1813,8 @@ html:not(.mov) .hero__pausa {
 
 .contacto__titulo {
   margin-top: 1.25rem;
-  font-size: clamp(1.9rem, 8vw, 6.4rem);
-  line-height: 0.88;
+  font-size: var(--t-h2);
+  line-height: 0.86;
 }
 
 .contacto__grilla {
@@ -2015,7 +1906,7 @@ html:not(.mov) .hero__pausa {
   align-items: center;
   min-height: 44px;
   padding: 0 1rem;
-  border-radius: 999px;
+  border-radius: 0;
   box-shadow: inset 0 0 0 1px var(--linea-fuerte);
   font-size: 0.95rem;
   color: var(--suave);
@@ -2341,7 +2232,7 @@ select.campo:focus-visible {
   gap: 0.55rem;
   width: 56px;
   height: 56px;
-  border-radius: 999px;
+  border-radius: 0;
   background: var(--marca-fondo);
   color: var(--marca-texto);
   font-weight: 600;
@@ -2538,11 +2429,12 @@ select.campo:focus-visible {
 .footer__marca {
   margin-top: clamp(3rem, 8vw, 6rem);
   overflow: hidden;
-  font-family: var(--marca);
-  /* "studio74dev" mide ~8,5 em: este tope lo deja entero dentro del contenedor de 1180 px */
-  font-size: min(9.4vw, 8.4rem);
+  font-family: var(--font);
+  font-weight: 600;
+  /* "studio74dev" mide ~5,6 em: este tope lo deja entero dentro del contenedor */
+  font-size: min(14vw, 8.4rem);
   line-height: 1.1;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.03em;
   white-space: nowrap;
 }
 
@@ -2551,7 +2443,7 @@ select.campo:focus-visible {
 }
 
 .footer__marca b {
-  font-weight: 400;
+  font-weight: 600;
   color: var(--acento);
 }
 
@@ -2860,152 +2752,106 @@ html.mov .tel__pedido em {
 }
 
 
-/* ── Ruta 74 y barra de progreso ─────────────────── */
-/* La Ruta 74 es un SVG (primer hijo de <main>) que arma js/main.js (trazarRuta): nace
-   bajo el 74 de la barra y pasa por un hito en cada capítulo. En celular es una línea
-   fina por el borde izquierdo (7 px); desde 760 px sigue dos carriles dentro del margen
-   libre. Va encima de los fondos y debajo del contenido y de la barra.
-   El trazo se dibuja con el scroll: animation-timeline: scroll() y, si el navegador no
-   lo tiene, html.sin-sda + --progreso escrito por main.js. Con reduced-motion (o sin
-   html.mov) la ruta está completa y los hitos encendidos. Sin JS no se ve. */
-:root {
-  --ruta-x: 7px;
-  --ruta-ancho: 14px;
-}
-
-main {
-  position: relative;
-}
-
-.ruta {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: var(--ruta-ancho);
-  height: 100%;
-  z-index: 1;
-  overflow: visible;
-  pointer-events: none;
-}
-
-.ruta path {
-  fill: none;
-  stroke: var(--senal);
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  vector-effect: non-scaling-stroke;
-}
-
-/* El camino completo, apenas marcado: el texto cambia de color entre capítulos y el
-   SVG queda fuera de ellos, así que usa el azul de la marca a baja opacidad */
-.ruta__fondo {
-  opacity: 0.22;
-}
-
-.ruta__trazo {
-  stroke-dasharray: 1;
-  stroke-dashoffset: 0;
-}
-
-html.mov .ruta__trazo {
-  stroke-dashoffset: 1;
-}
-
-.hito {
-  position: absolute;
-  left: var(--ruta-x);
-  top: 0;
-  z-index: 2;
-  width: 10px;
-  height: 10px;
-  margin: -5px 0 0 -5px;
-  background: var(--fondo);
-  box-shadow: inset 0 0 0 2px var(--senal);
-  pointer-events: none;
-}
-
-/* Encendido: es una marca de avance, mínima (10 px) y lejos de los botones de acción */
-.hito.encendido {
-  background: var(--accion);
-  box-shadow: 0 0 0 1.5px var(--tinta);
-}
-
-html.mov .hito {
-  transition: background-color 0.3s var(--ease), box-shadow 0.3s var(--ease);
-}
-
-html:not(.js) .ruta,
-html:not(.js) .hito,
-html:not(.js) .progreso {
+/* ── Carga inicial ───────────────────────────────── */
+/* Solo en la home y solo si el <head> puso html.con-carga (primera visita de la sesión, sin
+   reduced-motion). "studio74dev" sube desde una máscara, se cierran los costados y el 74 vuela
+   al logo de la barra (el vuelo lo calcula js/main.js con FLIP). Blanco y negro, invertido según
+   el tema del sistema. El fundido y el retiro son CSS puro: si el JS falla, se va sola a los
+   2,5 s. Sin la clase, no existe. */
+.carga {
   display: none;
+  --carga-fondo: #0B0B0C;
+  --carga-letras: #FFFFFF;
 }
 
-.progreso {
+@media (prefers-color-scheme: dark) {
+  .carga {
+    --carga-fondo: #F4F3EF;
+    --carga-letras: #0B0B0C;
+  }
+}
+
+html.con-carga .carga {
   position: fixed;
-  inset: 0 0 auto;
-  z-index: 75;
-  height: 3px;
-  pointer-events: none;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--carga-fondo);
+  color: var(--carga-letras);
+  animation: carga-fuera 0.4s linear 2.1s forwards;
 }
 
-.progreso span {
+.carga__palabra {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  width: 100%;
+  font-size: clamp(64px, 13vw, 200px);
+  line-height: 0.86;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Máscara: recorta por abajo (la subida) pero deja salir al 74 hacia arriba y a los costados */
+.carga__m {
   display: block;
-  height: 100%;
-  background: var(--senal);
-  transform: scaleX(0);
-  transform-origin: left;
+  clip-path: inset(-200vh -200vw 0 -200vw);
 }
 
-@keyframes ruta-dibujo {
-  from { stroke-dashoffset: 1; }
-  to { stroke-dashoffset: 0; }
+.carga__lado:first-child {
+  justify-self: end;
 }
 
-@keyframes progreso {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
+.carga__lado:last-child {
+  justify-self: start;
 }
 
-@supports (animation-timeline: scroll()) {
-  html.mov .ruta__trazo {
-    animation: ruta-dibujo linear both;
-    animation-timeline: scroll(root block);
-  }
-
-  html.mov .progreso span {
-    animation: progreso linear both;
-    animation-timeline: scroll(root block);
-  }
+.carga__m > span {
+  display: inline-block;
+  transform: translateY(110%);
+  animation: carga-sube 0.7s var(--ease) both;
 }
 
-/* Respaldo sin animation-timeline: main.js escribe --progreso (0 a 1) en .ruta y .progreso */
-html.mov.sin-sda .ruta__trazo {
-  animation: none;
-  stroke-dashoffset: calc(1 - var(--progreso, 0));
+.carga__centro > span {
+  transform-origin: center;
+  line-height: 0.78;
+  animation-delay: 0.1s;
 }
 
-html.sin-sda .progreso span,
-html:not(.mov) .progreso span {
-  animation: none;
-  transform: scaleX(var(--progreso, 0));
+.carga__lado:last-child > span {
+  animation-delay: 0.2s;
 }
 
-/* ── Fondo con parallax ──────────────────────────── */
-/* La luz y la grilla de .capitulo::before se desplazan hasta 20 px (de +20 a -20) mientras
-   la sección cruza la pantalla. Solo con html.mov y animation-timeline: view(); sin soporte
-   o con reduced-motion queda quieto (no hay respaldo en JS). */
-@keyframes luz {
-  from { transform: translateY(20px); }
-  to { transform: translateY(-20px); }
+/* Se cierran los costados: queda el 74 solo, en el centro */
+.carga__lado:first-child > span {
+  animation: carga-sube 0.7s var(--ease) both, carga-cierra-izq 0.4s var(--ease-io) 0.9s forwards;
 }
 
-@supports (animation-timeline: view()) {
-  html.mov .capitulo::before {
-    animation: luz linear both;
-    animation-timeline: view();
-    /* capa propia: sin esto cada cuadro repinta los degradados de las 8 secciones (TBT alto) */
-    will-change: transform;
-  }
+.carga__lado:last-child > span {
+  animation: carga-sube 0.7s var(--ease) 0.2s both, carga-cierra-der 0.4s var(--ease-io) 0.9s forwards;
+}
+
+@keyframes carga-sube {
+  from { transform: translateY(110%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes carga-cierra-izq {
+  from { clip-path: inset(0 0 0 0); opacity: 1; }
+  to { clip-path: inset(0 0 0 100%); opacity: 0; }
+}
+
+@keyframes carga-cierra-der {
+  from { clip-path: inset(0 0 0 0); opacity: 1; }
+  to { clip-path: inset(0 100% 0 0); opacity: 0; }
+}
+
+/* Fundido del fondo y de las letras; al terminar (2,5 s) queda hidden aunque falle el JS */
+@keyframes carga-fuera {
+  from { opacity: 1; visibility: visible; }
+  to { opacity: 0; visibility: hidden; }
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -3027,7 +2873,7 @@ html:not(.mov) .progreso span {
 
   .opcion span {
     width: auto;
-    border-radius: 999px;
+    border-radius: 0;
   }
 
   .form__nav {
@@ -3057,13 +2903,10 @@ html:not(.mov) .progreso span {
 @media (min-width: 760px) {
   :root {
     --ancho: min(1180px, calc(100% - 4rem));
-    /* Carriles dentro del margen libre: entre 12 y 64 px del borde */
-    --ruta-x: clamp(12px, calc(max(32px, (100vw - 1180px) / 2) * 0.4), 64px);
-    --ruta-ancho: calc(var(--ruta-x) * 2);
   }
 
-  .ruta path {
-    stroke-width: 2;
+  .btn {
+    padding: 22px 32px;
   }
 
   .nav__cta {
@@ -3115,7 +2958,7 @@ html:not(.mov) .progreso span {
 }
 
 .subportada .titulo {
-  font-size: clamp(2.6rem, 10vw, 6rem);
+  font-size: clamp(56px, 10vw, 140px);
 }
 
 .subportada__acciones {
