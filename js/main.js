@@ -292,43 +292,6 @@
   window.addEventListener('load', () => { medir(); pedir(); });
   if (document.fonts) document.fonts.ready.then(() => { medir(); pedir(); });
 
-  /* ── "¿Le pasa esto?": tachado al llegar a cada solución ── */
-  /* Solo con movimiento. Al entrar (o haber quedado arriba) la solución n,
-     se marca .resuelto su dolor y su rótulo; una sola vez. */
-  if (mov && 'IntersectionObserver' in window) {
-    const tachar = new IntersectionObserver((lista) => {
-      lista.forEach((e) => {
-        const arriba = !e.isIntersecting && e.boundingClientRect.bottom <= 0;
-        if (!e.isIntersecting && !arriba) return;
-        const n = e.target.dataset.dolor;
-        const dolor = document.querySelector(`#te-pasa .dolor[data-dolor="${n}"]`);
-        if (dolor) dolor.classList.add('resuelto');
-        const rotulo = e.target.querySelector('.solucion__dolor');
-        if (rotulo) rotulo.classList.add('resuelto');
-        tachar.unobserve(e.target);
-      });
-    }, { threshold: 0.6 });
-    document.querySelectorAll('#resolvemos .solucion[data-dolor]').forEach((el) => tachar.observe(el));
-  }
-
-  /* ── Antes / después de Matemar ──────────────────── */
-  /* Sin JS los dos paneles quedan uno debajo del otro. Con JS se superponen y el
-     deslizador mueve el corte (--corte). El centro de la manija (48 px) recorre
-     el ancho menos media manija a cada lado, por eso el calc(). */
-  const comparar = document.getElementById('comparar');
-  const control = comparar && comparar.querySelector('.comparar__control');
-  if (control) {
-    const mover = () => {
-      const v = Number(control.value);
-      comparar.style.setProperty('--corte', `calc(24px + (100% - 48px) * ${v / 100})`);
-      control.setAttribute('aria-valuetext', `Antes ${v} %, después ${100 - v} %`);
-    };
-    control.hidden = false;
-    comparar.classList.add('comparar--activo');
-    control.addEventListener('input', mover);
-    mover();
-  }
-
   /* ── Botones magnéticos ──────────────────────────── */
   /* Siguen un poco al puntero; solo con mouse y con movimiento permitido. */
   if (mov && window.matchMedia('(pointer: fine)').matches) {
@@ -343,51 +306,69 @@
     });
   }
 
-  /* ── Inicio: video y parallax ─────────────────────── */
-  const inicioEl = document.getElementById('inicio');
+  /* ── Video con póster (inicio y Quiénes somos) ─────── */
+  /* Mismo patrón en los dos: el HTML no tiene autoplay ni src (solo data-src). El video se pide por JS
+     únicamente con movimiento permitido (html.mov) y sin ahorro de datos, y recién cuando corresponde
+     (el inicio, después del load; Quiénes somos, al acercarse a la pantalla). Se frena solo fuera de
+     pantalla y con la pestaña oculta. Dura más de 5 s: botón de pausa (WCAG 2.2.2). Con reduced-motion,
+     sin JS o si falla, queda la imagen fija. */
   const raiz = document.documentElement;
-  if (inicioEl && raiz.classList.contains('mov')) {
-    /* Video: se pide recién después del load (para no competir con la imagen LCP) y solo si no hay
-       reduced-motion (html.mov ya lo garantiza) ni conexión ahorrada. Si falla, queda la foto.
-       Dura más de 5 s: hay botón de pausa (WCAG 2.2.2) y se frena solo fuera de pantalla. */
-    const video = inicioEl.querySelector('.hero__video');
-    const pausa = inicioEl.querySelector('.hero__pausa');
+  const vincularVideo = (zona, video, pausa, etiqueta, cuando) => {
     const con = navigator.connection;
-    if (video && video.dataset.src && !(con && con.saveData)) {
-      let pausadoPorUsuario = false;
-      let visible = true;
-      const sincronizar = () => {
-        if (pausadoPorUsuario || !visible || document.hidden) video.pause();
-        else video.play().catch(() => {});
-      };
-      const arrancar = () => {
-        const foto = inicioEl.querySelector('.hero__medio img');
-        if (foto && foto.currentSrc) video.poster = foto.currentSrc; /* la misma foto que ya está cargada: sin pedido extra */
-        video.src = video.dataset.src;
-        video.addEventListener('playing', () => {
-          video.classList.add('hero__video--activo');
-          if (pausa) pausa.hidden = false;
-        }, { once: true });
+    if (!zona || !video || !video.dataset.src || !raiz.classList.contains('mov') || (con && con.saveData)) return;
+    let pausadoPorUsuario = false;
+    let visible = false;
+    let cargado = false;
+    const sincronizar = () => {
+      if (!cargado) return;
+      if (pausadoPorUsuario || !visible || document.hidden) video.pause();
+      else video.play().catch(() => {});
+    };
+    const arrancar = () => {
+      if (cargado) return;
+      cargado = true;
+      video.src = video.dataset.src;
+      video.addEventListener('playing', () => {
+        video.classList.add('hero__video--activo');
+        if (pausa) pausa.hidden = false;
+      }, { once: true });
+      sincronizar();
+    };
+    if (pausa) {
+      pausa.addEventListener('click', () => {
+        pausadoPorUsuario = !pausadoPorUsuario;
+        pausa.setAttribute('aria-pressed', String(pausadoPorUsuario));
+        pausa.setAttribute('aria-label', `${pausadoPorUsuario ? 'Reanudar' : 'Pausar'} el video ${etiqueta}`);
         sincronizar();
-      };
-      if (pausa) {
-        pausa.addEventListener('click', () => {
-          pausadoPorUsuario = !pausadoPorUsuario;
-          pausa.setAttribute('aria-pressed', String(pausadoPorUsuario));
-          pausa.setAttribute('aria-label', pausadoPorUsuario ? 'Reanudar el video del inicio' : 'Pausar el video del inicio');
-          sincronizar();
-        });
-      }
-      if ('IntersectionObserver' in window) {
-        new IntersectionObserver((lista) => {
-          visible = lista[lista.length - 1].isIntersecting;
-          if (video.src) sincronizar();
-        }).observe(inicioEl);
-      }
-      document.addEventListener('visibilitychange', () => { if (video.src) sincronizar(); });
+      });
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((lista) => {
+        visible = lista[lista.length - 1].isIntersecting;
+        if (cuando === 'visible' && visible) arrancar();
+        sincronizar();
+      }, { rootMargin: cuando === 'visible' ? '300px 0px' : '0px' }).observe(zona);
+    } else {
+      visible = true;
+      if (cuando === 'visible') arrancar();
+    }
+    document.addEventListener('visibilitychange', sincronizar);
+    if (cuando === 'load') {
       const lanzar = () => (window.requestIdleCallback ? requestIdleCallback(arrancar, { timeout: 2500 }) : setTimeout(arrancar, 800));
       if (document.readyState === 'complete') lanzar();
       else window.addEventListener('load', lanzar, { once: true });
+    }
+  };
+
+  /* ── Inicio: video y parallax ─────────────────────── */
+  const inicioEl = document.getElementById('inicio');
+  if (inicioEl && raiz.classList.contains('mov')) {
+    /* Se pide recién después del load, para no competir con la imagen LCP. */
+    const video = inicioEl.querySelector('.hero__video');
+    if (video) {
+      const foto = inicioEl.querySelector('.hero__medio img');
+      if (foto && foto.currentSrc) video.poster = foto.currentSrc; /* la misma foto ya cargada: sin pedido extra */
+      vincularVideo(inicioEl, video, inicioEl.querySelector('.hero__pausa'), 'del inicio', 'load');
     }
 
     /* Parallax de respaldo (sin animation-timeline): escribe --py (0 a 1) mientras el inicio está a la vista.
@@ -414,6 +395,72 @@
       }).observe(inicioEl);
     }
     window.addEventListener('scroll', alScroll, { passive: true });
+  }
+
+  /* ── Quiénes somos: video de ruta ─────────────────── */
+  /* Arranca recién cuando la sección se acerca a la pantalla (lazy). */
+  const quienesEl = document.getElementById('quienes');
+  if (quienesEl) {
+    vincularVideo(quienesEl, quienesEl.querySelector('.quienes__video'), quienesEl.querySelector('.quienes__pausa'), 'de Quiénes somos', 'visible');
+  }
+
+  /* ── Franja de servicios ──────────────────────────── */
+  /* Loop de CSS (html.mov). Acá: el botón de pausa (WCAG 2.2.2) y la pausa fuera de pantalla.
+     Sin movimiento o sin JS, el botón no existe y los ítems quedan quietos. */
+  const franjaSec = document.getElementById('servicios');
+  if (franjaSec && raiz.classList.contains('mov')) {
+    const botonFranja = franjaSec.querySelector('.pausa');
+    let porUsuario = false;
+    let fuera = false;
+    const aplicarFranja = () => franjaSec.classList.toggle('is-pausada', porUsuario || fuera);
+    if (botonFranja) {
+      botonFranja.hidden = false;
+      botonFranja.addEventListener('click', () => {
+        porUsuario = !porUsuario;
+        botonFranja.setAttribute('aria-pressed', String(porUsuario));
+        botonFranja.setAttribute('aria-label', porUsuario ? 'Reanudar la franja' : 'Pausar la franja');
+        aplicarFranja();
+      });
+    }
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver((lista) => {
+        fuera = !lista[lista.length - 1].isIntersecting;
+        aplicarFranja();
+      }, { rootMargin: '100px 0px' }).observe(franjaSec);
+    }
+  }
+
+  /* ── Cifras (componente reutilizable) ─────────────── */
+  /* <span data-cifra="175" [data-prefijo=""] [data-sufijo=""] aria-hidden="true">175</span>
+     Cuenta de 0 al valor en ~1200 ms, una sola vez, al entrar en pantalla (threshold .6). El ancho
+     se reserva (tabular-nums y min-width en ch en el HTML) para que no haya CLS. Sin movimiento o
+     sin JS queda el valor final del HTML. */
+  const cifras = Array.from(document.querySelectorAll('[data-cifra]'));
+  if (cifras.length && raiz.classList.contains('mov') && 'IntersectionObserver' in window) {
+    const fmt = (el, n) => `${el.dataset.prefijo || ''}${n}${el.dataset.sufijo || ''}`;
+    const contar = (el) => {
+      const meta = parseInt(el.dataset.cifra, 10);
+      const dur = 1200;
+      const t0 = performance.now();
+      const paso = (t) => {
+        const k = Math.min(1, (t - t0) / dur);
+        const e = 1 - Math.pow(1 - k, 3); /* easeOutCubic */
+        el.textContent = fmt(el, Math.round(meta * e));
+        if (k < 1) requestAnimationFrame(paso);
+      };
+      requestAnimationFrame(paso);
+    };
+    const obsCifras = new IntersectionObserver((lista) => {
+      lista.forEach((e) => {
+        if (!e.isIntersecting) return;
+        obsCifras.unobserve(e.target);
+        contar(e.target);
+      });
+    }, { threshold: 0.6 });
+    cifras.forEach((el) => {
+      el.textContent = fmt(el, 0);
+      obsCifras.observe(el);
+    });
   }
 
   /* ── Contact form ───────────────────────────────── */
@@ -454,14 +501,14 @@
       if (pasoActual === 1) {
         const cajas = Array.from(form.querySelectorAll('input[name="costo"]'));
         const alguna = cajas.some((c) => c.checked);
-        cajas[0].setCustomValidity(alguna ? '' : 'Elija al menos una opción.');
+        cajas[0].setCustomValidity(alguna ? '' : 'Elegí al menos una opción.');
         if (!alguna) { cajas[0].reportValidity(); return false; }
         return true;
       }
       if (pasoActual === 2) {
         const rubroEl = form.elements.rubro;
         const loc = form.elements.localidad;
-        rubroEl.setCustomValidity(rubroEl.value.trim() === '' ? 'Complete este campo.' : '');
+        rubroEl.setCustomValidity(rubroEl.value.trim() === '' ? 'Completá este campo.' : '');
         if (!rubroEl.checkValidity()) { rubroEl.reportValidity(); return false; }
         if (!loc.checkValidity()) { loc.reportValidity(); return false; }
         return true;
@@ -497,6 +544,15 @@
     const correoTexto = document.getElementById('formCorreo');
     const gmail = document.getElementById('formGmail');
     const programa = document.getElementById('formPrograma');
+    const gracias = document.getElementById('formGracias');
+    const graciasTitulo = document.getElementById('formGraciasTitulo');
+    /* Estado final: oculta el formulario, muestra "Gracias" con la salida por WhatsApp y lleva el foco al título */
+    const mostrarGracias = () => {
+      if (!gracias) return;
+      form.classList.add('form--enviado');
+      gracias.hidden = false;
+      if (graciasTitulo) graciasTitulo.focus();
+    };
     const originalBtnHTML = submitBtn ? submitBtn.innerHTML : '';
     const originalNote = note ? note.textContent : '';
     const originalReintentar = reintentar ? reintentar.textContent : '';
@@ -512,9 +568,9 @@
     /* Largos máximos: los mismos que el maxlength de index.html */
     const LIMITES = { name: 80, email: 120, rubro: 80, whatsapp: 30 };
     const AVISOS = {
-      fallo: 'No pudimos enviar su consulta desde la página. Puede intentar de nuevo o escribirnos directamente.',
-      limite: 'Hay demasiados envíos en este momento. Espere un minuto e intente de nuevo, o escríbanos directamente.',
-      ilegible: 'No pudimos enviar su consulta desde la página. Puede intentar de nuevo en un minuto o escribirnos directamente.',
+      fallo: 'No pudimos enviar tu consulta desde la página. Podés intentar de nuevo o escribirnos directamente.',
+      limite: 'Hay demasiados envíos en este momento. Esperá un minuto e intentá de nuevo, o escribinos directamente.',
+      ilegible: 'No pudimos enviar tu consulta desde la página. Podés intentar de nuevo en un minuto o escribirnos directamente.',
     };
     const CHECK_SVG = `
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -558,10 +614,10 @@
         `Nombre: ${data.get('name') || ''}`,
         `WhatsApp: ${data.get('whatsapp') || ''}`,
         `Correo: ${data.get('email') || ''}`,
-        `Qué le está costando: ${data.getAll('costo').join(', ')}`,
+        `Qué te está costando: ${data.getAll('costo').join(', ')}`,
         `Rubro: ${data.get('rubro') || ''}`,
         `Localidad: ${data.get('localidad') || ''}`,
-        `Cómo atiende hoy: ${data.getAll('atencion').join(', ') || 'No indicó'}`,
+        `Cómo atendés hoy: ${data.getAll('atencion').join(', ') || 'No indicó'}`,
         `Para cuándo: ${data.get('cuando') || ''}`,
       ].join('\n'),
     });
@@ -618,15 +674,15 @@
         const campo = form.elements[nombre];
         if (!campo) return;
         let aviso = '';
-        if (campo.required && campo.value.trim() === '') aviso = 'Complete este campo.';
-        else if (campo.value.length > max) aviso = `Use como máximo ${max} caracteres.`;
+        if (campo.required && campo.value.trim() === '') aviso = 'Completá este campo.';
+        else if (campo.value.length > max) aviso = `Usá como máximo ${max} caracteres.`;
         campo.setCustomValidity(aviso);
       });
       // Con uno de los dos alcanza: WhatsApp o correo
       const wa = form.elements.whatsapp;
       const mail = form.elements.email;
       if (wa && mail && !wa.validationMessage && wa.value.trim() === '' && mail.value.trim() === '') {
-        wa.setCustomValidity('Déjenos su WhatsApp o su correo.');
+        wa.setCustomValidity('Dejanos tu WhatsApp o tu correo.');
       }
     };
     form.addEventListener('input', (e) => {
@@ -650,10 +706,10 @@
       payload.append('WhatsApp', data.get('whatsapp') || '');
       payload.append('Correo', data.get('email') || '');
       if ((data.get('email') || '').trim() !== '') payload.append('replyto', data.get('email'));
-      payload.append('Qué le está costando', data.getAll('costo').join(', '));
+      payload.append('Qué te está costando', data.getAll('costo').join(', '));
       payload.append('Rubro', data.get('rubro') || '');
       payload.append('Localidad', data.get('localidad') || '');
-      payload.append('Cómo atiende hoy', data.getAll('atencion').join(', ') || 'No indicó');
+      payload.append('Cómo atendés hoy', data.getAll('atencion').join(', ') || 'No indicó');
       payload.append('Para cuándo', data.get('cuando') || '');
       payload.append('botcheck', ''); // vacío: una persona nunca marca la casilla
 
@@ -697,7 +753,7 @@
 
       const data = new FormData(form);
       ocultarAlternativas();
-      setState('is-loading', { btn: 'Enviando…', note: 'Enviando su consulta…' });
+      setState('is-loading', { btn: 'Enviando…', note: 'Enviando tu consulta…' });
 
       let r = await intentar(data);
       // Tiempo agotado o 5xx: un solo reintento. El 429 y lo ilegible no: empeoran el límite.
@@ -709,10 +765,12 @@
       if (r.tipo === 'ok') {
         setState('is-sent', {
           btn: `${CHECK_SVG} Pedido enviado`,
-          note: 'Recibimos su pedido. Le respondemos dentro de las 24 horas hábiles.',
-          ms: 8000,
-          reset: true,
+          note: 'Recibimos tu pedido. Te respondemos dentro de las 24 horas hábiles.',
+          ms: 0,
         });
+        form.reset();
+        irA(1, false);
+        mostrarGracias();
         return;
       }
       if (note) note.textContent = originalNote;
@@ -754,7 +812,7 @@
       sel.addRange(rango);
       let ok = false;
       try { ok = document.execCommand('copy'); } catch (_) { ok = false; }
-      avisarCopia(ok ? 'Correo copiado' : 'Correo seleccionado: cópielo desde el menú de su navegador.');
+      avisarCopia(ok ? 'Correo copiado' : 'Correo seleccionado: copialo desde el menú de tu navegador.');
     };
     if (copiar && correoTexto) {
       copiar.addEventListener('click', async () => {

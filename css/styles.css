@@ -247,11 +247,9 @@ b {
 .cond,
 .display,
 .hero__title,
-.paso h3,
 .caso__nombre,
 .titulo,
 .subtitulo,
-.contacto__titulo,
 .indice__lista a {
   font-family: var(--font);
   font-stretch: 62%;
@@ -273,9 +271,7 @@ b {
 }
 
 /* Íconos de línea con el mismo trazo */
-.btn svg,
-.canal svg,
-.estudio__github svg {
+.btn svg {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
@@ -509,60 +505,6 @@ b {
   height: 10px;
   border-radius: 0 0 14px 14px;
   background: var(--linea-fuerte);
-}
-
-/* Desplegable chico ("Cómo", "Qué revisamos"): el summary tiene 48 px de alto táctil */
-.mas {
-  margin-top: 0.25rem;
-}
-
-.mas summary {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 48px;
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  list-style: none;
-  cursor: pointer;
-  color: var(--texto);
-}
-
-.mas summary::-webkit-details-marker {
-  display: none;
-}
-
-.mas summary::after {
-  content: '+';
-  font-size: 1.1rem;
-  line-height: 1;
-}
-
-.mas[open] summary::after {
-  content: '\2212';
-}
-
-.mas summary:focus-visible {
-  outline: 2px solid var(--foco);
-  outline-offset: 3px;
-  border-radius: 6px;
-}
-
-.mas p {
-  max-width: 54ch;
-  padding-bottom: 0.5rem;
-  color: var(--suave);
-  text-wrap: pretty;
-}
-
-.cabeza .mas {
-  text-align: center;
-}
-
-.cabeza .mas summary {
-  justify-content: center;
 }
 
 /* ── Botones: rectos y grandes ───────────────────── */
@@ -954,8 +896,8 @@ html.mov .hero__video.hero__video--activo {
   font-size: 0.68rem;
 }
 
-/* Pausa del video (WCAG 2.2.2): el JS la muestra solo mientras el video se reproduce */
-.hero__pausa {
+/* Pausa (WCAG 2.2.2): el JS la muestra solo mientras el video o la franja se mueven. Por defecto abajo a la derecha. */
+.pausa {
   position: absolute;
   z-index: 3;
   right: 1rem;
@@ -972,23 +914,23 @@ html.mov .hero__video.hero__video--activo {
   cursor: pointer;
 }
 
-.hero__pausa[hidden] {
+.pausa[hidden] {
   display: none;
 }
 
-.hero__pausa:hover {
+.pausa:hover {
   border-color: var(--texto);
 }
 
 /* Dos barras (pausar); con aria-pressed="true", un triángulo (reanudar) */
-.hero__pausa span {
+.pausa span {
   display: block;
   width: 14px;
   height: 16px;
   background: linear-gradient(90deg, currentColor 0 4px, transparent 4px 10px, currentColor 10px 14px);
 }
 
-.hero__pausa[aria-pressed='true'] span {
+.pausa[aria-pressed='true'] span {
   background: currentColor;
   clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
@@ -1099,117 +1041,6 @@ html.mov.par-js .hero__cel {
   transform: translateY(calc(var(--py, 0) * 24px));
 }
 
-/* ── 01. ¿Le pasa esto? ──────────────────────────── */
-.le-pasa {
-  padding-block: clamp(4rem, 10vw, 7rem);
-}
-
-.dolores {
-  margin-top: clamp(2rem, 5vw, 3.5rem);
-  display: grid;
-  gap: 1rem;
-}
-
-.dolor {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-  align-items: center;
-  gap: 1rem;
-  min-height: 7rem;
-  padding: 1rem;
-  border-radius: var(--radio);
-  background: var(--superficie);
-  box-shadow: inset 0 0 0 1px var(--linea);
-}
-
-.dolor__frase {
-  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
-  font-weight: 650;
-  line-height: 1.3;
-  letter-spacing: -0.015em;
-  text-wrap: pretty;
-}
-
-@media (min-width: 760px) {
-  .dolores {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .dolor {
-    grid-template-columns: minmax(0, 1fr);
-    align-items: start;
-    gap: 1.25rem;
-    min-height: 9rem;
-    padding: 1.25rem;
-  }
-
-  .dolor__frase {
-    padding-inline: 0.5rem;
-  }
-}
-
-/* ── 02. Qué resolvemos ──────────────────────────── */
-.resolvemos {
-  padding-block: clamp(4rem, 10vw, 7rem);
-}
-
-.soluciones {
-  margin-top: clamp(2rem, 5vw, 3.5rem);
-  display: grid;
-  gap: 1rem;
-}
-
-.solucion {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  padding: 1.5rem;
-  border-radius: var(--radio);
-  background: var(--superficie);
-  box-shadow: inset 0 0 0 1px var(--linea);
-}
-
-.solucion__dolor {
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--suave);
-}
-
-.solucion__como {
-  font-size: 1.05rem;
-  color: var(--suave);
-  text-wrap: pretty;
-}
-
-.solucion__beneficio {
-  margin-top: auto;
-  padding-top: 0.5rem;
-  font-size: clamp(1.2rem, 2.2vw, 1.5rem);
-  line-height: 1.25;
-  letter-spacing: -0.015em;
-}
-
-.solucion__beneficio b {
-  font-weight: 750;
-}
-
-/* Visual de Qué resolvemos: notebook con el catálogo y celular con el botón de WhatsApp */
-.resolvemos__visual {
-  position: relative;
-  max-width: 44rem;
-  margin: clamp(2rem, 5vw, 3.5rem) auto 0;
-}
-
-.resolvemos__visual .dispositivo--cel {
-  position: absolute;
-  right: -0.25rem;
-  bottom: 1.25rem;
-  width: 30%;
-  max-width: 11rem;
-}
-
 .resolvemos__nota {
   margin-top: 1.25rem;
   font-family: var(--mono);
@@ -1242,29 +1073,11 @@ html.mov.par-js .hero__cel {
 }
 
 @media (min-width: 760px) {
-  .soluciones {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .solucion {
-    padding: 2rem;
-  }
 
   .cierre .btn {
     width: auto;
     max-width: none;
   }
-}
-
-/* ── 03. Casos reales ────────────────────────────── */
-.casos {
-  padding-block: clamp(4rem, 10vw, 7rem);
-}
-
-.casos__lista {
-  margin-top: clamp(2.5rem, 7vw, 4.5rem);
-  display: grid;
-  gap: 2rem;
 }
 
 .caso--proximo {
@@ -1287,14 +1100,6 @@ html.mov.par-js .hero__cel {
   color: var(--suave);
 }
 
-@media (min-width: 760px) {
-  .casos__lista {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 2.5rem;
-    align-items: stretch;
-  }
-}
-
 .caso__nombre {
   font-size: var(--t-h3);
   font-weight: 900;
@@ -1305,55 +1110,6 @@ html.mov.par-js .hero__cel {
 .caso > .bajada {
   margin: 1rem auto 1.75rem;
   text-align: center;
-}
-
-/* Antes y después de Matemar: "Antes" es una ilustración en HTML y CSS; "Después" es una captura real */
-.comparar {
-  position: relative;
-  display: grid;
-  gap: 1rem;
-  max-width: 24rem;
-  margin: 1.5rem auto 0;
-}
-
-.comparar__antes,
-.comparar__despues {
-  position: relative;
-  min-height: 14rem;
-  padding: 3rem 1.25rem 1.25rem;
-  border-radius: var(--radio-s);
-  background: var(--superficie);
-  box-shadow: inset 0 0 0 1px var(--linea);
-}
-
-.comparar__rotulo {
-  position: absolute;
-  top: 1rem;
-  left: 1.25rem;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--suave);
-}
-
-.burbujas {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.burbujas li {
-  padding: 0.6rem 1rem;
-  border-radius: 1.2rem 1.2rem 1.2rem 0.3rem;
-  background: var(--fondo);
-  box-shadow: inset 0 0 0 1px var(--linea-fuerte);
-  font-size: 1rem;
-}
-
-.burbujas li:nth-child(even) {
-  border-radius: 1.2rem 1.2rem 0.3rem 1.2rem;
-  margin-left: auto;
 }
 
 .pedido {
@@ -1387,160 +1143,6 @@ html.mov.par-js .hero__cel {
   border-left: 3px solid var(--linea-fuerte);
   font-size: 1.1rem;
   line-height: 1.45;
-}
-
-@media (min-width: 760px) {
-  .comparar {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-/* Con JS: los paneles se superponen y un deslizador (range) mueve el corte.
-   --corte lo escribe main.js; el clip-path solo recorta lo que se ve de "Después". */
-.comparar__control[hidden] {
-  display: none;
-}
-
-.comparar__despues img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 5;
-  object-fit: cover;
-  object-position: top;
-  border-radius: var(--radio-s);
-}
-
-.comparar--activo {
-  --corte: 50%;
-  grid-template-columns: minmax(0, 1fr);
-  touch-action: pan-y;
-  aspect-ratio: 4 / 5;
-  container-type: inline-size;
-}
-
-.comparar--activo .comparar__despues {
-  padding: 0;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.comparar--activo .comparar__despues img {
-  position: absolute;
-  inset: 0;
-  height: 100%;
-  aspect-ratio: auto;
-  border-radius: 0;
-}
-
-.comparar--activo .comparar__rotulo {
-  max-width: calc(50% - 1.75rem);
-  line-height: 1.3;
-}
-
-.comparar--activo .comparar__despues .comparar__rotulo {
-  z-index: 1;
-  padding: 0.3rem 0.6rem;
-  border-radius: 14px;
-  background: var(--fondo);
-  text-align: right;
-}
-
-.comparar--activo .comparar__antes,
-.comparar--activo .comparar__despues {
-  grid-area: 1 / 1;
-  min-height: 0;
-}
-
-.comparar--activo .comparar__despues {
-  clip-path: inset(0 0 0 var(--corte));
-}
-
-
-.comparar--activo .burbujas {
-  max-width: 22rem;
-  align-content: center;
-  height: 100%;
-}
-
-.comparar--activo .comparar__despues .comparar__rotulo {
-  left: auto;
-  right: 1.25rem;
-}
-
-/* Línea del corte: va en el panel de abajo, pegada al borde izquierdo del recorte */
-.comparar--activo .comparar__antes::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: calc(var(--corte) - 3px);
-  width: 3px;
-  background: var(--senal);
-  pointer-events: none;
-}
-
-.comparar__control {
-  grid-area: 1 / 1;
-  align-self: stretch;
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  background: transparent;
-  cursor: ew-resize;
-  touch-action: pan-y;
-  -webkit-appearance: none;
-  appearance: none;
-}
-
-.comparar__control::-webkit-slider-runnable-track {
-  height: 100%;
-  background: transparent;
-}
-
-.comparar__control::-moz-range-track {
-  height: 100%;
-  background: transparent;
-}
-
-.comparar__control::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 48px;
-  height: 48px;
-  margin-top: calc(7.5rem - 24px);
-  margin-top: calc(62.5cqw - 24px);
-  border: 3px solid var(--papel);
-  border-radius: 50%;
-  background: var(--senal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 7l-5 5 5 5M15 7l5 5-5 5'/%3E%3C/svg%3E") center / 26px no-repeat;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
-}
-
-.comparar__control::-moz-range-thumb {
-  width: 42px;
-  height: 42px;
-  border: 3px solid var(--papel);
-  border-radius: 50%;
-  background: var(--senal) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 7l-5 5 5 5M15 7l5 5-5 5'/%3E%3C/svg%3E") center / 26px no-repeat;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
-}
-
-.comparar__control:focus {
-  outline: none;
-}
-
-.comparar__control:focus-visible::-webkit-slider-thumb {
-  outline: 3px solid var(--foco);
-  outline-offset: 3px;
-  box-shadow: 0 0 0 3px var(--fondo), 0 2px 10px rgba(0, 0, 0, 0.35);
-}
-
-.comparar__control:focus-visible::-moz-range-thumb {
-  outline: 3px solid var(--foco);
-  outline-offset: 3px;
-  box-shadow: 0 0 0 3px var(--fondo), 0 2px 10px rgba(0, 0, 0, 0.35);
 }
 
 .ventana {
@@ -1596,338 +1198,6 @@ html.mov.par-js .hero__cel {
 .dato dd {
   margin-top: 0.25rem;
   font-weight: 600;
-}
-
-/* Garantías: mosaico de compromisos (dentro de Cómo trabajamos) */
-
-.compromisos {
-  margin-top: clamp(2.5rem, 6vw, 4rem);
-  display: grid;
-  gap: 1rem;
-}
-
-.compromiso {
-  position: relative;
-  padding: 1rem 1.5rem 1rem 2rem;
-  border-radius: var(--radio);
-  background: var(--superficie);
-  overflow: hidden;
-}
-
-.compromiso summary {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  min-height: 48px;
-  list-style: none;
-  cursor: pointer;
-}
-
-.compromiso summary::-webkit-details-marker {
-  display: none;
-}
-
-.compromiso summary::after {
-  content: '+';
-  flex: none;
-  font-family: var(--mono);
-  font-size: 1.5rem;
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: 0;
-}
-
-.compromiso details[open] summary::after {
-  content: '\2212';
-}
-
-.compromiso summary:focus-visible {
-  outline: 2px solid var(--foco);
-  outline-offset: 4px;
-  border-radius: 8px;
-}
-
-/* El trazo de señal recorre el borde de arriba al entrar */
-.compromiso::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 4px;
-  background: var(--senal);
-  transform: scaleX(0.06);
-  transform-origin: left;
-}
-
-.compromiso__frase {
-  font-stretch: 62%;
-  font-weight: 900;
-  font-size: var(--t-h3);
-  line-height: 0.9;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-}
-
-.compromiso:first-child .compromiso__frase {
-  font-size: var(--t-h2);
-}
-
-.compromiso__frase span {
-  display: inline-block;
-}
-
-.compromiso__detalle {
-  max-width: 36ch;
-  padding-bottom: 0.75rem;
-  color: var(--suave);
-}
-
-/* ── 04. Cómo trabajamos: pasos y garantías ─────── */
-.como {
-  padding-block: clamp(5rem, 12vw, 9rem);
-}
-
-.como .pasos {
-  max-width: 760px;
-  margin: clamp(2.5rem, 6vw, 4rem) auto 0;
-}
-
-.como .subtitulo {
-  margin-top: clamp(3.5rem, 8vw, 5.5rem);
-}
-
-.pasos {
-  position: relative;
-  display: grid;
-  gap: clamp(3rem, 8vw, 5rem);
-  padding-left: 2.75rem;
-}
-
-/* Línea de fondo y línea de señal que se dibuja */
-.pasos::before,
-.pasos::after {
-  content: '';
-  position: absolute;
-  left: 5px;
-  top: 0.5rem;
-  bottom: 0.5rem;
-  width: 2px;
-  border-radius: 2px;
-  background: var(--linea);
-}
-
-.pasos::after {
-  background: var(--acento);
-  transform: scaleY(var(--p));
-  transform-origin: top;
-}
-
-.paso {
-  position: relative;
-}
-
-/* Nodo: el punto de la marca, que se enciende al llegar */
-.paso::before,
-.paso::after {
-  content: '';
-  position: absolute;
-  left: -2.75rem;
-  top: 0.35rem;
-  width: 12px;
-  height: 12px;
-  background: var(--fondo);
-  box-shadow: inset 0 0 0 2px var(--linea-fuerte);
-}
-
-.paso::after {
-  z-index: 1;
-  background: var(--senal);
-  box-shadow: 0 0 0 1.5px var(--tinta);
-}
-
-.paso__n {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--suave);
-}
-
-.paso h3 {
-  margin-top: 0.6rem;
-  font-size: var(--t-h3);
-  font-weight: 900;
-  letter-spacing: -0.01em;
-}
-
-.paso p {
-  margin-top: 0.75rem;
-  max-width: 44ch;
-  color: var(--suave);
-}
-
-/* ── 05. Quiénes somos ───────────────────────────── */
-.quienes {
-  padding-block: clamp(5rem, 12vw, 9rem);
-}
-
-.equipo {
-  margin-top: clamp(2.5rem, 6vw, 4rem);
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.persona {
-  display: flex;
-  flex-direction: column;
-  min-height: 15rem;
-  padding: 1.5rem;
-  border-radius: var(--radio);
-  background: var(--superficie);
-  transition: background-color 0.4s var(--ease), color 0.4s var(--ease);
-}
-
-.persona:hover {
-  background: var(--senal);
-  color: var(--sobre-senal);
-  --suave: rgba(255, 255, 255, 0.86);
-}
-
-.persona__inicial {
-  font-stretch: 62%;
-  font-weight: 900;
-  font-size: clamp(2.8rem, 6vw, 4.4rem);
-  line-height: 1;
-}
-
-.persona__nombre {
-  margin-top: auto;
-  padding-top: 2rem;
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.persona__formacion {
-  margin-top: 0.35rem;
-  font-size: 0.92rem;
-  line-height: 1.4;
-  color: var(--suave);
-}
-
-.estudio__github {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.estudio__github a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  min-height: 44px;
-  font-weight: 600;
-  color: var(--acento);
-  text-underline-offset: 0.25em;
-}
-
-.estudio__github svg {
-  width: 18px;
-  height: 18px;
-}
-
-/* ── 08. Preguntas ───────────────────────────────── */
-.preguntas-sec {
-  padding-block: clamp(5rem, 12vw, 9rem);
-}
-
-.preguntas-sec__grilla {
-  display: grid;
-  gap: clamp(2.5rem, 6vw, 4rem);
-}
-
-.preguntas {
-  width: 100%;
-  max-width: 860px;
-  margin-inline: auto;
-  border-top: 1px solid var(--linea-fuerte);
-}
-
-.pregunta {
-  border-bottom: 1px solid var(--linea-fuerte);
-}
-
-.pregunta summary {
-  position: relative;
-  padding: 1.5rem 3rem 1.5rem 0;
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  font-weight: 650;
-  letter-spacing: -0.02em;
-  list-style: none;
-  cursor: pointer;
-}
-
-.pregunta summary::-webkit-details-marker {
-  display: none;
-}
-
-.pregunta summary::before,
-.pregunta summary::after {
-  content: '';
-  position: absolute;
-  right: 0.5rem;
-  top: 50%;
-  width: 16px;
-  height: 2px;
-  border-radius: 2px;
-  background: currentColor;
-  transition: transform 0.4s var(--ease);
-}
-
-.pregunta summary::after {
-  transform: rotate(90deg);
-}
-
-.pregunta[open] summary::before {
-  transform: rotate(45deg);
-}
-
-.pregunta[open] summary::after {
-  transform: rotate(135deg);
-}
-
-/* Apertura suave donde el navegador lo permite */
-.pregunta::details-content {
-  block-size: 0;
-  overflow: hidden;
-  transition: block-size 0.45s var(--ease), content-visibility 0.45s allow-discrete;
-}
-
-.pregunta[open]::details-content {
-  block-size: auto;
-}
-
-.pregunta p {
-  max-width: 62ch;
-  padding-bottom: 1.5rem;
-  color: var(--suave);
-}
-
-/* ── 09. Contacto ────────────────────────────────── */
-.contacto {
-  padding-block: clamp(5rem, 12vw, 9rem);
-}
-
-.contacto__titulo {
-  margin-top: 1.25rem;
-  font-size: var(--t-h2);
-  line-height: 0.86;
-}
-
-.contacto__grilla {
-  margin-top: clamp(3rem, 7vw, 5rem);
-  display: grid;
-  gap: 1rem;
 }
 
 .form {
@@ -2256,72 +1526,6 @@ select.campo:focus-visible {
   display: none;
 }
 
-.canales {
-  display: grid;
-  align-self: start;
-  align-content: start;
-  padding: clamp(1.5rem, 4vw, 2.5rem);
-  border-radius: var(--radio);
-  background: var(--superficie);
-}
-
-.canales__titulo {
-  padding-bottom: 1rem;
-  font-family: var(--mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--suave);
-}
-
-.canal {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: center;
-  gap: 0.15rem 1rem;
-  padding: 1.1rem 0;
-  border-top: 1px solid var(--linea);
-  text-decoration: none;
-  transition: padding 0.4s var(--ease), color 0.25s var(--ease);
-}
-
-.canal[hidden],
-[data-canal][hidden] {
-  display: none;
-}
-
-.canal__rotulo {
-  font-family: var(--mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--suave);
-}
-
-.canal__valor {
-  grid-column: 1;
-  font-size: 1.15rem;
-  font-weight: 650;
-  letter-spacing: -0.015em;
-  overflow-wrap: anywhere;
-}
-
-.canal svg {
-  grid-column: 2;
-  grid-row: 1 / 3;
-  width: 22px;
-  height: 22px;
-  transition: transform 0.4s var(--ease);
-}
-
-.canal:hover {
-  padding-left: 0.5rem;
-}
-
-.canal:hover svg {
-  transform: rotate(45deg);
-}
-
 /* ── WhatsApp flotante ───────────────────────────── */
 /* Píldora del mismo azul que los botones (no el verde de WhatsApp: el sitio
    tiene un solo acento). js/main.js le pone .is-visible entre la portada y
@@ -2587,94 +1791,6 @@ select.campo:focus-visible {
   transition: none !important;
 }
 
-/* La persona conserva el cambio de color al pasar el mouse */
-.mov.revelar .persona {
-  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), background-color 0.4s var(--ease), color 0.4s var(--ease);
-}
-
-/* En los mosaicos y listas, cada tarjeta llega un poco después que la anterior (80 ms como máximo) */
-.mov.revelar .persona:nth-child(2),
-.mov.revelar .compromiso:nth-child(2),
-.mov.revelar .dolor:nth-child(2),
-.mov.revelar .solucion:nth-child(2) { transition-delay: 0.06s; }
-.mov.revelar .persona:nth-child(3),
-.mov.revelar .compromiso:nth-child(3),
-.mov.revelar .dolor:nth-child(3),
-.mov.revelar .solucion:nth-child(3) { transition-delay: 0.12s; }
-.mov.revelar .persona:nth-child(4),
-.mov.revelar .compromiso:nth-child(4),
-.mov.revelar .dolor:nth-child(4),
-.mov.revelar .solucion:nth-child(4) { transition-delay: 0.18s; }
-
-/* Pasado el hover, sin demora */
-.mov.revelar .persona.visto:hover { transition-delay: 0s; }
-
-/* Sin letra chica: el trazo se completa y la frase se descubre */
-.mov.revelar .compromiso::before {
-  transition: transform 0.4s var(--ease-io) 0.1s;
-}
-
-.mov.revelar .compromiso.visto::before {
-  transform: none;
-}
-
-.mov.revelar .compromiso__frase span {
-  clip-path: inset(-0.1em 100% -0.15em 0);
-  transition: clip-path 0.4s var(--ease-io) 0.1s;
-}
-
-.mov.revelar .compromiso.visto .compromiso__frase span {
-  clip-path: inset(-0.1em 0 -0.15em 0);
-}
-
-.mov.revelar .compromiso__detalle {
-  opacity: 0;
-  transition: opacity 0.3s var(--ease) 0.2s;
-}
-
-.mov.revelar .compromiso.visto .compromiso__detalle {
-  opacity: 1;
-}
-
-/* Proceso: el nodo se enciende cuando llega el paso */
-.mov.revelar .paso::after {
-  opacity: 0;
-  transition: opacity 0.3s var(--ease) 0.15s;
-}
-
-.mov.revelar .paso.visto::after {
-  opacity: 1;
-}
-
-/* "¿Le pasa esto?": cuando se llega a la solución de un dolor, su frase (y su
-   rótulo en "Qué resolvemos") se tacha. Solo con movimiento: main.js agrega .resuelto. */
-.mov.revelar .dolor__frase span,
-.mov.revelar .solucion__dolor span {
-  background: linear-gradient(currentColor, currentColor) no-repeat 0 58% / 0 2px;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-  transition: background-size 0.4s var(--ease);
-}
-
-.mov.revelar .dolor__frase,
-.mov.revelar .solucion__dolor {
-  transition: opacity 0.4s var(--ease);
-}
-
-.mov.revelar .dolor.resuelto .dolor__frase span,
-.mov.revelar .solucion__dolor.resuelto span {
-  background-size: 100% 2px;
-}
-
-.mov.revelar .dolor.resuelto .dolor__frase {
-  opacity: 0.6;
-}
-
-/* El rótulo de "Qué resolvemos" no baja de opacidad (quedaría bajo 4,5:1): solo se tacha */
-.mov.revelar .solucion__dolor.resuelto {
-  opacity: 1;
-}
-
 /* Pie: el contenedor queda quieto y la marca sube desde abajo */
 .mov.revelar .footer__marca[data-escena='entrada'] {
   opacity: 1;
@@ -2690,7 +1806,6 @@ select.campo:focus-visible {
 .mov.revelar .footer__marca.visto span {
   transform: none;
 }
-
 
 /* ── Carga inicial ───────────────────────────────── */
 /* Solo en la home y solo si el <head> puso html.con-carga (primera visita de la sesión, sin
@@ -2861,23 +1976,6 @@ html.con-carga .carga {
   .ventana__estado {
     display: inline-flex;
   }
-
-  .equipo {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-
-  /* Mosaico: el primer compromiso ocupa todo el ancho */
-  .compromisos {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .compromiso {
-    padding: 1.25rem 2rem 1.25rem 2.5rem;
-  }
-
-  .compromiso:first-child {
-    grid-column: 1 / -1;
-  }
 }
 
 @media (min-width: 960px) {
@@ -2885,10 +1983,6 @@ html.con-carga .carga {
     display: flex;
     gap: 1.75rem;
     margin-right: 1rem;
-  }
-
-  .contacto__grilla {
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
   }
 }
 
@@ -3003,31 +2097,6 @@ html.con-carga .carga {
   color: var(--acento);
 }
 
-.caso__ver,
-.casos__todos {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 48px;
-  font-weight: 600;
-  color: var(--texto);
-  text-underline-offset: 0.3em;
-  text-decoration-thickness: 1px;
-}
-
-.caso__ver {
-  margin-top: 1rem;
-}
-
-.casos__todos {
-  margin-top: 2rem;
-}
-
-.caso__ver:hover,
-.casos__todos:hover {
-  color: var(--acento);
-}
-
 @media (min-width: 760px) {
   .proyecto {
     padding: 2rem;
@@ -3052,6 +2121,886 @@ html.con-carga .carga {
     background: color-mix(in srgb, var(--fondo) 96%, transparent);
   }
 
+}
+
+/* ═══════════════════════════════════════════════════════
+   SECCIONES (ronda 3, etapa 3): servicios, problemas, números, cómo trabajamos,
+   qué incluye, caso, quiénes somos, preguntas y formulario
+═══════════════════════════════════════════════════════ */
+
+/* Encabezados alineados a la izquierda, como la opción A */
+.cabeza {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.rotulo {
+  justify-content: flex-start;
+}
+
+.cabeza .bajada {
+  margin-inline: 0;
+}
+
+.titulo .linea {
+  display: block;
+}
+
+.acento {
+  color: var(--celeste);
+}
+
+/* Cierre de sección alineado a la izquierda */
+.cierre {
+  align-items: flex-start;
+  text-align: left;
+}
+
+.cierre--dos {
+  align-items: stretch;
+}
+
+@media (min-width: 760px) {
+  .cierre--dos {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+/* ── Franja de servicios ─────────────────────────── */
+.servicios {
+  padding-block: clamp(1.25rem, 3vw, 2rem);
+  border-block: 1px solid var(--linea);
+}
+
+.franja {
+  overflow: clip;
+}
+
+.franja__pista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0;
+  width: var(--ancho);
+  margin-inline: auto;
+  font-family: var(--font);
+  font-stretch: 62%;
+  font-weight: 900;
+  font-size: clamp(44px, 6vw, 64px);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--celeste);
+}
+
+.franja__pista li {
+  display: flex;
+  align-items: center;
+  padding-right: 1.5rem;
+  white-space: nowrap;
+}
+
+.franja__sep {
+  margin-left: 1.5rem;
+  font-size: 0.5em;
+  font-weight: 400;
+  font-stretch: 100%;
+  color: var(--texto-2);
+}
+
+.franja__pista .franja__copia {
+  display: none;
+}
+
+html.mov .franja__pista {
+  flex-wrap: nowrap;
+  width: max-content;
+  margin-inline: 0;
+  animation: franja 30s linear infinite;
+}
+
+html.mov .franja__pista .franja__copia {
+  display: flex;
+}
+
+@keyframes franja {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+html.mov .servicios.is-pausada .franja__pista {
+  animation-play-state: paused;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html.mov .servicios:hover .franja__pista {
+    animation-play-state: paused;
+  }
+}
+
+html.mov .servicios:focus-within .franja__pista {
+  animation-play-state: paused;
+}
+
+.franja__pausa {
+  top: 50%;
+  right: 1rem;
+  bottom: auto;
+  transform: translateY(-50%);
+}
+
+/* ── Pausa genérica (WCAG 2.2.2) ─────────────────── */
+.quienes__pausa {
+  top: 1rem;
+  right: 1rem;
+  bottom: auto;
+}
+
+/* ── ¿Te pasa esto? Tarjetas apiladas ────────────── */
+.te-pasa {
+  padding-block: clamp(4rem, 10vw, 7rem);
+}
+
+/* Bloque (no grilla): una tarjeta sticky solo se queda pegada si su contenedor es el ol entero */
+.pila {
+  display: block;
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+}
+
+.tarjeta {
+  position: sticky;
+  top: calc(var(--header-height) + 12px + var(--i, 0) * 24px);
+  display: grid;
+  margin-bottom: 1.5rem;
+  background: var(--fondo);
+  color: var(--texto);
+  border: 1px solid var(--tinta);
+}
+
+.tarjeta__foto {
+  position: relative;
+  margin: 0;
+}
+
+.tarjeta .foto img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+}
+
+.tarjeta .foto--pendiente {
+  aspect-ratio: 16 / 10;
+  border-radius: 0;
+}
+
+.tarjeta .foto__nota {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 0.35rem 0.6rem;
+  background: var(--tinta);
+  color: var(--papel);
+}
+
+.tarjeta__texto {
+  display: grid;
+  align-content: center;
+  gap: 0.75rem;
+  padding: 1.25rem;
+}
+
+.tarjeta__n {
+  color: var(--acento);
+}
+
+.tarjeta h3 {
+  font-size: var(--t-h3);
+  line-height: 0.92;
+}
+
+.tarjeta__texto p {
+  max-width: 40ch;
+  color: var(--texto-2);
+}
+
+@media (min-width: 900px) {
+  .tarjeta {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    min-height: 380px;
+    margin-bottom: 2rem;
+  }
+
+  .tarjeta__foto {
+    order: 2;
+  }
+
+  .tarjeta .foto img,
+  .tarjeta .foto--pendiente {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .tarjeta__texto {
+    order: 1;
+    padding: clamp(2rem, 3vw, 3rem);
+  }
+}
+
+/* ── Números (único bloque azul) ─────────────────── */
+.numeros {
+  padding-block: clamp(4rem, 10vw, 8rem);
+}
+
+.cifras {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.cifra {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+  border-top: 2px solid var(--linea-fuerte);
+}
+
+.cifra__n {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: clamp(120px, 22vw, 320px);
+  line-height: 0.8;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--texto);
+}
+
+.cifra__txt {
+  font-size: 0.9rem;
+  color: var(--texto);
+}
+
+.numeros__frase {
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  max-width: 46ch;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  line-height: 1.35;
+  color: var(--texto-2);
+}
+
+@media (min-width: 760px) {
+  .cifras {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3rem;
+  }
+}
+
+/* ── Cómo trabajamos ─────────────────────────────── */
+.como {
+  padding-block: clamp(4rem, 10vw, 8rem);
+}
+
+.pasos {
+  display: grid;
+  margin-top: clamp(2rem, 5vw, 3.5rem);
+  border-top: 2px solid var(--linea-fuerte);
+}
+
+.paso {
+  padding: 1.5rem 0;
+  border-bottom: 2px solid var(--linea-fuerte);
+}
+
+.paso__n {
+  display: block;
+  font-size: clamp(96px, 10vw, 120px);
+  line-height: 0.8;
+  color: var(--azul);
+}
+
+.paso h3 {
+  margin-top: 1rem;
+  font-size: var(--t-h3);
+  line-height: 0.92;
+}
+
+.paso p {
+  max-width: 36ch;
+  margin-top: 0.75rem;
+  color: var(--texto-2);
+}
+
+@media (min-width: 900px) {
+  .pasos {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .paso {
+    padding: 2rem 1.5rem 2.5rem;
+    border-bottom: 0;
+    border-left: 2px solid var(--linea-fuerte);
+  }
+
+  .paso:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+
+.como__foto {
+  max-width: 26rem;
+  margin: clamp(2rem, 5vw, 3rem) 0 0;
+}
+
+.como .subtitulo {
+  margin-top: clamp(3rem, 7vw, 5rem);
+  text-align: left;
+}
+
+.compromisos {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--linea-fuerte);
+}
+
+.compromiso {
+  border-bottom: 1px solid var(--linea-fuerte);
+}
+
+.compromiso summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 56px;
+  padding: 0.9rem 0;
+  font-weight: 600;
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  letter-spacing: -0.01em;
+  list-style: none;
+  cursor: pointer;
+}
+
+.compromiso summary::-webkit-details-marker {
+  display: none;
+}
+
+.compromiso summary::after {
+  content: '+';
+  flex: none;
+  font-family: var(--mono);
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 1;
+  transition: transform 0.3s var(--ease);
+}
+
+.compromiso details[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.compromiso p {
+  max-width: 60ch;
+  padding-bottom: 1.1rem;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+/* ── Qué incluye el diagnóstico ──────────────────── */
+.incluye {
+  padding-block: clamp(4rem, 10vw, 8rem);
+  border-top: 1px solid var(--linea);
+}
+
+.revisamos {
+  margin-top: clamp(2rem, 5vw, 3rem);
+  border-top: 1px solid var(--linea-fuerte);
+}
+
+.revisamos li {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--linea-fuerte);
+}
+
+.revisamos__n {
+  flex: none;
+  color: var(--acento);
+}
+
+.revisamos p {
+  font-size: clamp(1.25rem, 2.4vw, 2rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.incluye__cierre {
+  max-width: 44ch;
+  margin-top: 2rem;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  color: var(--texto-2);
+}
+
+/* ── Caso: Matemar ───────────────────────────────── */
+.casos {
+  padding-block: clamp(4rem, 10vw, 8rem);
+}
+
+.caso__visual {
+  max-width: 960px;
+  margin: clamp(2rem, 5vw, 3rem) 0 0;
+}
+
+.caso__marco {
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+.caso__nb {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--tinta);
+}
+
+.caso__cel {
+  position: absolute;
+  right: 1rem;
+  bottom: -1.75rem;
+  width: 38%;
+  aspect-ratio: 1 / 1.6;
+  object-fit: cover;
+  object-position: top;
+  border: 6px solid var(--tinta);
+  background: var(--tinta);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.caso__visual .resolvemos__nota {
+  margin-top: 0;
+  text-align: left;
+}
+
+.antes-ahora {
+  display: grid;
+  gap: 1.5rem;
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+.antes-ahora__bloque {
+  padding-top: 1rem;
+  border-top: 2px solid var(--texto);
+}
+
+.antes-ahora dt {
+  color: var(--acento);
+}
+
+.antes-ahora dd {
+  margin-top: 0.6rem;
+  max-width: 36ch;
+  font-size: clamp(1.1rem, 2vw, 1.5rem);
+  font-weight: 500;
+  line-height: 1.3;
+  text-wrap: pretty;
+}
+
+@media (min-width: 760px) {
+  .caso__cel {
+    width: 24%;
+    bottom: -2rem;
+  }
+
+  .antes-ahora {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3rem;
+  }
+}
+
+/* ── Quiénes somos: video de ruta en blanco y negro ─ */
+.quienes {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: min(640px, 90svh);
+  padding-block: clamp(4rem, 10vw, 7rem) clamp(2rem, 5vw, 3rem);
+}
+
+.quienes__medio {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+  background: var(--superficie-tinta);
+}
+
+/* Degradado tinta de abajo hacia arriba para el contraste del texto (sin filter) */
+.quienes__medio::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--tinta) 0%, rgba(11, 11, 12, 0.85) 40%, rgba(11, 11, 12, 0.45) 100%);
+  pointer-events: none;
+}
+
+.quienes__par {
+  object-position: 50% 60%;
+}
+
+.quienes__video {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.6s var(--ease);
+}
+
+html.mov .quienes__video {
+  display: block;
+}
+
+html.mov .quienes__video.hero__video--activo {
+  opacity: 1;
+}
+
+.quienes__contenido {
+  position: relative;
+  z-index: 2;
+}
+
+.quienes__texto {
+  max-width: 34ch;
+  margin-top: 1.25rem;
+  font-size: clamp(1.15rem, 2vw, 1.6rem);
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.equipo {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 1rem;
+  margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--linea-fuerte);
+}
+
+.persona__nombre {
+  color: var(--acento);
+}
+
+.persona__formacion {
+  margin-top: 0.35rem;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--texto-2);
+}
+
+.quienes__nota {
+  margin-top: 1.25rem;
+  font-size: 0.68rem;
+  color: var(--texto-2);
+}
+
+@media (min-width: 760px) {
+  .equipo {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* ── Preguntas ───────────────────────────────────── */
+.preguntas-sec {
+  padding-block: clamp(4rem, 10vw, 8rem);
+}
+
+.preguntas-sec__grilla {
+  display: grid;
+  gap: clamp(2rem, 5vw, 3rem);
+}
+
+.preguntas {
+  width: 100%;
+  max-width: 960px;
+  border-top: 2px solid var(--texto);
+}
+
+.pregunta {
+  border-bottom: 1px solid var(--linea-fuerte);
+}
+
+.pregunta summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 64px;
+  padding: 1rem 0;
+  font-stretch: 62%;
+  font-weight: 900;
+  font-size: clamp(28px, 3.2vw, 36px);
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  list-style: none;
+  cursor: pointer;
+}
+
+.pregunta summary::-webkit-details-marker {
+  display: none;
+}
+
+/* "+" que rota a "×" */
+.pregunta summary::after {
+  content: '+';
+  flex: none;
+  font-family: var(--mono);
+  font-stretch: 100%;
+  font-weight: 400;
+  font-size: 1.6rem;
+  line-height: 1;
+  transition: transform 0.3s var(--ease);
+}
+
+.pregunta[open] summary::after {
+  transform: rotate(45deg);
+}
+
+.pregunta::details-content {
+  block-size: 0;
+  overflow: clip;
+  transition: block-size 0.4s var(--ease), content-visibility 0.4s allow-discrete;
+}
+
+.pregunta[open]::details-content {
+  block-size: auto;
+}
+
+.pregunta p {
+  max-width: 62ch;
+  padding-bottom: 1.5rem;
+  color: var(--texto-2);
+  text-wrap: pretty;
+}
+
+/* ── Diagnóstico gratis: formulario con estilo A ─── */
+.contacto {
+  padding-block: clamp(4rem, 10vw, 8rem);
+}
+
+.contacto .form {
+  display: grid;
+  gap: 1.75rem;
+  max-width: 860px;
+  margin-top: clamp(2rem, 5vw, 3rem);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.form__progreso {
+  gap: 0.6rem;
+}
+
+.form__progreso p {
+  font-size: 0.78rem;
+  color: var(--texto);
+}
+
+.form__barra {
+  height: 4px;
+  border-radius: 0;
+  background: var(--linea-fuerte);
+}
+
+.form__barra i {
+  background: var(--azul);
+}
+
+.form__paso > legend {
+  margin-bottom: 1.25rem;
+  font-family: var(--font);
+  font-stretch: 62%;
+  font-weight: 900;
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.grupo__etiqueta {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--texto);
+}
+
+.opciones {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+@media (min-width: 560px) {
+  .opciones {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Opciones como botones grandes: el input queda oculto pero enfocable (y se tilda con Espacio) */
+.opcion {
+  flex: none;
+  min-width: 0;
+}
+
+.opcion span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  min-height: 64px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--texto);
+  color: var(--texto);
+  font-weight: 700;
+  font-size: clamp(1.2rem, 1.6vw, 1.375rem);
+  line-height: 1.15;
+}
+
+.opcion span::after {
+  content: '';
+  flex: none;
+  width: 1.1em;
+  text-align: right;
+}
+
+.opcion:hover span {
+  box-shadow: inset 0 0 0 3px var(--texto);
+}
+
+.opcion input:checked + span {
+  background: var(--tinta);
+  color: var(--papel);
+  box-shadow: none;
+}
+
+.opcion input:checked + span::after {
+  content: '\2713';
+}
+
+.opcion input:focus-visible + span {
+  outline: 3px solid var(--foco);
+  outline-offset: 3px;
+}
+
+/* Campos con borde inferior de 2 px */
+.campo {
+  min-height: 56px;
+  padding: 0.7rem 0;
+  border: 0;
+  border-bottom: 2px solid var(--texto);
+  border-radius: 0;
+  background-color: transparent;
+  font-size: 1.25rem;
+}
+
+.campo:hover {
+  border-color: var(--texto);
+}
+
+.campo:focus {
+  outline: 2px solid var(--foco);
+  outline-offset: 6px;
+  border-color: var(--foco);
+  box-shadow: none;
+}
+
+.form__volver {
+  color: var(--texto);
+}
+
+.form__note,
+.grupo__ayuda,
+.form .confianza {
+  color: var(--texto-2);
+}
+
+/* Estado final: gracias, con la salida por WhatsApp */
+.form__gracias {
+  display: grid;
+  justify-items: start;
+  gap: 1.25rem;
+  padding: 1rem 0 2rem;
+}
+
+.form__gracias[hidden] {
+  display: none;
+}
+
+.form__gracias h3 {
+  font-size: var(--t-h2);
+  line-height: 0.88;
+  text-wrap: balance;
+}
+
+.form__gracias h3:focus {
+  outline: none;
+}
+
+.form__gracias p {
+  font-size: clamp(1.15rem, 2vw, 1.5rem);
+  color: var(--texto-2);
+}
+
+.form--enviado .form__progreso,
+.form--enviado .form__paso,
+.form--enviado .form__nav,
+.form--enviado .form__pie,
+.form--enviado .form__alternativas {
+  display: none !important;
+}
+
+.contacto__wa {
+  max-width: 860px;
+  margin-top: 2rem;
+  font-size: clamp(1.1rem, 1.8vw, 1.35rem);
+}
+
+.contacto__wa a {
+  font-weight: 700;
+  text-underline-offset: 0.25em;
+}
+
+/* Franja de contacto: atención al público y soporte para clientes */
+.atencion {
+  display: grid;
+  gap: 0.9rem;
+  max-width: 860px;
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--linea-fuerte);
+}
+
+.atencion li {
+  color: var(--texto-2);
+}
+
+.atencion__r {
+  display: block;
+  margin-bottom: 0.25rem;
+  color: var(--texto);
+}
+
+@media (min-width: 760px) {
+  .atencion {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
 }
 
 /* Más contraste si el sistema lo pide: texto secundario pleno y líneas marcadas */

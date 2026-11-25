@@ -110,6 +110,14 @@ con el botón de diagnóstico y el WhatsApp, y se oculta al llegar a Contacto o 
 - **Geist Mono** para rótulos chicos y **Michroma** solo para la marca ("STUDIO 74").
 - Las palabras muy largas en los títulos llevan guiones suaves (`&shy;`) para cortar bien en el celular.
 
+### Números con contador (componente "cifra")
+
+En `index.html`, `#numeros`. Cada número es un `<span class="cifra__n cond" data-cifra="175" aria-hidden="true">175</span>` más un `<span class="visually-hidden">175</span>` con el mismo valor para lectores de pantalla. `js/main.js` lo cuenta de 0 al valor, una sola vez, cuando entra en pantalla (solo con movimiento permitido). Atributos opcionales: `data-prefijo` y `data-sufijo` (por ejemplo `data-sufijo="%"`). Sin movimiento o sin JavaScript queda el valor final escrito en el HTML. Reservá el ancho con `style="min-width:<dígitos>ch"` para que no haya saltos de diseño.
+
+### Video de Quiénes somos
+
+`#quienes` usa `assets/video/quienes.mp4` (blanco y negro, sin audio, 21:9) con `assets/img/stock/quienes-ruta-1712.webp` como póster. No hay autoplay en el HTML: `js/main.js` lo pide al acercarse a la pantalla, solo con movimiento permitido y sin ahorro de datos, lo pausa fuera de pantalla y ofrece un botón de pausa (dura más de 5 s). Con reduced-motion o sin JavaScript queda el póster.
+
 ### Animaciones de scroll y Ruta 74
 
 - La landing ya no tiene escenas fijas ni giros 3D. Lo que se mueve:
