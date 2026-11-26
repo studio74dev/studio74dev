@@ -35,7 +35,7 @@
   <link rel="preload" as="image" href="/assets/img/casos/matemar/matemar-inicio-720.webp" imagesrcset="/assets/img/casos/matemar/matemar-inicio-720.webp 720w, /assets/img/casos/matemar/matemar-inicio-1440.webp 1440w" imagesizes="(min-width: 760px) 600px, calc(100vw - 56px)" fetchpriority="high" />
   <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="/css/styles.css?v=39" />
+  <link rel="stylesheet" href="/css/styles.css?v=40" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        Sin estas clases la página se ve completa y quieta. -->
@@ -78,7 +78,7 @@
         <li><a href="/#quienes">Nosotros</a></li>
       </ul>
 
-      <a href="/#contacto" class="nav__cta magnetico" data-evento="diagnostico-nav">Diagnóstico gratis</a>
+      <a href="/#contacto" class="nav__cta" data-evento="diagnostico-nav">Diagnóstico gratis</a>
       <button class="nav__menu" id="menuBoton" type="button" aria-expanded="false" aria-controls="indice" aria-label="Índice de secciones">
         <span class="nav__menu-texto">Índice</span>
         <span class="nav__menu-icono" aria-hidden="true"><i></i><i></i></span>
@@ -147,14 +147,14 @@
     <!-- 02. Lista de proyectos -->
     <section id="proyectos-lista" class="subseccion capitulo" data-tema="papel" aria-labelledby="proyectos-lista-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo"><span class="rotulo__n">02</span>Trabajo real</p>
-          <h2 id="proyectos-lista-title" class="titulo cond">Casos reales</h2>
+        <div class="cabeza">
+          <p class="rotulo" data-revelar><span class="rotulo__n">02</span>Trabajo real</p>
+          <h2 id="proyectos-lista-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Casos reales</span></span></h2>
         </div>
 
         <ul class="proyectos">
           <li>
-            <article class="proyecto" data-escena="entrada">
+            <article class="proyecto" data-revelar>
               <div class="dispositivo dispositivo--note">
                 <div class="ventana">
                   <img src="/assets/img/casos/matemar/matemar-inicio-720.webp" srcset="/assets/img/casos/matemar/matemar-inicio-720.webp 720w, /assets/img/casos/matemar/matemar-inicio-1440.webp 1440w" sizes="(min-width: 760px) 600px, calc(100vw - 56px)" width="1440" height="900" fetchpriority="high" decoding="async" alt="Inicio del sitio de Matemar en una notebook">
@@ -175,7 +175,7 @@
             </article>
           </li>
           <li>
-            <article class="caso caso--proximo" data-escena="entrada">
+            <article class="caso caso--proximo" data-revelar>
               <h3 class="caso__nombre cond">¿El próximo caso es el tuyo?</h3>
               <a href="/#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
             </article>
@@ -211,7 +211,7 @@
     <p class="footer__marca" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
   </footer>
 
-  <script src="/js/main.js?v=39" defer></script>
+  <script src="/js/main.js?v=40" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

@@ -33,7 +33,7 @@
   <!-- Fuentes propias, sin pasar por otro dominio. Rutas desde la raíz: valen igual en /proyectos/ y /proyectos/matemar/ -->
   <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="/css/styles.css?v=39" />
+  <link rel="stylesheet" href="/css/styles.css?v=40" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        Sin estas clases la página se ve completa y quieta. -->
@@ -76,7 +76,7 @@
         <li><a href="/#quienes">Nosotros</a></li>
       </ul>
 
-      <a href="/#contacto" class="nav__cta magnetico" data-evento="diagnostico-nav">Diagnóstico gratis</a>
+      <a href="/#contacto" class="nav__cta" data-evento="diagnostico-nav">Diagnóstico gratis</a>
       <button class="nav__menu" id="menuBoton" type="button" aria-expanded="false" aria-controls="indice" aria-label="Índice de secciones">
         <span class="nav__menu-texto">Índice</span>
         <span class="nav__menu-icono" aria-hidden="true"><i></i><i></i></span>
@@ -148,11 +148,11 @@
     <!-- 02. El caso en corto -->
     <section id="matemar-caso" class="subseccion capitulo" data-tema="papel" aria-labelledby="matemar-caso-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo"><span class="rotulo__n">02</span>El caso</p>
-          <h2 id="matemar-caso-title" class="titulo cond">El caso en corto</h2>
+        <div class="cabeza">
+          <p class="rotulo" data-revelar><span class="rotulo__n">02</span>El caso</p>
+          <h2 id="matemar-caso-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">El caso en corto</span></span></h2>
         </div>
-        <dl class="datos datos--caso" data-escena="entrada">
+        <dl class="datos datos--caso" data-revelar>
           <div class="dato"><dt>Problema</dt><dd>Vendía solo por historias de Instagram y las consultas llegaban sueltas.</dd></div>
           <div class="dato"><dt>Solución</dt><dd>Una página con sus yerbas uruguayas donde el cliente arma el pedido y lo envía por WhatsApp.</dd></div>
           <div class="dato"><dt>Resultado</dt><dd>Le llega ordenado y con presupuesto, y solo trata con quien quiere comprar.</dd></div>
@@ -164,11 +164,11 @@
     <!-- 03. Capturas reales -->
     <section id="matemar-capturas" class="subseccion capitulo" data-tema="tinta" aria-labelledby="matemar-capturas-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo"><span class="rotulo__n">03</span>Capturas</p>
-          <h2 id="matemar-capturas-title" class="titulo cond">Así se ve</h2>
+        <div class="cabeza">
+          <p class="rotulo" data-revelar><span class="rotulo__n">03</span>Capturas</p>
+          <h2 id="matemar-capturas-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Así se ve</span></span></h2>
         </div>
-        <div class="capturas" data-escena="entrada">
+        <div class="capturas" data-revelar="imagen">
           <a class="captura" href="/assets/img/casos/matemar/matemar-inicio-390.webp" target="_blank" rel="noopener noreferrer" aria-label="Abrir la captura en tamaño completo (se abre en una pestaña nueva)">
             <div class="dispositivo dispositivo--cel">
               <img src="/assets/img/casos/matemar/matemar-inicio-390.webp" width="780" height="1688" loading="lazy" decoding="async" alt="Inicio del sitio de Matemar en el celular">
@@ -185,7 +185,7 @@
             </div>
           </a>
         </div>
-        <div class="capturas__note" data-escena="entrada">
+        <div class="capturas__note" data-revelar>
           <a class="captura" href="/assets/img/casos/matemar/matemar-catalogo-1440.webp" target="_blank" rel="noopener noreferrer" aria-label="Abrir la captura en tamaño completo (se abre en una pestaña nueva)">
             <div class="dispositivo dispositivo--note">
               <div class="ventana">
@@ -202,16 +202,16 @@
     <!-- 04. Cómo llega el pedido y cierre -->
     <section id="matemar-pedido" class="subseccion capitulo" data-tema="papel" aria-labelledby="matemar-pedido-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo"><span class="rotulo__n">04</span>Pedido</p>
-          <h2 id="matemar-pedido-title" class="titulo cond">Así le llega el pedido (ilustración)</h2>
+        <div class="cabeza">
+          <p class="rotulo" data-revelar><span class="rotulo__n">04</span>Pedido</p>
+          <h2 id="matemar-pedido-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Así le llega el pedido (ilustración)</span></span></h2>
         </div>
-        <div class="pedido pedido--caso" data-escena="entrada">
+        <div class="pedido pedido--caso" data-revelar>
           <p class="pedido__titulo">Pedido armado</p>
           <p class="pedido__items">Canarias Tradicional · Baldo · Sara Coco · Rei Verde Premium</p>
           <p class="pedido__listo">Presupuesto listo ✓</p>
         </div>
-        <div class="cierre" data-escena="entrada">
+        <div class="cierre" data-revelar>
           <a href="/#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
           <a class="volver" href="/proyectos/">Volver a proyectos</a>
         </div>
@@ -245,7 +245,7 @@
     <p class="footer__marca" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
   </footer>
 
-  <script src="/js/main.js?v=39" defer></script>
+  <script src="/js/main.js?v=40" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

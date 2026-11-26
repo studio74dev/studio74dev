@@ -311,7 +311,7 @@
   <!-- Imagen LCP del inicio (misma que el <img> de #inicio) -->
   <link rel="preload" as="image" href="assets/img/stock/inicio-mar-1280.webp" imagesrcset="assets/img/stock/inicio-mar-640.webp 640w, assets/img/stock/inicio-mar-960.webp 960w, assets/img/stock/inicio-mar-1280.webp 1280w, assets/img/stock/inicio-mar-1920.webp 1920w" imagesizes="(min-width: 1100px) 1080px, 100vw" fetchpriority="high" />
 
-  <link rel="stylesheet" href="css/styles.css?v=39" />
+  <link rel="stylesheet" href="css/styles.css?v=40" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        "con-carga": la carga inicial (el 74 que vuela al logo), solo si hay JS, no hay
@@ -366,7 +366,7 @@
         <li><a href="#quienes">Nosotros</a></li>
       </ul>
 
-      <a href="#contacto" class="nav__cta magnetico" data-evento="diagnostico-nav">Diagnóstico gratis</a>
+      <a href="#contacto" class="nav__cta" data-evento="diagnostico-nav">Diagnóstico gratis</a>
       <button class="nav__menu" id="menuBoton" type="button" aria-expanded="false" aria-controls="indice" aria-label="Índice de secciones">
         <span class="nav__menu-texto">Índice</span>
         <span class="nav__menu-icono" aria-hidden="true"><i></i><i></i></span>
@@ -468,9 +468,9 @@
     <!-- 02. ¿Te pasa esto? Tarjetas apiladas (sticky): cada problema con su solución en una línea -->
     <section id="te-pasa" class="te-pasa capitulo" data-tema="papel" aria-labelledby="te-pasa-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo mono">01 · Problemas</p>
-          <h2 id="te-pasa-title" class="titulo cond">¿Te pasa esto?</h2>
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>01 · Problemas</p>
+          <h2 id="te-pasa-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">¿Te pasa esto?</span></span></h2>
         </div>
         <ol class="pila">
           <li class="tarjeta" data-tema="papel" style="--i:0">
@@ -542,16 +542,16 @@
             <span class="cifra__txt mono">fichas sin reclamar</span>
           </li>
         </ul>
-        <p class="numeros__frase" data-escena="entrada">En octubre relevamos 175 comercios de la costa: 54 tenían su ficha de Google sin reclamar.</p>
+        <p class="numeros__frase" data-revelar>En octubre relevamos 175 comercios de la costa: 54 tenían su ficha de Google sin reclamar.</p>
       </div>
     </section>
 
     <!-- 04. Cómo trabajamos: tres pasos grandes y las garantías (sin letra chica) -->
     <section id="como-trabajamos" class="como capitulo" data-tema="tinta" aria-labelledby="como-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo mono">02 · Cómo trabajamos</p>
-          <h2 id="como-title" class="titulo cond">Cómo trabajamos</h2>
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>02 · Cómo trabajamos</p>
+          <h2 id="como-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Cómo trabajamos</span></span></h2>
         </div>
         <ol class="pasos">
           <li class="paso">
@@ -570,11 +570,11 @@
             <p>Lo ves avanzar y lo probás antes de la entrega.</p>
           </li>
         </ol>
-        <figure class="foto foto--pendiente foto--ancha como__foto" data-escena="entrada">
+        <figure class="foto foto--pendiente foto--ancha como__foto" data-revelar="imagen">
           <p>[FOTO: escena 5, dos personas conversando en un mostrador]</p>
         </figure>
 
-        <h3 class="subtitulo cond" data-escena="entrada">Sin letra chica.</h3>
+        <h3 class="subtitulo cond" data-revelar>Sin letra chica.</h3>
         <ul class="compromisos">
           <li class="compromiso">
             <details>
@@ -613,9 +613,9 @@
     <!-- 05. Qué incluye el diagnóstico gratis -->
     <section id="que-incluye" class="incluye capitulo" data-tema="tinta" aria-labelledby="incluye-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo mono">03 · Diagnóstico gratis</p>
-          <h2 id="incluye-title" class="titulo cond">Qué revisamos</h2>
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>03 · Diagnóstico gratis</p>
+          <h2 id="incluye-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Qué revisamos</span></span></h2>
         </div>
         <ul class="revisamos">
           <li><span class="revisamos__n mono">01</span><p>Tu ficha de Google: si está completa y aparece bien.</p></li>
@@ -633,18 +633,18 @@
     <!-- 06. Caso: Matemar (el único caso) -->
     <section id="casos" class="casos capitulo" data-tema="papel" aria-labelledby="casos-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo mono">04 · Caso · Matemar · Miramar</p>
-          <h2 id="casos-title" class="titulo cond">De historias a una web.</h2>
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>04 · Caso · Matemar · Miramar</p>
+          <h2 id="casos-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">De historias a una web.</span></span></h2>
         </div>
-        <figure class="caso__visual" data-escena="entrada">
+        <figure class="caso__visual" data-revelar="imagen">
           <div class="caso__marco">
             <img class="caso__nb" src="assets/img/casos/matemar/matemar-catalogo-1440.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Catálogo de yerbas de Matemar en una notebook">
             <img class="caso__cel" src="assets/img/casos/matemar/matemar-whatsapp-390.webp" width="780" height="1688" loading="lazy" decoding="async" alt="Pedido de Matemar listo para enviar por WhatsApp, en el celular">
           </div>
           <figcaption class="resolvemos__nota">Trabajo real: Matemar, Miramar.</figcaption>
         </figure>
-        <dl class="antes-ahora" data-escena="entrada">
+        <dl class="antes-ahora" data-revelar>
           <div class="antes-ahora__bloque">
             <dt class="mono">Antes</dt>
             <dd>Vendía solo por historias de Instagram y las consultas llegaban sueltas.</dd>
@@ -673,7 +673,7 @@
       <button type="button" class="pausa quienes__pausa" aria-pressed="false" aria-label="Pausar el video de Quiénes somos" hidden><span aria-hidden="true"></span></button>
       <div class="contenedor quienes__contenido">
         <p class="rotulo mono">05 · Quiénes somos</p>
-        <h2 id="quienes-title" class="titulo cond"><span class="linea">Cuatro devs.</span> <span class="linea acento">Una ruta.</span></h2>
+        <h2 id="quienes-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Cuatro devs.</span></span> <span class="linea acento"><span style="--i:1">Una ruta.</span></span></h2>
         <p class="quienes__texto">Tres de General Madariaga y uno de Pinamar, unidos por la Ruta 74.</p>
         <ul class="equipo">
           <li class="persona">
@@ -701,11 +701,11 @@
          (solo las preguntas cuya respuesta ya es definitiva, sin marcas pendientes). -->
     <section id="preguntas" class="preguntas-sec capitulo" data-tema="papel" aria-labelledby="preguntas-title">
       <div class="contenedor preguntas-sec__grilla">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo mono">Preguntas frecuentes</p>
-          <h2 id="preguntas-title" class="titulo cond">Preguntas</h2>
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>Preguntas frecuentes</p>
+          <h2 id="preguntas-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Preguntas</span></span></h2>
         </div>
-        <div class="preguntas" data-escena="entrada">
+        <div class="preguntas" data-revelar>
           <details class="pregunta">
             <summary>¿Cuánto cuesta?</summary>
             <p>Depende del alcance. Antes de empezar enviamos un presupuesto por escrito, sin cargo, que detalla qué
@@ -749,15 +749,15 @@
     <!-- 09. Diagnóstico gratis: formulario "pedido que se arma": una pregunta por pantalla -->
     <section id="contacto" class="contacto capitulo" data-tema="papel" aria-labelledby="contacto-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo mono">06 · Diagnóstico gratis</p>
-          <h2 id="contacto-title" class="titulo cond">Pedí tu diagnóstico gratis</h2>
-          <p class="bajada">Revisamos cómo te encuentran hoy y te armamos una propuesta a medida. Sin costo y sin compromiso.</p>
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>06 · Diagnóstico gratis</p>
+          <h2 id="contacto-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Pedí tu diagnóstico gratis</span></span></h2>
+          <p class="bajada" data-revelar>Revisamos cómo te encuentran hoy y te armamos una propuesta a medida. Sin costo y sin compromiso.</p>
         </div>
 
         <!-- Formulario "pedido que se arma": una pregunta por pantalla y la tarjeta TU DIAGNÓSTICO que se completa en vivo
              (lo arma js/main.js). Sin JS todo queda visible en una sola página y se envía por mailto. -->
-        <form class="form" id="contactForm" action="mailto:studio74dev@gmail.com" method="post" enctype="text/plain" novalidate data-escena="entrada">
+        <form class="form" id="contactForm" action="mailto:studio74dev@gmail.com" method="post" enctype="text/plain" novalidate data-revelar>
           <div class="form__layout">
 
             <!-- Tarjeta en vivo: oculta sin JS; en celular va arriba y se pliega -->
@@ -919,10 +919,10 @@
           </div>
         </form>
 
-        <p class="contacto__wa" data-escena="entrada">¿Preferís hablar ya? <a href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" data-evento="whatsapp-contacto" target="_blank" rel="noopener noreferrer" aria-label="Escribinos por WhatsApp (se abre en una pestaña nueva)">Escribinos por WhatsApp</a>.</p>
+        <p class="contacto__wa" data-revelar>¿Preferís hablar ya? <a href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" data-evento="whatsapp-contacto" target="_blank" rel="noopener noreferrer" aria-label="Escribinos por WhatsApp (se abre en una pestaña nueva)">Escribinos por WhatsApp</a>.</p>
 
         <!-- Franja de contacto (decisión del usuario, ronda 3): horario de atención y soporte para clientes -->
-        <ul class="atencion" data-escena="entrada" aria-label="Atención y soporte">
+        <ul class="atencion" data-revelar aria-label="Atención y soporte">
           <li><span class="atencion__r mono">Atención al público:</span> lunes a viernes de 9 a 15.</li>
           <li><span class="atencion__r mono">Para clientes:</span> soporte según tu disponibilidad, y 24/7 en temporada.</li>
         </ul>
@@ -956,7 +956,7 @@
     <p class="footer__marca" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
   </footer>
 
-  <script src="js/main.js?v=39" defer></script>
+  <script src="js/main.js?v=40" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

@@ -22,7 +22,7 @@
    Cómo se mueve:
    - Todo lo animado vive bajo html.mov (hay JS y no hay reduced-motion).
      Sin esa clase la página se ve completa, quieta y en orden.
-   - js/main.js calcula el avance de cada [data-escena] y lo deja en --p (0 a 1).
+   - los [data-revelar] se revelan con animation-timeline (respaldo: IntersectionObserver y html.sin-vista).
 ═══════════════════════════════════════════════════════ */
 
 /* Fuentes propias: juego latino (español completo). Archivo es variable en ancho y peso. */
@@ -78,8 +78,16 @@
   --header-height: 60px;
   --radio: 0;
   --radio-s: 0;
-  --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --spring: cubic-bezier(0.34, 1.32, 0.64, 1);
+  /* Curvas y duraciones del sitio (estilo iOS: salida suave y resorte leve) */
+  --ease-salida: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-resorte: cubic-bezier(0.34, 1.32, 0.64, 1);
+  --dur-1: 0.2s;
+  --dur-2: 0.3s;
+  --dur-3: 0.45s;
+  --dur-4: 0.7s;
+  --presion: 0.97;
+  --ease: var(--ease-salida);
+  --spring: var(--ease-resorte);
   --ease-io: cubic-bezier(0.7, 0, 0.2, 1);
   --p: 1;
 
@@ -522,17 +530,13 @@ b {
   font-size: 1rem;
   text-decoration: none;
   cursor: pointer;
-  transition: transform 0.35s var(--ease), background-color 0.25s var(--ease), color 0.25s var(--ease), box-shadow 0.25s var(--ease);
+  transition: transform var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
 }
 
 .btn svg {
   width: 18px;
   height: 18px;
-  transition: transform 0.3s var(--ease);
-}
-
-.btn:hover svg {
-  transform: translateX(4px);
+  transition: transform var(--dur-2) var(--ease);
 }
 
 /* Acción: azul con texto blanco (sobre el bloque azul, papel con texto tinta). */
@@ -582,7 +586,7 @@ b {
   -webkit-backdrop-filter: saturate(180%) blur(20px);
   backdrop-filter: saturate(180%) blur(20px);
   border-bottom: 1px solid var(--linea);
-  transition: color 0.3s var(--ease), background-color 0.3s var(--ease);
+  transition: color var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease);
 }
 
 .nav {
@@ -629,7 +633,7 @@ b {
   text-transform: uppercase;
   color: var(--suave);
   text-decoration: none;
-  transition: color 0.2s var(--ease);
+  transition: color var(--dur-1) var(--ease);
 }
 
 .nav__links a:hover,
@@ -649,7 +653,7 @@ b {
   font-weight: 700;
   font-size: 0.9rem;
   text-decoration: none;
-  transition: transform 0.35s var(--ease), background-color 0.3s var(--ease), color 0.3s var(--ease);
+  transition: transform var(--dur-2) var(--ease), background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease);
 }
 
 .nav__menu {
@@ -686,7 +690,7 @@ b {
   width: 18px;
   height: 1.5px;
   background: currentColor;
-  transition: transform 0.3s var(--ease);
+  transition: transform var(--dur-2) var(--ease);
 }
 
 .nav__menu[aria-expanded='true'] .nav__menu-icono i:first-child {
@@ -736,7 +740,7 @@ b {
   font-size: clamp(32px, min(7vw, 8.5vh), 80px);
   line-height: 0.95;
   text-decoration: none;
-  transition: color 0.25s var(--ease), transform 0.35s var(--ease);
+  transition: color var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
 }
 
 .indice__lista a span {
@@ -750,7 +754,6 @@ b {
 
 .indice__lista a:hover {
   color: var(--acento);
-  transform: translateX(10px);
 }
 
 .indice__pie {
@@ -1234,7 +1237,7 @@ html.mov.par-js .hero__cel {
   background: var(--fondo);
   color: var(--texto);
   font-size: 1rem;
-  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  transition: border-color var(--dur-1) var(--ease), box-shadow var(--dur-1) var(--ease);
 }
 
 .campo:hover {
@@ -1281,7 +1284,7 @@ html.mov.par-js .hero__cel {
   box-shadow: inset 0 0 0 1px var(--linea-fuerte);
   font-size: 0.95rem;
   color: var(--suave);
-  transition: background-color 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+  transition: background-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease), box-shadow var(--dur-1) var(--ease);
 }
 
 .opcion:hover span {
@@ -1383,7 +1386,7 @@ select.campo:focus-visible {
 }
 
 .mov .form__barra i {
-  transition: transform 0.3s var(--ease);
+  transition: transform var(--dur-2) var(--ease);
 }
 
 .form__nav {
@@ -1547,8 +1550,8 @@ select.campo:focus-visible {
   visibility: hidden;
   transform: translateY(8px);
   /* visibility espera a que termine la salida; oculto no recibe foco */
-  transition: opacity 0.35s var(--ease), transform 0.35s var(--ease), visibility 0s linear 0.35s,
-    background-color 0.3s var(--ease), color 0.3s var(--ease), box-shadow 0.25s var(--ease);
+  transition: opacity var(--dur-2) var(--ease), transform var(--dur-2) var(--ease), visibility 0s linear var(--dur-2),
+    background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease), box-shadow var(--dur-2) var(--ease);
 }
 
 .wa-flotante[hidden] {
@@ -1638,7 +1641,7 @@ select.campo:focus-visible {
   }
 
   .mov .barra-cta {
-    transition: transform 0.25s var(--ease), visibility 0s linear 0.25s, background-color 0.3s var(--ease);
+    transition: transform var(--dur-2) var(--ease), visibility 0s linear var(--dur-2), background-color var(--dur-2) var(--ease);
   }
 
   .mov .barra-cta.is-visible {
@@ -1725,7 +1728,7 @@ select.campo:focus-visible {
   color: var(--texto);
   background: transparent;
   text-decoration: none;
-  transition: background-color 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease), transform 0.25s var(--ease);
+  transition: background-color var(--dur-2) var(--ease), color var(--dur-2) var(--ease), border-color var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
 }
 
 .red svg {
@@ -1739,7 +1742,6 @@ select.campo:focus-visible {
   background: var(--texto);
   border-color: var(--texto);
   color: var(--fondo);
-  transform: translateY(-3px);
 }
 
 .footer__mail {
@@ -1798,26 +1800,215 @@ select.campo:focus-visible {
    MOVIMIENTO (solo con html.mov)
 ═══════════════════════════════════════════════════════ */
 
-/* Entradas: se revelan una sola vez al aparecer, con una transición corta
-   (opacity y translateY de 12 px, 400 ms como máximo). No siguen al scroll, así
-   se ven fluidas aunque el dedo vaya rápido o lento.
-   Todo estado oculto depende de .mov.revelar: "revelar" lo pone main.js, así que
-   si el script falla (o no carga) ningún texto queda escondido. */
-.mov.revelar [data-escena='entrada'] {
-  opacity: 0;
-  transform: translate3d(0, 12px, 0);
-  transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+/* Revelado al entrar ([data-revelar]: vacío = subir y aparecer; imagen; numero; titulo).
+   Con animation-timeline (Chrome, Edge) lo mueve el scroll. Sin soporte, main.js agrega
+   html.sin-vista, un IntersectionObserver pone .visto una sola vez y corre una transición.
+   Todo estado oculto depende de .mov.revelar: "revelar" lo pone main.js, así que si el script
+   falla (o no carga) ningún texto queda escondido. Lo que ya está en la primera pantalla
+   lleva .inicial y nunca arranca oculto (LCP). */
+@keyframes revelar {
+  from { opacity: 0; transform: translate3d(0, 40px, 0); }
+  to { opacity: 1; transform: none; }
 }
 
-.mov.revelar [data-escena='entrada'].visto {
+@keyframes revelar-imagen {
+  from { opacity: 0; transform: translate3d(0, 24px, 0) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes revelar-numero {
+  from { clip-path: inset(100% 0 0 0); transform: translate3d(0, 30%, 0); }
+  to { clip-path: inset(0); transform: none; }
+}
+
+@keyframes revelar-linea {
+  from { transform: translate3d(0, 105%, 0); }
+  to { transform: none; }
+}
+
+/* Con soporte: el scroll mueve la animación (backwards: al terminar no deja ningún transform) */
+@supports (animation-timeline: view()) {
+  html.mov.revelar:not(.sin-vista) [data-revelar]:not(.inicial, [data-revelar='titulo']) {
+    animation: revelar linear backwards;
+    animation-timeline: view();
+    animation-range: entry 0% entry min(90%, 180px);
+  }
+
+  html.mov.revelar:not(.sin-vista) [data-revelar='imagen']:not(.inicial) {
+    animation-name: revelar-imagen;
+  }
+
+  html.mov.revelar:not(.sin-vista) [data-revelar='numero']:not(.inicial) {
+    animation-name: revelar-numero;
+  }
+
+  html.mov.revelar:not(.sin-vista) [data-revelar='titulo']:not(.inicial) {
+    view-timeline: --titulo block;
+  }
+
+  html.mov.revelar:not(.sin-vista) [data-revelar='titulo']:not(.inicial) .linea > span {
+    animation: revelar-linea linear backwards;
+    animation-timeline: --titulo;
+    animation-range: entry calc(var(--i, 0) * 12%) entry min(calc(80% + var(--i, 0) * 12%), 140px);
+  }
+}
+
+/* Sin soporte (html.sin-vista): se esconde hasta que main.js pone .visto */
+.mov.revelar.sin-vista [data-revelar]:not(.visto, .inicial, [data-revelar='titulo']) {
+  opacity: 0;
+  transform: translate3d(0, 24px, 0);
+}
+
+.mov.revelar.sin-vista [data-revelar='imagen']:not(.visto, .inicial) {
+  transform: translate3d(0, 16px, 0) scale(0.97);
+}
+
+.mov.revelar.sin-vista [data-revelar='numero']:not(.visto, .inicial) {
   opacity: 1;
-  transform: none;
+  clip-path: inset(100% 0 0 0);
+  transform: translate3d(0, 30%, 0);
+}
+
+.mov.revelar.sin-vista [data-revelar]:not([data-revelar='titulo']) {
+  transition: opacity var(--dur-4) var(--ease-salida), transform var(--dur-4) var(--ease-salida), clip-path var(--dur-4) var(--ease-salida);
+}
+
+.mov.revelar.sin-vista [data-revelar='titulo']:not(.visto, .inicial) .linea > span {
+  transform: translate3d(0, 105%, 0);
+}
+
+.mov.revelar.sin-vista [data-revelar='titulo'] .linea > span {
+  transition: transform var(--dur-4) var(--ease-salida) calc(var(--i, 0) * 80ms);
 }
 
 /* Destino de un enlace: aparece completo, sin transición (main.js la quita dos frames después) */
 .mov.revelar .sin-transicion,
 .mov.revelar .sin-transicion * {
   transition: none !important;
+}
+
+/* Líneas de los títulos: cada una recorta lo que sube desde abajo (sin tapar tildes ni colas) */
+.mov .titulo .linea {
+  overflow: clip;
+  padding-block: 0.14em;
+  margin-block: -0.14em;
+}
+
+.mov .titulo .linea > span {
+  display: block;
+}
+
+/* Presión al tocar (iOS): escala leve con resorte suave, en botones, tarjetas e íconos */
+.mov .btn,
+.mov .nav__cta,
+.mov .red,
+.mov .paso,
+.mov .tarjeta {
+  transition-property: transform, background-color, color, border-color, box-shadow;
+  transition-duration: var(--dur-2);
+  transition-timing-function: var(--ease-resorte);
+}
+
+.mov .btn:active,
+.mov .nav__cta:active,
+.mov .red:active,
+.mov .wa-flotante:active,
+.mov .tarjeta:active,
+.mov .paso:active {
+  transform: scale(var(--presion));
+  transition-duration: var(--dur-1);
+}
+
+/* Elevación y sombra al pasar (solo mouse) */
+@media (hover: hover) and (pointer: fine) {
+  .mov .btn:hover,
+  .mov .nav__cta:hover {
+    transform: translateY(-3px);
+  }
+
+  .mov .btn:active:hover,
+  .mov .nav__cta:active:hover {
+    transform: scale(var(--presion));
+  }
+
+  .mov .tarjeta:hover {
+    border-color: var(--texto);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.18);
+  }
+
+  .mov .paso:hover {
+    transform: translateY(-3px);
+    border-bottom-color: var(--texto);
+  }
+
+  .mov .red:hover,
+  .mov .red:focus-visible {
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.3);
+  }
+
+  .mov .opcion:hover span {
+    transform: translateY(-2px);
+    box-shadow: inset 0 0 0 1px var(--texto), 0 8px 20px rgba(0, 0, 0, 0.14);
+  }
+
+  .mov .opcion:active:hover span {
+    transform: scale(var(--presion));
+  }
+
+  .mov .tarjeta__foto {
+    overflow: clip;
+  }
+
+  .mov .tarjeta__foto img {
+    transition: transform var(--dur-4) var(--ease-salida);
+  }
+
+  .mov .tarjeta:hover .tarjeta__foto img {
+    transform: scale(1.04);
+  }
+
+  .mov .btn:hover svg {
+    transform: translateX(4px);
+  }
+
+  .mov .red:hover,
+  .mov .red:focus-visible {
+    transform: translateY(-3px);
+  }
+
+  .mov .indice__lista a:hover {
+    transform: translateX(10px);
+  }
+}
+
+/* Enlaces de texto: el subrayado queda siempre (no depender solo del color); al pasar el mouse se
+   dibuja de izquierda a derecha una línea de 2 px sobre el subrayado fino */
+@media (hover: hover) and (pointer: fine) {
+  .mov .contacto__wa a,
+  .mov .footer__mail,
+  .mov .volver {
+    text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+    background-image: linear-gradient(currentColor, currentColor);
+    background-repeat: no-repeat;
+    background-position: 0 calc(100% - 0.08em);
+    background-size: 0 2px;
+    transition: background-size var(--dur-3) var(--ease-salida), color var(--dur-2) var(--ease-salida);
+  }
+
+  /* Los de caja flex de 48 px: la línea va pegada al texto, no al borde de la caja */
+  .mov .footer__mail,
+  .mov .volver {
+    background-position: 0 calc(50% + 0.8em);
+  }
+
+  .mov .contacto__wa a:hover,
+  .mov .footer__mail:hover,
+  .mov .volver:hover,
+  .mov .contacto__wa a:focus-visible,
+  .mov .footer__mail:focus-visible,
+  .mov .volver:focus-visible {
+    background-size: 100% 2px;
+  }
 }
 
 /* Pie: la palabra gigante sube con el scroll. Con animation-timeline la mueve el scroll;
@@ -2552,7 +2743,7 @@ html.mov .servicios:focus-within .franja__pista {
   font-size: 1.6rem;
   font-weight: 400;
   line-height: 1;
-  transition: transform 0.3s var(--ease);
+  transition: transform var(--dur-2) var(--ease);
 }
 
 .compromiso details[open] summary::after {
@@ -2819,7 +3010,7 @@ html.mov .quienes__video.hero__video--activo {
   font-weight: 400;
   font-size: 1.6rem;
   line-height: 1;
-  transition: transform 0.3s var(--ease);
+  transition: transform var(--dur-2) var(--ease);
 }
 
 .pregunta[open] summary::after {
@@ -3074,7 +3265,7 @@ html.mov .quienes__video.hero__video--activo {
 
 /* Opciones: presión con escala leve y resorte suave */
 .opcion span {
-  transition: background-color 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.25s var(--spring);
+  transition: background-color var(--dur-1) var(--ease), color var(--dur-1) var(--ease), box-shadow var(--dur-1) var(--ease), transform var(--dur-2) var(--spring);
 }
 
 .opcion:active span {
@@ -3116,11 +3307,11 @@ html.mov .quienes__video.hero__video--activo {
 }
 
 html.mov .form[data-dir='adelante'] .form__paso.is-actual {
-  animation: paso-adelante 0.28s var(--ease) both;
+  animation: paso-adelante var(--dur-2) var(--ease-resorte) both;
 }
 
 html.mov .form[data-dir='atras'] .form__paso.is-actual {
-  animation: paso-atras 0.28s var(--ease) both;
+  animation: paso-atras var(--dur-2) var(--ease-resorte) both;
 }
 
 /* Tarjeta TU DIAGNÓSTICO */
@@ -3172,7 +3363,7 @@ html.mov .form[data-dir='atras'] .form__paso.is-actual {
 }
 
 html.mov .diag__cuenta.is-nuevo {
-  animation: diag-pop 0.3s var(--spring) both;
+  animation: diag-pop var(--dur-2) var(--ease-resorte) both;
 }
 
 .diag__flecha {
@@ -3184,7 +3375,7 @@ html.mov .diag__cuenta.is-nuevo {
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
-  transition: transform 0.28s var(--ease);
+  transition: transform var(--dur-2) var(--ease);
 }
 
 .diag:not(.diag--cerrada) .diag__flecha {
@@ -3198,7 +3389,7 @@ html.mov .diag__cuenta.is-nuevo {
 .diag__cuerpo {
   display: grid;
   grid-template-rows: 1fr;
-  transition: grid-template-rows 0.28s var(--ease), visibility 0s;
+  transition: grid-template-rows var(--dur-2) var(--ease), visibility 0s;
 }
 
 .diag__interior {
@@ -3209,7 +3400,7 @@ html.mov .diag__cuenta.is-nuevo {
 .diag--cerrada .diag__cuerpo {
   grid-template-rows: 0fr;
   visibility: hidden;
-  transition: grid-template-rows 0.28s var(--ease), visibility 0s 0.28s;
+  transition: grid-template-rows var(--dur-2) var(--ease), visibility 0s var(--dur-2);
 }
 
 .diag__lista {
@@ -3249,14 +3440,14 @@ html.mov .diag__cuenta.is-nuevo {
   color: var(--texto-2);
   font-size: 1.4rem;
   line-height: 1;
-  transition: opacity 0.2s var(--ease);
+  transition: opacity var(--dur-1) var(--ease);
 }
 
 .diag__c {
   color: var(--azul);
   opacity: 0;
   transform: scale(0.4);
-  transition: opacity 0.2s var(--ease), transform 0.28s var(--spring);
+  transition: opacity var(--dur-1) var(--ease), transform var(--dur-2) var(--spring);
 }
 
 .diag__ren.is-listo .diag__p {
@@ -3303,7 +3494,7 @@ html.mov .diag__cuenta.is-nuevo {
 }
 
 html.mov .diag__ren.is-nuevo .diag__v {
-  animation: diag-v 0.28s var(--ease) both;
+  animation: diag-v var(--dur-2) var(--ease-salida) both;
 }
 
 /* Revisión: cada renglón se edita */

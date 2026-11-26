@@ -115,16 +115,12 @@
   });
 
   /* ── Motor de scroll ─────────────────────────────── */
-  /* Cada [data-escena] recibe --p entre 0 y 1 según el tipo:
-     - pin: el capítulo es más alto que la pantalla; 0 cuando su borde de
-       arriba toca el de la pantalla, 1 cuando su borde de abajo toca el de abajo.
-     - entrada: no sigue al scroll; recibe la clase .visto una sola vez al aparecer
-       y el CSS hace la transición (fluida aunque el dedo vaya rápido o lento).
-     - paso: 0 cuando asoma por abajo, 1 cuando se fue por arriba.
-     - recorrido: la línea del proceso, que avanza con el centro de la pantalla.
-     También pinta el color de la barra, marca en la barra la sección que se
-     está leyendo y el avance de los revelados. */
-  const escenas = Array.from(document.querySelectorAll('[data-escena]'));
+  /* Revelado al entrar ([data-revelar]). Con animation-timeline lo mueve el scroll desde el CSS; sin
+     soporte (Safari) se agrega html.sin-vista y un IntersectionObserver pone .visto una sola vez (el
+     CSS hace la transición). Lo que ya está en la primera pantalla recibe .inicial: no arranca oculto.
+     También pinta el color de la barra y marca en la barra la sección que se está leyendo. */
+  const sinTimeline = !(window.CSS && CSS.supports && CSS.supports('animation-timeline: view()'));
+  if (sinTimeline) document.documentElement.classList.add('sin-vista');
   const capitulos = Array.from(document.querySelectorAll('.capitulo[data-tema]'));
   const linksBarra = Array.from(document.querySelectorAll('.nav__links a'));
   const waFlotante = document.getElementById('waFlotante');
@@ -133,8 +129,7 @@
   const iPortada = capitulos.findIndex((c) => c.hasAttribute('data-portada'));
   const iContacto = capitulos.findIndex((c) => c.id === 'contacto');
   const clamp = (v) => Math.min(1, Math.max(0, v));
-  const continuas = escenas.filter((el) => el.dataset.escena !== 'entrada');
-  let entradas = escenas.filter((el) => el.dataset.escena === 'entrada');
+  let entradas = Array.from(document.querySelectorAll('[data-revelar]'));
   let altoBarra = header.offsetHeight;
 
   const mostrar = (el) => el.classList.add('visto');
@@ -146,12 +141,12 @@
         mostrar(e.target);
         revelar.unobserve(e.target);
       });
-    }, { rootMargin: '0px 0px -8% 0px' });
+    }, { rootMargin: '0px 0px -10% 0px' });
     // Regla general: lo que ya está en la primera pantalla no arranca oculto
     // (se muestra en el mismo cuadro en que corre el script, sin transición).
     const primera = entradas.filter((el) => el.getBoundingClientRect().top < window.innerHeight);
     primera.forEach((el) => {
-      el.classList.add('sin-transicion');
+      el.classList.add('sin-transicion', 'inicial');
       mostrar(el);
     });
     if (primera.length) {
@@ -173,8 +168,8 @@
     try { destino = document.querySelector(hash); } catch (e) { return; }
     if (!destino) return;
     const seccion = destino.closest('.capitulo') || destino;
-    const lista = [seccion].concat(Array.from(seccion.querySelectorAll("[data-escena='entrada']")))
-      .filter((el) => el.dataset && el.dataset.escena === 'entrada');
+    const lista = [seccion].concat(Array.from(seccion.querySelectorAll('[data-revelar]')))
+      .filter((el) => el.hasAttribute && el.hasAttribute('data-revelar'));
     lista.forEach((el) => {
       el.classList.add('sin-transicion');
       mostrar(el);
@@ -196,7 +191,6 @@
      CSS; acá queda el respaldo (.asomado) para los navegadores que no lo tienen. */
   const pieEl = document.querySelector('.footer');
   const marcaPie = pieEl ? pieEl.querySelector('.footer__marca') : null;
-  const sinTimeline = !(window.CSS && CSS.supports && CSS.supports('animation-timeline: view()'));
   let altoPie = 0;
   const calcularPie = () => {
     if (!pieEl) return;
@@ -230,8 +224,6 @@
   };
 
   let pendiente = false;
-  // Último valor escrito por elemento, para no tocar el estilo si no cambió
-  const ultimos = new WeakMap();
 
   const pintar = () => {
     pendiente = false;
@@ -239,29 +231,8 @@
     const y = window.scrollY;
     const alFinal = y + vh >= document.documentElement.scrollHeight - 2;
 
-    // Primero se lee todo y después se escribe: mezclar lecturas y escrituras
-    // obliga al navegador a recalcular el diseño varias veces por cuadro.
-    const rects = continuas.map((el) => el.getBoundingClientRect());
     const rectsCap = capitulos.map((c) => c.getBoundingClientRect());
     const total = document.documentElement.scrollHeight;
-
-    const valores = rects.map((r, i) => {
-      let p;
-      switch (continuas[i].dataset.escena) {
-        case 'pin': p = -r.top / Math.max(1, r.height - vh); break;
-        case 'paso': p = (vh - r.top) / (vh + r.height); break;
-        default: p = (vh * 0.6 - r.top) / Math.max(1, r.height);
-      }
-      return clamp(p);
-    });
-
-    // Solo se escribe lo que cambió (las escenas lejos de la pantalla quedan quietas)
-    continuas.forEach((el, i) => {
-      const v = valores[i].toFixed(4);
-      if (ultimos.get(el) === v) return;
-      ultimos.set(el, v);
-      el.style.setProperty('--p', v);
-    });
 
     pintarPie(y, vh, total);
 
@@ -329,20 +300,6 @@
   window.addEventListener('resize', () => { medir(); pedir(); });
   window.addEventListener('load', () => { medir(); pedir(); });
   if (document.fonts) document.fonts.ready.then(() => { medir(); pedir(); });
-
-  /* ── Botones magnéticos ──────────────────────────── */
-  /* Siguen un poco al puntero; solo con mouse y con movimiento permitido. */
-  if (mov && window.matchMedia('(pointer: fine)').matches) {
-    document.querySelectorAll('.magnetico').forEach((b) => {
-      b.addEventListener('pointermove', (e) => {
-        const r = b.getBoundingClientRect();
-        const dx = (e.clientX - r.left - r.width / 2) * 0.22;
-        const dy = (e.clientY - r.top - r.height / 2) * 0.35;
-        b.style.transform = `translate(${dx.toFixed(1)}px, ${dy.toFixed(1)}px)`;
-      });
-      b.addEventListener('pointerleave', () => { b.style.transform = ''; });
-    });
-  }
 
   /* ── Video con póster (inicio y Quiénes somos) ─────── */
   /* Mismo patrón en los dos: el HTML no tiene autoplay ni src (solo data-src). El video se pide por JS
