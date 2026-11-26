@@ -190,8 +190,43 @@
   });
   if (location.hash) revelarDestino(location.hash);
 
+  /* Pie: cortina y palabra gigante. La cortina (html.pie-cortina) deja el pie fijo debajo del
+     contenido y se descubre al terminar #contacto; solo con alto >= 640 px y si el pie mide
+     <= 100svh - 24 px (si no, el pie fluye normal). La palabra sube con animation-timeline en el
+     CSS; acá queda el respaldo (.asomado) para los navegadores que no lo tienen. */
+  const pieEl = document.querySelector('.footer');
+  const marcaPie = pieEl ? pieEl.querySelector('.footer__marca') : null;
+  const sinTimeline = !(window.CSS && CSS.supports && CSS.supports('animation-timeline: view()'));
+  let altoPie = 0;
+  const calcularPie = () => {
+    if (!pieEl) return;
+    const cl = document.documentElement.classList;
+    altoPie = pieEl.offsetHeight;
+    const cabe = window.innerHeight >= 640 && altoPie <= window.innerHeight - 24;
+    const activa = mov && cabe;
+    if (cl.contains('pie-cortina') !== activa) cl.toggle('pie-cortina', activa);
+    if (activa) document.documentElement.style.setProperty('--pie-alto', altoPie + 'px');
+    else document.documentElement.style.removeProperty('--pie-alto');
+  };
+  // Con la cortina el pie está fijo y tapado: si un enlace del pie toma el foco, se baja al final
+  if (pieEl) {
+    pieEl.addEventListener('focusin', () => {
+      if (document.documentElement.classList.contains('pie-cortina')) {
+        window.scrollTo(0, document.documentElement.scrollHeight);
+      }
+    });
+  }
+  const pintarPie = (y, vh, total) => {
+    if (!marcaPie || !sinTimeline || !mov) return;
+    const faltan = total - (y + vh);
+    const cortina = document.documentElement.classList.contains('pie-cortina');
+    const asoma = cortina ? faltan < altoPie * 0.85 : pieEl.getBoundingClientRect().top < vh * 0.9;
+    if (marcaPie.classList.contains('asomado') !== asoma) marcaPie.classList.toggle('asomado', asoma);
+  };
+
   const medir = () => {
     altoBarra = header.offsetHeight;
+    calcularPie();
   };
 
   let pendiente = false;
@@ -228,6 +263,8 @@
       el.style.setProperty('--p', v);
     });
 
+    pintarPie(y, vh, total);
+
     // Al llegar al final, lo que quede por revelar se muestra
     if (alFinal && entradas.length) {
       entradas.forEach(mostrar);
@@ -249,7 +286,8 @@
     if (waFlotante && !waFlotante.hidden) {
       const visible = menuBoton.getAttribute('aria-expanded') !== 'true'
         && (iPortada < 0 || rectsCap[iPortada].bottom < vh * 0.5)
-        && (iContacto < 0 || rectsCap[iContacto].top > vh * 0.75);
+        && (iContacto < 0 || rectsCap[iContacto].top > vh * 0.75)
+        && total - (y + vh) > altoPie * 0.6; // ni sobre el pie (la palabra gigante)
       if (waFlotante.classList.contains('is-visible') !== visible) waFlotante.classList.toggle('is-visible', visible);
       const bajoBoton = vh - 44;
       const temaWa = temaDe(capitulos.find((c, i) => rectsCap[i].top <= bajoBoton && rectsCap[i].bottom > bajoBoton));

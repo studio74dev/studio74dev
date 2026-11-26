@@ -1,5 +1,7 @@
 # Créditos de fotos de stock
 
+## Fotos de stock
+
 Todas las fotos son de Pexels, licencia Pexels (uso comercial permitido, sin atribución obligatoria; igual se acredita). Licencia: https://www.pexels.com/license/ (leída el 2026-11-24: permite usar y modificar; no permite mostrar a personas identificables de forma negativa ni sugerir que respaldan un producto o una marca).
 Originales (locales, fuera de git): `docs/_stock/originales/`. Los `.webp` de las escenas 1 a 3 se generaron con `docs/fotos.html`; los del inicio y los videos (`assets/video/`), con ffmpeg (columna "Archivos web"). Los videos van recortados, en blanco y negro y sin audio.
 
@@ -17,3 +19,14 @@ Pendientes (decisión del usuario 2026-11-24: van con placeholder gris, no se us
 Notas de uso (para 1.6 y 1.9): en `alt` y pie de foto no decir "cliente" ni poner palabras en boca de las personas; no describir la pantalla de la escena 3 como "Google Maps" (es una app de mapa genérica); la escena 1 muestra nombres de apps en la pantalla (pequeños al reducir).
 
 Fotos ilustrativas: no muestran clientes de studio74dev ni representan testimonios.
+
+## Íconos
+
+Íconos de las redes del pie, de Simple Icons (CC0 1.0 Universal, dominio público; licencia leída el 2026-11-25 en el `LICENSE.md` del paquete). Se incrustan en línea como SVG (un solo `path`, `viewBox="0 0 24 24"`). Fuente: https://github.com/simple-icons/simple-icons (paquete npm `simple-icons`). El sobre del mail es propio, dibujado para el sitio y sin marca. Archivos locales (fuera de git) en `docs/_iconos/`.
+
+| Ícono | Slug | Versión | URL | Licencia | Consultado | Nota |
+|---|---|---|---|---|---|---|
+| Instagram | `instagram` | 16.38.1 | https://cdn.jsdelivr.net/npm/simple-icons@16.38.1/icons/instagram.svg (repo: https://github.com/simple-icons/simple-icons) | CC0 1.0 | 2026-11-25 | Marcas registradas de sus dueños; se usan solo para enlazar a los perfiles de studio74dev |
+| Facebook | `facebook` | 16.38.1 | https://cdn.jsdelivr.net/npm/simple-icons@16.38.1/icons/facebook.svg (repo: https://github.com/simple-icons/simple-icons) | CC0 1.0 | 2026-11-25 | Ídem (simple-icons) |
+| WhatsApp | `whatsapp` | 16.38.1 | https://cdn.jsdelivr.net/npm/simple-icons@16.38.1/icons/whatsapp.svg (repo: https://github.com/simple-icons/simple-icons) | CC0 1.0 | 2026-11-25 | Ídem (simple-icons) |
+| LinkedIn | `linkedin` | 13.21.0 | https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/linkedin.svg (repo: https://github.com/simple-icons/simple-icons) | CC0 1.0 | 2026-11-25 | Simple Icons quitó LinkedIn desde la 14.0.0 (404 en 14.0.0 y posteriores); 13.21.0 es la última versión que lo incluye. Ídem marcas |

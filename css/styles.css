@@ -596,24 +596,17 @@ b {
 .nav__logo {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
+  justify-content: center;
   margin-right: auto;
+  min-width: 48px;
   min-height: 48px;
   text-decoration: none;
 }
 
-/* El isotipo (el 74 que vuela al logo en la carga) y la marca al lado, en minúscula */
+/* Solo el isotipo (el 74 que vuela al logo en la carga); el nombre va en el aria-label del enlace */
 .nav__logo-icon {
   width: 32px;
   height: 32px;
-  color: var(--texto);
-}
-
-.nav__marca {
-  font-weight: 600;
-  font-size: 1.05rem;
-  letter-spacing: -0.01em;
-  text-transform: none;
   color: var(--texto);
 }
 
@@ -1713,40 +1706,74 @@ select.campo:focus-visible {
   color: var(--suave);
 }
 
+/* Redes: solo íconos, en botones circulares de 48 px */
 .redes {
   display: flex;
   flex-wrap: wrap;
-  gap: 0 1.5rem;
+  gap: 0.75rem;
 }
 
 .red {
   display: inline-flex;
   align-items: center;
-  min-height: 48px;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--linea-fuerte);
+  border-radius: 50%;
+  color: var(--texto);
+  background: transparent;
   text-decoration: none;
-  background: linear-gradient(var(--acento), var(--acento)) 0 calc(100% - 10px) / 0 2px no-repeat;
-  transition: background-size 0.35s var(--ease);
+  transition: background-color 0.25s var(--ease), color 0.25s var(--ease), border-color 0.25s var(--ease), transform 0.25s var(--ease);
 }
 
-.red:hover {
-  background-size: 100% 2px;
+.red svg {
+  display: block;
+  width: 28px;
+  height: 28px;
 }
 
-.red--secundaria {
-  color: var(--suave);
+.red:hover,
+.red:focus-visible {
+  background: var(--texto);
+  border-color: var(--texto);
+  color: var(--fondo);
+  transform: translateY(-3px);
 }
 
-/* La marca a todo el ancho, al final de la página */
+.footer__mail {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--texto);
+  text-underline-offset: 0.2em;
+}
+
+.footer__mail:hover {
+  color: var(--acento);
+}
+
+/* La palabra a casi todo el ancho del pie (en minúscula, condensada). Se mide con cqi: el
+   ancho del pie sin la barra de scroll, así nunca genera scroll horizontal. */
+.footer {
+  container-type: inline-size;
+  padding-bottom: 0;
+}
+
 .footer__marca {
-  margin-top: clamp(3rem, 8vw, 6rem);
-  overflow: hidden;
+  margin-top: clamp(2rem, 6vw, 4rem);
+  padding-inline: 1.5cqi;
+  overflow: clip;
   font-family: var(--font);
-  font-weight: 600;
-  /* "studio74dev" mide ~5,6 em: este tope lo deja entero dentro del contenedor */
-  font-size: min(14vw, 8.4rem);
-  line-height: 1.1;
-  letter-spacing: -0.03em;
+  font-stretch: 62%;
+  font-weight: 900;
+  font-size: var(--marca-tam, 22.6cqi);
+  line-height: 0.8;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  text-align: center;
   white-space: nowrap;
+  color: var(--texto);
 }
 
 .footer__marca span {
@@ -1754,12 +1781,13 @@ select.campo:focus-visible {
 }
 
 .footer__marca b {
-  font-weight: 600;
+  font-weight: 900;
   color: var(--acento);
 }
 
 .footer__copy {
   margin-top: 1.5rem;
+  padding-bottom: 0.5rem;
   font-family: var(--mono);
   font-size: 0.75rem;
   color: var(--suave);
@@ -1791,20 +1819,51 @@ select.campo:focus-visible {
   transition: none !important;
 }
 
-/* Pie: el contenedor queda quieto y la marca sube desde abajo */
-.mov.revelar .footer__marca[data-escena='entrada'] {
-  opacity: 1;
-  transform: none;
-  transition: none;
+/* Pie: la palabra gigante sube con el scroll. Con animation-timeline la mueve el scroll;
+   sin eso, main.js agrega .asomado y corre una transición. Sin JS o con reduced-motion queda quieta y visible. */
+@keyframes pie-sube {
+  from { transform: translate3d(0, 70%, 0); }
+  to { transform: none; }
 }
 
-.mov.revelar .footer__marca span {
-  transform: translate3d(0, 100%, 0);
-  transition: transform 0.4s var(--ease);
+.mov .footer__marca span {
+  transform: translate3d(0, 70%, 0);
+  transition: transform 0.7s var(--ease);
 }
 
-.mov.revelar .footer__marca.visto span {
+.mov .footer__marca.asomado span {
   transform: none;
+}
+
+@supports (animation-timeline: view()) {
+  .mov .footer__marca span {
+    transform: none;
+    transition: none;
+    animation: pie-sube linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 100%;
+  }
+
+  /* En cortina el pie está fijo: lo mueve el scroll de la página en su último tramo */
+  .mov.pie-cortina .footer__marca span {
+    animation-timeline: scroll(root block);
+    animation-range: calc(100% - var(--pie-alto, 600px)) 100%;
+  }
+}
+
+/* Cortina: el pie queda fijo debajo del contenido y se descubre al terminar #contacto.
+   La activa main.js (html.pie-cortina) solo con alto >= 640 px y si el pie entra en pantalla. */
+.pie-cortina main {
+  position: relative;
+  z-index: 1;
+  background: var(--tinta);
+  margin-bottom: var(--pie-alto, 0px);
+}
+
+.pie-cortina .footer {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 0;
 }
 
 /* ── Carga inicial ───────────────────────────────── */
@@ -1845,7 +1904,7 @@ html.con-carga .carga {
   width: 100%;
   font-size: clamp(64px, 13vw, 200px);
   line-height: 0.86;
-  text-transform: uppercase;
+  text-transform: none; /* minúscula: studio / 74 / dev */
   white-space: nowrap;
 }
 
