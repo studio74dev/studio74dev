@@ -33,7 +33,7 @@
   <!-- Fuentes propias, sin pasar por otro dominio. Rutas desde la raíz: valen igual en /proyectos/ y /proyectos/matemar/ -->
   <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="/css/styles.css?v=40" />
+  <link rel="stylesheet" href="/css/styles.css?v=41" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        Sin estas clases la página se ve completa y quieta. -->
@@ -96,7 +96,7 @@
       <li><a href="/#casos"><span>07</span>Caso Matemar</a></li>
       <li><a href="/#quienes"><span>08</span>Quiénes somos</a></li>
       <li><a href="/#preguntas"><span>09</span>Preguntas</a></li>
-      <li><a href="/#contacto"><span>10</span>Diagnóstico gratis</a></li>
+      <li><a href="/#contacto" data-evento="diagnostico-indice"><span>10</span>Diagnóstico gratis</a></li>
       <li><a href="/proyectos/"><span>11</span>Proyectos</a></li>
     </ol>
     <div class="indice__pie">
@@ -212,7 +212,7 @@
           <p class="pedido__listo">Presupuesto listo ✓</p>
         </div>
         <div class="cierre" data-revelar>
-          <a href="/#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
+          <a href="/#contacto" class="btn btn--accion" data-evento="diagnostico-casos">Pedí tu diagnóstico gratis</a>
           <a class="volver" href="/proyectos/">Volver a proyectos</a>
         </div>
       </div>
@@ -245,7 +245,7 @@
     <p class="footer__marca" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
   </footer>
 
-  <script src="/js/main.js?v=40" defer></script>
+  <script src="/js/main.js?v=41" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

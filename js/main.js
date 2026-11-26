@@ -251,6 +251,11 @@
 
     const centroEn = capitulos.find((c, i) => rectsCap[i].top <= vh / 2 && rectsCap[i].bottom > vh / 2);
 
+    // El pie (con cortina o sin ella) asoma en pantalla: la barra y el flotante se retiran
+    const sobrePie = pieEl
+      ? (document.documentElement.classList.contains('pie-cortina') ? total - (y + vh) < altoPie : pieEl.getBoundingClientRect().top < vh)
+      : false;
+
     // WhatsApp flotante: aparece cuando se deja la portada (que ya tiene sus
     // acciones) y se va al llegar a Contacto (que ya tiene su propio enlace de WhatsApp).
     // Toma el tema del capítulo que tiene debajo.
@@ -258,8 +263,9 @@
       const visible = menuBoton.getAttribute('aria-expanded') !== 'true'
         && (iPortada < 0 || rectsCap[iPortada].bottom < vh * 0.5)
         && (iContacto < 0 || rectsCap[iContacto].top > vh * 0.75)
-        && total - (y + vh) > altoPie * 0.6; // ni sobre el pie (la palabra gigante)
+        && !sobrePie; // ni sobre el pie (la palabra gigante)
       if (waFlotante.classList.contains('is-visible') !== visible) waFlotante.classList.toggle('is-visible', visible);
+      waFlotante.inert = !visible;
       const bajoBoton = vh - 44;
       const temaWa = temaDe(capitulos.find((c, i) => rectsCap[i].top <= bajoBoton && rectsCap[i].bottom > bajoBoton));
       if (waFlotante.dataset.tema !== temaWa) waFlotante.dataset.tema = temaWa;
@@ -270,8 +276,10 @@
     if (barraCta) {
       const visibleBarra = menuBoton.getAttribute('aria-expanded') !== 'true'
         && iPortada >= 0 && rectsCap[iPortada].bottom < vh * 0.3
-        && (iContacto < 0 || rectsCap[iContacto].top > vh);
+        && (iContacto < 0 || rectsCap[iContacto].top > vh)
+        && !sobrePie;
       if (barraCta.classList.contains('is-visible') !== visibleBarra) barraCta.classList.toggle('is-visible', visibleBarra);
+      barraCta.inert = !visibleBarra;
       const bajoBarraCta = vh - 36;
       const temaCta = temaDe(capitulos.find((c, i) => rectsCap[i].top <= bajoBarraCta && rectsCap[i].bottom > bajoBarraCta));
       if (barraCta.dataset.tema !== temaCta) barraCta.dataset.tema = temaCta;

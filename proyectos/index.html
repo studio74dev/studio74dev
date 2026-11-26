@@ -35,7 +35,7 @@
   <link rel="preload" as="image" href="/assets/img/casos/matemar/matemar-inicio-720.webp" imagesrcset="/assets/img/casos/matemar/matemar-inicio-720.webp 720w, /assets/img/casos/matemar/matemar-inicio-1440.webp 1440w" imagesizes="(min-width: 760px) 600px, calc(100vw - 56px)" fetchpriority="high" />
   <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="/css/styles.css?v=40" />
+  <link rel="stylesheet" href="/css/styles.css?v=41" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        Sin estas clases la página se ve completa y quieta. -->
@@ -98,7 +98,7 @@
       <li><a href="/#casos"><span>07</span>Caso Matemar</a></li>
       <li><a href="/#quienes"><span>08</span>Quiénes somos</a></li>
       <li><a href="/#preguntas"><span>09</span>Preguntas</a></li>
-      <li><a href="/#contacto"><span>10</span>Diagnóstico gratis</a></li>
+      <li><a href="/#contacto" data-evento="diagnostico-indice"><span>10</span>Diagnóstico gratis</a></li>
       <li><a href="/proyectos/"><span>11</span>Proyectos</a></li>
     </ol>
     <div class="indice__pie">
@@ -177,7 +177,7 @@
           <li>
             <article class="caso caso--proximo" data-revelar>
               <h3 class="caso__nombre cond">¿El próximo caso es el tuyo?</h3>
-              <a href="/#contacto" class="btn btn--accion">Pedí tu diagnóstico gratis</a>
+              <a href="/#contacto" class="btn btn--accion" data-evento="diagnostico-casos">Pedí tu diagnóstico gratis</a>
             </article>
           </li>
         </ul>
@@ -211,7 +211,7 @@
     <p class="footer__marca" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
   </footer>
 
-  <script src="/js/main.js?v=40" defer></script>
+  <script src="/js/main.js?v=41" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

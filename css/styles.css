@@ -1680,6 +1680,11 @@ select.campo:focus-visible {
     display: none;
   }
 
+  /* Reserva el alto de la barra: un ancla o un campo enfocado no queda debajo de ella */
+  html {
+    scroll-padding-bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+
   /* El pie deja lugar para que la barra no tape contenido */
   .footer {
     padding-bottom: calc(2rem + 76px + env(safe-area-inset-bottom, 0px));

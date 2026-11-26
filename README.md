@@ -137,6 +137,17 @@ En `index.html`, `#numeros`. Cada número es un `<span class="cifra__n cond" dat
 - Todo lo animado vive bajo `html.mov`, que pone el `<head>` solo si hay JavaScript y el dispositivo no pide movimiento reducido. **Sin `mov`, la página se ve completa y quieta**: es la versión accesible, no hay que mantener otra. Con `prefers-reduced-motion`, el celular, la Ruta 74 completa, el tachado y las transiciones de la barra quedan quietos.
 - Se anima solo `transform`, `opacity` y `clip-path` (la excepción es `stroke-dashoffset` de la Ruta 74), para que vaya fluido en celulares. En el celular la barra va sin desenfoque (`backdrop-filter` se recalcula en cada cuadro).
 
+### Medición
+
+No hay scripts de medición de terceros. Cada enlace a WhatsApp, a `#contacto`, a las redes y a `mailto:`, y el botón de envío del formulario, llevan `data-evento="<tipo>-<lugar>[-<detalle>]"`:
+
+- tipo: `whatsapp`, `diagnostico`, `red` o `mail`;
+- lugar: `nav`, `inicio`, `te-pasa`, `que-incluye`, `casos`, `preguntas`, `contacto`, `gracias`, `barra`, `flotante`, `indice` o `pie`.
+
+Ejemplos: `diagnostico-barra` (barra fija del celular), `whatsapp-flotante` (botón de la compu), `diagnostico-enviar` (envío del formulario), `red-instagram-pie`. Dentro de una página no se repite ningún valor; `docs/chequeo.py` (C18) lo verifica.
+
+Para medir más adelante con Cloudflare Web Analytics hay que decidir antes el script (cargarlo es una decisión pendiente, fuera de esta versión). Una vez decidido, un único `click` delegado sobre `[data-evento]` en `js/main.js` alcanza para enviar el nombre del evento.
+
 ### Canales oficiales
 
 Los únicos canales de contacto para el público (URLs exactas):
