@@ -510,7 +510,7 @@
      Nunca mostramos "mensaje enviado" si no se envió nada. */
   const form = document.getElementById('contactForm');
   if (form) {
-    /* ── Pasos: 1 de 3 (sin JS todo queda en una sola página) ── */
+    /* ── Pantallas: una pregunta por vez (sin JS todo queda en una sola página) ── */
     const progreso = form.querySelector('.form__progreso');
     const pasoTexto = document.getElementById('formPasoTexto');
     const barra = form.querySelector('.form__barra i');
@@ -518,23 +518,105 @@
     const volver = document.getElementById('formVolver');
     const seguir = document.getElementById('formSeguir');
     const pasos = Array.from(form.querySelectorAll('.form__paso'));
-    const TOTAL = pasos.length;
+    const TOTAL = pasos.length; // 6 preguntas + la revisión
     let pasoActual = 1;
+    let editando = false; // vino de "Editar" en la revisión: Seguir vuelve a la revisión
+    let atencionVista = false; // la pregunta opcional ya se pasó (con o sin respuesta)
+
+    /* Tarjeta TU DIAGNÓSTICO: se arma con lo que se va eligiendo */
+    const diag = document.getElementById('formDiag');
+    const diagToggle = document.getElementById('diagToggle');
+    const diagCuenta = document.getElementById('diagCuenta');
+    const diagAnuncio = document.getElementById('diagAnuncio');
+    const filas = diag ? Array.from(diag.querySelectorAll('.diag__ren')) : [];
+    const ETIQUETAS = {
+      costo: 'Te cuesta', rubro: 'Rubro', localidad: 'Localidad', atencion: 'Atendés hoy',
+      cuando: 'Para cuándo', name: 'Nombre', contacto: 'Contacto',
+    };
+    const FILA_DE = { whatsapp: 'contacto', email: 'contacto' };
+    const mqEscritorio = window.matchMedia('(min-width: 900px)');
+    let diagAbierta = false;
+    let ultimos = {};
+
+    const leer = () => {
+      const d = new FormData(form);
+      const t = (k) => String(d.get(k) || '').trim();
+      return {
+        costo: d.getAll('costo').join(', '),
+        rubro: t('rubro'),
+        localidad: t('localidad'),
+        atencion: d.getAll('atencion').join(', ') || (atencionVista ? 'Sin indicar' : ''),
+        cuando: t('cuando'),
+        name: t('name'),
+        contacto: [t('whatsapp'), t('email')].filter(Boolean).join(' · '),
+      };
+    };
+    const pintar = (v, animar = true) => {
+      if (!diag) return;
+      let listos = 0;
+      filas.forEach((li) => {
+        const k = li.dataset.fila;
+        const valor = v[k] || '';
+        const listo = valor !== '';
+        if (listo) listos++;
+        li.classList.toggle('is-listo', listo);
+        const el = li.querySelector('.diag__v');
+        const nuevo = listo ? valor : 'Pendiente';
+        if (el.textContent !== nuevo) {
+          el.textContent = nuevo;
+          if (animar && listo) {
+            li.classList.remove('is-nuevo');
+            void li.offsetWidth;
+            li.classList.add('is-nuevo');
+          }
+        }
+      });
+      const cuenta = `${listos} de ${filas.length}`;
+      if (diagCuenta.textContent !== cuenta) {
+        diagCuenta.textContent = cuenta;
+        if (animar) { diagCuenta.classList.remove('is-nuevo'); void diagCuenta.offsetWidth; diagCuenta.classList.add('is-nuevo'); }
+      }
+      ultimos = v;
+    };
+    const refrescar = (animar = true) => pintar(leer(), animar);
+    const estadoDiag = () => {
+      if (!diag) return;
+      const fija = mqEscritorio.matches || pasoActual === TOTAL || form.classList.contains('form--enviado');
+      const abierta = fija || diagAbierta;
+      diag.classList.toggle('diag--cerrada', !abierta);
+      diagToggle.setAttribute('aria-expanded', String(abierta));
+      diagToggle.disabled = fija;
+    };
+    const anunciar = (nombre) => {
+      if (!diagAnuncio) return;
+      const k = FILA_DE[nombre] || nombre;
+      if (!(k in ETIQUETAS)) return;
+      diagAnuncio.textContent = `Tu diagnóstico. ${ETIQUETAS[k]}: ${ultimos[k] || 'sin responder'}.`;
+    };
+
     const irA = (n, enfocar) => {
-      pasoActual = Math.min(TOTAL, Math.max(1, n));
+      const nuevo = Math.min(TOTAL, Math.max(1, n));
+      form.dataset.dir = enfocar ? (nuevo > pasoActual ? 'adelante' : 'atras') : 'ninguna';
+      pasoActual = nuevo;
+      if (pasoActual === TOTAL) editando = false;
       pasos.forEach((p) => p.classList.toggle('is-actual', Number(p.dataset.paso) === pasoActual));
       form.dataset.paso = String(pasoActual);
       if (pasoTexto) pasoTexto.textContent = `Paso ${pasoActual} de ${TOTAL}`;
       if (barra) barra.style.setProperty('--p', String(pasoActual / TOTAL));
       if (volver) volver.hidden = pasoActual === 1;
-      if (seguir) seguir.hidden = pasoActual === TOTAL;
+      if (seguir) {
+        seguir.hidden = pasoActual === TOTAL;
+        seguir.textContent = editando ? 'Volver a la revisión' : 'Seguir';
+      }
+      estadoDiag();
       if (!enfocar) return;
-      const leyenda = pasos[pasoActual - 1].querySelector(':scope > legend');
+      const leyenda = pasos[pasoActual - 1].querySelector(':scope > legend, :scope > .form__rev-titulo');
       if (leyenda) leyenda.focus({ preventScroll: false });
       // El borde superior del formulario tiene que quedar a la vista, debajo de la barra
       const tope = form.getBoundingClientRect().top - header.offsetHeight - 8;
       if (tope < 0) window.scrollBy({ top: tope, behavior: 'auto' });
     };
+    /* Cada pantalla se valida antes de avanzar: el navegador marca y enfoca el campo que falta */
     const validarPaso = () => {
       if (pasoActual === 1) {
         const cajas = Array.from(form.querySelectorAll('input[name="costo"]'));
@@ -545,30 +627,66 @@
       }
       if (pasoActual === 2) {
         const rubroEl = form.elements.rubro;
-        const loc = form.elements.localidad;
         rubroEl.setCustomValidity(rubroEl.value.trim() === '' ? 'Completá este campo.' : '');
         if (!rubroEl.checkValidity()) { rubroEl.reportValidity(); return false; }
-        if (!loc.checkValidity()) { loc.reportValidity(); return false; }
+        return true;
+      }
+      if (pasoActual === 3 || pasoActual === 5) {
+        const primero = form.querySelector(`input[name="${pasoActual === 3 ? 'localidad' : 'cuando'}"]`);
+        if (!primero.checkValidity()) { primero.reportValidity(); return false; }
+        return true;
+      }
+      if (pasoActual === 6) {
+        validarLargos();
+        const malo = ['name', 'whatsapp', 'email'].map((k) => form.elements[k]).find((c) => !c.checkValidity());
+        if (malo) { malo.reportValidity(); return false; }
         return true;
       }
       return true;
     };
+    const avanzar = () => {
+      if (!validarPaso()) return;
+      if (pasoActual === 4) { atencionVista = true; refrescar(); }
+      irA(editando ? TOTAL : pasoActual + 1, true);
+    };
     form.classList.add('form--pasos');
     if (progreso) progreso.hidden = false;
     if (nav) nav.hidden = false;
+    pasos.forEach((p) => { if (p.classList.contains('form__revision')) p.hidden = false; });
+    if (diag) {
+      diag.hidden = false;
+      refrescar(false);
+      diagToggle.addEventListener('click', () => { diagAbierta = !diagAbierta; estadoDiag(); });
+      mqEscritorio.addEventListener('change', estadoDiag);
+      filas.forEach((li) => li.querySelector('.diag__editar').addEventListener('click', () => {
+        editando = true;
+        irA(Number(li.dataset.ir), true);
+      }));
+    }
     irA(1, false);
-    if (seguir) seguir.addEventListener('click', () => { if (validarPaso()) irA(pasoActual + 1, true); });
-    if (volver) volver.addEventListener('click', () => irA(pasoActual - 1, true));
+    if (seguir) seguir.addEventListener('click', avanzar);
+    if (volver) volver.addEventListener('click', () => { editando = false; irA(pasoActual - 1, true); });
+    form.addEventListener('input', () => refrescar());
     form.addEventListener('change', (e) => {
       if (e.target.name === 'costo') form.querySelector('input[name="costo"]').setCustomValidity('');
+      refrescar();
+      anunciar(e.target.name);
     });
-    // Enter en los pasos 1 y 2 avanza, no envía
     form.addEventListener('keydown', (e) => {
-      if (e.key !== 'Enter' || pasoActual === TOTAL) return;
       const t = e.target;
-      if (t.tagName === 'INPUT' && (t.type === 'text' || t.type === 'checkbox')) {
+      if (t.tagName !== 'INPUT' || t.closest('.form__hp')) return;
+      // Enter avanza (no envía); en la revisión el envío es el botón
+      if (e.key === 'Enter' && pasoActual < TOTAL) {
         e.preventDefault();
-        if (validarPaso()) irA(pasoActual + 1, true);
+        avanzar();
+        return;
+      }
+      // Flechas entre opciones de varias respuestas (en las de una sola, ya las maneja el navegador)
+      if (t.type === 'checkbox' && ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(e.key)) {
+        const grupo = Array.from(t.closest('.opciones').querySelectorAll('input'));
+        const sig = grupo[(grupo.indexOf(t) + (e.key === 'ArrowDown' || e.key === 'ArrowRight' ? 1 : -1) + grupo.length) % grupo.length];
+        e.preventDefault();
+        sig.focus();
       }
     });
 
@@ -585,9 +703,38 @@
     const gracias = document.getElementById('formGracias');
     const graciasTitulo = document.getElementById('formGraciasTitulo');
     /* Estado final: oculta el formulario, muestra "Gracias" con la salida por WhatsApp y lleva el foco al título */
-    const mostrarGracias = () => {
+    const graciasWa = document.getElementById('formGraciasWa');
+    /* Mensaje de WhatsApp con un resumen de lo elegido (sin números) */
+    const mensajeWa = (v) => {
+      const partes = [
+        'Hola studio74dev, pedí el diagnóstico gratis desde la web.',
+        v.name && `Soy ${v.name}.`,
+        v.rubro && `Rubro: ${v.rubro}${v.localidad ? ` (${v.localidad})` : ''}.`,
+        !v.rubro && v.localidad && `Localidad: ${v.localidad}.`,
+        v.costo && `Me cuesta: ${v.costo}.`,
+        v.atencion && v.atencion !== 'Sin indicar' && `Hoy atiendo por: ${v.atencion}.`,
+        v.cuando && `Lo necesito: ${v.cuando}.`,
+      ].filter(Boolean);
+      return partes.join(' ');
+    };
+    /* Reinicia el formulario y la tarjeta */
+    const reiniciar = () => {
+      form.reset();
+      atencionVista = false;
+      editando = false;
+      refrescar(false);
+      irA(1, false);
+    };
+    const mostrarGracias = (v) => {
       if (!gracias) return;
       form.classList.add('form--enviado');
+      if (diag) {
+        pintar(v, false);
+        diag.classList.add('diag--enviada');
+        diagCuenta.textContent = 'Enviado ✓';
+        estadoDiag();
+      }
+      if (graciasWa) graciasWa.href = `${graciasWa.href.split('?')[0]}?text=${encodeURIComponent(mensajeWa(v))}`; // el número vive solo en el HTML
       gracias.hidden = false;
       if (graciasTitulo) graciasTitulo.focus();
     };
@@ -641,7 +788,7 @@
           submitBtn.innerHTML = originalBtnHTML;
         }
         if (note) note.textContent = originalNote;
-        if (reset) { form.reset(); irA(1, false); }
+        if (reset) reiniciar();
       }, ms);
     };
 
@@ -777,7 +924,11 @@
 
       validarLargos();
       if (!form.checkValidity()) {
-        form.reportValidity();
+        // Los campos de otras pantallas están ocultos: se vuelve a la primera que falta
+        const falta = Array.from(form.querySelectorAll('input, select, textarea')).find((c) => !c.checkValidity());
+        const paso = falta && falta.closest('.form__paso');
+        if (paso) irA(Number(paso.dataset.paso), true);
+        (falta || form).reportValidity();
         return;
       }
 
@@ -806,9 +957,10 @@
           note: 'Recibimos tu pedido. Te respondemos dentro de las 24 horas hábiles.',
           ms: 0,
         });
+        const resumen = leer();
         form.reset();
         irA(1, false);
-        mostrarGracias();
+        mostrarGracias(resumen);
         return;
       }
       if (note) note.textContent = originalNote;

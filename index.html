@@ -311,7 +311,7 @@
   <!-- Imagen LCP del inicio (misma que el <img> de #inicio) -->
   <link rel="preload" as="image" href="assets/img/stock/inicio-mar-1280.webp" imagesrcset="assets/img/stock/inicio-mar-640.webp 640w, assets/img/stock/inicio-mar-960.webp 960w, assets/img/stock/inicio-mar-1280.webp 1280w, assets/img/stock/inicio-mar-1920.webp 1920w" imagesizes="(min-width: 1100px) 1080px, 100vw" fetchpriority="high" />
 
-  <link rel="stylesheet" href="css/styles.css?v=38" />
+  <link rel="stylesheet" href="css/styles.css?v=39" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        "con-carga": la carga inicial (el 74 que vuela al logo), solo si hay JS, no hay
@@ -746,7 +746,7 @@
       </div>
     </section>
 
-    <!-- 09. Diagnóstico gratis: el formulario en 3 pasos (opciones como botones grandes) -->
+    <!-- 09. Diagnóstico gratis: formulario "pedido que se arma": una pregunta por pantalla -->
     <section id="contacto" class="contacto capitulo" data-tema="papel" aria-labelledby="contacto-title">
       <div class="contenedor">
         <div class="cabeza" data-escena="entrada">
@@ -755,127 +755,168 @@
           <p class="bajada">Revisamos cómo te encuentran hoy y te armamos una propuesta a medida. Sin costo y sin compromiso.</p>
         </div>
 
+        <!-- Formulario "pedido que se arma": una pregunta por pantalla y la tarjeta TU DIAGNÓSTICO que se completa en vivo
+             (lo arma js/main.js). Sin JS todo queda visible en una sola página y se envía por mailto. -->
         <form class="form" id="contactForm" action="mailto:studio74dev@gmail.com" method="post" enctype="text/plain" novalidate data-escena="entrada">
-          <div class="form__progreso" hidden>
-            <p id="formPasoTexto" class="mono" aria-live="polite">Paso 1 de 3</p>
-            <span class="form__barra"><i></i></span>
-          </div>
+          <div class="form__layout">
 
-          <fieldset class="form__paso" data-paso="1">
-            <legend tabindex="-1">¿Qué te está costando hoy?</legend>
-            <div class="opciones">
-              <label class="opcion"><input type="checkbox" name="costo" value="Consultas repetidas" /><span>Consultas repetidas</span></label>
-              <label class="opcion"><input type="checkbox" name="costo" value="Pedidos desordenados" /><span>Pedidos desordenados</span></label>
-              <label class="opcion"><input type="checkbox" name="costo" value="No aparezco en Google" /><span>No aparezco en Google</span></label>
-              <label class="opcion"><input type="checkbox" name="costo" value="No doy abasto en temporada" /><span>No doy abasto en temporada</span></label>
-              <label class="opcion"><input type="checkbox" name="costo" value="Otra" /><span>Otra</span></label>
-            </div>
-          </fieldset>
-
-          <fieldset class="form__paso" data-paso="2">
-            <legend tabindex="-1">Tu negocio</legend>
-            <div class="grupo">
-              <label class="grupo__etiqueta mono" for="rubro">Rubro</label>
-              <input type="text" id="rubro" name="rubro" class="campo" maxlength="80" aria-describedby="rubroAyuda" required />
-              <p class="grupo__ayuda" id="rubroAyuda">Por ejemplo: almacén, peluquería, hospedaje.</p>
-            </div>
-            <div class="grupo">
-              <label class="grupo__etiqueta mono" for="localidad">Localidad</label>
-              <select id="localidad" name="localidad" class="campo" required>
-                <option value="">Elegí una localidad</option>
-                <option value="Pinamar">Pinamar</option>
-                <option value="Villa Gesell">Villa Gesell</option>
-                <option value="General Juan Madariaga">General Juan Madariaga</option>
-                <option value="Cariló">Cariló</option>
-                <option value="Ostende">Ostende</option>
-                <option value="Valeria del Mar">Valeria del Mar</option>
-                <option value="Mar de las Pampas">Mar de las Pampas</option>
-                <option value="Mar del Plata">Mar del Plata</option>
-                <option value="Miramar">Miramar</option>
-                <option value="Dolores">Dolores</option>
-                <option value="San Clemente del Tuyú">San Clemente del Tuyú</option>
-                <option value="Santa Teresita">Santa Teresita</option>
-                <option value="Mar de Ajó">Mar de Ajó</option>
-                <option value="San Bernardo del Tuyú">San Bernardo del Tuyú</option>
-                <option value="Otra">Otra</option>
-              </select>
-            </div>
-            <fieldset class="grupo">
-              <legend class="grupo__etiqueta mono">¿Cómo atendés hoy? (opcional)</legend>
-              <div class="opciones">
-                <label class="opcion"><input type="checkbox" name="atencion" value="Solo en el local" /><span>Solo en el local</span></label>
-                <label class="opcion"><input type="checkbox" name="atencion" value="Instagram" /><span>Instagram</span></label>
-                <label class="opcion"><input type="checkbox" name="atencion" value="WhatsApp" /><span>WhatsApp</span></label>
-                <label class="opcion"><input type="checkbox" name="atencion" value="Ya tengo web" /><span>Ya tengo web</span></label>
+            <!-- Tarjeta en vivo: oculta sin JS; en celular va arriba y se pliega -->
+            <aside class="diag" id="formDiag" aria-label="Tu diagnóstico" hidden>
+              <button type="button" class="diag__cab" id="diagToggle" aria-expanded="false" aria-controls="diagCuerpo">
+                <span class="diag__titulo mono">Tu diagnóstico</span>
+                <span class="diag__cuenta mono" id="diagCuenta">0 de 7</span>
+                <svg class="diag__flecha" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" /></svg>
+              </button>
+              <div class="diag__cuerpo" id="diagCuerpo">
+                <div class="diag__interior">
+                  <ol class="diag__lista">
+                    <li class="diag__ren" data-fila="costo" data-ir="1"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Te cuesta</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: qué te está costando">Editar</button></li>
+                    <li class="diag__ren" data-fila="rubro" data-ir="2"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Rubro</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: rubro">Editar</button></li>
+                    <li class="diag__ren" data-fila="localidad" data-ir="3"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Localidad</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: localidad">Editar</button></li>
+                    <li class="diag__ren" data-fila="atencion" data-ir="4"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Atendés hoy</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: cómo atendés hoy">Editar</button></li>
+                    <li class="diag__ren" data-fila="cuando" data-ir="5"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Para cuándo</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: para cuándo">Editar</button></li>
+                    <li class="diag__ren" data-fila="name" data-ir="6"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Nombre</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: nombre">Editar</button></li>
+                    <li class="diag__ren" data-fila="contacto" data-ir="6"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Contacto</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: contacto">Editar</button></li>
+                  </ol>
+                </div>
               </div>
-            </fieldset>
-          </fieldset>
+              <p class="visually-hidden" id="diagAnuncio" role="status" aria-live="polite"></p>
+            </aside>
 
-          <fieldset class="form__paso" data-paso="3">
-            <legend tabindex="-1">¿Cómo te contactamos?</legend>
-            <fieldset class="grupo">
-              <legend class="grupo__etiqueta mono">¿Para cuándo lo necesitás?</legend>
-              <div class="opciones">
-                <label class="opcion"><input type="radio" name="cuando" value="Antes de la temporada" required /><span>Antes de la temporada</span></label>
-                <label class="opcion"><input type="radio" name="cuando" value="Este mes" /><span>Este mes</span></label>
-                <label class="opcion"><input type="radio" name="cuando" value="Sin apuro" /><span>Sin apuro</span></label>
+            <div class="form__main">
+              <div class="form__progreso" hidden>
+                <p id="formPasoTexto" class="mono" aria-live="polite">Paso 1 de 7</p>
+                <span class="form__barra"><i></i></span>
               </div>
-            </fieldset>
-            <div class="grupo">
-              <label class="grupo__etiqueta mono" for="name">Nombre</label>
-              <input type="text" id="name" name="name" class="campo" autocomplete="name" maxlength="80" required />
-            </div>
-            <div class="grupo">
-              <label class="grupo__etiqueta mono" for="whatsapp">WhatsApp</label>
-              <input type="tel" id="whatsapp" name="whatsapp" class="campo" inputmode="tel" autocomplete="tel" maxlength="30" aria-describedby="contactoAyuda" />
-            </div>
-            <div class="grupo">
-              <label class="grupo__etiqueta mono" for="email">Correo electrónico</label>
-              <input type="email" id="email" name="email" class="campo" autocomplete="email" maxlength="120" aria-describedby="contactoAyuda" />
-            </div>
-            <p class="grupo__ayuda" id="contactoAyuda">Dejanos tu WhatsApp o tu correo: con uno alcanza.</p>
-          </fieldset>
 
-          <div class="form__nav" hidden>
-            <button type="button" class="form__volver" id="formVolver">Volver</button>
-            <button type="button" class="btn btn--grande" id="formSeguir">Seguir</button>
-          </div>
+              <fieldset class="form__paso" data-paso="1">
+                <legend tabindex="-1">¿Qué te está costando hoy?</legend>
+                <p class="form__pista mono">Elegí todas las que quieras.</p>
+                <div class="opciones">
+                  <label class="opcion"><input type="checkbox" name="costo" value="Consultas repetidas" /><span>Consultas repetidas</span></label>
+                  <label class="opcion"><input type="checkbox" name="costo" value="Pedidos desordenados" /><span>Pedidos desordenados</span></label>
+                  <label class="opcion"><input type="checkbox" name="costo" value="No aparezco en Google" /><span>No aparezco en Google</span></label>
+                  <label class="opcion"><input type="checkbox" name="costo" value="No doy abasto en temporada" /><span>No doy abasto en temporada</span></label>
+                  <label class="opcion"><input type="checkbox" name="costo" value="Otra" /><span>Otra</span></label>
+                </div>
+              </fieldset>
 
-          <!-- Anti-spam: honeypot invisible (los bots suelen completarlo) -->
-          <div class="form__hp" aria-hidden="true">
-            <label for="company">Empresa (no completar)</label>
-            <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
-            <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true" autocomplete="off" />
-          </div>
+              <fieldset class="form__paso" data-paso="2">
+                <legend tabindex="-1">¿Cuál es tu rubro?</legend>
+                <div class="grupo">
+                  <label class="grupo__etiqueta mono" for="rubro">Rubro</label>
+                  <input type="text" id="rubro" name="rubro" class="campo" maxlength="80" aria-describedby="rubroAyuda" required />
+                  <p class="grupo__ayuda" id="rubroAyuda">Por ejemplo: almacén, peluquería, hospedaje.</p>
+                </div>
+              </fieldset>
 
-          <div class="form__pie">
-            <button type="submit" class="btn btn--accion btn--primary" data-evento="diagnostico-enviar">Pedir mi diagnóstico
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button>
-            <p class="confianza">Gratis y sin compromiso. Presupuesto por escrito.</p>
-            <p class="form__note" role="status" aria-live="polite">Respondemos en menos de 24 horas hábiles. Tus datos se
-              usan únicamente para responder la consulta.</p>
-          </div>
-          <!-- Si el envío falla, el visitante elige cómo seguir (lo muestra js/main.js) -->
-          <div class="form__alternativas" id="formAlternativas" hidden>
-            <p class="form__aviso" id="formAviso" role="alert" tabindex="-1"></p>
-            <div class="form__acciones">
-              <button type="button" class="btn btn--borde" id="formReintentar">Reintentar</button>
-              <button type="button" class="btn btn--borde" id="formCopiar">Copiar correo</button>
-              <a class="btn btn--borde" id="formGmail" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=studio74dev@gmail.com"
-                target="_blank" rel="noopener noreferrer" aria-label="Abrir en Gmail (pestaña nueva)">Abrir en Gmail</a>
+              <fieldset class="form__paso" data-paso="3">
+                <legend tabindex="-1">¿En qué localidad estás?</legend>
+                <div class="opciones opciones--denso">
+                  <label class="opcion"><input type="radio" name="localidad" value="Pinamar" required /><span>Pinamar</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Villa Gesell" /><span>Villa Gesell</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="General Juan Madariaga" /><span>General Juan Madariaga</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Cariló" /><span>Cariló</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Ostende" /><span>Ostende</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Valeria del Mar" /><span>Valeria del Mar</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Mar de las Pampas" /><span>Mar de las Pampas</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Mar del Plata" /><span>Mar del Plata</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Miramar" /><span>Miramar</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Dolores" /><span>Dolores</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="San Clemente del Tuyú" /><span>San Clemente del Tuyú</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Santa Teresita" /><span>Santa Teresita</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Mar de Ajó" /><span>Mar de Ajó</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="San Bernardo del Tuyú" /><span>San Bernardo del Tuyú</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Otra" /><span>Otra</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="form__paso" data-paso="4">
+                <legend tabindex="-1">¿Cómo atendés hoy?</legend>
+                <p class="form__pista mono">Opcional. Elegí las que uses.</p>
+                <div class="opciones">
+                  <label class="opcion"><input type="checkbox" name="atencion" value="Solo en el local" /><span>Solo en el local</span></label>
+                  <label class="opcion"><input type="checkbox" name="atencion" value="Instagram" /><span>Instagram</span></label>
+                  <label class="opcion"><input type="checkbox" name="atencion" value="WhatsApp" /><span>WhatsApp</span></label>
+                  <label class="opcion"><input type="checkbox" name="atencion" value="Ya tengo web" /><span>Ya tengo web</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="form__paso" data-paso="5">
+                <legend tabindex="-1">¿Para cuándo lo necesitás?</legend>
+                <div class="opciones">
+                  <label class="opcion"><input type="radio" name="cuando" value="Antes de la temporada" required /><span>Antes de la temporada</span></label>
+                  <label class="opcion"><input type="radio" name="cuando" value="Este mes" /><span>Este mes</span></label>
+                  <label class="opcion"><input type="radio" name="cuando" value="Sin apuro" /><span>Sin apuro</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="form__paso" data-paso="6">
+                <legend tabindex="-1">¿Cómo te contactamos?</legend>
+                <div class="grupo">
+                  <label class="grupo__etiqueta mono" for="name">Nombre</label>
+                  <input type="text" id="name" name="name" class="campo" autocomplete="name" maxlength="80" required />
+                </div>
+                <div class="grupo">
+                  <label class="grupo__etiqueta mono" for="whatsapp">WhatsApp</label>
+                  <input type="tel" id="whatsapp" name="whatsapp" class="campo" inputmode="tel" autocomplete="tel" maxlength="30" aria-describedby="contactoAyuda" />
+                </div>
+                <div class="grupo">
+                  <label class="grupo__etiqueta mono" for="email">Correo electrónico</label>
+                  <input type="email" id="email" name="email" class="campo" autocomplete="email" maxlength="120" aria-describedby="contactoAyuda" />
+                </div>
+                <p class="grupo__ayuda" id="contactoAyuda">Dejanos tu WhatsApp o tu correo: con uno alcanza.</p>
+              </fieldset>
+
+              <!-- Pantalla final (solo con JS): la tarjeta completa, con cada renglón editable, y el botón de enviar -->
+              <div class="form__paso form__revision" data-paso="7" hidden>
+                <h3 class="form__rev-titulo" tabindex="-1">Revisá tu diagnóstico</h3>
+                <p class="form__pista mono">Tocá “Editar” en cualquier renglón para cambiarlo.</p>
+              </div>
+
+              <div class="form__nav" hidden>
+                <button type="button" class="form__volver" id="formVolver">Volver</button>
+                <button type="button" class="btn btn--grande" id="formSeguir">Seguir</button>
+              </div>
+
+              <!-- Anti-spam: honeypot invisible (los bots suelen completarlo) -->
+              <div class="form__hp" aria-hidden="true">
+                <label for="company">Empresa (no completar)</label>
+                <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+                <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true" autocomplete="off" />
+              </div>
+
+              <div class="form__pie">
+                <button type="submit" class="btn btn--accion btn--primary" data-evento="diagnostico-enviar">Pedir mi diagnóstico
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button>
+                <p class="confianza">Gratis y sin compromiso. Presupuesto por escrito.</p>
+                <p class="form__note" role="status" aria-live="polite">Respondemos en menos de 24 horas hábiles. Tus datos se
+                  usan únicamente para responder la consulta.</p>
+              </div>
+              <!-- Si el envío falla, el visitante elige cómo seguir (lo muestra js/main.js) -->
+              <div class="form__alternativas" id="formAlternativas" hidden>
+                <p class="form__aviso" id="formAviso" role="alert" tabindex="-1"></p>
+                <div class="form__acciones">
+                  <button type="button" class="btn btn--borde" id="formReintentar">Reintentar</button>
+                  <button type="button" class="btn btn--borde" id="formCopiar">Copiar correo</button>
+                  <a class="btn btn--borde" id="formGmail" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=studio74dev@gmail.com"
+                    target="_blank" rel="noopener noreferrer" aria-label="Abrir en Gmail (pestaña nueva)">Abrir en Gmail</a>
+                </div>
+                <p class="form__directo">Correo del estudio: <span class="form__correo" id="formCorreo">studio74dev@gmail.com</span>
+                  · <a id="formPrograma" href="mailto:studio74dev@gmail.com">Usar el programa de correo</a></p>
+                <p class="form__copiado" id="formCopiado" role="status" aria-live="polite"></p>
+              </div>
+              <!-- Estado final: lo muestra js/main.js solo con un envío exitoso (o simulado). El enlace de WhatsApp
+                   lleva un resumen de lo elegido (lo arma js/main.js); este href es el respaldo -->
+              <div class="form__gracias" id="formGracias" role="status" hidden>
+                <h3 class="cond" id="formGraciasTitulo" tabindex="-1">Gracias. Recibimos tu pedido.</h3>
+                <p>Te respondemos dentro de las 24 horas hábiles.</p>
+                <a class="btn btn--borde" id="formGraciasWa" href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" data-evento="whatsapp-gracias" target="_blank" rel="noopener noreferrer" aria-label="Seguir por WhatsApp (se abre en una pestaña nueva)">Seguir por WhatsApp</a>
+              </div>
+              <noscript><p class="form__note">Sin JavaScript, el formulario abre tu aplicación de correo. También podés
+                  escribirnos directamente a studio74dev@gmail.com.</p></noscript>
             </div>
-            <p class="form__directo">Correo del estudio: <span class="form__correo" id="formCorreo">studio74dev@gmail.com</span>
-              · <a id="formPrograma" href="mailto:studio74dev@gmail.com">Usar el programa de correo</a></p>
-            <p class="form__copiado" id="formCopiado" role="status" aria-live="polite"></p>
           </div>
-          <!-- Estado final: lo muestra js/main.js solo con un envío exitoso (o simulado) -->
-          <div class="form__gracias" id="formGracias" role="status" hidden>
-            <h3 class="cond" id="formGraciasTitulo" tabindex="-1">Gracias. Recibimos tu pedido.</h3>
-            <p>Te respondemos dentro de las 24 horas hábiles.</p>
-            <a class="btn btn--borde" href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" data-evento="whatsapp-gracias" target="_blank" rel="noopener noreferrer" aria-label="Seguir por WhatsApp (se abre en una pestaña nueva)">Seguir por WhatsApp</a>
-          </div>
-          <noscript><p class="form__note">Sin JavaScript, el formulario abre tu aplicación de correo. También podés
-              escribirnos directamente a studio74dev@gmail.com.</p></noscript>
         </form>
 
         <p class="contacto__wa" data-escena="entrada">¿Preferís hablar ya? <a href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" data-evento="whatsapp-contacto" target="_blank" rel="noopener noreferrer" aria-label="Escribinos por WhatsApp (se abre en una pestaña nueva)">Escribinos por WhatsApp</a>.</p>
@@ -915,7 +956,7 @@
     <p class="footer__marca" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
   </footer>
 
-  <script src="js/main.js?v=38" defer></script>
+  <script src="js/main.js?v=39" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

@@ -79,6 +79,7 @@
   --radio: 0;
   --radio-s: 0;
   --ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --spring: cubic-bezier(0.34, 1.32, 0.64, 1);
   --ease-io: cubic-bezier(0.7, 0, 0.2, 1);
   --p: 1;
 
@@ -1429,7 +1430,7 @@ select.campo:focus-visible {
   display: none;
 }
 
-.form--pasos[data-paso='3'] .form__pie {
+.form--pasos[data-paso='7'] .form__pie {
   display: flex;
 }
 
@@ -2850,7 +2851,7 @@ html.mov .quienes__video.hero__video--activo {
 .contacto .form {
   display: grid;
   gap: 1.75rem;
-  max-width: 860px;
+  max-width: none;
   margin-top: clamp(2rem, 5vw, 3rem);
   padding: 0;
   border-radius: 0;
@@ -3022,6 +3023,352 @@ html.mov .quienes__video.hero__video--activo {
 .form--enviado .form__pie,
 .form--enviado .form__alternativas {
   display: none !important;
+}
+
+/* ── Formulario "pedido que se arma" ─────────────── */
+/* Sin JS todo queda en una columna; con JS (.form--pasos) la tarjeta va arriba en celular
+   y al costado, pegada, desde 900 px. */
+.form__layout {
+  display: grid;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+.form__main {
+  display: grid;
+  gap: 2.5rem;
+  min-width: 0;
+  max-width: 860px;
+}
+
+.form--pasos .form__main {
+  gap: 1.75rem;
+}
+
+.form__pista {
+  margin-top: -0.5rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--texto-2);
+}
+
+.form__rev-titulo {
+  margin-bottom: 1.25rem;
+  font-family: var(--font);
+  font-stretch: 62%;
+  font-weight: 900;
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+.form__rev-titulo:focus {
+  outline: none;
+}
+
+.form__revision[hidden] {
+  display: none;
+}
+
+/* Opciones: presión con escala leve y resorte suave */
+.opcion span {
+  transition: background-color 0.2s var(--ease), color 0.2s var(--ease), box-shadow 0.2s var(--ease), transform 0.25s var(--spring);
+}
+
+.opcion:active span {
+  transform: scale(0.97);
+}
+
+.opciones--denso {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.opciones--denso .opcion span {
+  min-height: 56px;
+  padding: 0.5rem 0.9rem;
+  font-size: 1rem;
+}
+
+@media (max-width: 559px) {
+  .form--pasos .opcion span {
+    min-height: 56px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .opciones--denso {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Entre preguntas: deslizamiento + fundido corto (solo con movimiento permitido) */
+@keyframes paso-adelante {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes paso-atras {
+  from { opacity: 0; transform: translateX(-24px); }
+  to { opacity: 1; transform: none; }
+}
+
+html.mov .form[data-dir='adelante'] .form__paso.is-actual {
+  animation: paso-adelante 0.28s var(--ease) both;
+}
+
+html.mov .form[data-dir='atras'] .form__paso.is-actual {
+  animation: paso-atras 0.28s var(--ease) both;
+}
+
+/* Tarjeta TU DIAGNÓSTICO */
+.diag {
+  min-width: 0;
+  border: 1px solid var(--texto);
+  background: color-mix(in srgb, var(--fondo) 45%, #fff);
+  color: var(--texto);
+}
+
+.diag[hidden] {
+  display: none;
+}
+
+.diag__cab {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 1rem;
+  border: 0;
+  background: var(--tinta);
+  color: var(--papel);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.diag__cab:disabled {
+  color: var(--papel);
+  cursor: default;
+}
+
+.diag__cab:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: 3px;
+}
+
+.diag__titulo,
+.diag__cuenta {
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.diag__titulo {
+  flex: 1;
+}
+
+html.mov .diag__cuenta.is-nuevo {
+  animation: diag-pop 0.3s var(--spring) both;
+}
+
+.diag__flecha {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.28s var(--ease);
+}
+
+.diag:not(.diag--cerrada) .diag__flecha {
+  transform: rotate(180deg);
+}
+
+.diag__cab:disabled .diag__flecha {
+  display: none;
+}
+
+.diag__cuerpo {
+  display: grid;
+  grid-template-rows: 1fr;
+  transition: grid-template-rows 0.28s var(--ease), visibility 0s;
+}
+
+.diag__interior {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.diag--cerrada .diag__cuerpo {
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition: grid-template-rows 0.28s var(--ease), visibility 0s 0.28s;
+}
+
+.diag__lista {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.diag__ren {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr) auto;
+  grid-template-areas: 'm k e' 'm v e';
+  column-gap: 0.75rem;
+  align-items: center;
+  padding: 0.55rem 1rem;
+  border-top: 1px dashed var(--linea-fuerte);
+}
+
+.diag__ren:first-child {
+  border-top: 0;
+}
+
+.diag__marca {
+  grid-area: m;
+  display: grid;
+  place-items: center;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.diag__marca i {
+  grid-area: 1 / 1;
+  font-style: normal;
+}
+
+.diag__p {
+  color: var(--texto-2);
+  font-size: 1.4rem;
+  line-height: 1;
+  transition: opacity 0.2s var(--ease);
+}
+
+.diag__c {
+  color: var(--azul);
+  opacity: 0;
+  transform: scale(0.4);
+  transition: opacity 0.2s var(--ease), transform 0.28s var(--spring);
+}
+
+.diag__ren.is-listo .diag__p {
+  opacity: 0;
+}
+
+.diag__ren.is-listo .diag__c {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.diag__k {
+  grid-area: k;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--texto-2);
+}
+
+.diag__v {
+  grid-area: v;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.25;
+  color: var(--texto-2);
+}
+
+.diag__ren.is-listo .diag__v {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--texto);
+}
+
+@keyframes diag-v {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes diag-pop {
+  from { transform: scale(0.8); }
+  to { transform: scale(1); }
+}
+
+html.mov .diag__ren.is-nuevo .diag__v {
+  animation: diag-v 0.28s var(--ease) both;
+}
+
+/* Revisión: cada renglón se edita */
+.diag__editar {
+  grid-area: e;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0 0.25rem;
+  border: 0;
+  background: none;
+  color: var(--texto);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.diag__editar:hover {
+  color: var(--azul);
+}
+
+.diag__editar:focus-visible {
+  outline: 3px solid var(--foco);
+  outline-offset: -3px;
+}
+
+.form[data-paso='7']:not(.form--enviado) .diag__editar {
+  display: inline-flex;
+}
+
+.form[data-paso='7']:not(.form--enviado) .diag {
+  border-color: var(--azul);
+  border-width: 2px;
+}
+
+.diag--enviada .diag__cab {
+  background: var(--azul);
+}
+
+@media (min-width: 900px) {
+  .form--pasos .form__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
+    gap: clamp(2rem, 5vw, 4.5rem);
+  }
+
+  .form--pasos .diag {
+    grid-column: 2;
+    grid-row: 1;
+    position: sticky;
+    top: calc(var(--header-height) + 1.5rem);
+  }
+
+  .form--pasos .form__main {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .diag__ren {
+    padding-block: 0.7rem;
+  }
 }
 
 .contacto__wa {
