@@ -311,7 +311,7 @@
   <!-- Imagen LCP del inicio (misma que el <img> de #inicio) -->
   <link rel="preload" as="image" href="assets/img/stock/inicio-mar-1280.webp" imagesrcset="assets/img/stock/inicio-mar-640.webp 640w, assets/img/stock/inicio-mar-960.webp 960w, assets/img/stock/inicio-mar-1280.webp 1280w, assets/img/stock/inicio-mar-1920.webp 1920w" imagesizes="(min-width: 1100px) 1080px, 100vw" fetchpriority="high" />
 
-  <link rel="stylesheet" href="css/styles.css?v=43" />
+  <link rel="stylesheet" href="css/styles.css?v=44" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        "con-carga": la carga inicial (el 74 que vuela al logo), solo si hay JS, no hay
@@ -339,7 +339,7 @@
 <body>
 
   <!-- Carga inicial: decorativa, solo con html.con-carga (ver el <head>). Se va sola a los 2,5 s. -->
-  <div class="carga" id="carga" aria-hidden="true"><p class="carga__palabra cond"><span class="carga__m carga__lado"><span>studio</span></span><span class="carga__m carga__centro"><span class="carga__74">74</span></span><span class="carga__m carga__lado"><span>dev</span></span></p></div>
+  <div class="carga" id="carga" aria-hidden="true"><p class="carga__palabra cond"><span class="carga__m carga__lado"><span>STUDIO</span></span><span class="carga__m carga__centro"><span><svg class="carga__74" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor"><path d="M7.7 10.9H64L13 88" stroke-width="6.2" /><path d="M7.7 90.4H18" stroke-width="6.4" /><path d="M90 7.7V78" stroke-width="5.5" /><path d="M90 19L52 59.5M50 60.5H90" stroke-width="4.2" /></g><rect class="nav__logo-punto" x="85" y="86" width="8" height="8" /></svg></span></span><span class="carga__m carga__lado"><span>DEV</span></span></p></div>
 
   <a class="saltar" href="#contenido">Saltar al contenido</a>
 
@@ -958,7 +958,7 @@
     <p class="footer__marca" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
   </footer>
 
-  <script src="js/main.js?v=43" defer></script>
+  <script src="js/main.js?v=44" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

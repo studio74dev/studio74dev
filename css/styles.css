@@ -2132,7 +2132,8 @@ html.con-carga .carga {
   width: 100%;
   font-size: clamp(64px, 13vw, 200px);
   line-height: 0.86;
-  text-transform: none; /* minúscula: studio / 74 / dev */
+  font-weight: 900;
+  text-transform: uppercase; /* STUDIO / isotipo 74 / DEV */
   white-space: nowrap;
 }
 
@@ -2164,6 +2165,13 @@ html.con-carga .carga {
 
 .carga__lado:last-child > span {
   animation-delay: 0.2s;
+}
+
+/* El 74 es el mismo isotipo SVG del logo: vuela y llega idéntico */
+.carga__74 {
+  display: block;
+  width: 0.86em;
+  height: 0.86em;
 }
 
 /* Se cierran los costados: queda el 74 solo, en el centro */
