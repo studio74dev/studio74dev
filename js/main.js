@@ -902,13 +902,13 @@
       payload.append('from_name', 'studio74dev · Web');
       payload.append('Nombre', data.get('name') || '');
       payload.append('WhatsApp', data.get('whatsapp') || '');
-      payload.append('Correo', data.get('email') || '');
+      payload.append('Correo', (data.get('email') || '').trim() || 'No indicó');
       if ((data.get('email') || '').trim() !== '') payload.append('replyto', data.get('email'));
-      payload.append('Qué le está costando', data.getAll('costo').join(', '));
+      payload.append('Que le esta costando', data.getAll('costo').join(', '));
       payload.append('Rubro', data.get('rubro') || '');
       payload.append('Localidad', data.get('localidad') || '');
-      payload.append('Cómo atiende hoy', data.getAll('atencion').join(', ') || 'No indicó');
-      payload.append('Para cuándo', data.get('cuando') || '');
+      payload.append('Como atiende hoy', data.getAll('atencion').join(', ') || 'No indicó');
+      payload.append('Para cuando', data.get('cuando') || '');
       payload.append('botcheck', ''); // vacío: una persona nunca marca la casilla
 
       const ctrl = new AbortController();
