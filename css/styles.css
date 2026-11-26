@@ -4004,6 +4004,33 @@ html.mov .diag__ren.is-nuevo .diag__v {
     pointer-events: none;
   }
 
+  /* Ola que avanza con el scroll: la sección actual se va cubriendo según cuánto se leyó
+     (--avance, de 0 a 1, lo escribe main.js). Una copia del texto en color de fondo se recorta
+     al mismo ancho, así las letras cambian de color justo donde pasa la ola. */
+  .nav__links a.is-actual::before {
+    transform: translateX(calc((var(--avance, 0) - 1) * 100%));
+  }
+
+  .nav__links a::after {
+    content: attr(data-texto);
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding-inline: 0.75rem;
+    color: var(--fondo);
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.55s var(--ease-salida);
+    pointer-events: none;
+  }
+
+  .nav__links a.is-actual::after {
+    clip-path: inset(0 calc((1 - var(--avance, 0)) * 100%) 0 0);
+  }
+
+  .nav__links a:focus-visible::after {
+    clip-path: inset(0);
+  }
   .nav__links a:focus-visible {
     color: var(--fondo);
   }
@@ -4022,6 +4049,10 @@ html.mov .diag__ren.is-nuevo .diag__v {
     transform: translateX(0);
   }
 
+  .nav__links a:hover::after {
+    clip-path: inset(0);
+  }
+
   .mov .nav__menu[aria-expanded='false']:hover .nav__menu-icono i:first-child {
     animation: ola-mece-a 0.9s var(--ease-io) infinite;
   }
@@ -4033,7 +4064,8 @@ html.mov .diag__ren.is-nuevo .diag__v {
 
 @media (prefers-reduced-motion: reduce) {
   .nav__links a,
-  .nav__links a::before {
+  .nav__links a::before,
+  .nav__links a::after {
     transition: none;
   }
 }

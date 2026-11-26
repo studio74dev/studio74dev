@@ -123,6 +123,8 @@
   if (sinTimeline) document.documentElement.classList.add('sin-vista');
   const capitulos = Array.from(document.querySelectorAll('.capitulo[data-tema]'));
   const linksBarra = Array.from(document.querySelectorAll('.nav__links a'));
+  // Copia del texto para la capa que se pinta sobre la ola (ver CSS, "ola que avanza con el scroll")
+  linksBarra.forEach((a) => { a.dataset.texto = a.textContent.trim(); });
   const waFlotante = document.getElementById('waFlotante');
   const barraCta = document.getElementById('barraCta');
   if (barraCta) barraCta.hidden = false;
@@ -290,6 +292,14 @@
     linksBarra.forEach((a) => {
       const es = a.getAttribute('href') === id;
       a.classList.toggle('is-actual', es);
+      // Cuánto se recorrió de esa sección (0 a 1): la ola de la barra la va cubriendo
+      if (es) {
+        const r = rectsCap[capitulos.indexOf(centroEn)];
+        const avance = Math.min(1, Math.max(0, (vh / 2 - r.top) / Math.max(1, r.height)));
+        a.style.setProperty('--avance', avance.toFixed(3));
+      } else {
+        a.style.removeProperty('--avance');
+      }
       if (es) a.setAttribute('aria-current', 'true');
       else a.removeAttribute('aria-current');
     });
