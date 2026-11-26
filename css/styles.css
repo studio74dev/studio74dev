@@ -99,6 +99,7 @@
   --ease: var(--ease-salida);
   --spring: var(--ease-resorte);
   --ease-io: cubic-bezier(0.7, 0, 0.2, 1);
+  --ease-ola: cubic-bezier(0.45, 0, 0.2, 1); /* ola de los desplegables: arranca y frena suave */
   --p: 1;
 
   /* Escala tipográfica */
@@ -3905,7 +3906,7 @@ html.mov .diag__ren.is-nuevo .diag__v {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  transition: color var(--dur-3) var(--ease-salida), padding-inline var(--dur-3) var(--ease-salida);
+  transition: color 0.8s var(--ease-ola), padding-inline 0.9s var(--ease-ola);
 }
 
 .pregunta summary::before,
@@ -3920,7 +3921,7 @@ html.mov .diag__ren.is-nuevo .diag__v {
   -webkit-mask: linear-gradient(#000, #000) left / calc(100% - 39px) 100% no-repeat, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H14C30 12 30 38 16 50C2 62 2 88 18 100H0Z'/%3E%3C/svg%3E") right / 40px 100% no-repeat;
   mask: linear-gradient(#000, #000) left / calc(100% - 39px) 100% no-repeat, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H14C30 12 30 38 16 50C2 62 2 88 18 100H0Z'/%3E%3C/svg%3E") right / 40px 100% no-repeat;
   transform: translateX(-100%);
-  transition: transform 0.6s var(--ease-salida);
+  transition: transform 1.1s var(--ease-ola);
   pointer-events: none;
 }
 
