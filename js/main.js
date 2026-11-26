@@ -58,6 +58,29 @@
     else programar(performance.now());
   })();
 
+  /* ── Enunciados (frases grandes, estilo nk.studio): se encienden palabra por palabra ── */
+  /* Cada palabra va en un span con --p (su posición de 0 a 1). Con animation-timeline la
+  enciende el scroll (CSS); sin soporte, un IntersectionObserver pone .visto y van en cascada.
+  El texto no cambia para lectores de pantalla (solo se envuelven las palabras). */
+  document.querySelectorAll('.enunciado').forEach((el) => {
+    const palabras = el.textContent.trim().split(/\s+/);
+    el.textContent = '';
+    palabras.forEach((w, i) => {
+      const s = document.createElement('span');
+      s.className = 'enunciado__p';
+      s.style.setProperty('--p', (i / Math.max(1, palabras.length - 1)).toFixed(3));
+      s.style.setProperty('--i', i);
+      s.textContent = w;
+      el.append(s, i < palabras.length - 1 ? ' ' : '');
+    });
+    if (!CSS.supports('animation-timeline: view()') && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((ents) => ents.forEach((en) => {
+        if (en.isIntersecting) { en.target.classList.add('visto'); io.unobserve(en.target); }
+      }), { rootMargin: '0px 0px -25% 0px' });
+      io.observe(el);
+    }
+  });
+
   // Las entradas de scroll solo esconden texto si este script corrió (html.mov.revelar)
   document.documentElement.classList.add('revelar');
 
@@ -78,6 +101,19 @@
 
   const root = document.documentElement;
 
+  /* ── Scroll suave (Lenis) ─────────────────────────── */
+  /* Solo con mouse (rueda/trackpad) y con movimiento permitido. En el celular el scroll táctil
+  queda nativo (syncTouch apagado). Corre sobre el scroll nativo: sticky, anclas y animation-
+  timeline siguen funcionando. Los enlaces internos los anima Lenis, respetando la barra. */
+  let lenis = null;
+  if (mov && window.Lenis && window.matchMedia('(pointer: fine)').matches) {
+    lenis = new window.Lenis({
+      autoRaf: true,
+      lerp: 0.09,
+      anchors: { offset: -(parseFloat(getComputedStyle(root).getPropertyValue('--header-height')) || 64) },
+    });
+  }
+
   /* ── Índice a pantalla completa ──────────────────── */
   const header = document.getElementById('header');
   const menuBoton = document.getElementById('menuBoton');
@@ -90,6 +126,7 @@
     indice.classList.remove('abierto');
     header.dataset.tema = temaAntes;
     document.body.style.overflow = '';
+    if (lenis) lenis.start();
     setTimeout(() => { indice.hidden = true; }, mov ? 600 : 0);
     pedir(); // el WhatsApp flotante vuelve si corresponde
     if (volverAlBoton) menuBoton.focus();
@@ -101,6 +138,7 @@
     header.dataset.tema = 'tinta';
     menuBoton.setAttribute('aria-expanded', 'true');
     document.body.style.overflow = 'hidden';
+    if (lenis) lenis.stop();
     pedir(); // el WhatsApp flotante se oculta mientras el índice está abierto
     requestAnimationFrame(() => requestAnimationFrame(() => indice.classList.add('abierto')));
     indice.querySelector('a').focus({ preventScroll: true });

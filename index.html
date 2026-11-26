@@ -311,7 +311,7 @@
   <!-- Imagen LCP del inicio (misma que el <img> de #inicio) -->
   <link rel="preload" as="image" href="assets/img/stock/inicio-mar-1280.webp" imagesrcset="assets/img/stock/inicio-mar-640.webp 640w, assets/img/stock/inicio-mar-960.webp 960w, assets/img/stock/inicio-mar-1280.webp 1280w, assets/img/stock/inicio-mar-1920.webp 1920w" imagesizes="(min-width: 1100px) 1080px, 100vw" fetchpriority="high" />
 
-  <link rel="stylesheet" href="css/styles.css?v=56" />
+  <link rel="stylesheet" href="css/styles.css?v=57" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        "con-carga": la carga inicial (el 74 que vuela al logo), solo si hay JS, no hay
@@ -375,7 +375,7 @@
   </header>
 
   <!-- Índice a pantalla completa -->
-  <div class="indice" id="indice" data-tema="tinta" hidden>
+  <div class="indice" id="indice" data-lenis-prevent data-tema="tinta" hidden>
     <ol class="indice__lista">
       <li><a href="#inicio"><span>01</span>Inicio</a></li>
       <li><a href="#servicios"><span>02</span>Servicios</a></li>
@@ -543,7 +543,7 @@
             <span class="cifra__txt mono">fichas sin reclamar</span>
           </li>
         </ul>
-        <p class="numeros__frase" data-revelar>En octubre relevamos 175 comercios de la costa: 54 tenían su ficha de Google sin reclamar.</p>
+        <p class="numeros__frase enunciado">En octubre relevamos 175 comercios de la costa: 54 tenían su ficha de Google sin reclamar.</p>
       </div>
     </section>
 
@@ -676,7 +676,7 @@
       <div class="contenedor quienes__contenido">
         <p class="rotulo mono">05 · Quiénes somos</p>
         <h2 id="quienes-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Cuatro devs.</span></span> <span class="linea acento"><span style="--i:1">Una ruta.</span></span></h2>
-        <p class="quienes__texto">Tres de General Madariaga y uno de Pinamar, unidos por la Ruta 74.</p>
+        <p class="quienes__texto enunciado">Tres de General Madariaga y uno de Pinamar, unidos por la Ruta 74.</p>
         <ul class="equipo">
           <li class="persona">
             <p class="persona__nombre mono">Mariano</p>
@@ -960,7 +960,9 @@
     <p class="footer__marca" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
   </footer>
 
-  <script src="js/main.js?v=56" defer></script>
+  <!-- Lenis 1.3.29 (MIT, darkroom.engineering): scroll suave con la rueda; local, ver assets/vendor/LICENSE-lenis.txt -->
+  <script src="assets/vendor/lenis.min.js?v=1" defer></script>
+  <script src="js/main.js?v=57" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
