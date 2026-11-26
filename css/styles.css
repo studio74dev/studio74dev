@@ -790,6 +790,7 @@ b {
   z-index: 2;
   width: var(--ancho);
   margin: 0 auto;
+  container-type: inline-size; /* el h1 se mide contra este ancho */
 }
 
 .hero__contenido .rotulo {
@@ -798,13 +799,17 @@ b {
   color: var(--acento-texto);
 }
 
+/* El tamaño nunca supera lo que entra en el ancho del bloque: así "ENCONTRADO" no se parte
+   en pantallas anchas (antes el tope de 780 px quedaba corto para la letra de 168 px) */
 .hero__title {
-  font-size: var(--t-h1);
+  font-size: min(var(--t-h1), 19cqi);
   line-height: 0.86;
+  overflow-wrap: normal;
 }
 
 .hero__title .linea {
   display: block;
+  white-space: nowrap;
 }
 
 .resalte {
