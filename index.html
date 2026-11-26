@@ -311,7 +311,7 @@
   <!-- Imagen LCP del inicio (misma que el <img> de #inicio) -->
   <link rel="preload" as="image" href="assets/img/stock/inicio-mar-1280.webp" imagesrcset="assets/img/stock/inicio-mar-640.webp 640w, assets/img/stock/inicio-mar-960.webp 960w, assets/img/stock/inicio-mar-1280.webp 1280w, assets/img/stock/inicio-mar-1920.webp 1920w" imagesizes="(min-width: 1100px) 1080px, 100vw" fetchpriority="high" />
 
-  <link rel="stylesheet" href="css/styles.css?v=48" />
+  <link rel="stylesheet" href="css/styles.css?v=50" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        "con-carga": la carga inicial (el 74 que vuela al logo), solo si hay JS, no hay
@@ -507,8 +507,9 @@
             </div>
           </li>
           <li class="tarjeta" data-tema="tinta" style="--i:3">
-            <figure class="tarjeta__foto foto foto--pendiente">
-              <p>[FOTO: escena 4, local lleno en temporada en la costa]</p>
+            <figure class="tarjeta__foto foto">
+              <img src="assets/img/stock/temporada-480.webp" srcset="assets/img/stock/temporada-480.webp 480w, assets/img/stock/temporada-960.webp 960w" sizes="(min-width: 900px) 40vw, 90vw" width="480" height="360" loading="lazy" decoding="async" alt="Terraza de un restaurante frente al mar, llena de gente en verano">
+              <figcaption class="foto__nota">Foto ilustrativa</figcaption>
             </figure>
             <div class="tarjeta__texto">
               <span class="tarjeta__n mono">Problema 04 · Temporada</span>
@@ -570,8 +571,9 @@
             <p>Lo ves avanzar y lo probás antes de la entrega.</p>
           </li>
         </ol>
-        <figure class="foto foto--pendiente foto--ancha como__foto" data-revelar="imagen">
-          <p>[FOTO: escena 5, dos personas conversando en un mostrador]</p>
+        <figure class="foto foto--ancha como__foto" data-revelar="imagen">
+          <img src="assets/img/stock/mostrador-charla-960.webp" srcset="assets/img/stock/mostrador-charla-960.webp 960w, assets/img/stock/mostrador-charla-1920.webp 1920w" sizes="(min-width: 900px) 100vw, 90vw" width="960" height="540" loading="lazy" decoding="async" alt="Dos personas conversando en el mostrador de un local">
+          <figcaption class="foto__nota">Foto ilustrativa</figcaption>
         </figure>
 
         <h3 class="subtitulo cond" data-revelar>Sin letra chica.</h3>
@@ -958,7 +960,7 @@
     <p class="footer__marca" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
   </footer>
 
-  <script src="js/main.js?v=48" defer></script>
+  <script src="js/main.js?v=50" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

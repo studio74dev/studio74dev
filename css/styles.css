@@ -2752,8 +2752,25 @@ html.mov .servicios:focus-within .franja__pista {
 }
 
 .como__foto {
+  position: relative;
   max-width: 26rem;
   margin: clamp(2rem, 5vw, 3rem) 0 0;
+  aspect-ratio: auto;
+}
+
+.como__foto img {
+  aspect-ratio: 16 / 9;
+  object-position: center 40%;
+}
+
+.como__foto .foto__nota {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  margin: 0;
+  padding: 0.35rem 0.6rem;
+  background: var(--tinta);
+  color: var(--papel);
 }
 
 .como .subtitulo {
@@ -3838,7 +3855,10 @@ html.mov .diag__ren.is-nuevo .diag__v {
   .como__foto img {
     width: 100%;
     height: 100%;
+    aspect-ratio: auto;
     object-fit: cover;
+    border-radius: 0;
+    object-position: center 22%;
   }
 
   .como__foto.foto--pendiente p {
