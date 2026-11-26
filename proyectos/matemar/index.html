@@ -33,7 +33,7 @@
   <!-- Fuentes propias, sin pasar por otro dominio. Rutas desde la raíz: valen igual en /proyectos/ y /proyectos/matemar/ -->
   <link rel="preload" href="/assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
 
-  <link rel="stylesheet" href="/css/styles.css?v=42" />
+  <link rel="stylesheet" href="/css/styles.css?v=43" />
   <!-- Clases del <head>, antes del primer pintado para que no parpadee.
        "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
        Sin estas clases la página se ve completa y quieta. -->
@@ -242,11 +242,12 @@
         </ul>
       </div>
       <p class="footer__copy">©<span id="year">2026</span> studio74dev</p>
+      <p class="footer__proy"><a href="/proyectos/">Proyectos</a></p>
     </div>
     <p class="footer__marca" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
   </footer>
 
-  <script src="/js/main.js?v=42" defer></script>
+  <script src="/js/main.js?v=43" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

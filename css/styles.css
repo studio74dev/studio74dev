@@ -1773,6 +1773,25 @@ select.campo:focus-visible {
   color: var(--acento);
 }
 
+.footer__proy {
+  margin-top: 0.25rem;
+}
+
+.footer__proy a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding-inline: 0.25rem;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--texto);
+  text-underline-offset: 0.2em;
+}
+
+.footer__proy a:hover {
+  color: var(--acento);
+}
+
 /* La palabra a casi todo el ancho del pie (en minúscula, condensada). Se mide con cqi: el
    ancho del pie sin la barra de scroll, así nunca genera scroll horizontal. */
 .footer {

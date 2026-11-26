@@ -77,7 +77,7 @@ más anchas, en cambio, hay un **botón flotante** de WhatsApp.
   texto corrido; **Geist Mono** para rótulos. Se sirven desde `assets/fonts/`, sin otro dominio.
 - Ambas usan `font-display: swap`. Para que el salto de los títulos no genere CLS hay una fuente de respaldo
   (`Archivo Fallback`, con las métricas de Archivo ajustadas sobre Arial). Se precarga solo Archivo.
-- Michroma ya no se carga ni se usa (el archivo `michroma-latin.woff2` queda sin referencias).
+- Michroma ya no se carga ni se usa (el archivo `michroma-latin.woff2` se movió a `_para_borrar/web-ronda-3`).
 - Las palabras muy largas en los títulos llevan guiones suaves (`&shy;`) para cortar bien en el celular.
 
 ### Carga inicial
@@ -162,7 +162,7 @@ No hay scripts de medición de terceros. Cada enlace a WhatsApp, a `#contacto`, 
 botón de envío del formulario, llevan `data-evento="<tipo>-<lugar>[-<detalle>]"`:
 
 - tipo: `whatsapp`, `diagnostico`, `red` o `mail`;
-- lugar: `nav`, `inicio`, `contacto`, `casos`, `gracias`, `barra`, `flotante`, `indice` o `pie`.
+- lugar: `nav`, `inicio`, `contacto`, `te-pasa`, `que-incluye`, `casos`, `preguntas`, `gracias`, `barra`, `flotante`, `indice` o `pie`.
 
 Ejemplos: `diagnostico-barra`, `diagnostico-pie`, `whatsapp-flotante`, `diagnostico-enviar`,
 `red-instagram-pie`. Dentro de una página no se repite ningún valor; `docs/chequeo.py` lo verifica.
@@ -226,6 +226,10 @@ py -m http.server 8800 --bind 127.0.0.1
 
 Y abrir `http://127.0.0.1:8800/`. Ese servidor no comprime ni cachea, así que los tiempos de carga son más
 pesimistas que en Cloudflare Pages. Para ver la carga inicial de nuevo, abrir `/?carga`.
+
+El servidor estático reproduce lo que publica Cloudflare Pages: el formulario sale por
+Web3Forms y el mail llega de verdad. Al probar el formulario en local, el mail llega de verdad al estudio:
+usá datos de prueba claros o la simulación de `docs/chequeo-form.js`, que nunca llama a Web3Forms.
 
 ## Formulario de contacto
 

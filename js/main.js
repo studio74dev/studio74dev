@@ -856,10 +856,10 @@
       payload.append('WhatsApp', data.get('whatsapp') || '');
       payload.append('Correo', data.get('email') || '');
       if ((data.get('email') || '').trim() !== '') payload.append('replyto', data.get('email'));
-      payload.append('Qué te está costando', data.getAll('costo').join(', '));
+      payload.append('Qué le está costando', data.getAll('costo').join(', '));
       payload.append('Rubro', data.get('rubro') || '');
       payload.append('Localidad', data.get('localidad') || '');
-      payload.append('Cómo atendés hoy', data.getAll('atencion').join(', ') || 'No indicó');
+      payload.append('Cómo atiende hoy', data.getAll('atencion').join(', ') || 'No indicó');
       payload.append('Para cuándo', data.get('cuando') || '');
       payload.append('botcheck', ''); // vacío: una persona nunca marca la casilla
 
