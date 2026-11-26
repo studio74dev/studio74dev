@@ -3732,3 +3732,116 @@ html.mov .diag__ren.is-nuevo .diag__v {
     animation: none !important;
   }
 }
+
+/* ═══════════════════════════════════════════════════════
+   COMPU (≥ 900 px): ANCHO COMPLETO
+   "¿Te pasa esto?": cada problema es una franja de borde a borde, alternando
+   foto a la izquierda y a la derecha; la foto entra deslizándose desde su lado y
+   el texto queda alineado con el contenedor. En el celular siguen apiladas (sticky).
+   "Cómo trabajamos": la foto pasa a ser una franja panorámica de borde a borde.
+   ═══════════════════════════════════════════════════════ */
+@keyframes entra-izq {
+  from { opacity: 0; transform: translate3d(-14%, 0, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes entra-der {
+  from { opacity: 0; transform: translate3d(14%, 0, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (min-width: 900px) {
+  .pila {
+    margin-inline: calc(50% - 50vw);
+  }
+
+  .tarjeta,
+  .mov .tarjeta {
+    position: relative;
+    top: auto;
+    min-height: clamp(420px, 36vw, 560px);
+    margin-bottom: 0;
+    border: 0;
+    border-top: 1px solid var(--linea-fuerte);
+    overflow: clip;
+  }
+
+  .mov .tarjeta:active,
+  .mov .tarjeta:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  /* Margen exterior del texto = el del contenedor, para que quede alineado con el título */
+  .tarjeta__texto {
+    --borde: max(2rem, calc((100vw - 1180px) / 2));
+    padding-block: clamp(2.5rem, 4vw, 4rem);
+    padding-inline: var(--borde) clamp(2rem, 5vw, 5rem);
+  }
+
+  .tarjeta:nth-child(even) .tarjeta__foto {
+    order: 1;
+  }
+
+  .tarjeta:nth-child(even) .tarjeta__texto {
+    order: 2;
+    padding-inline: clamp(2rem, 5vw, 5rem) var(--borde);
+  }
+
+  .tarjeta h3 {
+    font-size: clamp(2.4rem, 3.6vw, 3.6rem);
+  }
+
+  .tarjeta .foto__nota {
+    left: auto;
+    right: 0;
+  }
+
+  .tarjeta:nth-child(even) .foto__nota {
+    left: 0;
+    right: auto;
+  }
+
+  .tarjeta .foto--pendiente p {
+    font-size: 0.9rem;
+  }
+
+  /* Entrada desde el costado (con scroll donde hay soporte; si no, al aparecer) */
+  @supports (animation-timeline: view()) {
+    html.mov.revelar:not(.sin-vista) .tarjeta__foto {
+      animation: entra-der linear backwards;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+
+    html.mov.revelar:not(.sin-vista) .tarjeta:nth-child(even) .tarjeta__foto {
+      animation-name: entra-izq;
+    }
+
+    html.mov.revelar:not(.sin-vista) .tarjeta__texto {
+      animation: revelar linear backwards;
+      animation-timeline: view();
+      animation-range: entry 10% entry 80%;
+    }
+  }
+
+  /* Cómo trabajamos: franja panorámica de borde a borde, de la misma altura que antes */
+  .como__foto {
+    max-width: none;
+    width: auto;
+    height: clamp(15rem, 20vw, 20rem);
+    margin-inline: calc(50% - 50vw);
+    aspect-ratio: auto;
+    border-radius: 0;
+  }
+
+  .como__foto img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .como__foto.foto--pendiente p {
+    font-size: 0.9rem;
+  }
+}
