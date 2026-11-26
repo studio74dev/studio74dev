@@ -3961,14 +3961,11 @@ html.mov .diag__ren.is-nuevo .diag__v {
   }
 }
 
-/* ── Barra: ola al pasar el mouse ──────────────────────────────── */
-/* Cada sección de la barra dibuja una ola fina debajo que corre hacia la derecha mientras el
-   mouse está encima; al pasar seguido por varias, la ola parece ir corriendo de una a otra.
-   Las dos líneas del botón del índice se mecen como agua. Solo con mouse y con movimiento. */
-@keyframes ola-corre {
-  to { -webkit-mask-position: 12px 0; mask-position: 12px 0; }
-}
-
+/* ── Barra: ola que cubre cada sección al pasar el mouse ───────── */
+/* Igual que en los desplegables: una ola (azul sobre papel, celeste sobre tinta) entra desde la
+   izquierda con el borde ondulado y tapa la sección; las letras pasan a blanco o tinta. Al salir,
+   la ola se retira como en la orilla. Pasando seguido por las cuatro, se ve una ola que corre por
+   la barra. Las líneas del botón del índice se mecen. Solo con mouse; sin movimiento, solo color. */
 @keyframes ola-mece-a {
   0%, 100% { transform: translateX(0); }
   50% { transform: translateX(4px); }
@@ -3979,53 +3976,64 @@ html.mov .diag__ren.is-nuevo .diag__v {
   50% { transform: translateX(-4px); }
 }
 
-.nav__links a {
-  position: relative;
-}
-
-.nav__links a::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 6px;
-  height: 6px;
-  background: var(--acento-texto);
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 6'%3E%3Cpath d='M0 3C3 0 3 0 6 3S9 6 12 3' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") 0 0 / 12px 6px repeat-x;
-  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 6'%3E%3Cpath d='M0 3C3 0 3 0 6 3S9 6 12 3' fill='none' stroke='%23000' stroke-width='1.6'/%3E%3C/svg%3E") 0 0 / 12px 6px repeat-x;
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path 0.45s var(--ease-salida);
-  pointer-events: none;
-}
-
-.nav__links a.is-actual::after {
-  clip-path: inset(0 0 0 0);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .nav__links a:hover::after {
-    clip-path: inset(0 0 0 0);
+@media (min-width: 900px) {
+  .nav__links {
+    gap: 0.35rem;
   }
 
-  .mov .nav__links a:hover::after {
-    animation: ola-corre 0.6s linear infinite;
+  .nav__links a {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-inline: 0.75rem;
+    transition: color var(--dur-3) var(--ease-salida);
+  }
+
+  .nav__links a::before {
+    content: '';
+    position: absolute;
+    inset-block: 6px;
+    left: 0;
+    z-index: -1;
+    width: calc(100% + 24px);
+    background: var(--acento-texto);
+    -webkit-mask: linear-gradient(#000, #000) left / calc(100% - 23px) 100% no-repeat, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H14C30 12 30 38 16 50C2 62 2 88 18 100H0Z'/%3E%3C/svg%3E") right / 24px 100% no-repeat;
+    mask: linear-gradient(#000, #000) left / calc(100% - 23px) 100% no-repeat, url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 100' preserveAspectRatio='none'%3E%3Cpath d='M0 0H14C30 12 30 38 16 50C2 62 2 88 18 100H0Z'/%3E%3C/svg%3E") right / 24px 100% no-repeat;
+    transform: translateX(-100%);
+    transition: transform 0.55s var(--ease-salida);
+    pointer-events: none;
+  }
+
+  .nav__links a:focus-visible {
+    color: var(--fondo);
+  }
+
+  .nav__links a:focus-visible::before {
+    transform: translateX(0);
+  }
+}
+
+@media (min-width: 900px) and (hover: hover) and (pointer: fine) {
+  .nav__links a:hover {
+    color: var(--fondo);
+  }
+
+  .nav__links a:hover::before {
+    transform: translateX(0);
   }
 
   .mov .nav__menu[aria-expanded='false']:hover .nav__menu-icono i:first-child {
-    animation: ola-mece-a 0.9s var(--ease-io, ease-in-out) infinite;
+    animation: ola-mece-a 0.9s var(--ease-io) infinite;
   }
 
   .mov .nav__menu[aria-expanded='false']:hover .nav__menu-icono i:last-child {
-    animation: ola-mece-b 0.9s var(--ease-io, ease-in-out) infinite;
+    animation: ola-mece-b 0.9s var(--ease-io) infinite;
   }
 }
 
-.nav__links a:focus-visible::after {
-  clip-path: inset(0 0 0 0);
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .nav__links a::after {
+  .nav__links a,
+  .nav__links a::before {
     transition: none;
   }
 }
