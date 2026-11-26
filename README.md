@@ -77,7 +77,7 @@ más anchas, en cambio, hay un **botón flotante** de WhatsApp.
   texto corrido; **Geist Mono** para rótulos. Se sirven desde `assets/fonts/`, sin otro dominio.
 - Ambas usan `font-display: swap`. Para que el salto de los títulos no genere CLS hay una fuente de respaldo
   (`Archivo Fallback`, con las métricas de Archivo ajustadas sobre Arial). Se precarga solo Archivo.
-- Michroma ya no se carga ni se usa (el archivo `michroma-latin.woff2` se movió a `_para_borrar/web-ronda-3`).
+- Michroma (`assets/fonts/michroma-latin.woff2`, la letra de la marca del sitio publicado) se usa solo en la palabra gigante "studio74dev" del pie.
 - Las palabras muy largas en los títulos llevan guiones suaves (`&shy;`) para cortar bien en el celular.
 
 ### Carga inicial
