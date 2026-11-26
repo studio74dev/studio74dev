@@ -30,7 +30,7 @@
   <meta name="author" content="studio74dev" />
 
   <!-- Datos estructurados: organización, zona de servicio y preguntas frecuentes.
-       Si cambian las preguntas de la sección #preguntas, actualizar también el FAQPage. -->
+       Si cambian las preguntas de la sección #preguntas, actualizar también el FAQPage (solo con respuestas definitivas). -->
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -257,18 +257,18 @@
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "¿Cuánto tiempo lleva el desarrollo?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Una página simple lleva alrededor de una semana desde que se reciben los textos y las fotos. Los sistemas, turnos y reservas dependen del alcance; el plazo se indica en el presupuesto."
-              }
-            },
-            {
-              "@type": "Question",
               "name": "¿Cuánto cuesta?",
               "acceptedAnswer": {
                 "@type": "Answer",
                 "text": "Depende del alcance. Antes de empezar enviamos un presupuesto por escrito, sin cargo, que detalla qué incluye y qué no."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Cuánto tarda?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Una página simple lleva alrededor de una semana desde que se reciben los textos y las fotos. Los sistemas, turnos y reservas dependen del alcance; el plazo se indica en el presupuesto."
               }
             },
             {
@@ -281,10 +281,10 @@
             },
             {
               "@type": "Question",
-              "name": "¿Incluye mantenimiento?",
+              "name": "¿Qué pasa después de la entrega?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Ofrecemos un servicio mensual que cubre hosting, mantenimiento y cambios menores. Se informa por separado en el presupuesto."
+                "text": "El proyecto queda publicado y en funcionamiento. A partir de ahí, el cliente puede contratar el servicio mensual de hosting y mantenimiento, o pedir que lo transfiramos a una cuenta propia."
               }
             },
             {
@@ -297,10 +297,18 @@
             },
             {
               "@type": "Question",
-              "name": "¿Qué pasa después de la entrega?",
+              "name": "¿Qué pasa si después quiero cambiar algo?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "El proyecto queda publicado y en funcionamiento. A partir de ahí, el cliente puede contratar el servicio mensual de hosting y mantenimiento, o pedir que lo transfiramos a una cuenta propia."
+                "text": "Los cambios menores están incluidos en el servicio mensual de hosting y mantenimiento, que se informa por separado en el presupuesto. Los cambios más grandes se cotizan aparte, siempre con presupuesto por escrito antes de empezar."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "¿Necesito saber de tecnología?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "No. Nosotros nos ocupamos de la parte técnica y te explicamos cómo usar lo que armamos, con palabras simples."
               }
             }
           ]
@@ -316,30 +324,29 @@
   <!-- Fuentes propias (solo el juego latino), sin pasar por otro dominio.
        La de los títulos se pide primero porque es la que se ve al cargar. -->
   <link rel="preload" href="assets/fonts/archivo-latin.woff2" as="font" type="font/woff2" crossorigin />
+  <!-- Imagen LCP del inicio (misma que el <img> de #inicio) -->
+  <link rel="preload" as="image" href="assets/img/stock/inicio-mar-1280.webp" imagesrcset="assets/img/stock/inicio-mar-640.webp 640w, assets/img/stock/inicio-mar-960.webp 960w, assets/img/stock/inicio-mar-1280.webp 1280w, assets/img/stock/inicio-mar-1920.webp 1920w" imagesizes="(min-width: 1100px) 1080px, 100vw" fetchpriority="high" />
 
-  <link rel="stylesheet" href="css/styles.css?v=21" />
-  <!-- data-theme: claro u oscuro, antes del primer pintado para que no parpadee.
-       "js": hay JavaScript. "mov": además se pueden usar las animaciones de scroll
-       (sin reduced-motion). Sin estas clases la página se ve completa y quieta.
-       La intro se muestra una vez por sesión en pantallas anchas (o siempre con ?intro).
-       En el celular se entra directo a la portada. -->
+  <link rel="stylesheet" href="css/styles.css?v=63" />
+  <!-- Clases del <head>, antes del primer pintado para que no parpadee.
+       "js": hay JavaScript. "mov": además se pueden usar las animaciones (sin reduced-motion).
+       "con-carga": la carga inicial (el 74 que vuela al logo), solo si hay JS, no hay
+       reduced-motion, es la primera visita de la sesión (o la URL trae ?carga) y no trae ?carga=0.
+       Sin estas clases la página se ve completa y quieta. -->
   <script>
     (function () {
       var d = document.documentElement;
       d.classList.add('js');
-      // Tema: el elegido con el botón de la barra o, si no hay, el del sistema
-      var tema = null;
-      try { tema = localStorage.getItem('s74-tema'); } catch (e) { }
-      if (tema !== 'claro' && tema !== 'oscuro') {
-        tema = window.matchMedia('(prefers-color-scheme: light)').matches ? 'claro' : 'oscuro';
-      }
-      d.dataset.theme = tema;
       try {
         var quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
         if (!quieto) d.classList.add('mov');
-        var forzar = /[?&]intro\b/.test(location.search);
-        var chico = window.matchMedia('(max-width: 759px)').matches;
-        if (!quieto && (forzar || (!chico && !sessionStorage.getItem('s74-intro')))) d.classList.add('con-intro');
+        var q = location.search;
+        var evitar = /[?&]carga=0(?:&|$)/.test(q);
+        var forzar = /[?&]carga(?:=1)?(?:&|$)/.test(q);
+        if (!quieto && !evitar && (forzar || !sessionStorage.getItem('s74-carga'))) {
+          sessionStorage.setItem('s74-carga', '1');
+          d.classList.add('con-carga');
+        }
       } catch (e) { }
     })();
   </script>
@@ -347,45 +354,14 @@
 
 <body>
 
+  <!-- Carga inicial: decorativa, solo con html.con-carga (ver el <head>). Se va sola a los 2,5 s. -->
+  <div class="carga" id="carga" aria-hidden="true"><p class="carga__palabra cond"><span class="carga__m carga__lado"><span>STUDIO</span></span><span class="carga__m carga__centro"><span><svg class="carga__74" viewBox="0 0 100 100" aria-hidden="true" focusable="false"><g fill="none" stroke="currentColor"><path d="M7.7 10.9H64L13 88" stroke-width="6.2" /><path d="M7.7 90.4H18" stroke-width="6.4" /><path d="M90 7.7V78" stroke-width="5.5" /><path d="M90 19L52 59.5M50 60.5H90" stroke-width="4.2" /></g><rect class="nav__logo-punto" x="85" y="86" width="8" height="8" /></svg></span></span><span class="carga__m carga__lado"><span>DEV</span></span></p></div>
+
   <a class="saltar" href="#contenido">Saltar al contenido</a>
 
-  <!-- Intro: pantalla de carga con líneas, el 74 y la marca. Termina con "Entrar". -->
-  <div class="intro" id="intro">
-    <div class="intro__mitad intro__mitad--arriba" aria-hidden="true"></div>
-    <div class="intro__mitad intro__mitad--abajo" aria-hidden="true"></div>
-    <svg class="intro__lineas" viewBox="0 0 1600 900" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-      <path d="M980 0V760a40 40 0 0 0 40 40H1600" pathLength="1" />
-      <path d="M1180 0V600" pathLength="1" />
-      <path d="M760 900A420 420 0 0 1 1180 480" pathLength="1" />
-      <path d="M1180 600L1480 300" pathLength="1" />
-      <path d="M0 700H520a40 40 0 0 1 40 40V900" pathLength="1" />
-    </svg>
-    <p class="intro__esquina intro__esquina--arriba" aria-hidden="true">©2026<br />studio74dev</p>
-    <p class="intro__esquina intro__esquina--abajo" aria-hidden="true">Estudio de desarrollo<br />studio74dev@gmail.com</p>
-    <p class="intro__carga" aria-hidden="true"><span id="introPct">00</span></p>
-
-    <div class="intro__centro">
-      <div class="intro__marca" id="introMarca" aria-hidden="true">
-        <svg class="intro__logo" viewBox="0 0 100 100" focusable="false">
-          <g class="intro__trazos" fill="none">
-            <path d="M7.7 10.9H64L13 88" stroke-width="6.2" pathLength="1" />
-            <path d="M7.7 90.4H18" stroke-width="6.4" pathLength="1" />
-            <path d="M90 7.7V78" stroke-width="5.5" pathLength="1" />
-            <path d="M90 19L52 59.5M50 60.5H90" stroke-width="4.2" pathLength="1" />
-          </g>
-          <rect class="intro__punto" x="85" y="86" width="8" height="8" />
-        </svg>
-      </div>
-      <p class="intro__palabra" aria-hidden="true">
-        <span>s</span><span>t</span><span>u</span><span>d</span><span>i</span><span>o</span><span>7</span><span>4</span><span>d</span><span>e</span><span>v</span>
-      </p>
-      <button type="button" class="intro__entrar" id="introEntrar">Entrar</button>
-    </div>
-  </div>
-
-  <!-- Barra: logo, secciones, tema, "Hablemos" y el índice a pantalla completa.
-       data-tema cambia según el capítulo que tiene debajo (base, alt o señal). -->
-  <header class="header" id="header" data-tema="base">
+  <!-- Barra: logo, secciones, "Diagnóstico gratis" y el índice a pantalla completa.
+       data-tema cambia según el capítulo que tiene debajo (tinta, papel o azul). -->
+  <header class="header" id="header" data-tema="tinta">
     <nav class="nav" aria-label="Navegación principal">
       <a href="#inicio" class="nav__logo" aria-label="studio74dev, inicio">
         <svg class="nav__logo-icon" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
@@ -399,21 +375,14 @@
         </svg>
       </a>
 
-      <ul class="nav__links">
-        <li><a href="#servicios">Servicios</a></li>
-        <li><a href="#caso">Caso real</a></li>
-        <li><a href="#proceso">Proceso</a></li>
-        <li><a href="#estudio">Estudio</a></li>
-        <li><a href="#preguntas">Preguntas</a></li>
+      <ul class="nav__links mono">
+        <li><a href="#te-pasa">Problemas</a></li>
+        <li><a href="#como-trabajamos">Cómo trabajamos</a></li>
+        <li><a href="#casos">Caso</a></li>
+        <li><a href="#quienes">Nosotros</a></li>
       </ul>
 
-      <button class="nav__tema" id="temaBoton" type="button" aria-label="Cambiar a tema claro">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <circle cx="12" cy="12" r="8" />
-          <path d="M12 4a8 8 0 0 1 0 16z" />
-        </svg>
-      </button>
-      <a href="#contacto" class="nav__cta magnetico">Hablemos</a>
+      <a href="#contacto" class="nav__cta" data-evento="diagnostico-nav">Diagnóstico gratis</a>
       <button class="nav__menu" id="menuBoton" type="button" aria-expanded="false" aria-controls="indice" aria-label="Índice de secciones">
         <span class="nav__menu-texto">Índice</span>
         <span class="nav__menu-icono" aria-hidden="true"><i></i><i></i></span>
@@ -422,408 +391,352 @@
   </header>
 
   <!-- Índice a pantalla completa -->
-  <div class="indice" id="indice" data-tema="base" hidden>
+  <div class="indice" id="indice" data-lenis-prevent data-tema="tinta" hidden>
     <ol class="indice__lista">
-      <li><a href="#vision"><span>01</span>Visión</a></li>
-      <li><a href="#problema"><span>02</span>El problema</a></li>
-      <li><a href="#servicios"><span>03</span>Qué hacemos</a></li>
-      <li><a href="#caso"><span>04</span>Caso real</a></li>
-      <li><a href="#diferencia"><span>05</span>Sin letra chica</a></li>
-      <li><a href="#proceso"><span>06</span>Proceso</a></li>
-      <li><a href="#estudio"><span>07</span>El estudio</a></li>
-      <li><a href="#preguntas"><span>08</span>Preguntas</a></li>
-      <li><a href="#contacto"><span>09</span>Contacto</a></li>
+      <li><a href="#inicio"><span>01</span>Inicio</a></li>
+      <li><a href="#servicios"><span>02</span>Servicios</a></li>
+      <li><a href="#te-pasa"><span>03</span>¿Te pasa esto?</a></li>
+      <li><a href="#numeros"><span>04</span>Números</a></li>
+      <li><a href="#como-trabajamos"><span>05</span>Cómo trabajamos</a></li>
+      <li><a href="#que-incluye"><span>06</span>Qué revisamos</a></li>
+      <li><a href="#casos"><span>07</span>Caso Matemar</a></li>
+      <li><a href="#quienes"><span>08</span>Quiénes somos</a></li>
+      <li><a href="#preguntas"><span>09</span>Preguntas</a></li>
+      <li><a href="#contacto" data-evento="diagnostico-indice"><span>10</span>Diagnóstico gratis</a></li>
+      <li><a href="/proyectos/"><span>11</span>Proyectos</a></li>
     </ol>
     <div class="indice__pie">
-      <a href="mailto:studio74dev@gmail.com" aria-label="Escribir a studio74dev@gmail.com">studio74dev@gmail.com</a>
-      <a href="https://www.instagram.com/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de studio74dev (se abre en una pestaña nueva)">Instagram</a>
-      <a href="https://www.linkedin.com/company/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de studio74dev (se abre en una pestaña nueva)">LinkedIn</a>
-      <a href="https://www.facebook.com/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="Facebook de studio74dev (se abre en una pestaña nueva)">Facebook</a>
+      <a data-evento="mail-indice" href="mailto:studio74dev@gmail.com" aria-label="Escribir a studio74dev@gmail.com">studio74dev@gmail.com</a>
+      <a data-evento="red-instagram-indice" href="https://www.instagram.com/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de studio74dev (se abre en una pestaña nueva)">Instagram</a>
+      <a data-evento="red-linkedin-indice" href="https://www.linkedin.com/company/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de studio74dev (se abre en una pestaña nueva)">LinkedIn</a>
+      <a data-evento="red-facebook-indice" href="https://www.facebook.com/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="Facebook de studio74dev (se abre en una pestaña nueva)">Facebook</a>
     </div>
   </div>
 
-  <!-- Riel de progreso: el trazo vertical del 4 con el punto de la marca -->
-  <div class="riel" aria-hidden="true">
-    <span class="riel__linea"></span>
-    <span class="riel__punto"></span>
-  </div>
-
-  <!-- WhatsApp flotante. Oculto sin JavaScript (hidden); js/main.js le pone el enlace
-       y decide cuándo se ve: después de la portada y antes de Contacto. -->
-  <a class="wa-flotante" id="waFlotante" data-canal="whatsapp" href="#" target="_blank" rel="noopener noreferrer"
-    aria-label="Escríbanos por WhatsApp (se abre en una pestaña nueva)" hidden>
+  <!-- WhatsApp flotante. js/main.js decide cuándo se ve: después de la portada y antes de Contacto. -->
+  <a class="wa-flotante" id="waFlotante" href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" data-evento="whatsapp-flotante" target="_blank" rel="noopener noreferrer"
+    aria-label="Escribinos por WhatsApp (se abre en una pestaña nueva)">
     <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
       <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.28-.2-.57-.35m-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.9 0-3.17-1.24-6.16-3.48-8.4" />
     </svg>
     <span class="wa-flotante__texto" aria-hidden="true">WhatsApp</span>
   </a>
 
+  <!-- Barra fija inferior, solo en el celular (< 760 px): acción principal y WhatsApp.
+       Oculta sin JavaScript (hidden); js/main.js la muestra entre la portada y Contacto. -->
+  <div class="barra-cta" id="barraCta" data-tema="tinta" hidden>
+    <a href="#contacto" class="btn btn--accion barra-cta__btn" data-evento="diagnostico-barra">Diagnóstico gratis</a>
+    <a class="barra-cta__wa" href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" data-evento="whatsapp-barra" target="_blank" rel="noopener noreferrer"
+      aria-label="WhatsApp (se abre en una pestaña nueva)">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+        <path d="M17.47 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.64.08-.3-.15-1.26-.47-2.39-1.48-.88-.79-1.48-1.76-1.65-2.06-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.18.2-.3.3-.5.1-.2.05-.37-.03-.52-.07-.15-.67-1.61-.92-2.2-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48s1.07 2.88 1.21 3.07c.15.2 2.1 3.2 5.08 4.49.71.3 1.26.49 1.7.63.71.22 1.36.19 1.87.12.57-.09 1.76-.72 2-1.41.25-.7.25-1.29.18-1.41-.08-.13-.28-.2-.57-.35m-5.42 7.4h-.01a9.87 9.87 0 0 1-5.03-1.38l-.36-.21-3.74.98 1-3.65-.24-.37a9.86 9.86 0 0 1-1.51-5.26c0-5.45 4.44-9.88 9.89-9.88 2.64 0 5.12 1.03 6.99 2.9a9.83 9.83 0 0 1 2.89 6.99c0 5.45-4.44 9.88-9.88 9.88m8.41-18.3A11.82 11.82 0 0 0 12.05 0C5.5 0 .16 5.34.16 11.89c0 2.1.55 4.14 1.59 5.95L.06 24l6.3-1.65a11.88 11.88 0 0 0 5.68 1.45h.01c6.55 0 11.89-5.34 11.89-11.9 0-3.17-1.24-6.16-3.48-8.4" />
+      </svg>
+    </a>
+  </div>
+
   <main id="contenido">
 
-    <!-- 00. Portada. Al bajar, los trazos del 74 se separan y el punto crece
-         hasta cubrir la pantalla: así se entra al capítulo de visión. -->
-    <section id="inicio" class="hero capitulo" data-tema="base" data-escena="pin" aria-labelledby="hero-title">
-      <div class="hero__escena">
-        <div class="hero__marca" aria-hidden="true">
-          <svg viewBox="0 0 100 100" focusable="false">
-            <g class="hero__siete" fill="none">
-              <path d="M7.7 10.9H64L13 88" stroke-width="6.2" pathLength="1" />
-              <path d="M7.7 90.4H18" stroke-width="6.4" pathLength="1" />
-            </g>
-            <g class="hero__cuatro" fill="none">
-              <path d="M90 7.7V78" stroke-width="5.5" pathLength="1" />
-              <path d="M90 19L52 59.5M50 60.5H90" stroke-width="4.2" pathLength="1" />
-            </g>
-          </svg>
-          <span class="hero__punto" id="heroPunto"></span>
-        </div>
-
-        <div class="hero__contenido">
-          <p class="rotulo">Estudio de desarrollo — Pinamar, Madariaga y toda la Costa Atlántica, de San Clemente a Miramar</p>
-          <h1 id="hero-title" class="hero__title">
-            <span class="linea"><span>Software y</span></span>
-            <span class="linea"><span>presencia digital</span></span>
-            <span class="linea linea--suave"><span>para comercios</span></span>
-            <span class="linea linea--suave"><span>de la costa<i class="hero__fin" aria-hidden="true"></i></span></span>
-          </h1>
-          <p class="hero__lead">Diseñamos, desarrollamos y mantenemos el canal digital de su negocio, con atención en
-            persona y presupuesto por escrito.</p>
-          <div class="hero__acciones">
-            <a href="#contacto" class="btn btn--senal magnetico">Solicitar presupuesto
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
-            <a href="#caso" class="btn btn--borde">Ver un caso real</a>
-          </div>
-          <p class="hero__whatsapp" data-canal="whatsapp" hidden>O escríbanos por
-            <a href="#" target="_blank" rel="noopener noreferrer"
-              aria-label="WhatsApp (se abre en una pestaña nueva)">WhatsApp</a></p>
-        </div>
-
-        <p class="hero__coordenadas" aria-hidden="true">37°06′ S<br />56°51′ O</p>
-        <p class="hero__bajar" aria-hidden="true"><span></span>Desplace para continuar</p>
-      </div>
-    </section>
-
-    <!-- 01. Visión: el manifiesto se enciende palabra por palabra con el scroll -->
-    <section id="vision" class="vision capitulo" data-tema="senal" data-escena="pin" aria-labelledby="vision-title">
-      <div class="vision__escena">
-        <p class="rotulo"><span class="rotulo__n">01</span>Visión</p>
-        <h2 id="vision-title" class="visually-hidden">Nuestra visión</h2>
-        <p class="vision__texto" data-palabras>Un comercio que la gente elige en la calle merece que lo encuentren igual
-          de fácil en el teléfono. Hacemos software claro, propio y mantenido por personas de la zona, para que cada
-          negocio tenga un canal digital que le pertenezca.</p>
-        <p class="vision__firma">— studio74dev</p>
-      </div>
-    </section>
-
-    <!-- 02. El problema: las tarjetas se deslizan en horizontal mientras se baja -->
-    <section id="problema" class="problema capitulo" data-tema="base" data-escena="pin" aria-labelledby="problema-title">
-      <div class="problema__escena">
-        <div class="cabeza problema__cabeza">
-          <p class="rotulo"><span class="rotulo__n">02</span>El problema</p>
-          <h2 id="problema-title" class="titulo">Buena reputación.<br /><em>Sin un canal digital propio.</em></h2>
-          <p class="bajada">Muchos comercios de la costa son conocidos en su ciudad, pero dependen de terceros para que
-            los encuentren: un perfil en redes, el boca a boca o una ficha de Google incompleta.</p>
-        </div>
-        <div class="problema__ventana">
-          <ol class="problema__pista" id="problemaPista">
-            <li class="sintoma">
-              <span class="sintoma__n">01</span>
-              <p class="sintoma__tipo">Presencia en Google</p>
-              <p class="sintoma__texto">El negocio no aparece cuando se lo busca, o aparece con datos desactualizados.</p>
-            </li>
-            <li class="sintoma">
-              <span class="sintoma__n">02</span>
-              <p class="sintoma__tipo">Turnos</p>
-              <p class="sintoma__texto">Los turnos se piden por mensaje y se anotan a mano, con superposiciones y
-                ausencias sin aviso.</p>
-            </li>
-            <li class="sintoma">
-              <span class="sintoma__n">03</span>
-              <p class="sintoma__tipo">Reservas</p>
-              <p class="sintoma__texto">Los huéspedes no pueden consultar la disponibilidad ni dejar una seña sin
-                intercambiar varios mensajes.</p>
-            </li>
-            <li class="sintoma">
-              <span class="sintoma__n">04</span>
-              <p class="sintoma__tipo">Gestión</p>
-              <p class="sintoma__texto">Las cuotas y los saldos se llevan en cuadernos o planillas sueltas, y saber quién
-                adeuda lleva horas.</p>
-            </li>
-            <li class="sintoma">
-              <span class="sintoma__n">05</span>
-              <p class="sintoma__tipo">Sitio web</p>
-              <p class="sintoma__texto">El sitio existente dejó de funcionar o muestra información vieja, y nadie sabe
-                cómo recuperarlo.</p>
-            </li>
-          </ol>
-          <span class="problema__barra" aria-hidden="true"></span>
+    <!-- 00. Portada: estática. El h1 es lo primero que se pinta, por eso no se anima. -->
+    <section id="inicio" class="hero capitulo" data-portada data-tema="tinta" aria-labelledby="hero-title">
+      <div class="hero__contenido">
+        <p class="rotulo mono">Estudio de desarrollo · Costa Atlántica</p>
+        <h1 id="hero-title" class="hero__title cond"><span class="linea">Tu negocio,</span> <span class="linea">encontrado</span> <span class="linea"><span class="resalte">y ordenado.</span></span></h1>
+        <p class="hero__lead">Webs, sistemas a medida, bots de WhatsApp y automatización para negocios de la Costa, de San Clemente a Miramar.</p>
+        <div class="hero__acciones">
+          <a href="#contacto" class="btn btn--accion" data-evento="diagnostico-inicio">Pedí tu diagnóstico gratis →</a>
+          <a href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" class="btn btn--borde" data-evento="whatsapp-inicio" target="_blank" rel="noopener noreferrer" aria-label="Escribinos por WhatsApp (se abre en una pestaña nueva)">Escribinos por WhatsApp</a>
         </div>
       </div>
+      <!-- Medio del inicio: foto de stock en blanco y negro (es la imagen LCP) y, encima, un video corto
+           en loop que el JS carga recién después del load (ver main.js, "Video del inicio"). Créditos en
+           assets/img/stock/CREDITOS.md. -->
+      <figure class="hero__medio" data-sobre-foto>
+        <img class="hero__par" src="assets/img/stock/inicio-mar-1280.webp" srcset="assets/img/stock/inicio-mar-640.webp 640w, assets/img/stock/inicio-mar-960.webp 960w, assets/img/stock/inicio-mar-1280.webp 1280w, assets/img/stock/inicio-mar-1920.webp 1920w" sizes="(min-width: 1100px) 1080px, 100vw" width="1920" height="1080" fetchpriority="high" decoding="async" alt="Playa de Pinamar con oleaje, en blanco y negro" />
+        <video class="hero__video hero__par" muted loop playsinline preload="none" data-src="assets/video/inicio.mp4" aria-hidden="true" tabindex="-1"></video>
+        <!-- [FOTO: reemplazo futuro opcional del inicio · foto propia mejor (Ruta 74, Madariaga o Pinamar) o video corto en loop, mudo y liviano]
+             Para cambiarla: reemplazar el src/srcset del img de arriba (ver README, "Cómo cambiar la foto o el video del inicio")
+             o el data-src del video por otro mp4 (sin audio, <= 1,5 MB). -->
+        <button type="button" class="pausa hero__pausa" aria-pressed="false" aria-label="Pausar el video del inicio" hidden><span aria-hidden="true"></span></button>
+        <p class="hero__lugar mono">Pinamar · Ruta 74 · Madariaga</p>
+      </figure>
+      <figure class="hero__cel">
+        <img class="hero__cel-img" src="assets/img/casos/matemar/matemar-catalogo-390.webp" srcset="assets/img/casos/matemar/matemar-catalogo-260.webp 260w, assets/img/casos/matemar/matemar-catalogo-390.webp 780w" sizes="(min-width: 900px) 14vw, 120px" width="780" height="1688" fetchpriority="low" decoding="async" alt="Web de Matemar en el celular, trabajo de studio74dev" />
+      </figure>
     </section>
 
-    <!-- Dos bandas cruzadas, como los trazos del 7 y el 4. Se mueven con el scroll. -->
-    <div class="bandas" data-escena="paso" aria-hidden="true">
-      <p class="banda banda--senal"><span>Página propia · Google Maps · WhatsApp · Sistemas a medida · Turnos y reservas · Automatización · Página propia · Google Maps · WhatsApp · Sistemas a medida · Turnos y reservas · Automatización ·</span></p>
-      <p class="banda banda--papel"><span>Pinamar · Cariló · Villa Gesell · Madariaga · Mar del Plata · Miramar · San Clemente · Pinamar · Cariló · Villa Gesell · Madariaga · Mar del Plata · Miramar · San Clemente ·</span></p>
-    </div>
-
-    <!-- 03. Qué hacemos: el teléfono se arma a medida que se leen los pasos -->
-    <section id="servicios" class="servicios capitulo" data-tema="alt" aria-labelledby="servicios-title">
-      <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo"><span class="rotulo__n">03</span>Qué hacemos</p>
-          <h2 id="servicios-title" class="titulo">Primero, que lo encuentren.<br /><em>Después, lo que haga
-              falta.</em></h2>
-        </div>
-
-        <div class="relato">
-          <div class="relato__pasos">
-            <p class="relato__rotulo">Paquete de entrada</p>
-            <article class="relato__paso" data-paso="1">
-              <span class="relato__n">01 / 03</span>
-              <h3>Una página propia</h3>
-              <p>Qué ofrece el negocio, precios, horarios y cómo llegar. Rápida, pensada para el celular y con el
-                dominio a nombre del cliente.</p>
-            </article>
-            <article class="relato__paso" data-paso="2">
-              <span class="relato__n">02 / 03</span>
-              <h3>Ubicación en Google Maps</h3>
-              <p>La ficha del negocio configurada y vinculada a la página, para aparecer en búsquedas y en el mapa.</p>
-            </article>
-            <article class="relato__paso" data-paso="3">
-              <span class="relato__n">03 / 03</span>
-              <h3>Contacto por WhatsApp</h3>
-              <p>Un botón que abre la conversación con el negocio, sin formularios ni pasos intermedios.</p>
-              <a href="#contacto" class="btn btn--tinta magnetico" data-servicio="Paquete de entrada">Solicitar el
-                paquete de entrada
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></a>
-            </article>
-          </div>
-
-          <!-- Teléfono ilustrativo: no es un negocio real -->
-          <div class="relato__fijo">
-            <div class="telefono" id="telefono" data-paso="1" role="img"
-              aria-label="Ilustración de un teléfono con la página de un comercio, su ubicación en el mapa y un botón de WhatsApp">
-              <div class="telefono__pantalla" aria-hidden="true">
-                <div class="tel-web">
-                  <div class="tel-web__barra"><i></i><span>su-comercio.com.ar</span></div>
-                  <div class="tel-web__hero">
-                    <b>Su comercio</b>
-                    <span>Abierto hoy · 9 a 20 h</span>
-                  </div>
-                  <div class="tel-web__chips"><span>Precios</span><span>Horarios</span><span>Cómo llegar</span></div>
-                  <div class="tel-web__lista">
-                    <span>Servicio principal<b>$ —</b></span>
-                    <span>Servicio adicional<b>$ —</b></span>
-                    <span>Horarios<b>Lun a sáb</b></span>
-                  </div>
-                  <div class="tel-web__lineas"><i></i><i></i><i></i></div>
-                </div>
-                <div class="tel-mapa">
-                  <div class="tel-mapa__lienzo"><i class="tel-mapa__costa"></i><i class="tel-mapa__pin"></i></div>
-                  <p><b>Su comercio</b><span>Cómo llegar · 4 min</span></p>
-                </div>
-                <div class="tel-wa">
-                  <p class="tel-wa__burbuja">Hola, quisiera consultar por un turno.</p>
-                  <span class="tel-wa__boton">Escribir por WhatsApp</span>
-                </div>
-              </div>
-            </div>
-            <p class="relato__nota">Ilustración de ejemplo</p>
-          </div>
-        </div>
-
-        <h3 class="subtitulo" data-escena="entrada">Además, trabajo a medida</h3>
-        <ul class="medida">
-          <li data-escena="entrada"><a href="#contacto" class="medida__fila" data-servicio="Sistema a medida">
-              <span class="medida__n">A</span>
-              <span class="medida__nombre">Sistemas a medida</span>
-              <span class="medida__desc">Socios, cobros, stock y reportes en un solo lugar, con permisos por usuario.</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a></li>
-          <li data-escena="entrada"><a href="#contacto" class="medida__fila" data-servicio="Turnos y reservas">
-              <span class="medida__n">B</span>
-              <span class="medida__nombre">Turnos y reservas</span>
-              <span class="medida__desc">Agenda online para que los clientes reserven solos, con señas y recordatorios.</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a></li>
-          <li data-escena="entrada"><a href="#contacto" class="medida__fila" data-servicio="Automatización">
-              <span class="medida__n">C</span>
-              <span class="medida__nombre">Automatización</span>
-              <span class="medida__desc">Avisos a clientes, reportes periódicos e integración entre sistemas.</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a></li>
-          <li data-escena="entrada"><a href="#contacto" class="medida__fila" data-servicio="Otra consulta">
-              <span class="medida__n">D</span>
-              <span class="medida__nombre">Arreglos</span>
-              <span class="medida__desc">Sitios caídos, certificados vencidos y enlaces rotos.</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a></li>
+    <!-- 01. Franja de servicios: loop lento con pausa (WCAG 2.2.2). Sin movimiento o sin JS, los 4 ítems quietos. -->
+    <section id="servicios" class="servicios capitulo" data-tema="tinta" aria-label="Servicios">
+      <div class="franja" id="franja">
+        <ul class="franja__pista">
+          <li>Webs<span class="franja__sep" aria-hidden="true">✦</span></li>
+          <li>Sistemas a medida<span class="franja__sep" aria-hidden="true">✦</span></li>
+          <li>Bots de WhatsApp<span class="franja__sep" aria-hidden="true">✦</span></li>
+          <li>Automatización<span class="franja__sep" aria-hidden="true">✦</span></li>
+          <li class="franja__copia" aria-hidden="true">Webs<span class="franja__sep">✦</span></li>
+          <li class="franja__copia" aria-hidden="true">Sistemas a medida<span class="franja__sep">✦</span></li>
+          <li class="franja__copia" aria-hidden="true">Bots de WhatsApp<span class="franja__sep">✦</span></li>
+          <li class="franja__copia" aria-hidden="true">Automatización<span class="franja__sep">✦</span></li>
         </ul>
       </div>
+      <button type="button" class="pausa franja__pausa" aria-pressed="false" aria-label="Pausar la franja" hidden><span aria-hidden="true"></span></button>
     </section>
 
-    <!-- 04. Caso real: la ventana se apoya sobre la mesa mientras se baja -->
-    <section id="caso" class="caso capitulo" data-tema="base" data-escena="pin" aria-labelledby="caso-title">
-      <div class="caso__escena">
-        <div class="cabeza caso__cabeza">
-          <p class="rotulo"><span class="rotulo__n">04</span>Caso real</p>
-          <h2 id="caso-title" class="titulo">Club El Progreso</h2>
-          <p class="bajada">Sistema de gestión que utiliza a diario la administración de un club de playa: socios y
-            grupos familiares, mapa de sombrillas, tarifas y cobranzas, con permisos por usuario.</p>
-        </div>
-
-        <div class="ventana">
-          <div class="ventana__barra">
-            <span class="ventana__archivo">CLUB EL PROGRESO</span>
-            <div class="app__tabs" role="tablist" aria-label="Pantallas del sistema">
-              <button type="button" role="tab" class="app__tab is-on" aria-selected="true" aria-controls="appVista"
-                data-img="assets/img/progreso-dashboard.webp"
-                data-alt="Panel principal del club con métricas y resumen de ocupación">Panel</button>
-              <button type="button" role="tab" class="app__tab" aria-selected="false" aria-controls="appVista"
-                data-img="assets/img/progreso-mapa.webp"
-                data-alt="Mapa de sombrillas y pileta del club, con el estado de cada lugar">Mapa de sombrillas</button>
-              <button type="button" role="tab" class="app__tab" aria-selected="false" aria-controls="appVista"
-                data-img="assets/img/progreso-recaudacion.webp"
-                data-alt="Módulo de recaudación y estado de cobranzas">Recaudación</button>
-            </div>
-            <span class="ventana__estado"><span class="punto" aria-hidden="true"></span>En producción</span>
-          </div>
-          <div class="app__vista" id="appVista" role="tabpanel">
-            <div class="app__marco">
-              <img src="assets/img/progreso-dashboard.webp" width="1024" height="470"
-                alt="Panel principal del club con métricas y resumen de ocupación" loading="lazy" decoding="async" />
-            </div>
-            <button type="button" class="app__ampliar" id="appAmpliar" aria-haspopup="dialog">
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M14 4h6v6M10 20H4v-6M20 4l-7 7M4 20l7-7" /></svg>
-              Ampliar</button>
-          </div>
-        </div>
-
-        <dl class="datos">
-          <div class="dato"><dt>Tipo</dt><dd>Sistema de gestión a medida</dd></div>
-          <div class="dato"><dt>Módulos</dt><dd>Socios, sombrillas, tarifas y cobranzas</dd></div>
-          <div class="dato"><dt>Estado</dt><dd>En producción, de uso diario</dd></div>
-        </dl>
-      </div>
-    </section>
-
-    <!-- 05. En qué nos diferenciamos: compromisos concretos, sin promesas infladas -->
-    <section id="diferencia" class="diferencia capitulo" data-tema="base" aria-labelledby="diferencia-title">
+    <!-- 02. ¿Te pasa esto? Tarjetas apiladas (sticky): cada problema con su solución en una línea -->
+    <section id="te-pasa" class="te-pasa capitulo" data-tema="papel" aria-labelledby="te-pasa-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo"><span class="rotulo__n">05</span>En qué nos diferenciamos</p>
-          <h2 id="diferencia-title" class="titulo">Sin letra chica.</h2>
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>01 · Problemas</p>
+          <h2 id="te-pasa-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">¿Te pasa esto?</span></span></h2>
         </div>
-        <ul class="compromisos">
-          <li class="compromiso" data-escena="entrada">
-            <p class="compromiso__frase"><span>El dominio es suyo.</span></p>
-            <p class="compromiso__detalle">Se registra a nombre del cliente desde el primer día.</p>
+        <ol class="pila">
+          <li class="tarjeta" data-tema="papel" style="--i:0">
+            <figure class="tarjeta__foto foto">
+              <img src="assets/img/stock/mensajes-480.webp" srcset="assets/img/stock/mensajes-480.webp 480w, assets/img/stock/mensajes-960.webp 960w" sizes="(min-width: 900px) 40vw, 90vw" width="480" height="360" loading="lazy" decoding="async" alt="Mano sosteniendo un celular con varias notificaciones en la pantalla de bloqueo">
+            </figure>
+            <div class="tarjeta__texto">
+              <span class="tarjeta__n mono">Problema 01 · Consultas repetidas</span>
+              <h3 class="cond">Contesto lo mismo veinte veces por día.</h3>
+              <p>Respuestas automáticas por WhatsApp con lo que más te preguntan.</p>
+            </div>
           </li>
-          <li class="compromiso" data-escena="entrada">
-            <p class="compromiso__frase"><span>Presupuesto por escrito.</span></p>
-            <p class="compromiso__detalle">Qué incluye, qué no, el plazo y el costo, antes de empezar.</p>
+          <li class="tarjeta" data-tema="tinta" style="--i:1">
+            <figure class="tarjeta__foto foto">
+              <img src="assets/img/stock/mostrador-480.webp" srcset="assets/img/stock/mostrador-480.webp 480w, assets/img/stock/mostrador-960.webp 960w" sizes="(min-width: 900px) 40vw, 90vw" width="480" height="360" loading="lazy" decoding="async" alt="Mostrador con un posnet, una notebook y un cuaderno de anotaciones">
+            </figure>
+            <div class="tarjeta__texto">
+              <span class="tarjeta__n mono">Problema 02 · Pedidos desordenados</span>
+              <h3 class="cond">Los pedidos me llegan desordenados por historias y WhatsApp.</h3>
+              <p>Una página con tu catálogo donde el cliente arma el pedido y te llega listo.</p>
+            </div>
           </li>
-          <li class="compromiso" data-escena="entrada">
-            <p class="compromiso__frase"><span>Atención en persona.</span></p>
-            <p class="compromiso__detalle">Reuniones presenciales en toda la zona, de San Clemente a Miramar.</p>
+          <li class="tarjeta" data-tema="papel" style="--i:2">
+            <figure class="tarjeta__foto foto">
+              <img src="assets/img/stock/mapa-480.webp" srcset="assets/img/stock/mapa-480.webp 480w, assets/img/stock/mapa-960.webp 960w" sizes="(min-width: 900px) 40vw, 90vw" width="480" height="360" loading="lazy" decoding="async" alt="Persona en la calle mirando una aplicación de mapa en su celular">
+            </figure>
+            <div class="tarjeta__texto">
+              <span class="tarjeta__n mono">Problema 03 · No aparecés en Google</span>
+              <h3 class="cond">En Google no aparezco, o figuran mal mis horarios.</h3>
+              <p>Tu ficha de Google ordenada y una página propia.</p>
+            </div>
           </li>
-          <li class="compromiso" data-escena="entrada">
-            <p class="compromiso__frase"><span>Respuesta en 24 horas.</span></p>
-            <p class="compromiso__detalle">Toda consulta recibe respuesta en menos de un día.</p>
-          </li>
-          <li class="compromiso" data-escena="entrada">
-            <p class="compromiso__frase"><span>Seguimos después de la entrega.</span></p>
-            <p class="compromiso__detalle">Hosting, mantenimiento y cambios menores con una cuota mensual.</p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 06. Proceso: la línea se dibuja con el scroll y enciende cada paso -->
-    <section id="proceso" class="proceso capitulo" data-tema="alt" aria-labelledby="proceso-title">
-      <div class="contenedor proceso__grilla">
-        <div class="cabeza proceso__cabeza" data-escena="entrada">
-          <p class="rotulo"><span class="rotulo__n">06</span>Proceso</p>
-          <h2 id="proceso-title" class="titulo">Cuatro pasos,<br /><em>sin sorpresas.</em></h2>
-        </div>
-        <ol class="pasos" data-escena="recorrido">
-          <li class="paso" data-escena="entrada">
-            <span class="paso__n">01</span>
-            <h3>Relevamiento</h3>
-            <p>Una conversación por mensaje, por correo o en persona, para entender el negocio y lo que necesita.</p>
-          </li>
-          <li class="paso" data-escena="entrada">
-            <span class="paso__n">02</span>
-            <h3>Presupuesto por escrito</h3>
-            <p>Detalla qué incluye, qué no, el plazo y el costo. Sin cargo y sin compromiso.</p>
-          </li>
-          <li class="paso" data-escena="entrada">
-            <span class="paso__n">03</span>
-            <h3>Desarrollo con avances</h3>
-            <p>El cliente ve el trabajo a medida que avanza y lo prueba antes de la entrega.</p>
-          </li>
-          <li class="paso" data-escena="entrada">
-            <span class="paso__n">04</span>
-            <h3>Acompañamiento</h3>
-            <p>Hosting, mantenimiento y cambios menores con una cuota mensual.</p>
+          <li class="tarjeta" data-tema="tinta" style="--i:3">
+            <figure class="tarjeta__foto foto">
+              <img src="assets/img/stock/temporada-480.webp" srcset="assets/img/stock/temporada-480.webp 480w, assets/img/stock/temporada-960.webp 960w" sizes="(min-width: 900px) 40vw, 90vw" width="480" height="360" loading="lazy" decoding="async" alt="Terraza de un restaurante frente al mar, llena de gente en verano">
+            </figure>
+            <div class="tarjeta__texto">
+              <span class="tarjeta__n mono">Problema 04 · Temporada</span>
+              <h3 class="cond">En temporada no doy abasto y se me escapan consultas.</h3>
+              <p>Un sistema de turnos, reservas o pedidos a tu medida.</p>
+            </div>
           </li>
         </ol>
+        <div class="cierre">
+          <a href="#contacto" class="btn btn--accion" data-evento="diagnostico-te-pasa">Pedí tu diagnóstico gratis <span aria-hidden="true">→</span></a>
+        </div>
       </div>
     </section>
 
-    <!-- 07. El estudio: quiénes somos y qué formación tenemos -->
-    <section id="estudio" class="estudio capitulo" data-tema="base" aria-labelledby="estudio-title">
+    <!-- 03. Números: el único bloque azul. Componente "cifra" reutilizable:
+         <span class="cifra__n cond" data-cifra="<entero>" [data-prefijo="…"] [data-sufijo="…"] aria-hidden="true">valor final</span>
+         más un <span class="visually-hidden"> con el valor, para lectores de pantalla. js/main.js la cuenta de 0 al valor
+         una sola vez al entrar en pantalla (solo con movimiento); sin movimiento o sin JS queda el valor final. -->
+    <section id="numeros" class="numeros capitulo" data-tema="azul" aria-labelledby="numeros-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo"><span class="rotulo__n">07</span>El estudio</p>
-          <h2 id="estudio-title" class="titulo">Formados en sistemas.<br /><em>Con base en la costa.</em></h2>
-          <p class="bajada"><b>studio74dev</b> somos cuatro desarrolladores full stack: dos estudiantes de la
-            Licenciatura en Sistemas y dos técnicos en software. El mismo equipo diseña, programa y mantiene cada
-            proyecto, con reuniones presenciales en toda la zona.</p>
+        <h2 id="numeros-title" class="visually-hidden">Los números del relevamiento</h2>
+        <ul class="cifras">
+          <li class="cifra">
+            <span class="cifra__n cond" data-cifra="175" style="min-width:3ch" aria-hidden="true">175</span>
+            <span class="visually-hidden">175</span>
+            <span class="cifra__txt mono">comercios relevados</span>
+          </li>
+          <li class="cifra">
+            <span class="cifra__n cond" data-cifra="54" style="min-width:2ch" aria-hidden="true">54</span>
+            <span class="visually-hidden">54</span>
+            <span class="cifra__txt mono">fichas sin reclamar</span>
+          </li>
+        </ul>
+        <p class="numeros__frase enunciado">En octubre relevamos 175 comercios de la costa: 54 tenían su ficha de Google sin reclamar.</p>
+      </div>
+    </section>
+
+    <!-- 04. Cómo trabajamos: tres pasos grandes y las garantías (sin letra chica) -->
+    <section id="como-trabajamos" class="como capitulo" data-tema="tinta" aria-labelledby="como-title">
+      <div class="contenedor">
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>02 · Cómo trabajamos</p>
+          <h2 id="como-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Cómo trabajamos</span></span></h2>
         </div>
+        <ol class="pasos">
+          <li class="paso">
+            <span class="paso__n cond" data-revelar="numero" aria-hidden="true">01</span>
+            <h3 class="cond">Diagnóstico gratis</h3>
+            <p>Revisamos cómo trabaja tu negocio hoy y qué te está costando.</p>
+          </li>
+          <li class="paso">
+            <span class="paso__n cond" data-revelar="numero" aria-hidden="true">02</span>
+            <h3 class="cond">Propuesta clara</h3>
+            <p>Un presupuesto por escrito con qué incluye, qué no, el plazo y el costo.</p>
+          </li>
+          <li class="paso">
+            <span class="paso__n cond" data-revelar="numero" aria-hidden="true">03</span>
+            <h3 class="cond">Entrega andando</h3>
+            <p>Lo ves avanzar y lo probás antes de la entrega.</p>
+          </li>
+        </ol>
+        <figure class="foto foto--ancha como__foto" data-revelar="imagen">
+          <img src="assets/img/stock/como-equipo-960.webp" srcset="assets/img/stock/como-equipo-960.webp 960w, assets/img/stock/como-equipo-1600.webp 1600w" sizes="(min-width: 900px) 100vw, 90vw" width="960" height="540" loading="lazy" decoding="async" alt="Un grupo chico trabajando con laptops alrededor de una mesa de madera">
+          <figcaption class="foto__nota">Foto ilustrativa</figcaption>
+        </figure>
+
+        <h3 class="subtitulo cond" data-revelar>Sin letra chica.</h3>
+        <ul class="compromisos">
+          <li class="compromiso">
+            <details>
+              <summary><span>El dominio es tuyo.</span></summary>
+              <p>Se registra a tu nombre desde el primer día y, si decidís no seguir con nosotros, te transferimos el sitio a una cuenta propia.</p>
+            </details>
+          </li>
+          <li class="compromiso">
+            <details>
+              <summary><span>Presupuesto por escrito.</span></summary>
+              <p>Qué incluye, qué no, el plazo y el costo, antes de empezar.</p>
+            </details>
+          </li>
+          <li class="compromiso">
+            <details>
+              <summary><span>Atención en persona.</span></summary>
+              <p>Reuniones presenciales en toda la zona, de San Clemente a Miramar.</p>
+            </details>
+          </li>
+          <li class="compromiso">
+            <details>
+              <summary><span>Respuesta en 24 horas hábiles.</span></summary>
+              <p>Toda consulta recibe respuesta en menos de un día hábil.</p>
+            </details>
+          </li>
+          <li class="compromiso">
+            <details>
+              <summary><span>Seguimos después de la entrega.</span></summary>
+              <p>Hosting, mantenimiento y cambios menores con una cuota mensual.</p>
+            </details>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 05. Qué incluye el diagnóstico gratis -->
+    <section id="que-incluye" class="incluye capitulo" data-tema="tinta" aria-labelledby="incluye-title">
+      <div class="contenedor">
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>03 · Diagnóstico gratis</p>
+          <h2 id="incluye-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Qué revisamos</span></span></h2>
+        </div>
+        <ul class="revisamos">
+          <li><span class="revisamos__n mono">01</span><p>Tu ficha de Google: si está completa y aparece bien.</p></li>
+          <li><span class="revisamos__n mono">02</span><p>Tus redes.</p></li>
+          <li><span class="revisamos__n mono">03</span><p>Tu web: si está indexada y bien armada.</p></li>
+          <li><span class="revisamos__n mono">04</span><p>Cómo tomás pedidos o reservas.</p></li>
+        </ul>
+        <p class="incluye__cierre">Con eso te armamos una propuesta a medida, sin costo y sin compromiso.</p>
+        <div class="cierre">
+          <a href="#contacto" class="btn btn--accion" data-evento="diagnostico-que-incluye">Pedí tu diagnóstico gratis <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06. Caso: Matemar (el único caso) -->
+    <section id="casos" class="casos capitulo" data-tema="papel" aria-labelledby="casos-title">
+      <div class="contenedor">
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>04 · Caso · Matemar · Miramar</p>
+          <h2 id="casos-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">De historias a una web.</span></span></h2>
+        </div>
+        <figure class="caso__visual" data-revelar="imagen">
+          <div class="caso__marco">
+            <img class="caso__nb" src="assets/img/casos/matemar/matemar-catalogo-1440.webp" width="1440" height="900" loading="lazy" decoding="async" alt="Catálogo de yerbas de Matemar en una notebook">
+            <img class="caso__cel" src="assets/img/casos/matemar/matemar-whatsapp-390.webp" width="780" height="1688" loading="lazy" decoding="async" alt="Pedido de Matemar listo para enviar por WhatsApp, en el celular">
+          </div>
+          <figcaption class="resolvemos__nota">Trabajo real: Matemar, Miramar.</figcaption>
+        </figure>
+        <dl class="antes-ahora" data-revelar>
+          <div class="antes-ahora__bloque">
+            <dt class="mono">Antes</dt>
+            <dd>Vendía solo por historias de Instagram y las consultas llegaban sueltas.</dd>
+          </div>
+          <div class="antes-ahora__bloque">
+            <dt class="mono">Ahora</dt>
+            <dd>Una página con sus yerbas uruguayas donde el cliente arma el pedido y lo envía por WhatsApp.</dd>
+          </div>
+        </dl>
+        <div class="cierre cierre--dos">
+          <a class="btn btn--borde" href="/proyectos/matemar/">Ver el caso completo</a>
+          <a href="#contacto" class="btn btn--accion" data-evento="diagnostico-casos">Pedí tu diagnóstico gratis <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07. Quiénes somos: video de ruta en blanco y negro (póster = imagen fija). Mismo patrón que el inicio:
+         sin autoplay en el HTML; main.js lo arranca al acercarse a la pantalla, solo con movimiento permitido
+         y sin ahorro de datos, y lo pausa fuera de pantalla. Dura más de 5 s: botón de pausa (WCAG 2.2.2).
+         Con reduced-motion o sin JS queda el póster. Medio de stock (créditos en assets/img/stock/CREDITOS.md). -->
+    <section id="quienes" class="quienes capitulo" data-tema="tinta" data-sobre-foto aria-labelledby="quienes-title">
+      <div class="quienes__medio" aria-hidden="true">
+        <img class="quienes__par hero__par" src="assets/img/stock/quienes-ruta-1712.webp" width="1712" height="720" loading="lazy" decoding="async" alt="" />
+        <video class="quienes__video hero__par" muted loop playsinline preload="none" data-src="assets/video/quienes.mp4" tabindex="-1"></video>
+      </div>
+      <button type="button" class="pausa quienes__pausa" aria-pressed="false" aria-label="Pausar el video de Quiénes somos" hidden><span aria-hidden="true"></span></button>
+      <div class="contenedor quienes__contenido">
+        <p class="rotulo mono">05 · Quiénes somos</p>
+        <h2 id="quienes-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Cuatro devs.</span></span> <span class="linea acento"><span style="--i:1">Una ruta.</span></span></h2>
+        <p class="quienes__texto enunciado">Tres de General Madariaga y uno de Pinamar, unidos por la Ruta 74.</p>
         <ul class="equipo">
-          <li class="persona" data-escena="entrada">
-            <span class="persona__inicial" aria-hidden="true">M</span>
-            <p class="persona__nombre">Mariano</p>
-            <p class="persona__cargo">Desarrollador full stack</p>
+          <li class="persona">
+            <p class="persona__nombre mono">Mariano</p>
             <p class="persona__formacion">Estudiante de la Licenciatura en Sistemas</p>
           </li>
-          <li class="persona" data-escena="entrada">
-            <span class="persona__inicial" aria-hidden="true">R</span>
-            <p class="persona__nombre">Ramiro</p>
-            <p class="persona__cargo">Desarrollador full stack</p>
+          <li class="persona">
+            <p class="persona__nombre mono">Ramiro</p>
             <p class="persona__formacion">Estudiante de la Licenciatura en Sistemas</p>
           </li>
-          <li class="persona" data-escena="entrada">
-            <span class="persona__inicial" aria-hidden="true">V</span>
-            <p class="persona__nombre">Valentín</p>
-            <p class="persona__cargo">Desarrollador full stack</p>
+          <li class="persona">
+            <p class="persona__nombre mono">Valentín</p>
             <p class="persona__formacion">Técnico en Software</p>
           </li>
-          <li class="persona" data-escena="entrada">
-            <span class="persona__inicial" aria-hidden="true">G</span>
-            <p class="persona__nombre">Gerónimo</p>
-            <p class="persona__cargo">Desarrollador full stack</p>
+          <li class="persona">
+            <p class="persona__nombre mono">Gerónimo</p>
             <p class="persona__formacion">Próximo a recibirse de Técnico en Software</p>
           </li>
         </ul>
+        <p class="quienes__nota mono">Imagen ilustrativa</p>
       </div>
     </section>
 
-    <!-- 08. Preguntas frecuentes. Si cambian, actualizar también el FAQPage del JSON-LD. -->
-    <section id="preguntas" class="preguntas-sec capitulo" data-tema="alt" aria-labelledby="preguntas-title">
+    <!-- 08. Preguntas frecuentes. Si cambian, actualizar también el FAQPage del JSON-LD
+         (solo las preguntas cuya respuesta ya es definitiva, sin marcas pendientes). -->
+    <section id="preguntas" class="preguntas-sec capitulo" data-tema="papel" aria-labelledby="preguntas-title">
       <div class="contenedor preguntas-sec__grilla">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo"><span class="rotulo__n">08</span>Preguntas frecuentes</p>
-          <h2 id="preguntas-title" class="titulo">Antes de<br /><em>empezar.</em></h2>
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>Preguntas frecuentes</p>
+          <h2 id="preguntas-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Preguntas</span></span></h2>
         </div>
-        <div class="preguntas" data-escena="entrada">
-          <details class="pregunta">
-            <summary>¿Cuánto tiempo lleva el desarrollo?</summary>
-            <p>Una página simple lleva alrededor de una semana desde que se reciben los textos y las fotos. Los
-              sistemas, turnos y reservas dependen del alcance; el plazo se indica en el presupuesto.</p>
-          </details>
+        <div class="preguntas" data-revelar>
           <details class="pregunta">
             <summary>¿Cuánto cuesta?</summary>
             <p>Depende del alcance. Antes de empezar enviamos un presupuesto por escrito, sin cargo, que detalla qué
               incluye y qué no.</p>
+          </details>
+          <details class="pregunta">
+            <summary>¿Cuánto tarda?</summary>
+            <p>Una página simple lleva alrededor de una semana desde que se reciben los textos y las fotos. Los
+              sistemas, turnos y reservas dependen del alcance; el plazo se indica en el presupuesto.</p>
+          </details>
+          <details class="pregunta">
+            <summary>¿Qué pasa si después quiero cambiar algo?</summary>
+            <p>Los cambios menores están incluidos en el servicio mensual de hosting y mantenimiento, que se informa por separado en el presupuesto. Los cambios más grandes se cotizan aparte, siempre con presupuesto por escrito antes de empezar.</p>
+          </details>
+          <details class="pregunta">
+            <summary>¿Necesito saber de tecnología?</summary>
+            <p>No. Nosotros nos ocupamos de la parte técnica y te explicamos cómo usar lo que armamos, con palabras simples.</p>
           </details>
           <details class="pregunta">
             <summary>¿Quién es dueño de la web?</summary>
@@ -831,154 +744,237 @@
               sitio a una cuenta propia.</p>
           </details>
           <details class="pregunta">
-            <summary>¿Incluye mantenimiento?</summary>
-            <p>Ofrecemos un servicio mensual que cubre hosting, mantenimiento y cambios menores. Se informa por separado
-              en el presupuesto.</p>
-          </details>
-          <details class="pregunta">
-            <!-- TODO: confirmar los medios de pago aceptados y detallarlos acá y en el JSON-LD. -->
-            <summary>¿Qué medios de pago aceptan?</summary>
-            <p>Las condiciones y los medios de pago se detallan en cada presupuesto.</p>
-          </details>
-          <details class="pregunta">
             <summary>¿Qué pasa después de la entrega?</summary>
             <p>El proyecto queda publicado y en funcionamiento. A partir de ahí, el cliente puede contratar el servicio
               mensual de hosting y mantenimiento, o pedir que lo transfiramos a una cuenta propia.</p>
           </details>
+          <details class="pregunta">
+            <!-- Medios de pago: decisión del equipo (2026-11-26), se detallan en cada presupuesto. -->
+            <summary>¿Qué medios de pago aceptan?</summary>
+            <p>Las condiciones y los medios de pago se detallan en cada presupuesto.</p>
+          </details>
+        </div>
+        <div class="cierre">
+          <a href="#contacto" class="btn btn--accion" data-evento="diagnostico-preguntas">Pedí tu diagnóstico gratis <span aria-hidden="true">→</span></a>
         </div>
       </div>
     </section>
 
-    <!-- 09. Contacto: el formulario se completa como una frase -->
-    <section id="contacto" class="contacto capitulo" data-tema="base" aria-labelledby="contacto-title">
+    <!-- 09. Diagnóstico gratis: formulario "pedido que se arma": una pregunta por pantalla -->
+    <section id="contacto" class="contacto capitulo" data-tema="papel" aria-labelledby="contacto-title">
       <div class="contenedor">
-        <div class="cabeza" data-escena="entrada">
-          <p class="rotulo"><span class="rotulo__n">09</span>Contacto</p>
-          <h2 id="contacto-title" class="contacto__titulo">Hablemos<br />de su negocio<i class="hero__fin" aria-hidden="true"></i></h2>
+        <div class="cabeza">
+          <p class="rotulo mono" data-revelar>06 · Diagnóstico gratis</p>
+          <h2 id="contacto-title" class="titulo cond" data-revelar="titulo"><span class="linea"><span style="--i:0">Pedí tu diagnóstico gratis</span></span></h2>
+          <p class="bajada" data-revelar>Revisamos cómo te encuentran hoy y te armamos una propuesta a medida. Sin costo y sin compromiso.</p>
         </div>
 
-        <div class="contacto__grilla">
-          <form class="form" id="contactForm" action="mailto:studio74dev@gmail.com" method="post" enctype="text/plain" novalidate data-escena="entrada">
-            <div class="form__fila">
-              <div class="grupo">
-                <label class="grupo__etiqueta" for="name">Nombre</label>
-                <input type="text" id="name" name="name" class="campo" autocomplete="name" maxlength="80" required />
+        <!-- Formulario "pedido que se arma": una pregunta por pantalla y la tarjeta TU DIAGNÓSTICO que se completa en vivo
+             (lo arma js/main.js). Sin JS todo queda visible en una sola página y se envía por mailto. -->
+        <form class="form" id="contactForm" action="mailto:studio74dev@gmail.com" method="post" enctype="text/plain" novalidate data-revelar>
+          <div class="form__layout">
+
+            <!-- Tarjeta en vivo: oculta sin JS; en celular va arriba y se pliega -->
+            <aside class="diag" id="formDiag" aria-label="Tu diagnóstico" hidden>
+              <button type="button" class="diag__cab" id="diagToggle" aria-expanded="false" aria-controls="diagCuerpo">
+                <span class="diag__titulo mono">Tu diagnóstico</span>
+                <span class="diag__cuenta mono" id="diagCuenta">0 de 7</span>
+                <svg class="diag__flecha" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 9l6 6 6-6" /></svg>
+              </button>
+              <div class="diag__cuerpo" id="diagCuerpo">
+                <div class="diag__interior">
+                  <ol class="diag__lista">
+                    <li class="diag__ren" data-fila="costo" data-ir="1"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Te cuesta</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: qué te está costando">Editar</button></li>
+                    <li class="diag__ren" data-fila="rubro" data-ir="2"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Rubro</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: rubro">Editar</button></li>
+                    <li class="diag__ren" data-fila="localidad" data-ir="3"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Localidad</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: localidad">Editar</button></li>
+                    <li class="diag__ren" data-fila="atencion" data-ir="4"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Atendés hoy</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: cómo atendés hoy">Editar</button></li>
+                    <li class="diag__ren" data-fila="cuando" data-ir="5"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Para cuándo</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: para cuándo">Editar</button></li>
+                    <li class="diag__ren" data-fila="name" data-ir="6"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Nombre</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: nombre">Editar</button></li>
+                    <li class="diag__ren" data-fila="contacto" data-ir="6"><span class="diag__marca" aria-hidden="true"><i class="diag__p">·</i><i class="diag__c">✓</i></span><span class="diag__k mono">Contacto</span><span class="diag__v">Pendiente</span><button type="button" class="diag__editar mono" aria-label="Cambiar: contacto">Editar</button></li>
+                  </ol>
+                </div>
               </div>
-              <div class="grupo">
-                <label class="grupo__etiqueta" for="email">Correo electrónico</label>
-                <input type="email" id="email" name="email" class="campo" autocomplete="email" maxlength="120" required />
+              <p class="visually-hidden" id="diagAnuncio" role="status" aria-live="polite"></p>
+            </aside>
+
+            <div class="form__main">
+              <div class="form__progreso" hidden>
+                <p id="formPasoTexto" class="mono" aria-live="polite">Paso 1 de 7</p>
+                <span class="form__barra"><i></i></span>
               </div>
-            </div>
 
-            <fieldset class="grupo form__servicios">
-              <legend class="grupo__etiqueta">Tipo de consulta</legend>
-              <div class="opciones">
-                <label class="opcion"><input type="radio" name="service" value="Paquete de entrada" required /><span>Paquete de entrada</span></label>
-                <label class="opcion"><input type="radio" name="service" value="Sistema a medida" /><span>Sistema a medida</span></label>
-                <label class="opcion"><input type="radio" name="service" value="Turnos y reservas" /><span>Turnos y reservas</span></label>
-                <label class="opcion"><input type="radio" name="service" value="Automatización" /><span>Automatización</span></label>
-                <label class="opcion"><input type="radio" name="service" value="Otra consulta" /><span>Otra consulta</span></label>
+              <fieldset class="form__paso" data-paso="1">
+                <legend tabindex="-1">¿Qué te está costando hoy?</legend>
+                <p class="form__pista mono">Elegí todas las que quieras.</p>
+                <div class="opciones">
+                  <label class="opcion"><input type="checkbox" name="costo" value="Consultas repetidas" /><span>Consultas repetidas</span></label>
+                  <label class="opcion"><input type="checkbox" name="costo" value="Pedidos desordenados" /><span>Pedidos desordenados</span></label>
+                  <label class="opcion"><input type="checkbox" name="costo" value="No aparezco en Google" /><span>No aparezco en Google</span></label>
+                  <label class="opcion"><input type="checkbox" name="costo" value="No doy abasto en temporada" /><span>No doy abasto en temporada</span></label>
+                  <label class="opcion"><input type="checkbox" name="costo" value="Otra" /><span>Otra</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="form__paso" data-paso="2">
+                <legend tabindex="-1">¿Cuál es tu rubro?</legend>
+                <div class="grupo">
+                  <label class="grupo__etiqueta mono" for="rubro">Rubro</label>
+                  <input type="text" id="rubro" name="rubro" class="campo" maxlength="80" aria-describedby="rubroAyuda" required />
+                  <p class="grupo__ayuda" id="rubroAyuda">Por ejemplo: almacén, peluquería, hospedaje.</p>
+                </div>
+              </fieldset>
+
+              <fieldset class="form__paso" data-paso="3">
+                <legend tabindex="-1">¿En qué localidad estás?</legend>
+                <div class="opciones opciones--denso">
+                  <label class="opcion"><input type="radio" name="localidad" value="Pinamar" required /><span>Pinamar</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Villa Gesell" /><span>Villa Gesell</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="General Juan Madariaga" /><span>General Juan Madariaga</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Cariló" /><span>Cariló</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Ostende" /><span>Ostende</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Valeria del Mar" /><span>Valeria del Mar</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Mar de las Pampas" /><span>Mar de las Pampas</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Mar del Plata" /><span>Mar del Plata</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Miramar" /><span>Miramar</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Dolores" /><span>Dolores</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="San Clemente del Tuyú" /><span>San Clemente del Tuyú</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Santa Teresita" /><span>Santa Teresita</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Mar de Ajó" /><span>Mar de Ajó</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="San Bernardo del Tuyú" /><span>San Bernardo del Tuyú</span></label>
+                  <label class="opcion"><input type="radio" name="localidad" value="Otra" /><span>Otra</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="form__paso" data-paso="4">
+                <legend tabindex="-1">¿Cómo atendés hoy?</legend>
+                <p class="form__pista mono">Opcional. Elegí las que uses.</p>
+                <div class="opciones">
+                  <label class="opcion"><input type="checkbox" name="atencion" value="Solo en el local" /><span>Solo en el local</span></label>
+                  <label class="opcion"><input type="checkbox" name="atencion" value="Instagram" /><span>Instagram</span></label>
+                  <label class="opcion"><input type="checkbox" name="atencion" value="WhatsApp" /><span>WhatsApp</span></label>
+                  <label class="opcion"><input type="checkbox" name="atencion" value="Ya tengo web" /><span>Ya tengo web</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="form__paso" data-paso="5">
+                <legend tabindex="-1">¿Para cuándo lo necesitás?</legend>
+                <div class="opciones">
+                  <label class="opcion"><input type="radio" name="cuando" value="Antes de la temporada" required /><span>Antes de la temporada</span></label>
+                  <label class="opcion"><input type="radio" name="cuando" value="Este mes" /><span>Este mes</span></label>
+                  <label class="opcion"><input type="radio" name="cuando" value="Sin apuro" /><span>Sin apuro</span></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="form__paso" data-paso="6">
+                <legend tabindex="-1">¿Cómo te contactamos?</legend>
+                <div class="grupo">
+                  <label class="grupo__etiqueta mono" for="name">Nombre</label>
+                  <input type="text" id="name" name="name" class="campo" autocomplete="name" maxlength="80" required />
+                </div>
+                <div class="grupo">
+                  <label class="grupo__etiqueta mono" for="whatsapp">WhatsApp</label>
+                  <input type="tel" id="whatsapp" name="whatsapp" class="campo" inputmode="tel" autocomplete="tel" maxlength="30" aria-describedby="contactoAyuda" />
+                </div>
+                <div class="grupo">
+                  <label class="grupo__etiqueta mono" for="email">Correo electrónico</label>
+                  <input type="email" id="email" name="email" class="campo" autocomplete="email" maxlength="120" aria-describedby="contactoAyuda" />
+                </div>
+                <p class="grupo__ayuda" id="contactoAyuda">Dejanos tu WhatsApp o tu correo: con uno alcanza.</p>
+              </fieldset>
+
+              <!-- Pantalla final (solo con JS): la tarjeta completa, con cada renglón editable, y el botón de enviar -->
+              <div class="form__paso form__revision" data-paso="7" hidden>
+                <h3 class="form__rev-titulo" tabindex="-1">Revisá tu diagnóstico</h3>
+                <p class="form__pista mono">Tocá “Editar” en cualquier renglón para cambiarlo.</p>
               </div>
-            </fieldset>
 
-            <div class="grupo">
-              <label class="grupo__etiqueta" for="message">Mensaje</label>
-              <textarea id="message" name="message" class="campo campo--largo" rows="4" aria-describedby="messageAyuda"
-                maxlength="2000" required></textarea>
-              <p class="grupo__ayuda" id="messageAyuda">Cuéntenos sobre su negocio y qué necesita. Por ejemplo: «Tengo
-                un gimnasio y registro las cuotas en un cuaderno».</p>
-            </div>
-
-            <!-- Anti-spam: honeypot invisible (los bots suelen completarlo) -->
-            <div class="form__hp" aria-hidden="true">
-              <label for="company">Empresa (no completar)</label>
-              <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
-              <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true" autocomplete="off" />
-            </div>
-
-            <div class="form__pie">
-              <button type="submit" class="btn btn--senal btn--primary magnetico">Enviar consulta
-                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button>
-              <p class="form__note" role="status" aria-live="polite">Respondemos en menos de 24 horas. Sus datos se
-                usan únicamente para responder la consulta.</p>
-            </div>
-            <!-- Si el envío falla, el visitante elige cómo seguir (lo muestra js/main.js) -->
-            <div class="form__alternativas" id="formAlternativas" hidden>
-              <p class="form__aviso" id="formAviso" role="alert" tabindex="-1"></p>
-              <div class="form__acciones">
-                <button type="button" class="btn btn--borde" id="formReintentar">Reintentar</button>
-                <button type="button" class="btn btn--borde" id="formCopiar">Copiar correo</button>
-                <a class="btn btn--borde" id="formGmail" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=studio74dev@gmail.com"
-                  target="_blank" rel="noopener noreferrer" aria-label="Abrir en Gmail (pestaña nueva)">Abrir en Gmail</a>
+              <div class="form__nav" hidden>
+                <button type="button" class="form__volver" id="formVolver">Volver</button>
+                <button type="button" class="btn btn--grande" id="formSeguir">Seguir</button>
               </div>
-              <p class="form__directo">Correo del estudio: <span class="form__correo" id="formCorreo">studio74dev@gmail.com</span>
-                · <a id="formPrograma" href="mailto:studio74dev@gmail.com">Usar el programa de correo</a></p>
-              <p class="form__copiado" id="formCopiado" role="status" aria-live="polite"></p>
-            </div>
-            <noscript><p class="form__note">Sin JavaScript, el formulario abre su aplicación de correo. También puede
-                escribirnos directamente a studio74dev@gmail.com.</p></noscript>
-          </form>
 
-          <div class="canales" data-escena="entrada">
-            <p class="canales__titulo">O escríbanos directamente</p>
-            <!-- WhatsApp: el enlace lo pone js/main.js (CANALES); sin JavaScript queda oculto. -->
-            <a class="canal" data-canal="whatsapp" href="#" target="_blank" rel="noopener noreferrer" hidden
-              aria-label="WhatsApp: abrir chat (se abre en una pestaña nueva)">
-              <span class="canal__rotulo">WhatsApp</span><span class="canal__valor">Abrir chat</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a>
-            <a class="canal" href="mailto:studio74dev@gmail.com" aria-label="Correo: studio74dev@gmail.com">
-              <span class="canal__rotulo">Correo</span><span class="canal__valor">studio74dev@gmail.com</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a>
-            <a class="canal" href="https://www.instagram.com/studio74dev/" target="_blank" rel="noopener noreferrer"
-              aria-label="Instagram @studio74dev (se abre en una pestaña nueva)">
-              <span class="canal__rotulo">Instagram</span><span class="canal__valor">@studio74dev</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a>
-            <a class="canal" href="https://www.linkedin.com/company/studio74dev/" target="_blank" rel="noopener noreferrer"
-              aria-label="LinkedIn studio74dev (se abre en una pestaña nueva)">
-              <span class="canal__rotulo">LinkedIn</span><span class="canal__valor">studio74dev</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a>
-            <a class="canal" href="https://www.facebook.com/studio74dev/" target="_blank" rel="noopener noreferrer"
-              aria-label="Facebook studio74dev (se abre en una pestaña nueva)">
-              <span class="canal__rotulo">Facebook</span><span class="canal__valor">studio74dev</span>
-              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 17L17 7M8 7h9v9" /></svg></a>
+              <!-- Anti-spam: honeypot invisible (los bots suelen completarlo) -->
+              <div class="form__hp" aria-hidden="true">
+                <label for="company">Empresa (no completar)</label>
+                <input type="text" id="company" name="company" tabindex="-1" autocomplete="off" />
+                <input type="checkbox" name="botcheck" tabindex="-1" aria-hidden="true" autocomplete="off" />
+              </div>
+
+              <div class="form__pie">
+                <button type="submit" class="btn btn--accion btn--primary" data-evento="diagnostico-enviar">Pedir mi diagnóstico
+                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12h14M13 6l6 6-6 6" /></svg></button>
+                <p class="confianza">Gratis y sin compromiso. Presupuesto por escrito.</p>
+                <p class="form__note" role="status" aria-live="polite">Respondemos en menos de 24 horas hábiles. Tus datos se
+                  usan únicamente para responder la consulta.</p>
+              </div>
+              <!-- Si el envío falla, el visitante elige cómo seguir (lo muestra js/main.js) -->
+              <div class="form__alternativas" id="formAlternativas" hidden>
+                <p class="form__aviso" id="formAviso" role="alert" tabindex="-1"></p>
+                <div class="form__acciones">
+                  <button type="button" class="btn btn--borde" id="formReintentar">Reintentar</button>
+                  <button type="button" class="btn btn--borde" id="formCopiar">Copiar correo</button>
+                  <a class="btn btn--borde" id="formGmail" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=studio74dev@gmail.com"
+                    target="_blank" rel="noopener noreferrer" aria-label="Abrir en Gmail (pestaña nueva)">Abrir en Gmail</a>
+                </div>
+                <p class="form__directo">Correo del estudio: <span class="form__correo" id="formCorreo">studio74dev@gmail.com</span>
+                  · <a id="formPrograma" href="mailto:studio74dev@gmail.com" data-evento="mail-contacto">Usar el programa de correo</a></p>
+                <p class="form__copiado" id="formCopiado" role="status" aria-live="polite"></p>
+              </div>
+              <!-- Estado final: lo muestra js/main.js solo con un envío exitoso (o simulado). El enlace de WhatsApp
+                   lleva un resumen de lo elegido (lo arma js/main.js); este href es el respaldo -->
+              <div class="form__gracias" id="formGracias" role="status" hidden>
+                <h3 class="cond" id="formGraciasTitulo" tabindex="-1">Gracias. Recibimos tu pedido.</h3>
+                <p>Te respondemos dentro de las 24 horas hábiles.</p>
+                <a class="btn btn--borde" id="formGraciasWa" href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" data-evento="whatsapp-gracias" target="_blank" rel="noopener noreferrer" aria-label="Seguir por WhatsApp (se abre en una pestaña nueva)">Seguir por WhatsApp</a>
+              </div>
+              <noscript><p class="form__note">Sin JavaScript, el formulario abre tu aplicación de correo. También podés
+                  escribirnos directamente a studio74dev@gmail.com.</p></noscript>
+            </div>
           </div>
-        </div>
+        </form>
+
+        <p class="contacto__wa" data-revelar>¿Preferís hablar ya? <a href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" data-evento="whatsapp-contacto" target="_blank" rel="noopener noreferrer" aria-label="Escribinos por WhatsApp (se abre en una pestaña nueva)">Escribinos por WhatsApp</a>.</p>
+
+        <!-- Franja de contacto (decisión del usuario, ronda 3): horario de atención y soporte para clientes -->
+        <ul class="atencion" data-revelar aria-label="Atención y soporte">
+          <li><span class="atencion__r mono">Atención al público:</span> lunes a viernes de 9 a 15.</li>
+          <li><span class="atencion__r mono">Para clientes:</span> soporte según tu disponibilidad, y 24/7 en temporada.</li>
+        </ul>
       </div>
     </section>
 
   </main>
 
-  <footer class="footer capitulo" data-tema="base">
+  <footer class="footer capitulo" id="pie" data-tema="tinta">
     <div class="contenedor">
       <div class="footer__fila">
-        <p class="footer__zona">Software y presencia digital para comercios de Pinamar, Madariaga y toda la
-          Costa Atlántica, de San Clemente a Miramar.</p>
+        <div class="footer__datos">
+          <p class="footer__zona">Software y presencia digital para comercios de Pinamar, Madariaga y toda la
+            Costa Atlántica, de San Clemente a Miramar.</p>
+          <p class="footer__horario">Lunes a viernes de 9 a 15.</p>
+          <p class="footer__horario"><a class="footer__mail" href="mailto:studio74dev@gmail.com" data-evento="mail-pie">studio74dev@gmail.com</a></p>
+          <p class="footer__servicios">Webs y landing pages · Sistemas a medida · Bots de WhatsApp · Automatización con IA · Soporte y mantenimiento</p>
+          <p class="footer__servicios footer__otro">¿Necesitás otra cosa de sistemas? <a href="#contacto" data-evento="diagnostico-pie">Consultanos.</a></p>
+        </div>
+        <!-- Íconos: Simple Icons 16.38.1 (LinkedIn: 13.21.0, el último que lo trae), CC0 1.0; el sobre del mail es propio
+             (ver assets/img/stock/CREDITOS.md, sección Íconos) -->
         <ul class="redes" aria-label="Canales oficiales de studio74dev">
-          <li><a class="red" href="https://www.instagram.com/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de studio74dev (se abre en una pestaña nueva)">Instagram</a></li>
-          <li><a class="red" href="https://www.linkedin.com/company/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de studio74dev (se abre en una pestaña nueva)">LinkedIn</a></li>
-          <li><a class="red" href="https://www.facebook.com/studio74dev/" target="_blank" rel="noopener noreferrer" aria-label="Facebook de studio74dev (se abre en una pestaña nueva)">Facebook</a></li>
-          <li data-canal="whatsapp" hidden><a class="red" href="#" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de studio74dev (se abre en una pestaña nueva)">WhatsApp</a></li>
-          <li><a class="red" href="mailto:studio74dev@gmail.com" aria-label="Escribir a studio74dev@gmail.com">studio74dev@gmail.com</a></li>
+          <li><a class="red" href="https://www.instagram.com/studio74dev/" data-evento="red-instagram-pie" target="_blank" rel="noopener noreferrer" aria-label="Instagram de studio74dev (se abre en una pestaña nueva)"><svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true" focusable="false"><path d="M7.0301.084c-1.2768.0602-2.1487.264-2.911.5634-.7888.3075-1.4575.72-2.1228 1.3877-.6652.6677-1.075 1.3368-1.3802 2.127-.2954.7638-.4956 1.6365-.552 2.914-.0564 1.2775-.0689 1.6882-.0626 4.947.0062 3.2586.0206 3.6671.0825 4.9473.061 1.2765.264 2.1482.5635 2.9107.308.7889.72 1.4573 1.388 2.1228.6679.6655 1.3365 1.0743 2.1285 1.38.7632.295 1.6361.4961 2.9134.552 1.2773.056 1.6884.069 4.9462.0627 3.2578-.0062 3.668-.0207 4.9478-.0814 1.28-.0607 2.147-.2652 2.9098-.5633.7889-.3086 1.4578-.72 2.1228-1.3881.665-.6682 1.0745-1.3378 1.3795-2.1284.2957-.7632.4966-1.636.552-2.9124.056-1.2809.0692-1.6898.063-4.948-.0063-3.2583-.021-3.6668-.0817-4.9465-.0607-1.2797-.264-2.1487-.5633-2.9117-.3084-.7889-.72-1.4568-1.3876-2.1228C21.2982 1.33 20.628.9208 19.8378.6165 19.074.321 18.2017.1197 16.9244.0645 15.6471.0093 15.236-.005 11.977.0014 8.718.0076 8.31.0215 7.0301.0839m.1402 21.6932c-1.17-.0509-1.8053-.2453-2.2287-.408-.5606-.216-.96-.4771-1.3819-.895-.422-.4178-.6811-.8186-.9-1.378-.1644-.4234-.3624-1.058-.4171-2.228-.0595-1.2645-.072-1.6442-.079-4.848-.007-3.2037.0053-3.583.0607-4.848.05-1.169.2456-1.805.408-2.2282.216-.5613.4762-.96.895-1.3816.4188-.4217.8184-.6814 1.3783-.9003.423-.1651 1.0575-.3614 2.227-.4171 1.2655-.06 1.6447-.072 4.848-.079 3.2033-.007 3.5835.005 4.8495.0608 1.169.0508 1.8053.2445 2.228.408.5608.216.96.4754 1.3816.895.4217.4194.6816.8176.9005 1.3787.1653.4217.3617 1.056.4169 2.2263.0602 1.2655.0739 1.645.0796 4.848.0058 3.203-.0055 3.5834-.061 4.848-.051 1.17-.245 1.8055-.408 2.2294-.216.5604-.4763.96-.8954 1.3814-.419.4215-.8181.6811-1.3783.9-.4224.1649-1.0577.3617-2.2262.4174-1.2656.0595-1.6448.072-4.8493.079-3.2045.007-3.5825-.006-4.848-.0608M16.953 5.5864A1.44 1.44 0 1 0 18.39 4.144a1.44 1.44 0 0 0-1.437 1.4424M5.8385 12.012c.0067 3.4032 2.7706 6.1557 6.173 6.1493 3.4026-.0065 6.157-2.7701 6.1506-6.1733-.0065-3.4032-2.771-6.1565-6.174-6.1498-3.403.0067-6.156 2.771-6.1496 6.1738M8 12.0077a4 4 0 1 1 4.008 3.9921A3.9996 3.9996 0 0 1 8 12.0077"/></svg></a></li>
+          <li><a class="red" href="https://www.facebook.com/studio74dev/" data-evento="red-facebook-pie" target="_blank" rel="noopener noreferrer" aria-label="Facebook de studio74dev (se abre en una pestaña nueva)"><svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true" focusable="false"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></svg></a></li>
+          <li><a class="red" href="https://www.linkedin.com/company/studio74dev/" data-evento="red-linkedin-pie" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de studio74dev (se abre en una pestaña nueva)"><svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true" focusable="false"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a></li>
+          <li><a class="red" href="mailto:studio74dev@gmail.com" data-evento="mail-pie-icono" aria-label="Escribir a studio74dev@gmail.com"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M3 5.5h18v13H3zM3.5 6.5 12 13l8.5-6.5"/></svg></a></li>
+          <li><a class="red" href="https://wa.me/5492254424691?text=Hola%20studio74dev%2C%20quiero%20el%20diagn%C3%B3stico%20gratis%20para%20mi%20negocio" data-evento="whatsapp-pie" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp de studio74dev (se abre en una pestaña nueva)"><svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg></a></li>
         </ul>
       </div>
-      <p class="footer__marca" data-escena="entrada" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
       <p class="footer__copy">©<span id="year">2026</span> studio74dev</p>
+      <p class="footer__proy"><a href="/proyectos/">Proyectos</a></p>
     </div>
+    <p class="footer__marca" aria-hidden="true"><span>studio<b>74</b>dev</span></p>
   </footer>
 
-  <!-- Visor de la pantalla del sistema: se puede desplazar y hacer zoom -->
-  <dialog class="visor" id="visor" aria-label="Pantalla del sistema ampliada">
-    <form method="dialog" class="visor__barra">
-      <span class="visor__titulo" id="visorTitulo"></span>
-      <button type="submit" class="visor__cerrar" aria-label="Cerrar">
-        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
-    </form>
-    <div class="visor__lienzo">
-      <img id="visorImagen" src="data:," width="1024" height="470" alt="" />
-    </div>
-  </dialog>
-
-  <script src="js/main.js?v=22" defer></script>
+  <!-- Lenis 1.3.29 (MIT, darkroom.engineering): scroll suave con la rueda; local, ver assets/vendor/LICENSE-lenis.txt -->
+  <script src="assets/vendor/lenis.min.js?v=1" defer></script>
+  <script src="js/main.js?v=63" defer></script>
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

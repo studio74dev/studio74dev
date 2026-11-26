@@ -9,69 +9,167 @@ HTML, CSS y JavaScript sin frameworks ni paso de build. Se edita y se sube, nada
 | Archivo | Qué es |
 |---|---|
 | `index.html` | La landing completa (ver secciones abajo). Incluye los datos estructurados JSON-LD. |
-| `css/styles.css` | Todos los estilos. Paleta del logo y tokens por capítulo (ver "Paleta y capítulos"). |
-| `js/main.js` | Canales (WhatsApp y LinkedIn), intro de carga, índice, motor de scroll, teléfono de "Qué hacemos", botones magnéticos, pestañas del caso real y envío del formulario. |
+| `proyectos/index.html` | Lista de proyectos (`/proyectos/`). Cada subpágina copia el `<head>`, la barra y el pie de la home y usa rutas absolutas (`/css/...`). |
+| `proyectos/matemar/index.html` | Página del caso Matemar: datos, capturas reales y el pedido ilustrado. |
+| `css/styles.css` | Todos los estilos. Paleta de 4 colores y temas por capítulo (ver "Paleta y ritmo"). |
+| `js/main.js` | Carga inicial, índice, motor de scroll (revelados, parallax, cortina y palabra del pie), cifras, videos con póster, franja con pausa, barra fija y botón flotante, antes/después de Matemar y formulario "pedido que se arma". |
 | `404.html` | Página de error propia. Lleva los estilos en línea, así que no depende del CSS. |
+| `assets/fonts/` | Archivo (variable en ancho y peso) y Geist Mono, solo el juego latino, en woff2. |
+| `assets/img/stock/` | Fotos y póster de stock (webp, blanco y negro) y `CREDITOS.md` con banco, autor, licencia y verificación de que no son IA. |
+| `assets/video/` | `inicio.mp4` y `quienes.mp4` (blanco y negro, sin audio). |
+| `assets/img/casos/matemar/` | Capturas reales de matemar.pages.dev (390 y 1440 px), con la fecha en la página del caso. |
 | `assets/og.png` | Imagen que se ve al compartir el link (1200×630). |
-| `assets/img/` | Capturas de Club El Progreso, solo en WebP. |
-| `assets/isotipo/`, `assets/firma/` | Logo en sus variantes y firma de mail del equipo. La web no los usa. |
+| `assets/isotipo/`, `assets/firma/` | Logo en sus variantes y firma de mail del equipo. |
 | `docs/og-imagen.html` | Fuente de `assets/og.png` (ver "Imagen para compartir"). |
 | `robots.txt`, `sitemap.xml`, `favicon.*` | Lo de siempre. |
 
 ## Secciones de la landing
 
-En el orden de `index.html`. Todo el texto va en registro formal (usted o neutro, sin voseo).
-Cada capítulo lleva su número (`01`…`09`) y un tipo de fondo (`base`, `alt` o `senal`).
+En el orden de `index.html`. El texto va en registro **"vos"** (reemplaza al registro anterior), salvo las
+preguntas frecuentes, que están en tercera persona porque espejan el JSON-LD.
 
-1. **Intro de carga** (`#intro`): líneas que se dibujan, el 74 trazándose, "STUDIO 74" letra por letra y un contador que sigue la carga real. Al llegar a 100 aparece **Entrar**; si nadie lo toca, entra sola. La pantalla se abre en dos y el logo vuela a la barra.
-2. **Barra**: fina, esmerilada y siempre visible. El isotipo (sin "STUDIO 74" al lado, para no repetir el 74), las secciones (en pantallas anchas, marcando la que se está leyendo), el botón de **tema claro/oscuro**, "Hablemos" (también en el celular) e **Índice**, que abre la navegación a pantalla completa. Toma el color del capítulo que tiene debajo. A la derecha, el **riel** de progreso: el trazo del 4 con el punto de la marca. Abajo a la derecha, entre la portada y Contacto, el **botón flotante de WhatsApp** (ver "Canales oficiales").
-3. **Portada** (`#inicio`, base): frase de valor centrada, con el 74 detrás, y las dos acciones. Al bajar, el texto se va, el 74 se enciende, los trazos del 7 y el 4 se separan y **el punto crece hasta cubrir la pantalla**: así se entra al capítulo siguiente.
-4. **Visión** (`#vision`, señal, azul): el manifiesto se enciende palabra por palabra con el scroll.
-5. **El problema** (`#problema`, base): los cinco problemas se deslizan en horizontal mientras se baja.
-6. **Bandas cruzadas**: dos cintas en diagonal, como los trazos del 7 y el 4, que corren con el scroll.
-7. **Qué hacemos** (`#servicios`, alt): un teléfono ilustrativo se arma a medida que se leen los tres pasos del paquete de entrada (página, Google Maps, WhatsApp). Debajo, el trabajo a medida en un mosaico de tarjetas. Los enlaces con `data-servicio` dejan marcado ese tipo en el formulario.
-8. **Caso real** (`#caso`, base): en pantallas anchas la ventana de Club El Progreso se apoya y se endereza; en el celular va suelta y la imagen se recorre con el dedo. Sus pestañas funcionan y **Ampliar** (o tocar la imagen) la abre a tamaño real en un visor (`<dialog>`).
-9. **Sin letra chica** (`#diferencia`, base): los compromisos concretos en un mosaico, con un trazo que se completa.
-10. **Proceso** (`#proceso`, alt): la línea se dibuja con el scroll y enciende cada paso.
-11. **El estudio** (`#estudio`, base): los cuatro desarrolladores full stack con su formación (Licenciatura en Sistemas y Técnico en Software).
-12. **Preguntas frecuentes** (`#preguntas`, alt).
-13. **Contacto** (`#contacto`, base): formulario simple con etiquetas visibles (nombre, correo, tipo de consulta y mensaje) y, al lado, los canales directos.
-14. **Pie** con redes y la marca a todo el ancho.
+1. **Carga inicial** (solo la home): ver "Carga inicial".
+2. **Barra** (fija arriba): solo el isotipo 74 (con `aria-label` "studio74dev, inicio"), los enlaces, el
+   botón **Pedí tu diagnóstico gratis** (pantallas de 760 px o más) y **Índice**, que abre la navegación a
+   pantalla completa.
+3. **Inicio** (`#inicio`, tinta): título "Tu negocio, encontrado y ordenado.", bajada, botón de diagnóstico y
+   **Escribinos por WhatsApp**, con la foto y el video de stock (ver "Foto y video del inicio") y la captura
+   de Matemar en un celular.
+4. **Franja de servicios** (`#servicios`, tinta): loop lento con botón de pausa (WCAG 2.2.2). Sin movimiento o
+   sin JS quedan los cuatro ítems quietos.
+5. **¿Te pasa esto?** (`#te-pasa`, papel): tarjetas apiladas (`sticky`), cada problema con su solución en una línea.
+6. **Números** (`#numeros`, azul): único bloque azul; el relevamiento con el componente de cifras.
+7. **Cómo trabajamos** (`#como-trabajamos`, tinta): pasos y compromisos en desplegables.
+8. **Qué revisamos** (`#que-incluye`, tinta): qué incluye el diagnóstico gratis.
+9. **Caso** (`#casos`, papel): Matemar (Miramar), antes/después y "Ver el caso".
+10. **Quiénes somos** (`#quienes`, tinta): video de ruta (ver "Video de Quiénes somos") y el equipo.
+11. **Preguntas frecuentes** (`#preguntas`, papel): en `<details>`.
+12. **Diagnóstico** (`#contacto`, papel): formulario "pedido que se arma" (ver "Formulario de contacto") y la
+    franja de atención (horario y soporte).
+13. **Pie** (`#pie`, tinta): zona, horario, mail, **servicios** (Webs y landing pages · Sistemas a medida ·
+    Bots de WhatsApp · Automatización con IA · Soporte y mantenimiento, más "¿Necesitás otra cosa de
+    sistemas? Consultanos." con enlace al diagnóstico), redes en íconos, el 74 y la palabra "studio74dev"
+    gigante. Es igual en las 3 páginas.
+
+Los ids `#inicio`, `#preguntas` y `#contacto` se conservan (los usa `404.html`).
+
+Hay una **barra fija inferior** solo en el celular (menos de 760 px): aparece al dejar el inicio, con el
+botón de diagnóstico y el WhatsApp, y se va al llegar a Contacto, al pie o con el índice abierto. En pantallas
+más anchas, en cambio, hay un **botón flotante** de WhatsApp.
 
 ## Cosas a saber antes de tocar
 
-### Intro de carga
+### Paleta y ritmo
 
-- Se muestra **una vez por sesión** (guarda `s74-intro` en `sessionStorage`) y **solo en pantallas de 760 px o más**: en el celular se entra directo a la portada. Para verla de nuevo (también en el celular): `?intro` en la URL.
-- No aparece si el visitante tiene las animaciones reducidas en su dispositivo.
-- La activa el script del `<head>` poniendo la clase `con-intro` en `<html>`. **No uses `intro` como nombre de clase en `<html>`**: choca con el componente `.intro` (que arranca con `display: none`) y esconde toda la página.
-- Si algo falla, se cierra sola a los 8 segundos.
-
-### Paleta, temas y capítulos
-
-- El logo en blanco y negro con un solo color de acento: **tinta** `#0B0B0C`, **papel** `#F4F3EF` y **señal**, un azul costa `#2F5BEA` (más blanco y dos grises oscuros para las tarjetas). Sobre fondos oscuros, el texto de acento usa su versión clara `#8EA8FF`.
-- El acento vive en una sola variable (`--senal` en `styles.css`), con `--senal-claro` y `--sobre-senal` (texto encima). Para probar otro tono se cambian esas tres y se revisa el contraste.
-- **Tema claro y oscuro**: `html[data-theme="claro|oscuro"]`. Lo pone el script del `<head>` antes del primer pintado: el que eligió el visitante con el botón de la barra (guardado en `localStorage` como `s74-tema`) o, si nunca lo tocó, el del sistema.
-- Cada capítulo declara `data-tema="base|alt|senal"` y eso redefine `--fondo`, `--texto`, `--suave`, `--superficie`, `--boton-fondo`… según el tema. `base` y `alt` cambian con el tema; `senal` es verde en los dos. Para un capítulo nuevo alcanza con ponerle `class="capitulo"` y su `data-tema`.
-- Contrastes: blanco sobre el azul 5,5:1, azul sobre papel 5:1, azul claro sobre tinta 8,6:1. Con `prefers-contrast: more` el texto secundario pasa a color pleno.
+- Cuatro colores fijos: **tinta** `#0B0B0C`, **papel** `#F4F3EF`, **azul** `#2F5BEA` y **celeste** `#8EA8FF`
+  (el celeste es el azul para texto sobre fondos oscuros). Cortes claros, sin degradés.
+- Cada capítulo declara `data-tema="tinta|papel|azul"` y eso redefine `--fondo`, `--texto`, `--suave`,
+  `--superficie`, `--boton-fondo`, etc. El ritmo de la landing es negro / papel, con un único bloque azul:
+  la franja de números. Para un capítulo nuevo alcanza con `class="capitulo"` y su `data-tema`.
+- No hay selector de tema del visitante ni color de acento alternativo: salieron con el rediseño. Lo único
+  que sigue al esquema del sistema (`prefers-color-scheme`) es la carga inicial.
+- Contrastes medidos: blanco sobre azul 5,5:1, azul sobre papel 5:1, celeste sobre tinta 8,6:1. Con
+  `prefers-contrast: more` el texto secundario pasa a color pleno.
 
 ### Tipografía
 
-- Las fuentes se sirven desde `assets/fonts/` (solo el juego latino, en woff2; se declaran al principio de `styles.css`). La de los títulos se precarga en el `<head>` y usa `font-display: optional`: si no llegó para el primer pintado, esa visita sigue con la del sistema en lugar de mover la portada. No se usa Google Fonts: un dominio menos y sin bloquear el primer pintado.
-- **Archivo** (variable con ejes de ancho y peso). Los títulos grandes usan `font-stretch: 125%`, peso 900 y mayúsculas: una grotesca extendida y negra. El texto corrido va en Archivo normal.
-- **Geist Mono** para rótulos chicos y **Michroma** solo para la marca ("STUDIO 74").
+- **Archivo** (variable, ejes de ancho 62 %–125 % y peso 100–900) para los títulos condensados enormes y el
+  texto corrido; **Geist Mono** para rótulos. Se sirven desde `assets/fonts/`, sin otro dominio.
+- Ambas usan `font-display: swap`. Para que el salto de los títulos no genere CLS hay una fuente de respaldo
+  (`Archivo Fallback`, con las métricas de Archivo ajustadas sobre Arial). Se precarga solo Archivo.
+- Michroma (`assets/fonts/michroma-latin.woff2`, la letra de la marca del sitio publicado) se usa solo en la palabra gigante "studio74dev" del pie.
 - Las palabras muy largas en los títulos llevan guiones suaves (`&shy;`) para cortar bien en el celular.
 
-### Animaciones de scroll
+### Carga inicial
 
-- `js/main.js` le da a cada `[data-escena]` una variable `--p` de 0 a 1, y el CSS la usa con `calc()`:
-  - `pin`: capítulos altos con una escena fija (`sticky`), como la portada, la visión, el problema y el caso.
-  - `paso`: el elemento atraviesa la pantalla (las bandas). `recorrido`: la línea del proceso.
-- `entrada` no usa `--p`: un `IntersectionObserver` le pone la clase `.visto` **una sola vez** cuando aparece y el CSS hace la transición. Así las tarjetas entran fluidas aunque el dedo vaya rápido o lento.
-- El motor lee todas las posiciones primero y escribe después (sin forzar el diseño varias veces por cuadro), y solo toca el estilo de lo que cambió.
-- Todo lo animado vive bajo `html.mov`, que pone el `<head>` solo si hay JavaScript y el dispositivo no pide movimiento reducido. **Sin `mov`, la página se ve completa y quieta**: es la versión accesible, no hay que mantener otra.
-- Para cambiar cuánto dura una escena fija, se cambia su `--alto` en `styles.css`. La del problema la calcula el JS según el ancho de las tarjetas.
-- Se anima solo `transform`, `opacity` y `clip-path`, para que vaya fluido en celulares. En el celular la barra va sin desenfoque (`backdrop-filter` se recalcula en cada cuadro).
+- Solo en la home y solo en la primera visita de la sesión: la palabra "studio74dev" (en minúscula en el DOM;
+  las mayúsculas, si las hay, las pone el CSS) se abre, el **74** queda al centro y **vuela** (técnica FLIP)
+  hasta el isotipo de la barra. Sigue el esquema del sistema (claro u oscuro, invertido respecto del inicio).
+- El script del `<head>` decide con `sessionStorage` (clave `s74-carga`) si agrega `html.con-carga`. La URL
+  `?carga` la fuerza y `?carga=0` la evita, para pruebas.
+- El fundido y el retiro son CSS puro: si falla el JS, la capa se va sola a los 2,5 s. El JS solo hace el vuelo
+  y el cierre anticipado con un click o una tecla. Con reduced-motion o sin JS no hay carga.
+- La capa es decorativa (`aria-hidden`).
+
+### Foto y video del inicio
+
+- `#inicio` lleva una foto de stock en blanco y negro (`figure.hero__medio`, es la imagen LCP: sin `lazy`,
+  `fetchpriority="high"`) y, encima, un video corto en loop (`assets/video/inicio.mp4`). El video **no** está en
+  el HTML como fuente: el JS le pone el `src` recién después del `load`, y solo con `html.mov` (sin
+  reduced-motion) y sin conexión ahorrada (`saveData`). Si algo falla, queda la foto.
+- Como dura más de 5 s, hay botón de pausa (`.hero__pausa`), y el video se frena solo fuera de pantalla o con la
+  pestaña oculta.
+- Parallax suave sin `scale()`: la imagen es más alta que su marco y se traslada. Con `animation-timeline: view()`
+  lo hace el CSS; sin soporte, el JS escribe `--py`.
+
+### Cómo cambiar la foto o el video del inicio
+
+- **Foto**: mínimo 1600 px de ancho, en webp y de hasta 150 KB (la más grande). Generar 640, 960, 1280 y 1920 px
+  y actualizar el `src`, el `srcset`, el `<link rel="preload">` del `<head>` y el `poster` del video. Si es
+  propia, agregarla a `assets/img/propias/` y a `CREDITOS.md`.
+- **Video**: sin audio, mp4 H.264 (`yuv420p`, `+faststart`), de unos 10 s en loop y de hasta 1,5 MB; cambiar el
+  `data-src` del `<video>`. Si dura más de 5 s se mantiene el botón de pausa.
+- El comentario `[FOTO: reemplazo futuro opcional del inicio…]` en `index.html` marca el lugar.
+
+### Video de Quiénes somos
+
+`#quienes` usa `assets/video/quienes.mp4` (blanco y negro, sin audio, 21:9) con `assets/img/stock/quienes-ruta-1712.webp`
+como póster. No hay autoplay en el HTML: `js/main.js` lo pide al acercarse a la pantalla, solo con movimiento
+permitido y sin ahorro de datos, lo pausa fuera de pantalla y ofrece un botón de pausa. Sin personas en el
+video, a propósito: una persona de stock ahí parecería uno de los cuatro devs.
+
+### Números con contador (componente "cifra")
+
+En `index.html`, `#numeros`. Cada número es un `<span class="cifra__n cond" data-cifra="175" aria-hidden="true">175</span>`
+más un `<span class="visually-hidden">175</span>` con el mismo valor para lectores de pantalla. `js/main.js` lo
+cuenta de 0 al valor, una sola vez, cuando entra en pantalla (solo con movimiento permitido). Atributos
+opcionales: `data-prefijo` y `data-sufijo` (por ejemplo `data-sufijo="%"`). Sin movimiento o sin JavaScript queda
+el valor final escrito en el HTML. Reservá el ancho con `style="min-width:<dígitos>ch"` para que no haya saltos.
+
+### Revelados y movimiento
+
+- Los elementos con `data-revelar` se revelan al entrar (`data-revelar="titulo"` hace subir cada línea del
+  título). Con `animation-timeline: view()` lo mueve el scroll desde el CSS; sin soporte (Safari), el JS agrega
+  `html.sin-vista` y un `IntersectionObserver` pone la clase `.visto` una sola vez.
+- **`html.revelar`**: `js/main.js` la pone al arrancar. Los elementos solo se esconden si ese script corrió. Si el
+  JS no carga, todo se ve.
+- Todo lo animado vive bajo `html.mov`, que el `<head>` pone solo si hay JavaScript y el dispositivo no pide
+  movimiento reducido. **Sin `mov`, la página se ve completa y quieta**: es la versión accesible, no hay que
+  mantener otra.
+- Microanimaciones tipo iOS: curvas con resorte suave (`--ease-resorte`), presión con escala leve (`--presion`,
+  0,97), elevación y sombra al pasar sobre tarjetas e íconos, desenfoque de fondo en la barra (no en el celular,
+  donde `backdrop-filter` se recalcula en cada cuadro).
+- Se anima solo `transform`, `opacity` y `clip-path`.
+
+### Pie, créditos de íconos y créditos de medios
+
+- El pie tiene el **74** y la palabra **"studio74dev"** a casi todo el ancho (se mide con `cqi`, así no genera
+  scroll horizontal). Al llegar al final, la palabra sube deslizándose con el scroll (`animation-timeline`, con
+  respaldo de `IntersectionObserver`); con reduced-motion queda quieta.
+- **Cortina**: el pie queda fijo debajo del contenido y la página lo va descubriendo. Solo se activa con alto de
+  pantalla de 640 px o más y si el pie entra en pantalla (`html.pie-cortina`).
+- Redes en **íconos** de 28 px dentro de botones circulares de 48 px, con el nombre en `aria-label`: Instagram,
+  Facebook, LinkedIn, mail y WhatsApp. Son de Simple Icons 16.38.1 (LinkedIn: 13.21.0, el último que lo trae),
+  licencia CC0; el sobre del mail es propio. Las marcas siguen siendo de sus dueños: se usan solo para enlazar
+  a los perfiles propios. Detalle en `assets/img/stock/CREDITOS.md`, sección Íconos.
+- La lista de servicios del pie es la misma en las 3 páginas. Los 4 primeros respetan el orden de la ficha de
+  Google; "Soporte y mantenimiento" y la invitación abierta se agregaron por decisión de Ramiro (2026-11-26).
+  Revisable cuando el estudio escale.
+
+### Medición
+
+No hay scripts de medición de terceros. Cada enlace a WhatsApp, a `#contacto`, a las redes y a `mailto:`, y el
+botón de envío del formulario, llevan `data-evento="<tipo>-<lugar>[-<detalle>]"`:
+
+- tipo: `whatsapp`, `diagnostico`, `red` o `mail`;
+- lugar: `nav`, `inicio`, `contacto`, `te-pasa`, `que-incluye`, `casos`, `preguntas`, `gracias`, `barra`, `flotante`, `indice` o `pie`.
+
+Ejemplos: `diagnostico-barra`, `diagnostico-pie`, `whatsapp-flotante`, `diagnostico-enviar`,
+`red-instagram-pie`. Dentro de una página no se repite ningún valor; `docs/chequeo.py` lo verifica.
+
+Para medir más adelante con Cloudflare Web Analytics hay que decidir antes el script (es una decisión
+pendiente, fuera de esta versión). Una vez decidido, un único `click` delegado sobre `[data-evento]` en
+`js/main.js` alcanza para enviar el nombre del evento.
 
 ### Canales oficiales
 
@@ -83,48 +181,40 @@ Los únicos canales de contacto para el público (URLs exactas):
 - Facebook: https://www.facebook.com/studio74dev/
 - Sitio: https://studio74dev.com.ar/
 
-Aparecen en el índice a pantalla completa, en Contacto, en el pie, en `sameAs` del JSON-LD y en las
-firmas de Gmail (`assets/firma/`). Si cambia alguno, hay que cambiarlo en todos esos lugares.
-GitHub no es un canal para el público: no se enlaza desde la web.
+Aparecen en el índice a pantalla completa, en el pie, en `sameAs` del JSON-LD y en las firmas de Gmail
+(`assets/firma/`). Si cambia alguno, hay que cambiarlo en todos esos lugares. GitHub no es un canal para el
+público: no se enlaza desde la web.
 
-**WhatsApp**: el número **no se muestra en la web** ni va en el JSON-LD. Solo se usa dentro del
-enlace a `wa.me`, y se carga en un solo lugar, la constante `CANALES` al principio de `js/main.js`,
-armado por partes para que no quede escrito de corrido:
+### WhatsApp directo
 
-```js
-const CANALES = {
-  whatsapp: ['<código de país>', '<característica>', '<número en partes>'].join(''), // sin "+" ni espacios
-  linkedin: 'https://www.linkedin.com/company/studio74dev/',
-};
-```
+- Todos los botones son un enlace `https://wa.me/<número con el 9>?text=<mensaje>` escrito **en el HTML**, así
+  funciona sin JavaScript. El mensaje es el mismo en todos lados: "Hola studio74dev, quiero el diagnóstico gratis
+  para mi negocio".
+- El número **no se muestra escrito** en la web ni va en el JSON-LD: solo vive dentro de los `href`. Los
+  `aria-label` tampoco lo nombran. Si cambia, hay que cambiarlo en todos los enlaces de las 3 páginas (el enlace
+  de "Gracias" arma un resumen de lo elegido).
+- Lugares: inicio, Contacto, "Gracias" del formulario, pie, **barra fija** del celular (`#barraCta`, ícono de
+  52 px, respeta `env(safe-area-inset-bottom)`) y **botón flotante** de pantallas anchas (`#waFlotante`).
+  Ambos usan el azul de marca, no el verde de WhatsApp.
+- Pendiente: Ramiro tiene que tocar el botón desde su celular y confirmar que abre el chat correcto.
 
-Los textos visibles dicen solo "WhatsApp" (portada) o "Abrir chat" (Contacto), y los `aria-label`
-tampoco nombran el número.
+### Imágenes
 
-Cada bloque con `data-canal="whatsapp"` recibe el enlace a `wa.me` con el mensaje de
-`MENSAJE_WHATSAPP` ("Hola studio74dev, vengo de la web y quiero consultar por", abierto para que
-el visitante lo termine) y recién ahí se muestra. **Sin JavaScript quedan ocultos**: nunca hay un
-enlace roto. Están en la portada (debajo de las dos acciones), en Contacto (primer canal), en el pie
-y en el **botón flotante**:
-
-- Abajo a la derecha, alineado con el riel. En el celular es un círculo de 56 px; desde 1024 px
-  suma el texto "WhatsApp".
-- Usa el azul de los botones (`--boton-fondo`), no el verde de WhatsApp: el sitio tiene un solo
-  acento. Toma el `data-tema` del capítulo que tiene debajo, así que sobre Visión se invierte a blanco.
-- Aparece al dejar la portada (que ya tiene sus acciones) y se va al llegar a Contacto (que ya
-  tiene WhatsApp) y mientras el índice está abierto. Lo decide el motor de scroll de `js/main.js`.
-- Oculto usa `visibility: hidden`, así no recibe foco con el teclado.
-
-### Animaciones
-
-- Los elementos con `data-reveal` aparecen al hacer scroll. Sin JavaScript se ven igual.
-- Todo respeta `prefers-reduced-motion`.
+- Solo `.webp`, `.avif` o `.svg`, con `alt`, `width`, `height` y `loading="lazy"` (menos en `#inicio`).
+- **Fotos de stock** (`assets/img/stock/`): solo de Pexels, Unsplash o Pixabay, sin IA, nunca presentadas como
+  clientes ni junto a testimonios. Cada una figura en `CREDITOS.md`. Van en blanco y negro (tratamiento uniforme).
+- Para regenerarlas: poner el original en `docs/_stock/originales/` y abrir `docs/fotos.html` (conversor en
+  canvas; los parámetros van en la URL) con el servidor local.
+- Las capturas de Matemar llevan la fecha en la página del caso.
+- Quedan placeholders `[FOTO: …]` para las escenas 4 y 5 de "¿Te pasa esto?" y para el reemplazo opcional del inicio.
 
 ### SEO
 
-- Un solo `h1` (el de la portada).
-- JSON-LD con `Organization`/`ProfessionalService` (zona de servicio y catálogo), `Place`, `WebSite` y `FAQPage`. Si cambian las preguntas de `#preguntas`, actualizá también las del JSON-LD.
-- Las fuentes (Archivo, Geist Mono y Michroma) cargan sin bloquear el primer pintado.
+- Un solo `h1` por página. `sitemap.xml` lista 3 URLs: `/`, `/proyectos/` y `/proyectos/matemar/` (cada una con
+  su `title`, `description` y `canonical`).
+- JSON-LD con `Organization`/`ProfessionalService` (zona de servicio y catálogo), `Place`, `WebSite` y
+  `FAQPage`. Si cambian las preguntas de `#preguntas`, actualizá también las del JSON-LD.
+- Las fuentes (Archivo y Geist Mono) cargan sin bloquear el primer pintado.
 
 ## Probarlo en local
 
@@ -134,78 +224,86 @@ Cualquier servidor de archivos estáticos sirve:
 py -m http.server 8800 --bind 127.0.0.1
 ```
 
-Y abrir `http://127.0.0.1:8800/?intro`.
+Y abrir `http://127.0.0.1:8800/`. Ese servidor no comprime ni cachea, así que los tiempos de carga son más
+pesimistas que en Cloudflare Pages. Para ver la carga inicial de nuevo, abrir `/?carga`.
 
 El servidor estático reproduce lo que publica Cloudflare Pages: el formulario sale por
-Web3Forms y el mail llega de verdad.
+Web3Forms y el mail llega de verdad. Al probar el formulario en local, el mail llega de verdad al estudio:
+usá datos de prueba claros o la simulación de `docs/chequeo-form.js`, que nunca llama a Web3Forms.
 
 ## Formulario de contacto
 
+El formulario (`#contactForm`, en `#contacto`) es de **diagnóstico** y funciona como un **pedido que se arma**:
+con JavaScript muestra **una pregunta por pantalla** (7 pasos) con opciones grandes y, al costado en escritorio
+o arriba y plegable en el celular, la tarjeta **TU DIAGNÓSTICO** que se completa en vivo con lo elegido. El
+último paso es la revisión completa y el envío. Los pasos son: qué te cuesta hoy (opción múltiple), rubro,
+localidad, cómo atendés hoy, para cuándo, cómo te contactamos (nombre, WhatsApp o correo; con uno alcanza) y
+revisión.
+
+Sin JavaScript, todo queda visible en una sola página, en orden, y se envía por `mailto:`. "Seguir" valida
+solo el paso actual y "Volver" conserva lo cargado. Al terminar se puede seguir por WhatsApp con un resumen.
+
+El correo que llega tiene asunto `Diagnóstico desde la web — <rubro> (<localidad>)` y una línea por campo. Si
+hay correo, se responde a él (`replyto`). Los nombres de los campos no cambian.
+
 El envío está en `js/main.js`:
 
-1. **Web3Forms** — el formulario se manda con `fetch` a `api.web3forms.com`, como `FormData`
-   y sin cabeceras propias: así el pedido es "simple" y el navegador no hace el preflight
-   `OPTIONS`. La clave (`WEB3FORMS_KEY` en `js/main.js`) es pública a propósito: así funciona
-   el servicio. Sirve para *enviar* al mail del estudio, no para leer lo que llegó.
+1. **Web3Forms**: el formulario se manda con `fetch` a `api.web3forms.com`, como `FormData` y sin cabeceras
+   propias (así el pedido es "simple" y el navegador no hace el preflight `OPTIONS`). La clave
+   (`WEB3FORMS_KEY`) es pública a propósito: sirve para *enviar* al mail del estudio, no para leer lo que
+   llegó.
    - Tiempo máximo de 12 s por intento.
    - Tiempo agotado o error 5xx: **un** reintento automático a los 1,5 s.
    - Error 4xx (clave o dominio rechazado): sin reintento.
-   - 429 legible: sin reintento, porque empeora el límite; si trae `Retry-After`,
-     "Reintentar" espera ese tiempo.
-   - Sin respuesta legible (`Failed to fetch`): sin reintento y con un aviso neutral. Puede
-     ser una red caída o el 429 de Web3Forms, que limita por IP y responde sin cabeceras
-     CORS: el navegador no deja distinguirlos.
-2. **Si falla**: el sitio **nunca** abre el programa de correo por su cuenta. Los campos
-   quedan como estaban y aparece el aviso con **Reintentar**, **Copiar correo**, **Abrir en
-   Gmail** (pestaña nueva, con el mensaje cargado) y el enlace "Usar el programa de correo"
-   (`mailto:`), además del correo del estudio como texto.
-3. **Sin JavaScript**: el `action` del formulario es `mailto:studio74dev@gmail.com` y un
-   `<noscript>` muestra el correo. Con JS, `js/main.js` quita ese `action` al arrancar.
+   - 429 legible: sin reintento; si trae `Retry-After`, "Reintentar" espera ese tiempo.
+   - Sin respuesta legible (`Failed to fetch`): sin reintento y con un aviso neutral.
+2. **Si falla**: el sitio **nunca** abre el programa de correo por su cuenta. Los campos quedan como estaban y
+   aparece el aviso con **Reintentar**, **Copiar correo**, **Abrir en Gmail** y el enlace "Usar el programa
+   de correo" (`mailto:`).
+3. **Sin JavaScript**: el `action` es `mailto:studio74dev@gmail.com` y un `<noscript>` muestra el correo. Con
+   JS, `js/main.js` quita ese `action` al arrancar.
 
 Nunca se muestra un "enviado" que no salió.
 
-**Anti-spam**: dos trampas invisibles que una persona no completa. El campo `company`
-(honeypot propio) y la casilla `botcheck` (la de Web3Forms, que además se manda en el
-envío y el servicio la revisa). Si alguna viene completa, el formulario simula el éxito
-y no envía nada. Los largos máximos (nombre 80, correo 120, mensaje 2000) están como
-`maxlength` en `index.html` y se validan también en `js/main.js` antes de enviar.
+**Anti-spam**: dos trampas invisibles que una persona no completa: el campo `company` (honeypot propio) y la
+casilla `botcheck` (la de Web3Forms). Si alguna viene completa, el formulario simula el éxito y no envía
+nada. Los largos máximos están como `maxlength` en `index.html` y se validan también en `js/main.js`.
 
 ## Imagen para compartir
 
-`assets/og.png` sale de `docs/og-imagen.html`. Para regenerarla: levantá el servidor local,
-abrí `http://127.0.0.1:8800/docs/og-imagen.html` con la ventana en 1200×630 y sacá una captura.
-Después subí el `?v=N` de `og.png` en las etiquetas `og:image` y `twitter:image` de `index.html`,
-porque las redes guardan la imagen vieja.
+`assets/og.png` sale de `docs/og-imagen.html`. Para regenerarla: levantá el servidor local, abrí
+`http://127.0.0.1:8800/docs/og-imagen.html` con la ventana en 1200×630 y sacá una captura. Después subí el `?v=N`
+de `og.png` en las etiquetas `og:image` y `twitter:image`, porque las redes guardan la imagen vieja.
 
 ## Publicar
 
-Se publica en Cloudflare Pages (proyecto studio74dev) en cada merge a main; DNS en
-Cloudflare, cuenta studio74dev@gmail.com. El registro TXT google-site-verification no se
-borra (verifica Search Console).
+Se publica en Cloudflare Pages (proyecto studio74dev) en cada merge a main; DNS en Cloudflare, cuenta
+studio74dev@gmail.com. El registro TXT google-site-verification no se borra (verifica Search Console).
 
 Para cambios grandes, la forma de trabajo es:
 
 1. Rama nueva, cambios y `git push`.
 2. Pull request contra `main` para que el equipo lo revise.
-3. Merge: Cloudflare Pages lo publica solo (el estado del deploy se ve en el panel de
-   Cloudflare, proyecto studio74dev).
+3. Merge: Cloudflare Pages lo publica solo (el estado del deploy se ve en el panel de Cloudflare).
 
-GitHub Pages está desactivado en este repo. El dominio ya no se configura con un archivo
-`CNAME`: se maneja desde Cloudflare.
+GitHub Pages está desactivado en este repo. El dominio ya no se configura con un archivo `CNAME`: se maneja
+desde Cloudflare.
 
 Dos cosas a tener en cuenta:
 
-- El HTML sale con `Cache-Control: public, max-age=0, must-revalidate`: un cambio en
-  `index.html` se ve apenas termina el deploy.
-- El CSS, el JS y las imágenes salen con `max-age=14400` (cuatro horas) y se piden con
-  `?v=N`. **Subí ese número cada vez que los toques**, si no, quien ya visitó el sitio
-  va a seguir viendo la versión vieja hasta cuatro horas.
+- El HTML sale con `Cache-Control: public, max-age=0, must-revalidate`: un cambio en `index.html` se ve apenas
+  termina el deploy.
+- El CSS, el JS y las imágenes salen con `max-age=14400` (cuatro horas) y se piden con `?v=N` (hoy `?v=42`).
+  **Subí ese número cada vez que los toques**, si no, quien ya visitó el sitio va a seguir viendo la versión
+  vieja hasta cuatro horas.
 
 ## Pendientes para una próxima versión
 
 - **Medios de pago** aceptados, en la pregunta frecuente y en el JSON-LD (hoy dice que se detallan en el presupuesto).
+- **Cambios que no son menores**: cómo se cotizan (`[CONFIRMAR]` en la pregunta frecuente).
 - **Aviso de privacidad** (Ley 25.326): falta definir quién es el responsable de los datos.
-- **Prueba en un iPhone real** (Safari).
+- **Prueba en un iPhone real** (Safari) y del botón de WhatsApp desde el celular.
 - **CSP** (Content Security Policy) por `<meta>`.
 - **hCaptcha o Turnstile** en el formulario, solo si aparece spam.
+- Fotos de las escenas 4 y 5 y, opcional, foto o video propio para el inicio (`[FOTO]`).
 - Testimonio real de un cliente (con autorización) y capturas de los proyectos en desarrollo.
