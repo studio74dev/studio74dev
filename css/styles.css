@@ -2128,7 +2128,7 @@ html.con-carga .carga {
 .carga__palabra {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
-  align-items: center;
+  align-items: baseline; /* el isotipo se apoya en la misma línea que las letras */
   width: 100%;
   font-size: clamp(64px, 13vw, 200px);
   line-height: 0.86;
@@ -2168,10 +2168,13 @@ html.con-carga .carga {
 }
 
 /* El 74 es el mismo isotipo SVG del logo: vuela y llega idéntico */
+/* Alto ≈ altura de las mayúsculas: el dibujo ocupa ~89 % de su caja, así que 0.8em de caja
+   da ~0.71em de trazo; el leve descenso compensa el margen inferior del viewBox */
 .carga__74 {
-  display: block;
-  width: 0.86em;
-  height: 0.86em;
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  vertical-align: -0.05em;
 }
 
 /* Se cierran los costados: queda el 74 solo, en el centro */
