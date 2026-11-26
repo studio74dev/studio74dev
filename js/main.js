@@ -982,4 +982,44 @@
       });
     }
   }
+  /* ── Desplegables (preguntas y "Sin letra chica"): abren y cierran suave ── */
+  /* Anima el alto del <details> entre el del summary y el completo, con el texto
+     que entra con un fundido corto. Sin movimiento permitido o sin WAAPI, queda
+     el comportamiento nativo (abre y cierra al instante). */
+  (() => {
+    if (!document.documentElement.classList.contains('mov') || !Element.prototype.animate) return;
+    const curva = getComputedStyle(document.documentElement).getPropertyValue('--ease-salida').trim() || 'cubic-bezier(0.22, 1, 0.36, 1)';
+    document.querySelectorAll('.pregunta, .compromiso details').forEach((det) => {
+      const sum = det.querySelector('summary');
+      if (!sum) return;
+      let anim = null;
+      sum.addEventListener('click', (e) => {
+        e.preventDefault();
+        const abrir = !det.open || det.dataset.cerrando === '1';
+        const desde = det.offsetHeight;
+        if (anim) anim.cancel();
+        det.classList.add('animando');
+        if (abrir) {
+          det.dataset.cerrando = '';
+          det.open = true;
+        }
+        const hasta = abrir ? det.scrollHeight : sum.offsetHeight;
+        if (!abrir) det.dataset.cerrando = '1';
+        const cuerpo = [...det.children].filter((n) => n !== sum);
+        cuerpo.forEach((n) => n.animate(
+          abrir ? [{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }]
+                : [{ opacity: 1 }, { opacity: 0 }],
+          { duration: abrir ? 420 : 260, easing: curva, fill: 'none' }
+        ));
+        anim = det.animate([{ height: desde + 'px' }, { height: hasta + 'px' }], { duration: abrir ? 420 : 340, easing: curva });
+        anim.onfinish = () => {
+          if (!abrir) det.open = false;
+          det.dataset.cerrando = '';
+          det.classList.remove('animando');
+          anim = null;
+        };
+      });
+    });
+  })();
+
 })();
